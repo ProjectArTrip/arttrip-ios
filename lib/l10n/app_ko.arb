@@ -1,0 +1,23 @@
+{
+  "@@locale": "ko",
+  "@navHome": {
+    "description": "Bottom navigation - Home"
+  },
+  "@navMap": {
+    "description": "Bottom navigation - Map"
+  },
+  "@navMy": {
+    "description": "Bottom navigation - My page"
+  },
+  "@navStamp": {
+    "description": "Bottom navigation - Stamp"
+  },
+  "@navStorage": {
+    "description": "Bottom navigation - Storage"
+  },
+  "navHome": "홈",
+  "navMap": "지도",
+  "navMy": "My",
+  "navStamp": "스탬프",
+  "navStorage": "보관함"
+}
