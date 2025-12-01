@@ -1,7 +1,9 @@
+import 'package:arttrip/core/enum.dart';
 import 'package:flutter/material.dart';
-import 'l10n/generated/app_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'core/app_colors.dart';
+import 'l10n/generated/app_localizations.dart';
 import 'shared/main_view.dart';
 
 void main() {
@@ -13,18 +15,25 @@ class ArtTripApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ArtTrip',
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary300),
-        scaffoldBackgroundColor: AppColors.gray0,
-        useMaterial3: true,
-        fontFamily: 'Pretendard',
-      ),
-      home: const MainView(),
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (_, child) {
+        return MaterialApp(
+          title: 'ArtTrip',
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary300),
+            scaffoldBackgroundColor: AppColors.gray0,
+            useMaterial3: true,
+            fontFamily: FontFamilyType.pretendard.fontName,
+          ),
+          home: const MainView(),
+        );
+      },
     );
   }
 }

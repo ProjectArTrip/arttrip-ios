@@ -1,19 +1,21 @@
 name: arttrip
 description: "ArtTrip - Global Art Exhibition Booking App"
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.7.2
+  sdk: ^3.3.0
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: any
+
+  intl: ^0.20.2
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.10+1
+  flutter_screenutil: ^5.9.3
 
 dev_dependencies:
   flutter_test:
@@ -34,3 +36,5 @@ flutter:
           weight: 600
         - asset: assets/fonts/Pretendard-Regular.otf
           weight: 400
+        - asset: assets/fonts/Pretendard-Light.otf
+          weight: 300
