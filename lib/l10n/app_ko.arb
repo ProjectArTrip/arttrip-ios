@@ -1,23 +1,39 @@
 {
   "@@locale": "ko",
-  "@navHome": {
-    "description": "Bottom navigation - Home"
-  },
-  "@navMap": {
-    "description": "Bottom navigation - Map"
-  },
-  "@navMy": {
-    "description": "Bottom navigation - My page"
-  },
-  "@navStamp": {
-    "description": "Bottom navigation - Stamp"
-  },
-  "@navStorage": {
-    "description": "Bottom navigation - Storage"
-  },
   "navHome": "홈",
+  "@navHome": {
+    "description": "Bottom navigation home tab label"
+  },
   "navMap": "지도",
+  "@navMap": {
+    "description": "Bottom navigation map tab label"
+  },
   "navMy": "My",
+  "@navMy": {
+    "description": "Bottom navigation my page tab label"
+  },
   "navStamp": "스탬프",
-  "navStorage": "보관함"
+  "@navStamp": {
+    "description": "Bottom navigation stamp tab label"
+  },
+  "navStorage": "보관함",
+  "@navStorage": {
+    "description": "Bottom navigation storage tab label"
+  },
+  "splashSlogan": "세상의 전시, 내 손 안에.",
+  "@splashSlogan": {
+    "description": "Splash screen slogan text"
+  },
+  "loginKakao": "카카오로 로그인",
+  "@loginKakao": {
+    "description": "Kakao login button label"
+  },
+  "loginGoogle": "Google로 로그인",
+  "@loginGoogle": {
+    "description": "Google login button label"
+  },
+  "loginApple": "Apple로 로그인",
+  "@loginApple": {
+    "description": "Apple login button label"
+  }
 }

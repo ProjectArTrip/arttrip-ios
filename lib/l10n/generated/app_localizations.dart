@@ -95,35 +95,59 @@ abstract class AppLocalizations {
     Locale('ko')
   ];
 
-  /// Bottom navigation - Home
+  /// Bottom navigation home tab label
   ///
   /// In ko, this message translates to:
   /// **'홈'**
   String get navHome;
 
-  /// Bottom navigation - Map
+  /// Bottom navigation map tab label
   ///
   /// In ko, this message translates to:
   /// **'지도'**
   String get navMap;
 
-  /// Bottom navigation - My page
+  /// Bottom navigation my page tab label
   ///
   /// In ko, this message translates to:
   /// **'My'**
   String get navMy;
 
-  /// Bottom navigation - Stamp
+  /// Bottom navigation stamp tab label
   ///
   /// In ko, this message translates to:
   /// **'스탬프'**
   String get navStamp;
 
-  /// Bottom navigation - Storage
+  /// Bottom navigation storage tab label
   ///
   /// In ko, this message translates to:
   /// **'보관함'**
   String get navStorage;
+
+  /// Splash screen slogan text
+  ///
+  /// In ko, this message translates to:
+  /// **'세상의 전시, 내 손 안에.'**
+  String get splashSlogan;
+
+  /// Kakao login button label
+  ///
+  /// In ko, this message translates to:
+  /// **'카카오로 로그인'**
+  String get loginKakao;
+
+  /// Google login button label
+  ///
+  /// In ko, this message translates to:
+  /// **'Google로 로그인'**
+  String get loginGoogle;
+
+  /// Apple login button label
+  ///
+  /// In ko, this message translates to:
+  /// **'Apple로 로그인'**
+  String get loginApple;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
