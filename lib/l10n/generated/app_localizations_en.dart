@@ -22,4 +22,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navStorage => 'Storage';
+
+  @override
+  String get splashSlogan => 'The world\'s exhibitions, in your hands.';
+
+  @override
+  String get loginKakao => 'Login with Kakao';
+
+  @override
+  String get loginGoogle => 'Login with Google';
+
+  @override
+  String get loginApple => 'Login with Apple';
 }

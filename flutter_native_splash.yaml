@@ -1,0 +1,14 @@
+flutter_native_splash:
+  # iOS only configuration
+  color: "#8063FF"
+  image: assets/img/splash.png
+
+  # Disable Android (iOS only project)
+  android: false
+
+  # iOS specific settings
+  ios: true
+  ios_content_mode: center
+
+  # Fullscreen mode (hide status bar)
+  fullscreen: true

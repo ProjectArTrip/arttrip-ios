@@ -1,8 +1,39 @@
 {
   "@@locale": "en",
   "navHome": "Home",
+  "@navHome": {
+    "description": "Bottom navigation home tab label"
+  },
   "navMap": "Map",
+  "@navMap": {
+    "description": "Bottom navigation map tab label"
+  },
+  "navMy": "My",
+  "@navMy": {
+    "description": "Bottom navigation my page tab label"
+  },
   "navStamp": "Stamp",
+  "@navStamp": {
+    "description": "Bottom navigation stamp tab label"
+  },
   "navStorage": "Storage",
-  "navMy": "My"
+  "@navStorage": {
+    "description": "Bottom navigation storage tab label"
+  },
+  "splashSlogan": "The world's exhibitions, in your hands.",
+  "@splashSlogan": {
+    "description": "Splash screen slogan text"
+  },
+  "loginKakao": "Login with Kakao",
+  "@loginKakao": {
+    "description": "Kakao login button label"
+  },
+  "loginGoogle": "Login with Google",
+  "@loginGoogle": {
+    "description": "Google login button label"
+  },
+  "loginApple": "Login with Apple",
+  "@loginApple": {
+    "description": "Apple login button label"
+  }
 }

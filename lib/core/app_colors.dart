@@ -12,6 +12,7 @@ class AppColors {
   static const Color subRed = Color(0xFFEB6A5B);
   static const Color subLime = Color(0xFFB3FF3B);
   static const Color subLightGray = Color(0xFFF5F6FA);
+  static const Color subKakao = Color(0xFFFEE500);
 
   // Gray
   static const Color gray0 = Color(0xFFFFFFFF);

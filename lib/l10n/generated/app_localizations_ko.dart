@@ -22,4 +22,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get navStorage => '보관함';
+
+  @override
+  String get splashSlogan => '세상의 전시, 내 손 안에.';
+
+  @override
+  String get loginKakao => '카카오로 로그인';
+
+  @override
+  String get loginGoogle => 'Google로 로그인';
+
+  @override
+  String get loginApple => 'Apple로 로그인';
 }
