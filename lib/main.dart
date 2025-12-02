@@ -1,12 +1,15 @@
 import 'package:arttrip/core/enum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'core/app_colors.dart';
+import 'features/login/view/login_view.dart';
 import 'l10n/generated/app_localizations.dart';
-import 'shared/main_view.dart';
 
 void main() {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(const ArtTripApp());
 }
 
@@ -31,7 +34,7 @@ class ArtTripApp extends StatelessWidget {
             useMaterial3: true,
             fontFamily: FontFamilyType.pretendard.fontName,
           ),
-          home: const MainView(),
+          home: const LoginView(),
         );
       },
     );
