@@ -51,9 +51,6 @@ analyzer:
   exclude:
     - lib/**.freezed.dart
     - lib/**.g.dart
-    - lib/generated
-    - lib/firebase_options.dart
-    - lib/generated/l10n.dart
   errors:
     invalid_annotation_target: ignore
     todo: ignore
