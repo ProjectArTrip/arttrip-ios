@@ -7,9 +7,9 @@
 
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
-include: package:flutter_lints/flutter.yaml
+include:
+  package:flutter_lints/flutter.yaml
 
-linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:flutter_lints/flutter.yaml`
   # included above or to enable additional rules. A list of all available lints
@@ -20,9 +20,39 @@ linter:
   # or a specific dart file by using the `// ignore: name_of_lint` and
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
+linter:
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    - prefer_const_constructors
+    - always_declare_return_types
+    - avoid_types_on_closure_parameters
+    - avoid_annotating_with_dynamic
+    - avoid_escaping_inner_quotes
+    - avoid_function_literals_in_foreach_calls
+    - avoid_private_typedef_functions
+    - combinators_ordering
+    - curly_braces_in_flow_control_structures
+    - omit_local_variable_types
+    - annotate_overrides
+    - sort_constructors_first
+    - unawaited_futures
+    - directives_ordering
+    - unnecessary_final
+    - unnecessary_parenthesis
+    - conditional_uri_does_not_exist
+    - prefer_single_quotes
+    - await_only_futures
+    - always_use_package_imports
+    - avoid_empty_else
+    - comment_references
+    - prefer_void_to_null
+    - use_key_in_widget_constructors
 
+analyzer:
+  exclude:
+    - lib/**.freezed.dart
+    - lib/**.g.dart
+  errors:
+    invalid_annotation_target: ignore
+    todo: ignore
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

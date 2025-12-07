@@ -7,14 +7,14 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();

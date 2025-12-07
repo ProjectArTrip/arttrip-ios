@@ -1,19 +1,17 @@
+import 'package:arttrip/core/app_assets.dart';
+import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../core/app_assets.dart';
-import '../../core/app_colors.dart';
-import '../../core/extensions.dart';
-
 class BottomNavBar extends StatelessWidget {
-  final int currentIndex;
-  final ValueChanged<int> onTap;
-
   const BottomNavBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
   });
+  final int currentIndex;
+  final ValueChanged<int> onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +65,8 @@ class BottomNavBar extends StatelessWidget {
     String iconPath,
     String label,
   ) {
-    final isSelected = currentIndex == index;
-    final color = isSelected ? AppColors.primary300 : AppColors.gray900;
+    var isSelected = currentIndex == index;
+    var color = isSelected ? AppColors.primary300 : AppColors.gray900;
 
     return GestureDetector(
       onTap: () => onTap(index),
@@ -100,7 +98,7 @@ class BottomNavBar extends StatelessWidget {
   }
 
   Widget _buildStampNavItem(BuildContext context, String label) {
-    final isSelected = currentIndex == 2;
+    var isSelected = currentIndex == 2;
 
     return GestureDetector(
       onTap: () => onTap(2),

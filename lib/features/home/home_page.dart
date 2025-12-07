@@ -1,8 +1,8 @@
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:flutter/material.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
