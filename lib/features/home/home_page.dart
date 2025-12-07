@@ -1,24 +1,50 @@
-import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/core/app_assets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ArtTripText.pretendard().body01Bold().build().text('옥승철: 프로토타입 PROTOTYPE'),
-            ArtTripText.pretendard().body01Light().build().text('옥승철: 프로토타입 PROTOTYPE'),
-            ArtTripText.pretendard().title01Bold().build().text('옥승철: 프로토타입 PROTOTYPE'),
-            ArtTripText.pretendard().title02Bold().build().text('옥승철: 프로토타입 PROTOTYPE'),
-            ArtTripText.pretendard().body03Regular().build().text('옥승철: 프로토타입 PROTOTYPE'),
-            ArtTripText.pretendard().headline().build().text('옥승철: 프로토타입 PROTOTYPE'),
-          ],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leadingWidth: 88.w + 24.w,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 24.w),
+          child: SvgPicture.asset(AppAssets.icLogoBlack, width: 88.w, height: 28.h),
         ),
+        actions: [
+          Row(
+            spacing: 20.w,
+            children: [
+              GestureDetector(
+                onTap: () {},
+                child: SvgPicture.asset(AppAssets.icNotification, width: 24.w, height: 24.w),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: SvgPicture.asset(AppAssets.icCalendar, width: 24.w, height: 24.w),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: SvgPicture.asset(AppAssets.icSearch, width: 24.w, height: 24.w),
+              ),
+            ],
+          ),
+          SizedBox(width: 24.w),
+        ],
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [],
       ),
     );
   }

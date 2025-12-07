@@ -2,15 +2,19 @@ class AppAssets {
   AppAssets._();
 
   // SVG Icons
-  static const String iconHome = 'assets/svg/ic_home.svg';
-  static const String iconLocation = 'assets/svg/ic_location.svg';
-  static const String iconStamp = 'assets/svg/ic_stamp.svg';
-  static const String iconSave = 'assets/svg/ic_save.svg';
-  static const String iconMy = 'assets/svg/ic_my.svg';
-  static const String iconKakao = 'assets/svg/ic_kakao.svg';
-  static const String iconApple = 'assets/svg/ic_apple.svg';
-  static const String iconGoogle = 'assets/svg/ic_google.svg';
+  static const String icHome = 'assets/svg/ic_home.svg';
+  static const String icLocation = 'assets/svg/ic_location.svg';
+  static const String icStamp = 'assets/svg/ic_stamp.svg';
+  static const String icSave = 'assets/svg/ic_save.svg';
+  static const String icMy = 'assets/svg/ic_my.svg';
+  static const String icKakao = 'assets/svg/ic_kakao.svg';
+  static const String icApple = 'assets/svg/ic_apple.svg';
+  static const String icGoogle = 'assets/svg/ic_google.svg';
+  static const String icNotification = 'assets/svg/ic_notification.svg';
+  static const String icCalendar = 'assets/svg/ic_calendar.svg';
+  static const String icSearch = 'assets/svg/ic_search.svg';
 
   // Logo
-  static const String logo = 'assets/svg/ic_logo.svg';
+  static const String icLogoWhite = 'assets/svg/ic_logo_white.svg';
+  static const String icLogoBlack = 'assets/svg/ic_logo_black.svg';
 }
