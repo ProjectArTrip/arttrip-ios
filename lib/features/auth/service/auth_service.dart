@@ -12,8 +12,7 @@ class AuthResult {
 
   factory AuthResult.success() => const AuthResult(isSuccess: true);
 
-  factory AuthResult.failure(String message) =>
-      AuthResult(isSuccess: false, errorMessage: message);
+  factory AuthResult.failure(String message) => AuthResult(isSuccess: false, errorMessage: message);
 
   final bool isSuccess;
   final String? errorMessage;

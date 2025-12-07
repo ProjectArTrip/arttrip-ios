@@ -197,14 +197,11 @@ sealed class NetworkException implements Exception {
 
   // === Timeout Exceptions ===
 
-  factory NetworkException.connectionTimeout({required String message}) =
-      ConnectionTimeoutException;
+  factory NetworkException.connectionTimeout({required String message}) = ConnectionTimeoutException;
 
-  factory NetworkException.sendTimeout({required String message}) =
-      SendTimeoutException;
+  factory NetworkException.sendTimeout({required String message}) = SendTimeoutException;
 
-  factory NetworkException.receiveTimeout({required String message}) =
-      ReceiveTimeoutException;
+  factory NetworkException.receiveTimeout({required String message}) = ReceiveTimeoutException;
 
   factory NetworkException.requestTimeout({
     required String message,
@@ -214,11 +211,9 @@ sealed class NetworkException implements Exception {
 
   // === Connection Exceptions ===
 
-  factory NetworkException.noInternetConnection({required String message}) =
-      NoInternetConnectionException;
+  factory NetworkException.noInternetConnection({required String message}) = NoInternetConnectionException;
 
-  factory NetworkException.badCertificate({required String message}) =
-      BadCertificateException;
+  factory NetworkException.badCertificate({required String message}) = BadCertificateException;
 
   // === Client Error Exceptions (4xx) ===
 
@@ -298,8 +293,7 @@ sealed class NetworkException implements Exception {
 
   // === Other Exceptions ===
 
-  factory NetworkException.requestCancelled({required String message}) =
-      RequestCancelledException;
+  factory NetworkException.requestCancelled({required String message}) = RequestCancelledException;
 
   factory NetworkException.unexpected({
     required String message,
@@ -314,18 +308,15 @@ sealed class NetworkException implements Exception {
 // === Timeout Exception Classes ===
 
 final class ConnectionTimeoutException extends NetworkException {
-  const ConnectionTimeoutException({required super.message})
-      : super(statusCode: null, data: null);
+  const ConnectionTimeoutException({required super.message}) : super(statusCode: null, data: null);
 }
 
 final class SendTimeoutException extends NetworkException {
-  const SendTimeoutException({required super.message})
-      : super(statusCode: null, data: null);
+  const SendTimeoutException({required super.message}) : super(statusCode: null, data: null);
 }
 
 final class ReceiveTimeoutException extends NetworkException {
-  const ReceiveTimeoutException({required super.message})
-      : super(statusCode: null, data: null);
+  const ReceiveTimeoutException({required super.message}) : super(statusCode: null, data: null);
 }
 
 final class RequestTimeoutException extends NetworkException {
@@ -339,13 +330,11 @@ final class RequestTimeoutException extends NetworkException {
 // === Connection Exception Classes ===
 
 final class NoInternetConnectionException extends NetworkException {
-  const NoInternetConnectionException({required super.message})
-      : super(statusCode: null, data: null);
+  const NoInternetConnectionException({required super.message}) : super(statusCode: null, data: null);
 }
 
 final class BadCertificateException extends NetworkException {
-  const BadCertificateException({required super.message})
-      : super(statusCode: null, data: null);
+  const BadCertificateException({required super.message}) : super(statusCode: null, data: null);
 }
 
 // === Client Error Exception Classes (4xx) ===
@@ -451,8 +440,7 @@ final class GatewayTimeoutException extends NetworkException {
 // === Other Exception Classes ===
 
 final class RequestCancelledException extends NetworkException {
-  const RequestCancelledException({required super.message})
-      : super(statusCode: null, data: null);
+  const RequestCancelledException({required super.message}) : super(statusCode: null, data: null);
 }
 
 final class UnexpectedException extends NetworkException {
