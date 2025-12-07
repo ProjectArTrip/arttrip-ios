@@ -1,6 +1,10 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/auth/service/auth_service.dart';
+import 'package:arttrip/main_page.dart';
+
+import 'package:arttrip/shared/utils/snackbar_utils.dart';
 import 'package:arttrip/shared/widgets/social_login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -15,10 +19,43 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
     FlutterNativeSplash.remove();
+  }
+
+  Future<void> _handleKakaoLogin() async {
+    if (_isLoading) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      var result = await AuthService.instance.loginWithKakao();
+
+      if (!mounted) return;
+
+      if (result.isSuccess) {
+        debugPrint('로그인 성공');
+
+        // 메인 화면으로 이동
+        await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const MainPage()),
+        );
+      } else {
+        SnackBarUtils.showError(
+          context,
+          message: result.errorMessage ?? '로그인에 실패했습니다',
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   @override
@@ -42,9 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                   spacing: 12.h,
                   children: [
                     SocialLoginButton(
-                      onPressed: () {
-                        // TODO: Implement Kakao login
-                      },
+                      onPressed: _isLoading ? () {} : () => _handleKakaoLogin(),
                       label: context.l10n.loginKakao,
                       icon: AppAssets.iconKakao,
                       backgroundColor: AppColors.subKakao,
