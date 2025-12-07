@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
           SizedBox(width: 24.w),
         ],
       ),
-      body: Column(
+      body: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [],
       ),
