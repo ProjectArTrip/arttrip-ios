@@ -5,6 +5,7 @@ import 'package:arttrip/features/stamp/view/stamp_view.dart';
 import 'package:arttrip/features/storage/view/storage_view.dart';
 import 'package:arttrip/shared/widgets/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -23,6 +24,12 @@ class _MainPageState extends State<MainPage> {
     StorageView(),
     MyView(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    FlutterNativeSplash.remove();
+  }
 
   @override
   Widget build(BuildContext context) {

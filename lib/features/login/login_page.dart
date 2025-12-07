@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset(
-                  AppAssets.logo,
+                  AppAssets.icLogoWhite,
                   width: 188.w,
                   height: 59.h,
                 ),
@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                     SocialLoginButton(
                       onPressed: _isLoading ? () {} : () => _handleKakaoLogin(),
                       label: context.l10n.loginKakao,
-                      icon: AppAssets.iconKakao,
+                      icon: AppAssets.icKakao,
                       backgroundColor: AppColors.subKakao,
                       textColor: Colors.black,
                     ),
@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                         // TODO: Implement Google login
                       },
                       label: context.l10n.loginGoogle,
-                      icon: AppAssets.iconGoogle,
+                      icon: AppAssets.icGoogle,
                       backgroundColor: AppColors.gray0,
                       textColor: Colors.black,
                     ),
@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                         // TODO: Implement Apple login
                       },
                       label: context.l10n.loginApple,
-                      icon: AppAssets.iconApple,
+                      icon: AppAssets.icApple,
                       backgroundColor: AppColors.gray900,
                       textColor: AppColors.textWhite,
                     ),

@@ -1,7 +1,7 @@
 flutter_native_splash:
   # iOS only configuration
   color: "#8063FF"
-  image: assets/img/splash.png
+  image: assets/img/img_splash.png
 
   # Disable Android (iOS only project)
   android: false
