@@ -53,3 +53,6 @@ app.*.map.json
 
 # Generated files
 /lib/l10n/generated/
+
+# Environment variables
+.env

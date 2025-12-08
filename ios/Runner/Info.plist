@@ -49,6 +49,23 @@
 		<true/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>kakaokompassauth</string>
+			<string>kakaolink</string>
+			<string>kakaoplus</string>
+		</array>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>kakao295035084c1e08b86ef4d6a4e107c4fa</string>
+				</array>
+			</dict>
+		</array>
 		<!--스플래시 화면에서 상단 시스템바 아이콘 색상을 검정으로 고정-->
 		<key>UIStatusBarStyle</key>
     	<string>UIStatusBarStyleDarkContent</string>
