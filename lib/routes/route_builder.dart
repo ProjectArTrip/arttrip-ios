@@ -13,8 +13,6 @@ Page<dynamic> buildPage(
   var isModal = state.uri.queryParameters['modal'] == 'true';
   var transition = state.uri.queryParameters['trans'];
 
-  showModalBottomSheet(context: context, builder: (context) => child);
-
   // 트랜지션 처리
   if (transition != null) {
     return CustomTransitionPage<dynamic>(
