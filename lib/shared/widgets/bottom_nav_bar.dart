@@ -4,7 +4,7 @@ import 'package:arttrip/core/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class BottomNavBar extends StatelessWidget {
+class BottomNavBar extends StatefulWidget {
   const BottomNavBar({
     super.key,
     required this.currentIndex,
@@ -13,6 +13,11 @@ class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
 
+  @override
+  State<BottomNavBar> createState() => BottomNavBarState();
+}
+
+class BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -65,11 +70,11 @@ class BottomNavBar extends StatelessWidget {
     String iconPath,
     String label,
   ) {
-    var isSelected = currentIndex == index;
+    var isSelected = widget.currentIndex == index;
     var color = isSelected ? AppColors.primary300 : AppColors.gray900;
 
     return GestureDetector(
-      onTap: () => onTap(index),
+      onTap: () => widget.onTap(index),
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
         width: 60,
@@ -98,10 +103,10 @@ class BottomNavBar extends StatelessWidget {
   }
 
   Widget _buildStampNavItem(BuildContext context, String label) {
-    var isSelected = currentIndex == 2;
+    var isSelected = widget.currentIndex == 2;
 
     return GestureDetector(
-      onTap: () => onTap(2),
+      onTap: () => widget.onTap(2),
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
         width: 60,

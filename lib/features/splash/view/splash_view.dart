@@ -1,7 +1,6 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/features/auth/service/auth_service.dart';
-import 'package:arttrip/features/login/login_page.dart';
-import 'package:arttrip/main_page.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -58,18 +57,12 @@ class _SplashViewState extends State<SplashView> {
 
   void _navigateToLogin() {
     if (!mounted) return;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const LoginPage()),
-    );
+    Routes.go(context, '/login');
   }
 
   void _navigateToHome() {
     if (!mounted) return;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const MainPage()),
-    );
+    Routes.go(context, '/');
   }
 
   @override
