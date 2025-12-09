@@ -5,8 +5,8 @@ import 'package:arttrip/core/env.dart';
 import 'package:arttrip/core/network/network.dart';
 import 'package:arttrip/features/auth/service/auth_service.dart';
 import 'package:arttrip/features/auth/service/token_storage_service.dart';
-import 'package:arttrip/features/splash/view/splash_view.dart';
 import 'package:arttrip/l10n/generated/app_localizations.dart';
+import 'package:arttrip/routes/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -60,7 +60,7 @@ class ArtTripApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, child) {
-        return MaterialApp(
+        return MaterialApp.router(
           title: 'ArtTrip',
           debugShowCheckedModeBanner: false,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -71,7 +71,7 @@ class ArtTripApp extends StatelessWidget {
             useMaterial3: true,
             fontFamily: FontFamilyType.pretendard.fontName,
           ),
-          home: const SplashView(),
+          routerConfig: appRouter,
         );
       },
     );
