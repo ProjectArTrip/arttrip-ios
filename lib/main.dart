@@ -50,7 +50,7 @@ void main() async {
   );
 
   runApp(MultiProvider(
-    providers: getProviders(),
+    providers: getProviders,
     child: const ArtTripApp(),
   ));
 }
