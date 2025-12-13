@@ -8,5 +8,14 @@
   "splashSlogan": "The world's exhibitions, in your hands.",
   "loginKakao": "Login with Kakao",
   "loginGoogle": "Login with Google",
-  "loginApple": "Login with Apple"
+  "@loginGoogle": {
+    "description": "Google login button label"
+  },
+  "loginApple": "Login with Apple",
+  "@loginApple": {
+    "description": "Apple login button label"
+  },
+  "domesticExhibition": "domesticExhibition",
+  "internationalExhibition": "internationalExhibition",
+  "allItems": "All"
 }

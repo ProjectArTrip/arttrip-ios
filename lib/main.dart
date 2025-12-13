@@ -1,5 +1,6 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/config/prefs.dart';
+import 'package:arttrip/core/config/provider_config.dart';
 import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/env.dart';
 import 'package:arttrip/core/network/network.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   var widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +49,10 @@ void main() async {
     ),
   );
 
-  runApp(const ArtTripApp());
+  runApp(MultiProvider(
+    providers: getProviders,
+    child: const ArtTripApp(),
+  ));
 }
 
 class ArtTripApp extends StatelessWidget {
