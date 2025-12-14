@@ -7,14 +7,22 @@ import 'package:flutter/foundation.dart';
 class AuthResult {
   const AuthResult({
     required this.isSuccess,
+    this.firstLogin,
     this.errorMessage,
   });
 
-  factory AuthResult.success() => const AuthResult(isSuccess: true);
+  factory AuthResult.success({required bool firstLogin}) => AuthResult(
+        isSuccess: true,
+        firstLogin: firstLogin,
+      );
 
-  factory AuthResult.failure(String message) => AuthResult(isSuccess: false, errorMessage: message);
+  factory AuthResult.failure(String message) => AuthResult(
+        isSuccess: false,
+        errorMessage: message,
+      );
 
   final bool isSuccess;
+  final bool? firstLogin;
   final String? errorMessage;
 }
 
@@ -54,15 +62,23 @@ class AuthService {
       );
 
       return serverResult.when(
-        success: (tokenResponse) async {
+        success: (apiResponse) async {
+          // isSuccess 체크
+          if (!apiResponse.isSuccess || apiResponse.result == null) {
+            debugPrint('서버 응답 실패: ${apiResponse.message}');
+            return AuthResult.failure(apiResponse.message);
+          }
+
+          var tokenResult = apiResponse.result!;
+
           // 3. 토큰 저장
           await _tokenStorage.saveTokens(
-            accessToken: tokenResponse.accessToken,
-            refreshToken: tokenResponse.refreshToken,
+            accessToken: tokenResult.accessToken,
+            refreshToken: tokenResult.refreshToken,
           );
 
-          debugPrint('서버 토큰 발급 및 저장 완료');
-          return AuthResult.success();
+          debugPrint('서버 토큰 발급 및 저장 완료, firstLogin: ${tokenResult.firstLogin}');
+          return AuthResult.success(firstLogin: tokenResult.firstLogin);
         },
         failure: (exception) {
           debugPrint('서버 토큰 발급 실패: ${exception.message}');
@@ -89,11 +105,15 @@ class AuthService {
 
   /// 로그아웃
   Future<void> logout() async {
-    try {
-      // 서버 로그아웃 (선택적)
-      await _authApi.logout();
-    } catch (e) {
-      debugPrint('서버 로그아웃 실패: $e');
+    var refreshToken = _tokenStorage.getRefreshToken();
+
+    // 서버 로그아웃 (실패해도 로컬 로그아웃은 진행)
+    if (refreshToken != null) {
+      var result = await _authApi.logout(refreshToken: refreshToken);
+      result.when(
+        success: (_) => debugPrint('서버 로그아웃 성공'),
+        failure: (e) => debugPrint('서버 로그아웃 실패: ${e.message}'),
+      );
     }
 
     // 카카오 로그아웃
@@ -113,12 +133,18 @@ class AuthService {
     var result = await _authApi.refreshToken(refreshToken: refreshToken);
 
     return result.when(
-      success: (tokenResponse) async {
+      success: (apiResponse) async {
+        if (!apiResponse.isSuccess || apiResponse.result == null) {
+          debugPrint('토큰 갱신 실패: ${apiResponse.message}');
+          return null;
+        }
+
+        var tokenResult = apiResponse.result!;
         await _tokenStorage.saveTokens(
-          accessToken: tokenResponse.accessToken,
-          refreshToken: tokenResponse.refreshToken,
+          accessToken: tokenResult.accessToken,
+          refreshToken: tokenResult.refreshToken,
         );
-        return tokenResponse.accessToken;
+        return tokenResult.accessToken;
       },
       failure: (exception) {
         debugPrint('토큰 갱신 실패: ${exception.message}');
@@ -132,13 +158,10 @@ class AuthService {
     return _tokenStorage.getAccessToken();
   }
 
-  /// 로그인 상태 확인
+  /// 로그인 상태 확인 (토큰 존재 여부)
+  ///
+  /// 토큰 만료 여부는 API 호출 시 서버 401 응답으로 판단
   bool isLoggedIn() {
     return _tokenStorage.hasToken();
-  }
-
-  /// 토큰 만료 여부 확인
-  bool isTokenExpired() {
-    return _tokenStorage.isTokenExpired();
   }
 }

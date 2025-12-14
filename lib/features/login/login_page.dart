@@ -37,10 +37,16 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
 
       if (result.isSuccess) {
-        debugPrint('로그인 성공');
+        debugPrint('로그인 성공, firstLogin: ${result.firstLogin}');
 
-        // 메인 화면으로 이동
-        Routes.go(context, '/');
+        // firstLogin 분기 처리
+        if (result.firstLogin == true) {
+          // 신규 사용자: 온보딩 키워드 선택으로 이동
+          Routes.go(context, '/onboarding/keywords');
+        } else {
+          // 기존 사용자: 홈으로 이동
+          Routes.go(context, '/');
+        }
       } else {
         SnackBarUtils.showError(
           context,

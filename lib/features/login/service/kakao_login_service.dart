@@ -84,8 +84,6 @@ class KakaoLoginService {
       }
 
       debugPrint('카카오 로그인 성공');
-      debugPrint('accessToken: ${token.accessToken}');
-      debugPrint('idToken: ${token.idToken}');
 
       // OIDC ID Token 확인
       if (token.idToken == null) {

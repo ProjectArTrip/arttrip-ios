@@ -64,6 +64,15 @@ class AuthInterceptor extends Interceptor {
       return handler.next(err);
     }
 
+    // 응답 body에서 code 확인
+    var errorCode = _extractErrorCode(err.response);
+
+    // JWT401-EXPIRED_ACCESS만 토큰 갱신 시도, 나머지는 바로 로그아웃
+    if (errorCode != 'JWT401-EXPIRED_ACCESS') {
+      await onTokenExpired();
+      return handler.next(err);
+    }
+
     // 이미 토큰 갱신 중이면 대기열에 추가
     if (_isRefreshing) {
       return _queueRequest(err.requestOptions, handler);
@@ -97,6 +106,20 @@ class AuthInterceptor extends Interceptor {
     } finally {
       _isRefreshing = false;
     }
+  }
+
+  /// 응답에서 에러 코드 추출
+  String? _extractErrorCode(Response<dynamic>? response) {
+    if (response?.data == null) return null;
+
+    try {
+      var data = response!.data;
+      if (data is Map<String, dynamic>) {
+        return data['code'] as String?;
+      }
+    } catch (_) {}
+
+    return null;
   }
 
   /// 토큰이 필요 없는 공개 엔드포인트인지 확인

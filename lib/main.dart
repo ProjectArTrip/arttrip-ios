@@ -45,7 +45,10 @@ void main() async {
     authInterceptor: AuthInterceptor(
       tokenProvider: () async => TokenStorageService.instance.getAccessToken(),
       onTokenRefresh: () => AuthService.instance.refreshToken(),
-      onTokenExpired: () => AuthService.instance.logout(),
+      onTokenExpired: () async {
+        await AuthService.instance.logout();
+        appRouter.go('/login');
+      },
     ),
   );
 
