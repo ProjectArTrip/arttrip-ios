@@ -56,6 +56,14 @@ class ErrorInterceptor extends Interceptor {
       buffer.writeln('║ Response Data: ${err.response?.data}');
     }
 
+    // 실제 에러 원인 출력
+    if (err.error != null) {
+      buffer.writeln('║ Original Error: ${err.error}');
+    }
+    if (err.message != null) {
+      buffer.writeln('║ Dio Message: ${err.message}');
+    }
+
     buffer.writeln('╚══════════════════════════════════════════════════════════');
 
     // ignore: avoid_print
