@@ -1,11 +1,11 @@
 import 'package:arttrip/core/network/api_result.dart';
 import 'package:arttrip/core/network/interceptors/auth_interceptor.dart';
 import 'package:arttrip/core/network/interceptors/error_interceptor.dart';
+import 'package:arttrip/core/network/interceptors/logging_interceptor.dart';
 import 'package:arttrip/core/network/interceptors/retry_interceptor.dart';
 import 'package:arttrip/core/network/network_exceptions.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 /// Dio 클라이언트 설정 옵션
 class DioClientOptions {
@@ -90,29 +90,19 @@ class DioClient {
     );
 
     // 인터셉터 순서가 중요!
-    // 1. 로깅 (요청 시작 로그)
-    // 2. 인증 (토큰 추가)
+    // 1. 인증 (토큰 추가) - 먼저 실행되어야 로그에 토큰이 포함됨
+    // 2. 로깅 (요청/응답 로그)
     // 3. 재시도 (실패 시 재요청)
     // 4. 에러 핸들링 (최종 에러 변환)
 
-    // 로깅 인터셉터 (디버그 모드에서만)
-    if (options.enableLogging && kDebugMode) {
-      _dio.interceptors.add(
-        PrettyDioLogger(
-          requestHeader: true,
-          requestBody: true,
-          responseHeader: false,
-          responseBody: true,
-          error: true,
-          compact: true,
-          maxWidth: 90,
-        ),
-      );
-    }
-
-    // 인증 인터셉터
+    // 인증 인터셉터 (먼저 추가)
     if (authInterceptor != null) {
       _dio.interceptors.add(authInterceptor);
+    }
+
+    // 로깅 인터셉터 (디버그 모드에서만)
+    if (options.enableLogging && kDebugMode) {
+      _dio.interceptors.add(LoggingInterceptor());
     }
 
     // 재시도 인터셉터

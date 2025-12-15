@@ -85,6 +85,11 @@ class RetryInterceptor extends Interceptor {
       return false;
     }
 
+    // 재시도하지 않을 경로
+    if (_isNoRetryPath(err.requestOptions.path)) {
+      return false;
+    }
+
     // 타임아웃 에러는 재시도
     if (_isTimeoutError(err)) {
       return true;
@@ -102,6 +107,15 @@ class RetryInterceptor extends Interceptor {
     }
 
     return false;
+  }
+
+  /// 재시도하지 않을 경로인지 확인
+  bool _isNoRetryPath(String path) {
+    const noRetryPaths = [
+      '/auth/app/logout',
+      '/auth/social',
+    ];
+    return noRetryPaths.any((p) => path.contains(p));
   }
 
   /// 타임아웃 에러인지 확인

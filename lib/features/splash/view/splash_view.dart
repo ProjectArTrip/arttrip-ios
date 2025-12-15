@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 /// 스플래시 화면
 ///
 /// 앱 시작 시 인증 상태를 확인하고 적절한 화면으로 이동
+/// 토큰 만료 여부는 API 호출 시 서버 401 응답으로 판단
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
 
@@ -30,27 +31,10 @@ class _SplashViewState extends State<SplashView> {
 
     var authService = AuthService.instance;
 
-    // 토큰 존재 여부 확인
-    if (!authService.isLoggedIn()) {
-      _navigateToLogin();
-      return;
-    }
-
-    // 토큰 만료 여부 확인
-    if (!authService.isTokenExpired()) {
-      // 토큰이 유효하면 홈으로
-      _navigateToHome();
-      return;
-    }
-
-    // 토큰이 만료되었으면 갱신 시도
-    var newToken = await authService.refreshToken();
-
-    if (newToken != null) {
-      // 갱신 성공하면 홈으로
+    // 토큰 존재 여부만 확인 (만료 여부는 API 호출 시 서버에서 판단)
+    if (authService.isLoggedIn()) {
       _navigateToHome();
     } else {
-      // 갱신 실패하면 로그인으로
       _navigateToLogin();
     }
   }

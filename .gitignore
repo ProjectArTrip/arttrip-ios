@@ -56,3 +56,6 @@ app.*.map.json
 
 # Environment variables
 .env
+
+# Docs
+/docs/

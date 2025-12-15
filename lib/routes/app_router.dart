@@ -1,4 +1,5 @@
 import 'package:arttrip/features/login/login_page.dart';
+import 'package:arttrip/features/onboarding/view/keywords_page.dart';
 import 'package:arttrip/features/splash/view/splash_view.dart';
 import 'package:arttrip/routes/main_shell_route.dart';
 import 'package:arttrip/routes/route_builder.dart';
@@ -31,6 +32,14 @@ final appRouter = GoRouter(
       path: '/login',
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const LoginPage());
+      },
+    ),
+
+    // 온보딩 - 관심 키워드 선택
+    GoRoute(
+      path: '/onboarding/keywords',
+      pageBuilder: (context, state) {
+        return buildPage(context, state, child: const KeywordsPage());
       },
     ),
   ],
