@@ -1,5 +1,4 @@
 import 'package:arttrip/features/home/home_repository.dart';
-import 'package:arttrip/shared/models/region_model.dart';
 import 'package:flutter/material.dart';
 
 class HomeViewModel with ChangeNotifier {
@@ -7,22 +6,22 @@ class HomeViewModel with ChangeNotifier {
   final HomeRepository repository;
 
   bool _isDomestic = true;
-  RegionModel? _selectedRegion;
+  String? _selectedRegion;
 
   bool get isDomestic => _isDomestic;
-  RegionModel? get selectedRegion => _selectedRegion;
+  String? get selectedRegion => _selectedRegion;
 
   set isDomestic(bool value) {
     _isDomestic = value;
     notifyListeners();
   }
 
-  void updateSelectedRegion(RegionModel region) {
+  void updateSelectedRegion(String region) {
     _selectedRegion = region;
     notifyListeners();
   }
 
-  Future<List<RegionModel>?> fetchOverseasCountries() {
+  Future<List<String>?> fetchOverseasCountries() {
     var overseasCountries = repository.fetchOverseasCountries();
     overseasCountries.then((value) {
       if (value?.isNotEmpty == true) updateSelectedRegion(value!.first);
@@ -30,7 +29,7 @@ class HomeViewModel with ChangeNotifier {
     return overseasCountries;
   }
 
-  Future<List<RegionModel>?> fetchDomesticRegions() {
+  Future<List<String>?> fetchDomesticRegions() {
     return repository.fetchDomesticRegions();
   }
 }
