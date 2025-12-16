@@ -67,7 +67,7 @@ class AuthApiService extends BaseApiService {
       );
 
       await dio.post('/auth/app/logout', data: {'refreshToken': refreshToken});
-      return ApiResult.success(null);
+      return const ApiResult.success(null);
     } catch (e) {
       // 로그아웃 실패해도 로컬 로그아웃은 진행되므로 에러 무시
       return ApiResult.failure(
