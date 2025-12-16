@@ -58,4 +58,4 @@ app.*.map.json
 .env
 
 # Docs
-/docs/
+/docs/devtools_options.yaml
