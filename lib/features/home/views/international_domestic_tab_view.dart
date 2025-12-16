@@ -79,12 +79,10 @@ class _InternationalDomesticTabViewState
                     future:
                         regionsFuture ?? homeViewModel.fetchOverseasCountries(),
                     data: (data) {
-                      if (data?.isEmpty ?? true) {
-                        return const SizedBox.shrink();
-                      }
+                      if (data?.isEmpty ?? true) return const SizedBox.shrink();
 
                       _selectedRegionIndex.value = 0; // 데이터 호출이 빠를 수 있어서 초기화 추가
-                      var itemCount = homeViewModel.isDomestic
+                      var itemCount = !homeViewModel.isDomestic
                           ? data!.length + 1
                           : data!.length;
                       _itemKeys = List.generate(itemCount, (_) => GlobalKey());
@@ -92,7 +90,7 @@ class _InternationalDomesticTabViewState
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         _updateSelectedRegionIndex(
                           0,
-                          homeViewModel.isDomestic ? allItem! : data[0],
+                          !homeViewModel.isDomestic ? allItem! : data[0],
                         );
                       });
 
@@ -110,7 +108,7 @@ class _InternationalDomesticTabViewState
                           return _buildRegionItem(
                             _itemKeys![index],
                             index,
-                            homeViewModel.isDomestic
+                            !homeViewModel.isDomestic
                                 ? index == 0
                                       ? null
                                       : data[index - 1]
@@ -171,7 +169,7 @@ class _InternationalDomesticTabViewState
             context,
             listen: false,
           );
-          homeViewModel.isDomestic = index == 0 ? true : false;
+          homeViewModel.isDomestic = index == 0 ? false : true;
           if (index == 0) {
             _regionsFuture.value = homeViewModel.fetchOverseasCountries();
           } else {

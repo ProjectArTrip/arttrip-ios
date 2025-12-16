@@ -1,11 +1,12 @@
 import 'package:arttrip/features/home/home_repository.dart';
+import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:flutter/material.dart';
 
 class HomeViewModel with ChangeNotifier {
   HomeViewModel(this.repository);
   final HomeRepository repository;
 
-  bool _isDomestic = true;
+  bool _isDomestic = false;
   String? _selectedRegion;
 
   bool get isDomestic => _isDomestic;
@@ -31,5 +32,16 @@ class HomeViewModel with ChangeNotifier {
 
   Future<List<String>?> fetchDomesticRegions() {
     return repository.fetchDomesticRegions();
+  }
+
+  Future<List<ExhibitModel>?> fetchTodayExhibitRecommendations({
+    String? country,
+    String? region,
+  }) {
+    return repository.fetchTodayExhibitRecommendations(
+      isDomestic: _isDomestic,
+      country: country,
+      region: region,
+    );
   }
 }

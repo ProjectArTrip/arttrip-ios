@@ -1,10 +1,16 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/shared/models/base_result_model.dart';
+import 'package:arttrip/shared/models/exhibit_model.dart';
 
 abstract class HomeRepository {
   Future<List<String>?> fetchOverseasCountries();
   Future<List<String>?> fetchDomesticRegions();
+  Future<List<ExhibitModel>?> fetchTodayExhibitRecommendations({
+    required bool isDomestic,
+    String? country,
+    String? region,
+  });
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -17,9 +23,7 @@ class HomeRepositoryImpl implements HomeRepository {
       var response = await _dio.get('/exhibit/overseas');
       var model = BaseResultModel.fromJson(response.dataOrNull);
       if (model.result is! List) {
-        AppUtil.debugLog(
-          'fetchOverseasCountries type inconsistency: ${model.result.runtimeType}',
-        );
+        AppUtil.debugLog('fetchOverseasCountries type inconsistency: ${model.result.runtimeType}');
         return null;
       }
 
@@ -36,15 +40,35 @@ class HomeRepositoryImpl implements HomeRepository {
       var response = await _dio.get('/exhibit/domestic');
       var model = BaseResultModel.fromJson(response.dataOrNull);
       if (model.result is! List) {
-        AppUtil.debugLog(
-          'fetchDomesticRegions type inconsistency: ${model.result.runtimeType}',
-        );
+        AppUtil.debugLog('fetchDomesticRegions type inconsistency: ${model.result.runtimeType}');
         return null;
       }
 
       return model.result.map<String>((e) => e.toString()).toList();
     } catch (e) {
       AppUtil.debugLog('fetchDomesticRegions: $e');
+    }
+    return null;
+  }
+
+  @override
+  Future<List<ExhibitModel>?> fetchTodayExhibitRecommendations({
+    required bool isDomestic,
+    String? country,
+    String? region,
+  }) async {
+    try {
+      var body =
+          !isDomestic ? {'isDomestic': isDomestic, 'country': country} : {'isDomestic': isDomestic, 'region': region};
+      var response = await _dio.post('/home/recommend/today', data: body);
+      var model = BaseResultModel.fromJson(response.dataOrNull);
+      if (model.result is! List) {
+        AppUtil.debugLog('fetchTodayExhibitRecommendations type inconsistency: ${model.result.runtimeType}');
+        return null;
+      }
+      return model.result.map<ExhibitModel>((e) => ExhibitModel.fromJson(e)).toList();
+    } catch (e) {
+      AppUtil.debugLog('fetchTodayExhibitRecommendations: $e');
     }
     return null;
   }
