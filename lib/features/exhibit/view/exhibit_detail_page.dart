@@ -33,9 +33,9 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context
-          .read<ExhibitDetailViewModel>()
-          .fetchExhibitDetail(widget.exhibitId);
+      context.read<ExhibitDetailViewModel>().fetchExhibitDetail(
+        widget.exhibitId,
+      );
     });
   }
 
@@ -59,10 +59,10 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
       body: vm.isLoading
           ? const Center(child: CircularProgressIndicator())
           : vm.errorMessage != null
-              ? Center(child: Text(vm.errorMessage!))
-              : vm.exhibit == null
-                  ? const Center(child: Text('데이터를 불러올 수 없습니다'))
-                  : _buildContent(vm.exhibit!),
+          ? Center(child: Text(vm.errorMessage!))
+          : vm.exhibit == null
+          ? const Center(child: Text('데이터를 불러올 수 없습니다'))
+          : _buildContent(vm.exhibit!),
     );
   }
 
@@ -191,10 +191,7 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
         ),
         child: Text(
           '홈페이지 바로 가기',
-          style: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w700,
-          ),
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
         ),
       ),
     );
@@ -203,18 +200,13 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
   Widget _buildTabBar() {
     return Container(
       decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: _grayBorder, width: 1),
-        ),
+        border: Border(bottom: BorderSide(color: _grayBorder, width: 1)),
       ),
       child: TabBar(
         controller: _tabController,
         labelColor: _primaryColor,
         unselectedLabelColor: const Color(0xFFA5A5AF),
-        labelStyle: TextStyle(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w700,
-        ),
+        labelStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
         unselectedLabelStyle: TextStyle(
           fontSize: 16.sp,
           fontWeight: FontWeight.w700,
@@ -367,10 +359,7 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
                   color: _textColor,
                 ),
               ),
-              if (extraWidget != null) ...[
-                SizedBox(height: 4.h),
-                extraWidget,
-              ],
+              if (extraWidget != null) ...[SizedBox(height: 4.h), extraWidget],
             ],
           ),
         ),

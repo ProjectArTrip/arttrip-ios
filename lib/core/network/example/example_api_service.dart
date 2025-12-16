@@ -176,10 +176,9 @@ class ExhibitionApiService extends BaseApiService {
       },
     );
 
-    return result.map((data) => parsePaginatedResponse<Exhibition>(
-          data,
-          Exhibition.fromJson,
-        ));
+    return result.map(
+      (data) => parsePaginatedResponse<Exhibition>(data, Exhibition.fromJson),
+    );
   }
 
   /// 전시회 상세 조회
@@ -192,18 +191,14 @@ class ExhibitionApiService extends BaseApiService {
 
   /// 전시회 북마크 추가
   Future<ApiResult<void>> addBookmark(int exhibitionId) async {
-    var result = await post<Object?>(
-      '/exhibitions/$exhibitionId/bookmark',
-    );
+    var result = await post<Object?>('/exhibitions/$exhibitionId/bookmark');
 
     return result.map((_) {});
   }
 
   /// 전시회 북마크 삭제
   Future<ApiResult<void>> removeBookmark(int exhibitionId) async {
-    var result = await delete<Object?>(
-      '/exhibitions/$exhibitionId/bookmark',
-    );
+    var result = await delete<Object?>('/exhibitions/$exhibitionId/bookmark');
 
     return result.map((_) {});
   }
@@ -253,10 +248,7 @@ class _ExampleViewModel {
   Future<void> loadExhibitions({int page = 1}) async {
     isLoading = true;
 
-    var result = await _exhibitionService.getExhibitions(
-      page: page,
-      limit: 20,
-    );
+    var result = await _exhibitionService.getExhibitions(page: page, limit: 20);
 
     // when 패턴 사용
     result.when(
@@ -290,11 +282,9 @@ class _ExampleViewModel {
     var result = await _userService.getCurrentUser();
 
     // getOrElse 사용
-    return result.getOrElse(() => const User(
-          id: 0,
-          email: 'guest@example.com',
-          name: 'Guest',
-        ));
+    return result.getOrElse(
+      () => const User(id: 0, email: 'guest@example.com', name: 'Guest'),
+    );
   }
 
   /// nullable 데이터 반환

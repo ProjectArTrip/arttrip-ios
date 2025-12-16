@@ -97,11 +97,7 @@ class _KeywordsPageState extends State<KeywordsPage> {
             vm: vm,
           ),
           SizedBox(height: 32.h),
-          _buildSection(
-            title: '전시 스타일을 골라 주세요',
-            keywords: vm.styles,
-            vm: vm,
-          ),
+          _buildSection(title: '전시 스타일을 골라 주세요', keywords: vm.styles, vm: vm),
         ],
       ),
     );

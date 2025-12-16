@@ -111,10 +111,7 @@ class RetryInterceptor extends Interceptor {
 
   /// 재시도하지 않을 경로인지 확인
   bool _isNoRetryPath(String path) {
-    const noRetryPaths = [
-      '/auth/app/logout',
-      '/auth/social',
-    ];
+    const noRetryPaths = ['/auth/app/logout', '/auth/social'];
     return noRetryPaths.any((p) => path.contains(p));
   }
 

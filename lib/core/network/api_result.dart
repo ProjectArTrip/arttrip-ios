@@ -19,15 +19,15 @@ sealed class ApiResult<T> {
 
   /// 성공 시 데이터 반환, 실패 시 null
   T? get dataOrNull => switch (this) {
-        ApiSuccess<T> s => s.data,
-        ApiFailure<T>() => null,
-      };
+    ApiSuccess<T> s => s.data,
+    ApiFailure<T>() => null,
+  };
 
   /// 실패 시 예외 반환, 성공 시 null
   NetworkException? get exceptionOrNull => switch (this) {
-        ApiSuccess<T>() => null,
-        ApiFailure<T> f => f.exception,
-      };
+    ApiSuccess<T>() => null,
+    ApiFailure<T> f => f.exception,
+  };
 
   /// 결과에 따라 콜백 실행
   R when<R>({

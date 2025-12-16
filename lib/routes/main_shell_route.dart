@@ -28,8 +28,9 @@ final mainShellRoute = StatefulShellRoute.indexedStack(
           path: '/',
           pageBuilder: (context, state) {
             // Routes.go() 호출 시 extra로 타임스탬프가 전달되면 강제 재생성
-            var pageKey =
-                state.extra != null ? ValueKey(state.extra) : state.pageKey;
+            var pageKey = state.extra != null
+                ? ValueKey(state.extra)
+                : state.pageKey;
             return MaterialPage<dynamic>(key: pageKey, child: const HomePage());
           },
         ),

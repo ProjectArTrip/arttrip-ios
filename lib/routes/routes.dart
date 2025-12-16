@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 /// 트랜지션 타입
-enum TransitionType {
-  none,
-  fade,
-  slideUp,
-  slideDown,
-}
+enum TransitionType { none, fade, slideUp, slideDown }
 
 /// 네비게이션 래퍼 클래스
 ///

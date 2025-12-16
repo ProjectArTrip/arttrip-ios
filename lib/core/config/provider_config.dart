@@ -13,18 +13,24 @@ import 'package:provider/provider.dart';
 
 final List<ChangeNotifierProvider> getProviders = [
   ChangeNotifierProvider<HomeViewModel>(
-    create: (_) => HomeViewModel(AppConsts.useMock
-        ? HomeRepositoryMockImpl()
-        : HomeRepositoryImpl(DioClient.instance)),
+    create: (_) => HomeViewModel(
+      AppConsts.useMock
+          ? HomeRepositoryMockImpl()
+          : HomeRepositoryImpl(DioClient.instance),
+    ),
   ),
   ChangeNotifierProvider<KeywordsViewModel>(
-    create: (_) => KeywordsViewModel(AppConsts.useMock
-        ? KeywordsRepositoryMockImpl()
-        : KeywordsRepositoryImpl(DioClient.instance)),
+    create: (_) => KeywordsViewModel(
+      AppConsts.useMock
+          ? KeywordsRepositoryMockImpl()
+          : KeywordsRepositoryImpl(DioClient.instance),
+    ),
   ),
   ChangeNotifierProvider<ExhibitDetailViewModel>(
-    create: (_) => ExhibitDetailViewModel(AppConsts.useMock
-        ? ExhibitRepositoryMockImpl()
-        : ExhibitRepositoryImpl(DioClient.instance)),
+    create: (_) => ExhibitDetailViewModel(
+      AppConsts.useMock
+          ? ExhibitRepositoryMockImpl()
+          : ExhibitRepositoryImpl(DioClient.instance),
+    ),
   ),
 ];

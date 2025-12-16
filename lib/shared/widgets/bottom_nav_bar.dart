@@ -37,12 +37,7 @@ class BottomNavBarState extends State<BottomNavBar> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(
-                context,
-                0,
-                AppAssets.icHome,
-                context.l10n.navHome,
-              ),
+              _buildNavItem(context, 0, AppAssets.icHome, context.l10n.navHome),
               _buildNavItem(
                 context,
                 1,

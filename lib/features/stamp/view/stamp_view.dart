@@ -5,10 +5,6 @@ class StampView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('스탬프'),
-      ),
-    );
+    return const Scaffold(body: Center(child: Text('스탬프')));
   }
 }

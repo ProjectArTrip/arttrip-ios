@@ -16,9 +16,11 @@ class InternationalDomesticTabView extends StatefulWidget {
 }
 
 class _InternationalDomesticTabViewState
-    extends State<InternationalDomesticTabView> with TickerProviderStateMixin {
-  final ValueNotifier<Future<List<String>?>?> _regionsFuture =
-      ValueNotifier(null);
+    extends State<InternationalDomesticTabView>
+    with TickerProviderStateMixin {
+  final ValueNotifier<Future<List<String>?>?> _regionsFuture = ValueNotifier(
+    null,
+  );
   final ValueNotifier<int> _selectedRegionIndex = ValueNotifier(0);
   List<GlobalKey>? _itemKeys;
   String? allItem;
@@ -26,8 +28,10 @@ class _InternationalDomesticTabViewState
   @override
   void initState() {
     super.initState();
-    _regionsFuture.value = Provider.of<HomeViewModel>(context, listen: false)
-        .fetchOverseasCountries();
+    _regionsFuture.value = Provider.of<HomeViewModel>(
+      context,
+      listen: false,
+    ).fetchOverseasCountries();
   }
 
   @override
@@ -38,84 +42,92 @@ class _InternationalDomesticTabViewState
 
   void _updateSelectedRegionIndex(int index, String? region) {
     _selectedRegionIndex.value = index;
-    Provider.of<HomeViewModel>(context, listen: false)
-        .updateSelectedRegion(region ?? allItem!);
+    Provider.of<HomeViewModel>(
+      context,
+      listen: false,
+    ).updateSelectedRegion(region ?? allItem!);
     if (_itemKeys![index].currentContext != null) {
-      Scrollable.ensureVisible(_itemKeys![index].currentContext!,
-          alignment: 0.5, duration: const Duration(milliseconds: 500));
+      Scrollable.ensureVisible(
+        _itemKeys![index].currentContext!,
+        alignment: 0.5,
+        duration: const Duration(milliseconds: 500),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          switch (index) {
-            /// tabbar
-            case 0:
-              return _buildExhibitionTabBar();
+      delegate: SliverChildBuilderDelegate((context, index) {
+        switch (index) {
+          /// tabbar
+          case 0:
+            return _buildExhibitionTabBar();
 
-            /// countries
-            case 1:
-              return SizedBox(
-                height: 64.h,
-                child: ValueListenableBuilder(
-                    valueListenable: _regionsFuture,
-                    builder: (context, regionsFuture, _) {
-                      var homeViewModel =
-                          Provider.of<HomeViewModel>(context, listen: false);
-                      return FutureWhen(
-                        future: regionsFuture ??
-                            homeViewModel.fetchOverseasCountries(),
-                        data: (data) {
-                          if (data?.isEmpty ?? true) {
-                            return const SizedBox.shrink();
-                          }
+          /// countries
+          case 1:
+            return SizedBox(
+              height: 64.h,
+              child: ValueListenableBuilder(
+                valueListenable: _regionsFuture,
+                builder: (context, regionsFuture, _) {
+                  var homeViewModel = Provider.of<HomeViewModel>(
+                    context,
+                    listen: false,
+                  );
+                  return FutureWhen(
+                    future:
+                        regionsFuture ?? homeViewModel.fetchOverseasCountries(),
+                    data: (data) {
+                      if (data?.isEmpty ?? true) {
+                        return const SizedBox.shrink();
+                      }
 
-                          _selectedRegionIndex.value =
-                              0; // 데이터 호출이 빠를 수 있어서 초기화 추가
-                          var itemCount = homeViewModel.isDomestic
-                              ? data!.length + 1
-                              : data!.length;
-                          _itemKeys =
-                              List.generate(itemCount, (_) => GlobalKey());
+                      _selectedRegionIndex.value = 0; // 데이터 호출이 빠를 수 있어서 초기화 추가
+                      var itemCount = homeViewModel.isDomestic
+                          ? data!.length + 1
+                          : data!.length;
+                      _itemKeys = List.generate(itemCount, (_) => GlobalKey());
 
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _updateSelectedRegionIndex(0,
-                                homeViewModel.isDomestic ? allItem! : data[0]);
-                          });
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _updateSelectedRegionIndex(
+                          0,
+                          homeViewModel.isDomestic ? allItem! : data[0],
+                        );
+                      });
 
-                          return ListView.separated(
-                            shrinkWrap: true,
-                            itemCount: itemCount,
-                            scrollDirection: Axis.horizontal,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16.h, horizontal: 24.w),
-                            separatorBuilder: (context, index) =>
-                                SizedBox(width: 8.w),
-                            itemBuilder: (context, index) {
-                              return _buildRegionItem(
-                                  _itemKeys![index],
-                                  index,
-                                  homeViewModel.isDomestic
-                                      ? index == 0
-                                          ? null
-                                          : data[index - 1]
-                                      : data[index]);
-                            },
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: itemCount,
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 16.h,
+                          horizontal: 24.w,
+                        ),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(width: 8.w),
+                        itemBuilder: (context, index) {
+                          return _buildRegionItem(
+                            _itemKeys![index],
+                            index,
+                            homeViewModel.isDomestic
+                                ? index == 0
+                                      ? null
+                                      : data[index - 1]
+                                : data[index],
                           );
                         },
                       );
-                    }),
-              );
+                    },
+                  );
+                },
+              ),
+            );
 
-            default:
-              return const SizedBox.shrink();
-          }
-        },
-        childCount: 2,
-      ),
+          default:
+            return const SizedBox.shrink();
+        }
+      }, childCount: 2),
     );
   }
 
@@ -127,11 +139,14 @@ class _InternationalDomesticTabViewState
         controller: TabController(length: 2, vsync: this),
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         dividerHeight: 0,
-        overlayColor:
-            WidgetStateColor.resolveWith((states) => Colors.transparent),
+        overlayColor: WidgetStateColor.resolveWith(
+          (states) => Colors.transparent,
+        ),
         indicator: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: AppColors.primary200, width: 2.w))),
+          border: Border(
+            bottom: BorderSide(color: AppColors.primary200, width: 2.w),
+          ),
+        ),
         indicatorWeight: 2.h,
         labelStyle: ArtTripText.pretendard()
             .title01Bold()
@@ -152,8 +167,10 @@ class _InternationalDomesticTabViewState
           Tab(text: context.l10n.domesticExhibition),
         ],
         onTap: (index) {
-          var homeViewModel =
-              Provider.of<HomeViewModel>(context, listen: false);
+          var homeViewModel = Provider.of<HomeViewModel>(
+            context,
+            listen: false,
+          );
           homeViewModel.isDomestic = index == 0 ? true : false;
           if (index == 0) {
             _regionsFuture.value = homeViewModel.fetchOverseasCountries();
@@ -173,29 +190,29 @@ class _InternationalDomesticTabViewState
         }
       },
       child: ValueListenableBuilder(
-          valueListenable: _selectedRegionIndex,
-          builder: (context, selectedRegionIndex, _) {
-            var isSelected = index == selectedRegionIndex;
-            return Container(
-              key: key,
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: isSelected ? AppColors.primary300 : AppColors.gray0,
-                border: Border.all(
-                    color:
-                        isSelected ? AppColors.primary300 : AppColors.gray100,
-                    width: 1.w),
+        valueListenable: _selectedRegionIndex,
+        builder: (context, selectedRegionIndex, _) {
+          var isSelected = index == selectedRegionIndex;
+          return Container(
+            key: key,
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: isSelected ? AppColors.primary300 : AppColors.gray0,
+              border: Border.all(
+                color: isSelected ? AppColors.primary300 : AppColors.gray100,
+                width: 1.w,
               ),
-              child: ArtTripText.pretendard()
-                  .body01Bold()
-                  .color(
-                      isSelected ? AppColors.textWhite : AppColors.textPrimary)
-                  .build()
-                  .text(country ?? context.l10n.allItems),
-            );
-          }),
+            ),
+            child: ArtTripText.pretendard()
+                .body01Bold()
+                .color(isSelected ? AppColors.textWhite : AppColors.textPrimary)
+                .build()
+                .text(country ?? context.l10n.allItems),
+          );
+        },
+      ),
     );
   }
 }

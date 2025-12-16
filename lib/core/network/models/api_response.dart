@@ -21,8 +21,7 @@ class ApiResponse<T> {
   factory ApiResponse.fromJson(
     Map<String, dynamic> json,
     T Function(Object? json) fromJsonT,
-  ) =>
-      _$ApiResponseFromJson(json, fromJsonT);
+  ) => _$ApiResponseFromJson(json, fromJsonT);
 
   final bool isSuccess;
   final String code;

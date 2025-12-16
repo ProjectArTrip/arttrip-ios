@@ -25,16 +25,18 @@ Page<dynamic> buildPage(
             return FadeTransition(opacity: animation, child: child);
           case 'slideUp':
             return SlideTransition(
-              position:
-                  Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
-                      .animate(animation),
+              position: Tween<Offset>(
+                begin: const Offset(0, 1),
+                end: Offset.zero,
+              ).animate(animation),
               child: child,
             );
           case 'slideDown':
             return SlideTransition(
-              position:
-                  Tween<Offset>(begin: const Offset(0, -1), end: Offset.zero)
-                      .animate(animation),
+              position: Tween<Offset>(
+                begin: const Offset(0, -1),
+                end: Offset.zero,
+              ).animate(animation),
               child: child,
             );
           default:

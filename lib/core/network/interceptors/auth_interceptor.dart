@@ -142,10 +142,7 @@ class AuthInterceptor extends Interceptor {
   }
 
   /// 요청을 대기열에 추가
-  void _queueRequest(
-    RequestOptions options,
-    ErrorInterceptorHandler handler,
-  ) {
+  void _queueRequest(RequestOptions options, ErrorInterceptorHandler handler) {
     _pendingRequests.add(_PendingRequest(options, handler));
   }
 
@@ -161,10 +158,7 @@ class AuthInterceptor extends Interceptor {
         request.handler.resolve(response);
       } catch (e) {
         request.handler.reject(
-          DioException(
-            requestOptions: request.options,
-            error: e,
-          ),
+          DioException(requestOptions: request.options, error: e),
         );
       }
     }

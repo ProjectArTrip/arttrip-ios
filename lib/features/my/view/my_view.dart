@@ -8,9 +8,7 @@ class MyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('마이페이지'),
-      ),
+      appBar: AppBar(title: const Text('마이페이지')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

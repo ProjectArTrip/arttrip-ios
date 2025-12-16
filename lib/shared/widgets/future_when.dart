@@ -28,8 +28,11 @@ class FutureWhen<T> extends StatelessWidget {
           // TODO: 오류 화면 수정 예정
           return error?.call(snapshot.error!) ??
               Center(
-                  child: Text('오류 발생: ${snapshot.error}',
-                      style: const TextStyle(color: Colors.black)));
+                child: Text(
+                  '오류 발생: ${snapshot.error}',
+                  style: const TextStyle(color: Colors.black),
+                ),
+              );
         }
 
         if (snapshot.hasData) {

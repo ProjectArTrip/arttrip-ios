@@ -26,8 +26,11 @@ class _HomePageState extends State<HomePage> {
         leadingWidth: 88.w + 24.w,
         leading: Padding(
           padding: EdgeInsets.only(left: 24.w),
-          child: SvgPicture.asset(AppAssets.icLogoBlack,
-              width: 88.w, height: 28.h),
+          child: SvgPicture.asset(
+            AppAssets.icLogoBlack,
+            width: 88.w,
+            height: 28.h,
+          ),
         ),
         actions: [
           Row(
@@ -35,18 +38,27 @@ class _HomePageState extends State<HomePage> {
             children: [
               GestureDetector(
                 onTap: () {},
-                child: SvgPicture.asset(AppAssets.icNotification,
-                    width: 24.w, height: 24.w),
+                child: SvgPicture.asset(
+                  AppAssets.icNotification,
+                  width: 24.w,
+                  height: 24.w,
+                ),
               ),
               GestureDetector(
                 onTap: () {},
-                child: SvgPicture.asset(AppAssets.icCalendar,
-                    width: 24.w, height: 24.w),
+                child: SvgPicture.asset(
+                  AppAssets.icCalendar,
+                  width: 24.w,
+                  height: 24.w,
+                ),
               ),
               GestureDetector(
                 onTap: () {},
-                child: SvgPicture.asset(AppAssets.icSearch,
-                    width: 24.w, height: 24.w),
+                child: SvgPicture.asset(
+                  AppAssets.icSearch,
+                  width: 24.w,
+                  height: 24.w,
+                ),
               ),
             ],
           ),
@@ -56,9 +68,7 @@ class _HomePageState extends State<HomePage> {
       body: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         controller: _scrollController,
-        slivers: [
-          const InternationalDomesticTabView(),
-        ],
+        slivers: [const InternationalDomesticTabView()],
       ),
       // TODO: 임시 버튼 - 전시 상세 페이지 진입 테스트용
       floatingActionButton: FloatingActionButton(

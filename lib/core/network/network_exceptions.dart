@@ -7,11 +7,7 @@ import 'package:dio/dio.dart';
 /// 네트워크 예외를 나타내는 sealed class
 /// 모든 네트워크 관련 에러를 타입 안전하게 처리
 sealed class NetworkException implements Exception {
-  const NetworkException({
-    required this.message,
-    this.statusCode,
-    this.data,
-  });
+  const NetworkException({required this.message, this.statusCode, this.data});
 
   final String message;
   final int? statusCode;
@@ -21,24 +17,16 @@ sealed class NetworkException implements Exception {
   factory NetworkException.fromDioException(DioException error) {
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
-        return NetworkException.connectionTimeout(
-          message: '서버 연결 시간이 초과되었습니다',
-        );
+        return NetworkException.connectionTimeout(message: '서버 연결 시간이 초과되었습니다');
 
       case DioExceptionType.sendTimeout:
-        return NetworkException.sendTimeout(
-          message: '요청 전송 시간이 초과되었습니다',
-        );
+        return NetworkException.sendTimeout(message: '요청 전송 시간이 초과되었습니다');
 
       case DioExceptionType.receiveTimeout:
-        return NetworkException.receiveTimeout(
-          message: '응답 수신 시간이 초과되었습니다',
-        );
+        return NetworkException.receiveTimeout(message: '응답 수신 시간이 초과되었습니다');
 
       case DioExceptionType.badCertificate:
-        return NetworkException.badCertificate(
-          message: '보안 인증서가 유효하지 않습니다',
-        );
+        return NetworkException.badCertificate(message: '보안 인증서가 유효하지 않습니다');
 
       case DioExceptionType.badResponse:
         return NetworkException.fromStatusCode(
@@ -47,14 +35,10 @@ sealed class NetworkException implements Exception {
         );
 
       case DioExceptionType.cancel:
-        return NetworkException.requestCancelled(
-          message: '요청이 취소되었습니다',
-        );
+        return NetworkException.requestCancelled(message: '요청이 취소되었습니다');
 
       case DioExceptionType.connectionError:
-        return NetworkException.noInternetConnection(
-          message: '인터넷 연결을 확인해주세요',
-        );
+        return NetworkException.noInternetConnection(message: '인터넷 연결을 확인해주세요');
 
       case DioExceptionType.unknown:
         if (error.error is SocketException) {
@@ -69,10 +53,7 @@ sealed class NetworkException implements Exception {
   }
 
   /// HTTP 상태 코드에 따른 예외 생성
-  factory NetworkException.fromStatusCode({
-    int? statusCode,
-    Object? data,
-  }) {
+  factory NetworkException.fromStatusCode({int? statusCode, Object? data}) {
     var serverMessage = _extractServerMessage(data);
 
     switch (statusCode) {
@@ -315,17 +296,17 @@ sealed class NetworkException implements Exception {
 
 final class ConnectionTimeoutException extends NetworkException {
   const ConnectionTimeoutException({required super.message})
-      : super(statusCode: null, data: null);
+    : super(statusCode: null, data: null);
 }
 
 final class SendTimeoutException extends NetworkException {
   const SendTimeoutException({required super.message})
-      : super(statusCode: null, data: null);
+    : super(statusCode: null, data: null);
 }
 
 final class ReceiveTimeoutException extends NetworkException {
   const ReceiveTimeoutException({required super.message})
-      : super(statusCode: null, data: null);
+    : super(statusCode: null, data: null);
 }
 
 final class RequestTimeoutException extends NetworkException {
@@ -340,12 +321,12 @@ final class RequestTimeoutException extends NetworkException {
 
 final class NoInternetConnectionException extends NetworkException {
   const NoInternetConnectionException({required super.message})
-      : super(statusCode: null, data: null);
+    : super(statusCode: null, data: null);
 }
 
 final class BadCertificateException extends NetworkException {
   const BadCertificateException({required super.message})
-      : super(statusCode: null, data: null);
+    : super(statusCode: null, data: null);
 }
 
 // === Client Error Exception Classes (4xx) ===
@@ -452,7 +433,7 @@ final class GatewayTimeoutException extends NetworkException {
 
 final class RequestCancelledException extends NetworkException {
   const RequestCancelledException({required super.message})
-      : super(statusCode: null, data: null);
+    : super(statusCode: null, data: null);
 }
 
 final class UnexpectedException extends NetworkException {
