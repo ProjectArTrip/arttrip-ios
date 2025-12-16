@@ -16,6 +16,13 @@ class InternationalDomesticTabView extends StatefulWidget {
 
 class _InternationalDomesticTabViewState extends State<InternationalDomesticTabView> with TickerProviderStateMixin {
   List<GlobalKey>? _itemKeys;
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
 
   void _updateSelectedRegionIndex(int index, String region) {
     var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
@@ -85,7 +92,7 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
       height: 28.h,
       margin: EdgeInsets.only(top: 16.h),
       child: TabBar(
-        controller: TabController(length: 2, vsync: this),
+        controller: _tabController,
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         dividerHeight: 0,
         overlayColor: WidgetStateColor.resolveWith((states) => Colors.transparent),

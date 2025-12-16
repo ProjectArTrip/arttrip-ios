@@ -10,6 +10,20 @@ class TodayExhibitRecommendationView extends StatefulWidget {
 class _TodayExhibitRecommendationViewState extends State<TodayExhibitRecommendationView> {
   @override
   Widget build(BuildContext context) {
-    return const SliverToBoxAdapter();
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          switch (index) {
+            case 0:
+              return const SizedBox.shrink();
+            case 1:
+              return const SizedBox.shrink();
+            default:
+              return const SizedBox.shrink();
+          }
+        },
+        childCount: 2,
+      ),
+    );
   }
 }
