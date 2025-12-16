@@ -17,7 +17,9 @@ class KeywordApiService extends BaseApiService {
           (obj) {
             if (obj == null) return <Keyword>[];
             var list = obj as List<dynamic>;
-            return list.map((e) => Keyword.fromJson(e as Map<String, dynamic>)).toList();
+            return list
+                .map((e) => Keyword.fromJson(e as Map<String, dynamic>))
+                .toList();
           },
         );
       },

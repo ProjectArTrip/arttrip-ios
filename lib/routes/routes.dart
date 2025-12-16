@@ -37,7 +37,9 @@ class Routes {
       allParams['trans'] = transition.name;
     }
 
-    var fullPath = allParams.isEmpty ? uri.path : uri.replace(queryParameters: allParams).toString();
+    var fullPath = allParams.isEmpty
+        ? uri.path
+        : uri.replace(queryParameters: allParams).toString();
 
     if (replace) {
       context.pushReplacement(fullPath, extra: extra);
@@ -108,7 +110,9 @@ class Routes {
   }) {
     var uri = Uri.parse(path);
     var allParams = <String, String>{...uri.queryParameters, ...?params};
-    var fullPath = allParams.isEmpty ? uri.path : uri.replace(queryParameters: allParams).toString();
+    var fullPath = allParams.isEmpty
+        ? uri.path
+        : uri.replace(queryParameters: allParams).toString();
 
     context.go(fullPath, extra: extra);
   }

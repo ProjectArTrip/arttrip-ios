@@ -129,7 +129,9 @@ class RetryInterceptor extends Interceptor {
   Duration _getDelay(int retryCount) {
     if (useExponentialBackoff) {
       // 지수 백오프: baseDelay * 2^retryCount + 랜덤 지터
-      var baseDelay = retryDelays.isNotEmpty ? retryDelays.first : const Duration(seconds: 1);
+      var baseDelay = retryDelays.isNotEmpty
+          ? retryDelays.first
+          : const Duration(seconds: 1);
       var exponentialDelay = baseDelay * pow(2, retryCount);
       var jitter = Duration(milliseconds: Random().nextInt(1000));
       return exponentialDelay + jitter;
@@ -140,7 +142,9 @@ class RetryInterceptor extends Interceptor {
       return retryDelays[retryCount];
     }
 
-    return retryDelays.isNotEmpty ? retryDelays.last : const Duration(seconds: 1);
+    return retryDelays.isNotEmpty
+        ? retryDelays.last
+        : const Duration(seconds: 1);
   }
 
   /// 현재 재시도 횟수 조회

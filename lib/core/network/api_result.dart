@@ -92,7 +92,10 @@ final class ApiSuccess<T> extends ApiResult<T> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is ApiSuccess<T> && runtimeType == other.runtimeType && data == other.data;
+      identical(this, other) ||
+      other is ApiSuccess<T> &&
+          runtimeType == other.runtimeType &&
+          data == other.data;
 
   @override
   int get hashCode => data.hashCode;
@@ -116,7 +119,9 @@ final class ApiFailure<T> extends ApiResult<T> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ApiFailure<T> && runtimeType == other.runtimeType && exception == other.exception;
+      other is ApiFailure<T> &&
+          runtimeType == other.runtimeType &&
+          exception == other.exception;
 
   @override
   int get hashCode => exception.hashCode;

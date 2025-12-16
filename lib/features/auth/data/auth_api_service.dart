@@ -73,7 +73,8 @@ class AuthApiService extends BaseApiService {
       return ApiResult.success(null);
     } catch (e) {
       // 로그아웃 실패해도 로컬 로그아웃은 진행되므로 에러 무시
-      return ApiResult.failure(NetworkException.unexpected(message: e.toString()));
+      return ApiResult.failure(
+          NetworkException.unexpected(message: e.toString()));
     }
   }
 }

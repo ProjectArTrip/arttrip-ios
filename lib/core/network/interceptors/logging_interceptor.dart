@@ -31,7 +31,9 @@ class LoggingInterceptor extends Interceptor {
 
   void _log(RequestOptions options, int? statusCode, {required bool isError}) {
     var startTime = _requestTimes.remove(options.hashCode);
-    var duration = startTime != null ? DateTime.now().difference(startTime).inMilliseconds : 0;
+    var duration = startTime != null
+        ? DateTime.now().difference(startTime).inMilliseconds
+        : 0;
 
     var method = options.method.padRight(6);
     var path = options.path;

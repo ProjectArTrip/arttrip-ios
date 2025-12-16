@@ -16,7 +16,8 @@ class ExhibitDetailPage extends StatefulWidget {
   State<ExhibitDetailPage> createState() => _ExhibitDetailPageState();
 }
 
-class _ExhibitDetailPageState extends State<ExhibitDetailPage> with SingleTickerProviderStateMixin {
+class _ExhibitDetailPageState extends State<ExhibitDetailPage>
+    with SingleTickerProviderStateMixin {
   // 색상 상수
   static const _primaryColor = Color(0xFF7859FF);
   static const _tabIndicatorColor = Color(0xFFAA97FF);
@@ -32,7 +33,9 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage> with SingleTicker
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ExhibitDetailViewModel>().fetchExhibitDetail(widget.exhibitId);
+      context
+          .read<ExhibitDetailViewModel>()
+          .fetchExhibitDetail(widget.exhibitId);
     });
   }
 

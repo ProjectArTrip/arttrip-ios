@@ -11,11 +11,14 @@ class InternationalDomesticTabView extends StatefulWidget {
   const InternationalDomesticTabView({super.key});
 
   @override
-  State<InternationalDomesticTabView> createState() => _InternationalDomesticTabViewState();
+  State<InternationalDomesticTabView> createState() =>
+      _InternationalDomesticTabViewState();
 }
 
-class _InternationalDomesticTabViewState extends State<InternationalDomesticTabView> with TickerProviderStateMixin {
-  final ValueNotifier<Future<List<String>?>?> _regionsFuture = ValueNotifier(null);
+class _InternationalDomesticTabViewState
+    extends State<InternationalDomesticTabView> with TickerProviderStateMixin {
+  final ValueNotifier<Future<List<String>?>?> _regionsFuture =
+      ValueNotifier(null);
   final ValueNotifier<int> _selectedRegionIndex = ValueNotifier(0);
   List<GlobalKey>? _itemKeys;
   String? allItem;
@@ -23,7 +26,8 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
   @override
   void initState() {
     super.initState();
-    _regionsFuture.value = Provider.of<HomeViewModel>(context, listen: false).fetchOverseasCountries();
+    _regionsFuture.value = Provider.of<HomeViewModel>(context, listen: false)
+        .fetchOverseasCountries();
   }
 
   @override
@@ -34,7 +38,8 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
 
   void _updateSelectedRegionIndex(int index, String? region) {
     _selectedRegionIndex.value = index;
-    Provider.of<HomeViewModel>(context, listen: false).updateSelectedRegion(region ?? allItem!);
+    Provider.of<HomeViewModel>(context, listen: false)
+        .updateSelectedRegion(region ?? allItem!);
     if (_itemKeys![index].currentContext != null) {
       Scrollable.ensureVisible(_itemKeys![index].currentContext!,
           alignment: 0.5, duration: const Duration(milliseconds: 500));
@@ -58,26 +63,37 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
                 child: ValueListenableBuilder(
                     valueListenable: _regionsFuture,
                     builder: (context, regionsFuture, _) {
-                      var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+                      var homeViewModel =
+                          Provider.of<HomeViewModel>(context, listen: false);
                       return FutureWhen(
-                        future: regionsFuture ?? homeViewModel.fetchOverseasCountries(),
+                        future: regionsFuture ??
+                            homeViewModel.fetchOverseasCountries(),
                         data: (data) {
-                          if (data?.isEmpty ?? true) return const SizedBox.shrink();
+                          if (data?.isEmpty ?? true) {
+                            return const SizedBox.shrink();
+                          }
 
-                          _selectedRegionIndex.value = 0; // 데이터 호출이 빠를 수 있어서 초기화 추가
-                          var itemCount = homeViewModel.isDomestic ? data!.length + 1 : data!.length;
-                          _itemKeys = List.generate(itemCount, (_) => GlobalKey());
+                          _selectedRegionIndex.value =
+                              0; // 데이터 호출이 빠를 수 있어서 초기화 추가
+                          var itemCount = homeViewModel.isDomestic
+                              ? data!.length + 1
+                              : data!.length;
+                          _itemKeys =
+                              List.generate(itemCount, (_) => GlobalKey());
 
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _updateSelectedRegionIndex(0, homeViewModel.isDomestic ? allItem! : data[0]);
+                            _updateSelectedRegionIndex(0,
+                                homeViewModel.isDomestic ? allItem! : data[0]);
                           });
 
                           return ListView.separated(
                             shrinkWrap: true,
                             itemCount: itemCount,
                             scrollDirection: Axis.horizontal,
-                            padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
-                            separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16.h, horizontal: 24.w),
+                            separatorBuilder: (context, index) =>
+                                SizedBox(width: 8.w),
                             itemBuilder: (context, index) {
                               return _buildRegionItem(
                                   _itemKeys![index],
@@ -111,11 +127,22 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
         controller: TabController(length: 2, vsync: this),
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         dividerHeight: 0,
-        overlayColor: WidgetStateColor.resolveWith((states) => Colors.transparent),
-        indicator: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.primary200, width: 2.w))),
+        overlayColor:
+            WidgetStateColor.resolveWith((states) => Colors.transparent),
+        indicator: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(color: AppColors.primary200, width: 2.w))),
         indicatorWeight: 2.h,
-        labelStyle: ArtTripText.pretendard().title01Bold().color(AppColors.textPoint).build().style(),
-        unselectedLabelStyle: ArtTripText.pretendard().title01Bold().color(AppColors.textTertiary).build().style(),
+        labelStyle: ArtTripText.pretendard()
+            .title01Bold()
+            .color(AppColors.textPoint)
+            .build()
+            .style(),
+        unselectedLabelStyle: ArtTripText.pretendard()
+            .title01Bold()
+            .color(AppColors.textTertiary)
+            .build()
+            .style(),
         labelPadding: EdgeInsets.symmetric(horizontal: 12.w),
         indicatorSize: TabBarIndicatorSize.label,
         tabAlignment: TabAlignment.start,
@@ -125,7 +152,8 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
           Tab(text: context.l10n.domesticExhibition),
         ],
         onTap: (index) {
-          var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+          var homeViewModel =
+              Provider.of<HomeViewModel>(context, listen: false);
           homeViewModel.isDomestic = index == 0 ? true : false;
           if (index == 0) {
             _regionsFuture.value = homeViewModel.fetchOverseasCountries();
@@ -140,7 +168,9 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
   GestureDetector _buildRegionItem(GlobalKey key, int index, String? country) {
     return GestureDetector(
       onTap: () {
-        if (_selectedRegionIndex.value != index) _updateSelectedRegionIndex(index, index == 0 ? allItem! : country!);
+        if (_selectedRegionIndex.value != index) {
+          _updateSelectedRegionIndex(index, index == 0 ? allItem! : country!);
+        }
       },
       child: ValueListenableBuilder(
           valueListenable: _selectedRegionIndex,
@@ -153,11 +183,15 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: isSelected ? AppColors.primary300 : AppColors.gray0,
-                border: Border.all(color: isSelected ? AppColors.primary300 : AppColors.gray100, width: 1.w),
+                border: Border.all(
+                    color:
+                        isSelected ? AppColors.primary300 : AppColors.gray100,
+                    width: 1.w),
               ),
               child: ArtTripText.pretendard()
                   .body01Bold()
-                  .color(isSelected ? AppColors.textWhite : AppColors.textPrimary)
+                  .color(
+                      isSelected ? AppColors.textWhite : AppColors.textPrimary)
                   .build()
                   .text(country ?? context.l10n.allItems),
             );

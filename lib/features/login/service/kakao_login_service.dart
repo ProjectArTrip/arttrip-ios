@@ -87,7 +87,8 @@ class KakaoLoginService {
 
       // OIDC ID Token 확인
       if (token.idToken == null) {
-        return KakaoLoginResult.failure('OIDC ID Token을 받지 못했습니다. 카카오 개발자 콘솔에서 OpenID Connect 활성화를 확인해주세요.');
+        return KakaoLoginResult.failure(
+            'OIDC ID Token을 받지 못했습니다. 카카오 개발자 콘솔에서 OpenID Connect 활성화를 확인해주세요.');
       }
 
       // 사용자 정보 조회

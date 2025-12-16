@@ -20,13 +20,16 @@ class FutureWhen<T> extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // TODO: 로딩화면 수정 예정
-          return loading?.call() ?? const Center(child: CircularProgressIndicator());
+          return loading?.call() ??
+              const Center(child: CircularProgressIndicator());
         }
 
         if (snapshot.hasError) {
           // TODO: 오류 화면 수정 예정
           return error?.call(snapshot.error!) ??
-              Center(child: Text('오류 발생: ${snapshot.error}', style: const TextStyle(color: Colors.black)));
+              Center(
+                  child: Text('오류 발생: ${snapshot.error}',
+                      style: const TextStyle(color: Colors.black)));
         }
 
         if (snapshot.hasData) {

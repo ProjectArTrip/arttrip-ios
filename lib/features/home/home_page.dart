@@ -26,7 +26,8 @@ class _HomePageState extends State<HomePage> {
         leadingWidth: 88.w + 24.w,
         leading: Padding(
           padding: EdgeInsets.only(left: 24.w),
-          child: SvgPicture.asset(AppAssets.icLogoBlack, width: 88.w, height: 28.h),
+          child: SvgPicture.asset(AppAssets.icLogoBlack,
+              width: 88.w, height: 28.h),
         ),
         actions: [
           Row(
@@ -34,15 +35,18 @@ class _HomePageState extends State<HomePage> {
             children: [
               GestureDetector(
                 onTap: () {},
-                child: SvgPicture.asset(AppAssets.icNotification, width: 24.w, height: 24.w),
+                child: SvgPicture.asset(AppAssets.icNotification,
+                    width: 24.w, height: 24.w),
               ),
               GestureDetector(
                 onTap: () {},
-                child: SvgPicture.asset(AppAssets.icCalendar, width: 24.w, height: 24.w),
+                child: SvgPicture.asset(AppAssets.icCalendar,
+                    width: 24.w, height: 24.w),
               ),
               GestureDetector(
                 onTap: () {},
-                child: SvgPicture.asset(AppAssets.icSearch, width: 24.w, height: 24.w),
+                child: SvgPicture.asset(AppAssets.icSearch,
+                    width: 24.w, height: 24.w),
               ),
             ],
           ),

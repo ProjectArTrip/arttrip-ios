@@ -85,7 +85,8 @@ class DioClient {
           ...options.headers,
         },
         // 2xx만 성공으로 처리, 나머지는 DioException 발생
-        validateStatus: (status) => status != null && status >= 200 && status < 300,
+        validateStatus: (status) =>
+            status != null && status >= 200 && status < 300,
       ),
     );
 

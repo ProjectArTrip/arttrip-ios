@@ -29,5 +29,6 @@ class ApiResponse<T> {
   final String message;
   final T? result;
 
-  Map<String, dynamic> toJson(Object? Function(T value) toJsonT) => _$ApiResponseToJson(this, toJsonT);
+  Map<String, dynamic> toJson(Object? Function(T value) toJsonT) =>
+      _$ApiResponseToJson(this, toJsonT);
 }

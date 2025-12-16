@@ -177,9 +177,11 @@ class SnackBarUtils {
       duration: duration,
       behavior: behavior,
       margin: margin ?? const EdgeInsets.all(16),
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding:
+          padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       elevation: elevation ?? 4,
-      shape: shape ?? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: shape ??
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       action: action,
     );
 

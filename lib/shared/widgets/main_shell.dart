@@ -16,7 +16,8 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
-  final GlobalKey<BottomNavBarState> _bottomNavigationKey = GlobalKey<BottomNavBarState>();
+  final GlobalKey<BottomNavBarState> _bottomNavigationKey =
+      GlobalKey<BottomNavBarState>();
 
   @override
   Widget build(BuildContext context) {

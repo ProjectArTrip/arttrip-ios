@@ -21,7 +21,8 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   // 시스템 UI 모드 설정
-  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top]);
 
   // 환경 변수 로드
   await dotenv.load(fileName: '.env');

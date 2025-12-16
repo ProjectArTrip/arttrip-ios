@@ -49,7 +49,8 @@ final appRouter = GoRouter(
       path: '/exhibit/:id',
       pageBuilder: (context, state) {
         var id = int.parse(state.pathParameters['id']!);
-        return buildPage(context, state, child: ExhibitDetailPage(exhibitId: id));
+        return buildPage(context, state,
+            child: ExhibitDetailPage(exhibitId: id));
       },
     ),
   ],

@@ -43,9 +43,11 @@ class ErrorInterceptor extends Interceptor {
 
   void _logError(DioException err, NetworkException networkException) {
     var buffer = StringBuffer();
-    buffer.writeln('╔══════════════════════════════════════════════════════════');
+    buffer
+        .writeln('╔══════════════════════════════════════════════════════════');
     buffer.writeln('║ ❌ NETWORK ERROR');
-    buffer.writeln('╠══════════════════════════════════════════════════════════');
+    buffer
+        .writeln('╠══════════════════════════════════════════════════════════');
     buffer.writeln('║ URL: ${err.requestOptions.uri}');
     buffer.writeln('║ Method: ${err.requestOptions.method}');
     buffer.writeln('║ Status Code: ${err.response?.statusCode ?? 'N/A'}');
@@ -64,7 +66,8 @@ class ErrorInterceptor extends Interceptor {
       buffer.writeln('║ Dio Message: ${err.message}');
     }
 
-    buffer.writeln('╚══════════════════════════════════════════════════════════');
+    buffer
+        .writeln('╚══════════════════════════════════════════════════════════');
 
     // ignore: avoid_print
     print(buffer.toString());

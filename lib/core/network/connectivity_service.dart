@@ -20,10 +20,12 @@ class ConnectivityService {
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<List<ConnectivityResult>>? _subscription;
 
-  final _connectivityController = StreamController<ConnectivityStatus>.broadcast();
+  final _connectivityController =
+      StreamController<ConnectivityStatus>.broadcast();
 
   /// 연결 상태 변경 스트림
-  Stream<ConnectivityStatus> get onConnectivityChanged => _connectivityController.stream;
+  Stream<ConnectivityStatus> get onConnectivityChanged =>
+      _connectivityController.stream;
 
   ConnectivityStatus _currentStatus = ConnectivityStatus.unknown;
 
