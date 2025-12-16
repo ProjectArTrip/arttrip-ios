@@ -1,32 +1,48 @@
+import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/home/home_repository.dart';
+import 'package:arttrip/shared/models/exhibit_model.dart';
 
 class HomeRepositoryMockImpl implements HomeRepository {
   HomeRepositoryMockImpl();
 
   @override
   Future<List<String>?> fetchOverseasCountries() async {
-    await Future.delayed(const Duration(milliseconds: 100)); // 실제 딜레이 흉내
-    return [
-      '프랑스',
-      '오스트리아',
-      '중국',
-      '일본',
-      '독일',
-      '대한민국',
-    ];
+    await Future.delayed(const Duration(milliseconds: AppConsts.mockLoadingDelayMillis)); // 실제 딜레이 흉내
+    return ['프랑스', '오스트리아', '중국', '일본', '독일', '대한민국'];
   }
 
   @override
   Future<List<String>?> fetchDomesticRegions() async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: AppConsts.mockLoadingDelayMillis));
+    return ['서울', '경기', '충청', '강원', '전라', '경상', '제주'];
+  }
+
+  @override
+  Future<List<ExhibitModel>?> fetchTodayExhibitRecommendations({
+    required bool isDomestic,
+    String? country,
+    String? region,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: AppConsts.mockLoadingDelayMillis));
     return [
-      '서울',
-      '경기',
-      '충청',
-      '강원',
-      '전라',
-      '경상',
-      '제주',
+      ExhibitModel(
+          exhibitId: 7,
+          title: 'Koki Tanaka: Provisional Community',
+          posterUrl: 'https://arttrip.s3.ap-northeast-2.amazonaws.com/9dc3a4e7-6_fmi.png',
+          status: 'ONGOING',
+          exhibitPeriod: '2025-09-27 09:00:00.000000 ~ 2026-01-05 08:59:59.000000'),
+      ExhibitModel(
+          exhibitId: 8,
+          title: 'In Sight! Lovis Corinth',
+          posterUrl: 'https://arttrip.s3.ap-northeast-2.amazonaws.com/01d632f0-4_fmi.png',
+          status: 'UPCOMING',
+          exhibitPeriod: '2025-07-18 09:00:00.000000 ~ 2026-01-26 08:59:59.000000'),
+      ExhibitModel(
+          exhibitId: 1,
+          title: 'Matisse – Soulages',
+          posterUrl: 'https://arttrip.s3.ap-northeast-2.amazonaws.com/01d632f0-4_fmi.png',
+          status: 'ONGOING',
+          exhibitPeriod: '2025-10-18 09:00:00.000000 ~ 2026-03-09 08:59:59.000000'),
     ];
   }
 }

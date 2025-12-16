@@ -36,70 +36,72 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
     _selectedRegionIndex.value = index;
     Provider.of<HomeViewModel>(context, listen: false).updateSelectedRegion(region ?? allItem!);
     if (_itemKeys![index].currentContext != null) {
-      Scrollable.ensureVisible(_itemKeys![index].currentContext!,
-          alignment: 0.5, duration: const Duration(milliseconds: 500));
+      Scrollable.ensureVisible(
+        _itemKeys![index].currentContext!,
+        alignment: 0.5,
+        duration: const Duration(milliseconds: 500),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          switch (index) {
-            /// tabbar
-            case 0:
-              return _buildExhibitionTabBar();
+      delegate: SliverChildBuilderDelegate((context, index) {
+        switch (index) {
+          /// tabbar
+          case 0:
+            return _buildExhibitionTabBar();
 
-            /// countries
-            case 1:
-              return SizedBox(
-                height: 64.h,
-                child: ValueListenableBuilder(
-                    valueListenable: _regionsFuture,
-                    builder: (context, regionsFuture, _) {
-                      var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-                      return FutureWhen(
-                        future: regionsFuture ?? homeViewModel.fetchOverseasCountries(),
-                        data: (data) {
-                          if (data?.isEmpty ?? true) return const SizedBox.shrink();
+          /// countries
+          case 1:
+            return SizedBox(
+              height: 64.h,
+              child: ValueListenableBuilder(
+                valueListenable: _regionsFuture,
+                builder: (context, regionsFuture, _) {
+                  var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+                  return FutureWhen(
+                    future: regionsFuture ?? homeViewModel.fetchOverseasCountries(),
+                    data: (data) {
+                      if (data?.isEmpty ?? true) return const SizedBox.shrink();
 
-                          _selectedRegionIndex.value = 0; // 데이터 호출이 빠를 수 있어서 초기화 추가
-                          var itemCount = homeViewModel.isDomestic ? data!.length + 1 : data!.length;
-                          _itemKeys = List.generate(itemCount, (_) => GlobalKey());
+                      _selectedRegionIndex.value = 0; // 데이터 호출이 빠를 수 있어서 초기화 추가
+                      var itemCount = !homeViewModel.isDomestic ? data!.length + 1 : data!.length;
+                      _itemKeys = List.generate(itemCount, (_) => GlobalKey());
 
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _updateSelectedRegionIndex(0, homeViewModel.isDomestic ? allItem! : data[0]);
-                          });
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _updateSelectedRegionIndex(0, !homeViewModel.isDomestic ? allItem! : data[0]);
+                      });
 
-                          return ListView.separated(
-                            shrinkWrap: true,
-                            itemCount: itemCount,
-                            scrollDirection: Axis.horizontal,
-                            padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
-                            separatorBuilder: (context, index) => SizedBox(width: 8.w),
-                            itemBuilder: (context, index) {
-                              return _buildRegionItem(
-                                  _itemKeys![index],
-                                  index,
-                                  homeViewModel.isDomestic
-                                      ? index == 0
-                                          ? null
-                                          : data[index - 1]
-                                      : data[index]);
-                            },
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: itemCount,
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
+                        separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                        itemBuilder: (context, index) {
+                          return _buildRegionItem(
+                            _itemKeys![index],
+                            index,
+                            !homeViewModel.isDomestic
+                                ? index == 0
+                                    ? null
+                                    : data[index - 1]
+                                : data[index],
                           );
                         },
                       );
-                    }),
-              );
+                    },
+                  );
+                },
+              ),
+            );
 
-            default:
-              return const SizedBox.shrink();
-          }
-        },
-        childCount: 2,
-      ),
+          default:
+            return const SizedBox.shrink();
+        }
+      }, childCount: 2),
     );
   }
 
@@ -120,13 +122,10 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
         indicatorSize: TabBarIndicatorSize.label,
         tabAlignment: TabAlignment.start,
         isScrollable: true,
-        tabs: [
-          Tab(text: context.l10n.internationalExhibition),
-          Tab(text: context.l10n.domesticExhibition),
-        ],
+        tabs: [Tab(text: context.l10n.internationalExhibition), Tab(text: context.l10n.domesticExhibition)],
         onTap: (index) {
           var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-          homeViewModel.isDomestic = index == 0 ? true : false;
+          homeViewModel.isDomestic = index == 0 ? false : true;
           if (index == 0) {
             _regionsFuture.value = homeViewModel.fetchOverseasCountries();
           } else {
@@ -143,25 +142,26 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
         if (_selectedRegionIndex.value != index) _updateSelectedRegionIndex(index, index == 0 ? allItem! : country!);
       },
       child: ValueListenableBuilder(
-          valueListenable: _selectedRegionIndex,
-          builder: (context, selectedRegionIndex, _) {
-            var isSelected = index == selectedRegionIndex;
-            return Container(
-              key: key,
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: isSelected ? AppColors.primary300 : AppColors.gray0,
-                border: Border.all(color: isSelected ? AppColors.primary300 : AppColors.gray100, width: 1.w),
-              ),
-              child: ArtTripText.pretendard()
-                  .body01Bold()
-                  .color(isSelected ? AppColors.textWhite : AppColors.textPrimary)
-                  .build()
-                  .text(country ?? context.l10n.allItems),
-            );
-          }),
+        valueListenable: _selectedRegionIndex,
+        builder: (context, selectedRegionIndex, _) {
+          var isSelected = index == selectedRegionIndex;
+          return Container(
+            key: key,
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: isSelected ? AppColors.primary300 : AppColors.gray0,
+              border: Border.all(color: isSelected ? AppColors.primary300 : AppColors.gray100, width: 1.w),
+            ),
+            child: ArtTripText.pretendard()
+                .body01Bold()
+                .color(isSelected ? AppColors.textWhite : AppColors.textPrimary)
+                .build()
+                .text(country ?? context.l10n.allItems),
+          );
+        },
+      ),
     );
   }
 }
