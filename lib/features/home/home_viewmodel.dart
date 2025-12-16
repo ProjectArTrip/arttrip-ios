@@ -9,12 +9,13 @@ class HomeViewModel with ChangeNotifier {
   final HomeRepository repository;
 
   AsyncState<List<String>?> regions = const AsyncState.loading();
+  AsyncState<List<ExhibitModel>?> todayExhibitRecommendations = const AsyncState.loading();
 
   bool _isDomestic = false;
-  int _selectedRegionIndex = 0;
+  late String _selectedRegion;
 
   bool get isDomestic => _isDomestic;
-  int get selectedRegionIndex => _selectedRegionIndex;
+  String get selectedRegion => _selectedRegion;
 
   set isDomestic(bool value) {
     _isDomestic = value;
@@ -23,10 +24,11 @@ class HomeViewModel with ChangeNotifier {
 
   void load(BuildContext context) {
     fetchOverseasCountries(context);
+    fetchTodayExhibitRecommendations();
   }
 
-  set selectedRegionIndex(int index) {
-    _selectedRegionIndex = index;
+  set selectedRegion(String region) {
+    _selectedRegion = region;
     notifyListeners();
   }
 
@@ -39,7 +41,7 @@ class HomeViewModel with ChangeNotifier {
       regions = const AsyncState.error();
     } else {
       result = [context.l10n.allItems, ...result];
-      _selectedRegionIndex = 0;
+      _selectedRegion = context.l10n.allItems;
       regions = AsyncState.success(result);
     }
     notifyListeners();
@@ -53,20 +55,26 @@ class HomeViewModel with ChangeNotifier {
     if (result == null) {
       regions = const AsyncState.error();
     } else {
-      if (result.isNotEmpty) _selectedRegionIndex = 0;
+      if (result.isNotEmpty) _selectedRegion = result[0];
       regions = AsyncState.success(result);
     }
     notifyListeners();
   }
 
-  Future<List<ExhibitModel>?> fetchTodayExhibitRecommendations({
-    String? country,
-    String? region,
-  }) {
-    return repository.fetchTodayExhibitRecommendations(
+  Future<void> fetchTodayExhibitRecommendations() async {
+    todayExhibitRecommendations = const AsyncState.loading();
+    notifyListeners();
+
+    var result = await repository.fetchTodayExhibitRecommendations(
       isDomestic: _isDomestic,
-      country: country,
-      region: region,
+      country: _isDomestic ? null : _selectedRegion,
+      region: _isDomestic ? _selectedRegion : null,
     );
+    if (result == null) {
+      todayExhibitRecommendations = const AsyncState.error();
+    } else {
+      todayExhibitRecommendations = AsyncState.success(result);
+    }
+    notifyListeners();
   }
 }

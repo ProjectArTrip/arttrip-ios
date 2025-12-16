@@ -17,9 +17,9 @@ class InternationalDomesticTabView extends StatefulWidget {
 class _InternationalDomesticTabViewState extends State<InternationalDomesticTabView> with TickerProviderStateMixin {
   List<GlobalKey>? _itemKeys;
 
-  void _updateSelectedRegionIndex(int index) {
+  void _updateSelectedRegionIndex(int index, String region) {
     var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-    homeViewModel.selectedRegionIndex = index;
+    homeViewModel.selectedRegion = region;
     if (_itemKeys![index].currentContext != null) {
       Scrollable.ensureVisible(
         _itemKeys![index].currentContext!,
@@ -111,16 +111,16 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
     );
   }
 
-  GestureDetector _buildRegionItem(GlobalKey key, int index, String country) {
+  GestureDetector _buildRegionItem(GlobalKey key, int index, String region) {
     return GestureDetector(
       onTap: () {
         var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-        if (homeViewModel.selectedRegionIndex != index) _updateSelectedRegionIndex(index);
+        if (homeViewModel.selectedRegion != region) _updateSelectedRegionIndex(index, region);
       },
-      child: Selector<HomeViewModel, int>(
-        selector: (_, vm) => vm.selectedRegionIndex,
+      child: Selector<HomeViewModel, String>(
+        selector: (_, vm) => vm.selectedRegion,
         builder: (context, selectedRegionIndex, _) {
-          var isSelected = index == selectedRegionIndex;
+          var isSelected = region == selectedRegionIndex;
           return Container(
             key: key,
             padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -134,7 +134,7 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
                 .body01Bold()
                 .color(isSelected ? AppColors.textWhite : AppColors.textPrimary)
                 .build()
-                .text(country),
+                .text(region),
           );
         },
       ),

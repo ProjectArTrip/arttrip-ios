@@ -1,5 +1,6 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/home/views/international_domestic_tab_view.dart';
 import 'package:arttrip/features/home/views/today_exhibit_recommendation_view.dart';
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+      homeViewModel.selectedRegion = context.l10n.allItems;
       homeViewModel.load(context);
     });
   }
