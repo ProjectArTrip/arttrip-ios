@@ -1,3 +1,5 @@
+enum AsyncStatus { loading, success, error }
+
 enum FontFamilyType {
   pretendard('Pretendard');
 

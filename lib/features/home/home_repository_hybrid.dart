@@ -2,8 +2,8 @@ import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/home/home_repository.dart';
 import 'package:arttrip/shared/models/exhibit_model.dart';
 
-class HybridHomeRepository implements HomeRepository {
-  HybridHomeRepository({required this.mock, required this.api});
+class HomeRepositoryHybrid implements HomeRepository {
+  HomeRepositoryHybrid({required this.mock, required this.api});
 
   final HomeRepository mock;
   final HomeRepositoryImpl api;

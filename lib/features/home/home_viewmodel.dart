@@ -1,37 +1,62 @@
+import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_repository.dart';
 import 'package:arttrip/shared/models/exhibit_model.dart';
+import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:flutter/material.dart';
 
 class HomeViewModel with ChangeNotifier {
   HomeViewModel(this.repository);
   final HomeRepository repository;
 
+  AsyncState<List<String>?> regions = const AsyncState.loading();
+
   bool _isDomestic = false;
-  String? _selectedRegion;
+  int _selectedRegionIndex = 0;
 
   bool get isDomestic => _isDomestic;
-  String? get selectedRegion => _selectedRegion;
+  int get selectedRegionIndex => _selectedRegionIndex;
 
   set isDomestic(bool value) {
     _isDomestic = value;
     notifyListeners();
   }
 
-  void updateSelectedRegion(String region) {
-    _selectedRegion = region;
+  void load(BuildContext context) {
+    fetchOverseasCountries(context);
+  }
+
+  set selectedRegionIndex(int index) {
+    _selectedRegionIndex = index;
     notifyListeners();
   }
 
-  Future<List<String>?> fetchOverseasCountries() {
-    var overseasCountries = repository.fetchOverseasCountries();
-    overseasCountries.then((value) {
-      if (value?.isNotEmpty == true) updateSelectedRegion(value!.first);
-    });
-    return overseasCountries;
+  Future<void> fetchOverseasCountries(BuildContext context) async {
+    regions = const AsyncState.loading();
+    notifyListeners();
+
+    var result = await repository.fetchOverseasCountries();
+    if (result == null || context.mounted == false) {
+      regions = const AsyncState.error();
+    } else {
+      result = [context.l10n.allItems, ...result];
+      _selectedRegionIndex = 0;
+      regions = AsyncState.success(result);
+    }
+    notifyListeners();
   }
 
-  Future<List<String>?> fetchDomesticRegions() {
-    return repository.fetchDomesticRegions();
+  Future<void> fetchDomesticRegions() async {
+    regions = const AsyncState.loading();
+    notifyListeners();
+
+    var result = await repository.fetchDomesticRegions();
+    if (result == null) {
+      regions = const AsyncState.error();
+    } else {
+      if (result.isNotEmpty) _selectedRegionIndex = 0;
+      regions = AsyncState.success(result);
+    }
+    notifyListeners();
   }
 
   Future<List<ExhibitModel>?> fetchTodayExhibitRecommendations({

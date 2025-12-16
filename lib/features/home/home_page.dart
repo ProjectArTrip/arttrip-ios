@@ -1,11 +1,10 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
-import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/home/views/international_domestic_tab_view.dart';
+import 'package:arttrip/features/home/views/today_exhibit_recommendation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,9 +38,7 @@ class _HomePageState extends State<HomePage> {
               ),
               GestureDetector(onTap: () {}, child: SvgPicture.asset(AppAssets.icCalendar, width: 24.w, height: 24.w)),
               GestureDetector(
-                onTap: () {
-                  Provider.of<HomeViewModel>(context, listen: false).fetchTodayExhibitRecommendations(country: '전체');
-                },
+                onTap: () {},
                 child: SvgPicture.asset(AppAssets.icSearch, width: 24.w, height: 24.w),
               ),
             ],
@@ -52,7 +49,10 @@ class _HomePageState extends State<HomePage> {
       body: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         controller: _scrollController,
-        slivers: [const InternationalDomesticTabView()],
+        slivers: [
+          const InternationalDomesticTabView(),
+          const TodayExhibitRecommendationView(),
+        ],
       ),
     );
   }
