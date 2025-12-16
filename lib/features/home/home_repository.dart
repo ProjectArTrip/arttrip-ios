@@ -1,11 +1,10 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/shared/models/base_result_model.dart';
-import 'package:arttrip/shared/models/region_model.dart';
 
 abstract class HomeRepository {
-  Future<List<RegionModel>?> fetchOverseasCountries();
-  Future<List<RegionModel>?> fetchDomesticRegions();
+  Future<List<String>?> fetchOverseasCountries();
+  Future<List<String>?> fetchDomesticRegions();
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -13,11 +12,18 @@ class HomeRepositoryImpl implements HomeRepository {
   final DioClient _dio;
 
   @override
-  Future<List<RegionModel>?> fetchOverseasCountries() async {
+  Future<List<String>?> fetchOverseasCountries() async {
     try {
-      var response = await _dio.get('/home/overseas');
+      var response = await _dio.get('/exhibit/overseas');
       var model = BaseResultModel.fromJson(response.dataOrNull);
-      return model.result.map<RegionModel>((e) => RegionModel.fromJson(e)).toList();
+      if (model.result is! List) {
+        AppUtil.debugLog(
+          'fetchOverseasCountries type inconsistency: ${model.result.runtimeType}',
+        );
+        return null;
+      }
+
+      return model.result.map<String>((e) => e.toString()).toList();
     } catch (e) {
       AppUtil.debugLog('fetchOverseasCountries: $e');
     }
@@ -25,11 +31,18 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<List<RegionModel>?> fetchDomesticRegions() async {
+  Future<List<String>?> fetchDomesticRegions() async {
     try {
-      var response = await _dio.get('/home/domestic');
+      var response = await _dio.get('/exhibit/domestic');
       var model = BaseResultModel.fromJson(response.dataOrNull);
-      return model.result.map<RegionModel>((e) => RegionModel.fromJson(e)).toList();
+      if (model.result is! List) {
+        AppUtil.debugLog(
+          'fetchDomesticRegions type inconsistency: ${model.result.runtimeType}',
+        );
+        return null;
+      }
+
+      return model.result.map<String>((e) => e.toString()).toList();
     } catch (e) {
       AppUtil.debugLog('fetchDomesticRegions: $e');
     }

@@ -1,7 +1,6 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
-import 'package:arttrip/shared/models/region_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/future_when.dart';
 import 'package:flutter/material.dart';
@@ -16,26 +15,26 @@ class InternationalDomesticTabView extends StatefulWidget {
 }
 
 class _InternationalDomesticTabViewState extends State<InternationalDomesticTabView> with TickerProviderStateMixin {
-  final ValueNotifier<Future<List<RegionModel>?>?> _regions = ValueNotifier(null);
+  final ValueNotifier<Future<List<String>?>?> _regionsFuture = ValueNotifier(null);
   final ValueNotifier<int> _selectedRegionIndex = ValueNotifier(0);
   List<GlobalKey>? _itemKeys;
-  RegionModel? allItem;
+  String? allItem;
 
   @override
   void initState() {
     super.initState();
-    _regions.value = Provider.of<HomeViewModel>(context, listen: false).fetchOverseasCountries();
+    _regionsFuture.value = Provider.of<HomeViewModel>(context, listen: false).fetchOverseasCountries();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    allItem ??= RegionModel(title: context.l10n.allItems);
+    allItem ??= context.l10n.allItems;
   }
 
-  void _updateSelectedRegionIndex(int index, RegionModel data) {
+  void _updateSelectedRegionIndex(int index, String? region) {
     _selectedRegionIndex.value = index;
-    Provider.of<HomeViewModel>(context, listen: false).updateSelectedRegion(data);
+    Provider.of<HomeViewModel>(context, listen: false).updateSelectedRegion(region ?? allItem!);
     if (_itemKeys![index].currentContext != null) {
       Scrollable.ensureVisible(_itemKeys![index].currentContext!,
           alignment: 0.5, duration: const Duration(milliseconds: 500));
@@ -57,11 +56,11 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
               return SizedBox(
                 height: 64.h,
                 child: ValueListenableBuilder(
-                    valueListenable: _regions,
-                    builder: (context, regions, _) {
+                    valueListenable: _regionsFuture,
+                    builder: (context, regionsFuture, _) {
                       var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
                       return FutureWhen(
-                        future: regions ?? homeViewModel.fetchOverseasCountries(),
+                        future: regionsFuture ?? homeViewModel.fetchOverseasCountries(),
                         data: (data) {
                           if (data?.isEmpty ?? true) return const SizedBox.shrink();
 
@@ -129,16 +128,16 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
           var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
           homeViewModel.isDomestic = index == 0 ? true : false;
           if (index == 0) {
-            _regions.value = homeViewModel.fetchOverseasCountries();
+            _regionsFuture.value = homeViewModel.fetchOverseasCountries();
           } else {
-            _regions.value = homeViewModel.fetchDomesticRegions();
+            _regionsFuture.value = homeViewModel.fetchDomesticRegions();
           }
         },
       ),
     );
   }
 
-  GestureDetector _buildRegionItem(GlobalKey key, int index, RegionModel? country) {
+  GestureDetector _buildRegionItem(GlobalKey key, int index, String? country) {
     return GestureDetector(
       onTap: () {
         if (_selectedRegionIndex.value != index) _updateSelectedRegionIndex(index, index == 0 ? allItem! : country!);
@@ -160,7 +159,7 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
                   .body01Bold()
                   .color(isSelected ? AppColors.textWhite : AppColors.textPrimary)
                   .build()
-                  .text(country?.title ?? context.l10n.allItems),
+                  .text(country ?? context.l10n.allItems),
             );
           }),
     );
