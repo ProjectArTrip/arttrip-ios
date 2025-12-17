@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-      homeViewModel.selectedRegion = context.l10n.allItems;
+      homeViewModel.selectedLocation = context.l10n.allItems;
       homeViewModel.load(context);
     });
   }

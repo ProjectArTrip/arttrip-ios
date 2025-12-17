@@ -24,9 +24,9 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
     _tabController = TabController(length: 2, vsync: this);
   }
 
-  void _updateSelectedRegionIndex(int index, String region) {
+  void _updateSelectedLocationIndex(int index, String location) {
     var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-    homeViewModel.selectedRegion = region;
+    homeViewModel.selectedLocation = location;
     homeViewModel.fetchTodayExhibitRecommendations();
     if (_itemKeys![index].currentContext != null) {
       Scrollable.ensureVisible(
@@ -51,7 +51,7 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
             return SizedBox(
               height: 64.h,
               child: Selector<HomeViewModel, AsyncState<List<String>>>(
-                selector: (_, vm) => vm.regions,
+                selector: (_, vm) => vm.locations,
                 builder: (context, state, _) {
                   return AsyncView(
                     state: state,
@@ -68,7 +68,7 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
                         padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
                         separatorBuilder: (context, index) => SizedBox(width: 8.w),
                         itemBuilder: (context, index) {
-                          return _buildRegionItem(
+                          return _buildLocationItem(
                             _itemKeys![index],
                             index,
                             data[index],
@@ -119,16 +119,16 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
     );
   }
 
-  GestureDetector _buildRegionItem(GlobalKey key, int index, String region) {
+  GestureDetector _buildLocationItem(GlobalKey key, int index, String location) {
     return GestureDetector(
       onTap: () {
         var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-        if (homeViewModel.selectedRegion != region) _updateSelectedRegionIndex(index, region);
+        if (homeViewModel.selectedLocation != location) _updateSelectedLocationIndex(index, location);
       },
       child: Selector<HomeViewModel, String>(
-        selector: (_, vm) => vm.selectedRegion,
-        builder: (context, selectedRegionIndex, _) {
-          var isSelected = region == selectedRegionIndex;
+        selector: (_, vm) => vm.selectedLocation,
+        builder: (context, selectedLocationIndex, _) {
+          var isSelected = location == selectedLocationIndex;
           return Container(
             key: key,
             padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -142,7 +142,7 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
                 .body01Bold()
                 .color(isSelected ? AppColors.textWhite : AppColors.textPrimary)
                 .build()
-                .text(region),
+                .text(location),
           );
         },
       ),
