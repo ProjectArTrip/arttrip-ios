@@ -2,7 +2,7 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
-import 'package:arttrip/shared/widgets/future_when.dart';
+import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -18,34 +18,19 @@ class InternationalDomesticTabView extends StatefulWidget {
 class _InternationalDomesticTabViewState
     extends State<InternationalDomesticTabView>
     with TickerProviderStateMixin {
-  final ValueNotifier<Future<List<String>?>?> _regionsFuture = ValueNotifier(
-    null,
-  );
-  final ValueNotifier<int> _selectedRegionIndex = ValueNotifier(0);
   List<GlobalKey>? _itemKeys;
-  String? allItem;
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _regionsFuture.value = Provider.of<HomeViewModel>(
-      context,
-      listen: false,
-    ).fetchOverseasCountries();
+    _tabController = TabController(length: 2, vsync: this);
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    allItem ??= context.l10n.allItems;
-  }
-
-  void _updateSelectedRegionIndex(int index, String? region) {
-    _selectedRegionIndex.value = index;
-    Provider.of<HomeViewModel>(
-      context,
-      listen: false,
-    ).updateSelectedRegion(region ?? allItem!);
+  void _updateSelectedLocationIndex(int index, String location) {
+    var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+    homeViewModel.selectedLocation = location;
+    homeViewModel.fetchTodayExhibitRecommendations();
     if (_itemKeys![index].currentContext != null) {
       Scrollable.ensureVisible(
         _itemKeys![index].currentContext!,
@@ -68,31 +53,16 @@ class _InternationalDomesticTabViewState
           case 1:
             return SizedBox(
               height: 64.h,
-              child: ValueListenableBuilder(
-                valueListenable: _regionsFuture,
-                builder: (context, regionsFuture, _) {
-                  var homeViewModel = Provider.of<HomeViewModel>(
-                    context,
-                    listen: false,
-                  );
-                  return FutureWhen(
-                    future:
-                        regionsFuture ?? homeViewModel.fetchOverseasCountries(),
-                    data: (data) {
-                      if (data?.isEmpty ?? true) return const SizedBox.shrink();
+              child: Selector<HomeViewModel, AsyncState<List<String>>>(
+                selector: (_, vm) => vm.locations,
+                builder: (context, state, _) {
+                  return AsyncView(
+                    state: state,
+                    onData: (data) {
+                      if (data.isEmpty) return const SizedBox.shrink();
 
-                      _selectedRegionIndex.value = 0; // 데이터 호출이 빠를 수 있어서 초기화 추가
-                      var itemCount = !homeViewModel.isDomestic
-                          ? data!.length + 1
-                          : data!.length;
+                      var itemCount = data.length;
                       _itemKeys = List.generate(itemCount, (_) => GlobalKey());
-
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        _updateSelectedRegionIndex(
-                          0,
-                          !homeViewModel.isDomestic ? allItem! : data[0],
-                        );
-                      });
 
                       return ListView.separated(
                         shrinkWrap: true,
@@ -105,14 +75,10 @@ class _InternationalDomesticTabViewState
                         separatorBuilder: (context, index) =>
                             SizedBox(width: 8.w),
                         itemBuilder: (context, index) {
-                          return _buildRegionItem(
+                          return _buildLocationItem(
                             _itemKeys![index],
                             index,
-                            !homeViewModel.isDomestic
-                                ? index == 0
-                                      ? null
-                                      : data[index - 1]
-                                : data[index],
+                            data[index],
                           );
                         },
                       );
@@ -134,7 +100,7 @@ class _InternationalDomesticTabViewState
       height: 28.h,
       margin: EdgeInsets.only(top: 16.h),
       child: TabBar(
-        controller: TabController(length: 2, vsync: this),
+        controller: _tabController,
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         dividerHeight: 0,
         overlayColor: WidgetStateColor.resolveWith(
@@ -171,26 +137,31 @@ class _InternationalDomesticTabViewState
           );
           homeViewModel.isDomestic = index == 0 ? false : true;
           if (index == 0) {
-            _regionsFuture.value = homeViewModel.fetchOverseasCountries();
+            homeViewModel.fetchOverseasCountries(context);
           } else {
-            _regionsFuture.value = homeViewModel.fetchDomesticRegions();
+            homeViewModel.fetchDomesticRegions();
           }
         },
       ),
     );
   }
 
-  GestureDetector _buildRegionItem(GlobalKey key, int index, String? country) {
+  GestureDetector _buildLocationItem(
+    GlobalKey key,
+    int index,
+    String location,
+  ) {
     return GestureDetector(
       onTap: () {
-        if (_selectedRegionIndex.value != index) {
-          _updateSelectedRegionIndex(index, index == 0 ? allItem! : country!);
+        var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+        if (homeViewModel.selectedLocation != location) {
+          _updateSelectedLocationIndex(index, location);
         }
       },
-      child: ValueListenableBuilder(
-        valueListenable: _selectedRegionIndex,
-        builder: (context, selectedRegionIndex, _) {
-          var isSelected = index == selectedRegionIndex;
+      child: Selector<HomeViewModel, String>(
+        selector: (_, vm) => vm.selectedLocation,
+        builder: (context, selectedLocationIndex, _) {
+          var isSelected = location == selectedLocationIndex;
           return Container(
             key: key,
             padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -207,7 +178,7 @@ class _InternationalDomesticTabViewState
                 .body01Bold()
                 .color(isSelected ? AppColors.textWhite : AppColors.textPrimary)
                 .build()
-                .text(country ?? context.l10n.allItems),
+                .text(location),
           );
         },
       ),
