@@ -30,19 +30,19 @@ class HomeRepositoryMockImpl implements HomeRepository {
           title: 'Koki Tanaka: Provisional Community',
           posterUrl: 'https://arttrip.s3.ap-northeast-2.amazonaws.com/9dc3a4e7-6_fmi.png',
           status: 'ONGOING',
-          exhibitPeriod: '2025-09-27 09:00:00.000000 ~ 2026-01-05 08:59:59.000000'),
+          exhibitPeriod: '2025-09-27 ~ 2026-01-05'),
       ExhibitModel(
           exhibitId: 8,
           title: 'In Sight! Lovis Corinth',
           posterUrl: 'https://arttrip.s3.ap-northeast-2.amazonaws.com/01d632f0-4_fmi.png',
           status: 'UPCOMING',
-          exhibitPeriod: '2025-07-18 09:00:00.000000 ~ 2026-01-26 08:59:59.000000'),
+          exhibitPeriod: '2025-07-18 ~ 2026-01-26'),
       ExhibitModel(
           exhibitId: 1,
           title: 'Matisse – Soulages',
           posterUrl: 'https://arttrip.s3.ap-northeast-2.amazonaws.com/01d632f0-4_fmi.png',
           status: 'ONGOING',
-          exhibitPeriod: '2025-10-18 09:00:00.000000 ~ 2026-03-09 08:59:59.000000'),
+          exhibitPeriod: '2025-10-18 ~ 2026-03-09'),
     ];
   }
 }
