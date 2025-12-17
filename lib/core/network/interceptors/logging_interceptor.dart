@@ -3,10 +3,16 @@ import 'package:flutter/foundation.dart';
 
 /// 간단한 한 줄 로깅 인터셉터
 class LoggingInterceptor extends Interceptor {
-  LoggingInterceptor({this.enableRequestBody = false});
+  LoggingInterceptor({
+    this.enableRequestBody = false,
+    this.enableResponseBody = true,
+  });
 
   /// 요청 body 출력 여부
   final bool enableRequestBody;
+
+  /// 응답 body 출력 여부
+  final bool enableResponseBody;
 
   /// 요청 시작 시간 저장
   final Map<int, DateTime> _requestTimes = {};
@@ -14,12 +20,18 @@ class LoggingInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     _requestTimes[options.hashCode] = DateTime.now();
+    if (enableRequestBody && options.data != null) {
+      debugPrint('[API] Request Body: ${options.data}');
+    }
     handler.next(options);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     _log(response.requestOptions, response.statusCode, isError: false);
+    if (enableResponseBody && response.data != null) {
+      debugPrint('[API] Response Body: ${response.data}');
+    }
     handler.next(response);
   }
 
