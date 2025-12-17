@@ -36,7 +36,13 @@ class HomeViewModel with ChangeNotifier {
   }
 
   void load(BuildContext context) {
-    fetchOverseasCountries(context);
+    _isDomestic ? fetchDomesticRegions() : fetchOverseasCountries(context);
+    fetchTodayExhibitRecommendations();
+    fetchGenres();
+  }
+
+  void updateSelectedLocation(String location) {
+    _selectedLocation = location;
     fetchTodayExhibitRecommendations();
     fetchGenres();
   }

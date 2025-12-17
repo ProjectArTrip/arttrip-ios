@@ -1,3 +1,4 @@
+import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/home/widgets/today_exhibition_widget.dart';
 import 'package:arttrip/shared/models/exhibit_model.dart';
@@ -10,52 +11,51 @@ class TodayExhibitRecommendationView extends StatefulWidget {
   const TodayExhibitRecommendationView({super.key});
 
   @override
-  State<TodayExhibitRecommendationView> createState() => _TodayExhibitRecommendationViewState();
+  State<TodayExhibitRecommendationView> createState() =>
+      _TodayExhibitRecommendationViewState();
 }
 
-class _TodayExhibitRecommendationViewState extends State<TodayExhibitRecommendationView> {
+class _TodayExhibitRecommendationViewState
+    extends State<TodayExhibitRecommendationView> {
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          switch (index) {
-            case 0:
-              return Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
-                selector: (_, vm) => vm.todayExhibitRecommendations,
-                builder: (context, state, _) {
-                  return AsyncView(
-                    state: state,
-                    onData: (data) {
-                      return SizedBox(
-                        height: 240.h,
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: data.length,
-                          padding: EdgeInsets.symmetric(horizontal: 24.w),
-                          separatorBuilder: (context, index) => SizedBox(width: 8.w),
-                          itemBuilder: (context, index) {
-                            var item = data[index];
-                            return item.posterUrl?.isNotEmpty == true
-                                ? TodayExhibitionWidget(
-                                    item: item,
-                                    onTap: () {},
-                                    likeOnTap: () {},
-                                  )
-                                : const SizedBox.shrink();
-                          },
-                        ),
-                      );
-                    },
-                  );
-                },
+    return SliverToBoxAdapter(
+      child: Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
+        selector: (_, vm) => vm.todayExhibitRecommendations,
+        builder: (context, state, _) {
+          return AsyncView(
+            state: state,
+            onData: (data) {
+              return SizedBox(
+                height: 240.h,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: data.length,
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                  itemBuilder: (context, index) {
+                    var item = data[index];
+                    return item.posterUrl?.isNotEmpty == true
+                        ? Selector<HomeViewModel, String>(
+                            selector: (_, vm) => vm.selectedLocation,
+                            builder: (context, selectedLocation, _) {
+                              return TodayExhibitionWidget(
+                                item: item,
+                                isLiked: false,
+                                showCountry:
+                                    selectedLocation == context.l10n.allItems,
+                                onTap: () {},
+                                likeOnTap: () {},
+                              );
+                            })
+                        : const SizedBox.shrink();
+                  },
+                ),
               );
-            default:
-              return const SizedBox.shrink();
-          }
+            },
+          );
         },
-        childCount: 1,
       ),
     );
   }

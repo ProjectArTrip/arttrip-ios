@@ -11,10 +11,12 @@ class InternationalDomesticTabView extends StatefulWidget {
   const InternationalDomesticTabView({super.key});
 
   @override
-  State<InternationalDomesticTabView> createState() => _InternationalDomesticTabViewState();
+  State<InternationalDomesticTabView> createState() =>
+      _InternationalDomesticTabViewState();
 }
 
-class _InternationalDomesticTabViewState extends State<InternationalDomesticTabView> with TickerProviderStateMixin {
+class _InternationalDomesticTabViewState
+    extends State<InternationalDomesticTabView> with TickerProviderStateMixin {
   List<GlobalKey>? _itemKeys;
   late TabController _tabController;
 
@@ -26,8 +28,7 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
 
   void _updateSelectedLocation(int index, String location) {
     var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-    homeViewModel.selectedLocation = location;
-    homeViewModel.fetchTodayExhibitRecommendations();
+    homeViewModel.updateSelectedLocation(location);
     if (_itemKeys![index].currentContext != null) {
       Scrollable.ensureVisible(
         _itemKeys![index].currentContext!,
@@ -65,8 +66,10 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
                         shrinkWrap: true,
                         itemCount: itemCount,
                         scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
-                        separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 16.h, horizontal: 24.w),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(width: 8.w),
                         itemBuilder: (context, index) {
                           return _buildLocationItem(
                             _itemKeys![index],
@@ -96,34 +99,48 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
         controller: _tabController,
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         dividerHeight: 0,
-        overlayColor: WidgetStateColor.resolveWith((states) => Colors.transparent),
-        indicator: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.primary200, width: 2.w))),
+        overlayColor:
+            WidgetStateColor.resolveWith((states) => Colors.transparent),
+        indicator: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(color: AppColors.primary200, width: 2.w))),
         indicatorWeight: 2.h,
-        labelStyle: ArtTripText.pretendard().title01Bold().color(AppColors.textPoint).build().style(),
-        unselectedLabelStyle: ArtTripText.pretendard().title01Bold().color(AppColors.textTertiary).build().style(),
+        labelStyle: ArtTripText.pretendard()
+            .title01Bold()
+            .color(AppColors.textPoint)
+            .build()
+            .style(),
+        unselectedLabelStyle: ArtTripText.pretendard()
+            .title01Bold()
+            .color(AppColors.textTertiary)
+            .build()
+            .style(),
         labelPadding: EdgeInsets.symmetric(horizontal: 12.w),
         indicatorSize: TabBarIndicatorSize.label,
         tabAlignment: TabAlignment.start,
         isScrollable: true,
-        tabs: [Tab(text: context.l10n.internationalExhibition), Tab(text: context.l10n.domesticExhibition)],
+        tabs: [
+          Tab(text: context.l10n.internationalExhibition),
+          Tab(text: context.l10n.domesticExhibition)
+        ],
         onTap: (index) {
-          var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+          var homeViewModel =
+              Provider.of<HomeViewModel>(context, listen: false);
           homeViewModel.isDomestic = index == 0 ? false : true;
-          if (index == 0) {
-            homeViewModel.fetchOverseasCountries(context);
-          } else {
-            homeViewModel.fetchDomesticRegions();
-          }
+          homeViewModel.load(context);
         },
       ),
     );
   }
 
-  GestureDetector _buildLocationItem(GlobalKey key, int index, String location) {
+  GestureDetector _buildLocationItem(
+      GlobalKey key, int index, String location) {
     return GestureDetector(
       onTap: () {
         var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-        if (homeViewModel.selectedLocation != location) _updateSelectedLocation(index, location);
+        if (homeViewModel.selectedLocation != location) {
+          _updateSelectedLocation(index, location);
+        }
       },
       child: Selector<HomeViewModel, String>(
         selector: (_, vm) => vm.selectedLocation,
@@ -136,7 +153,9 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               color: isSelected ? AppColors.primary300 : AppColors.gray0,
-              border: Border.all(color: isSelected ? AppColors.primary300 : AppColors.gray100, width: 1.w),
+              border: Border.all(
+                  color: isSelected ? AppColors.primary300 : AppColors.gray100,
+                  width: 1.w),
             ),
             child: ArtTripText.pretendard()
                 .body01Bold()

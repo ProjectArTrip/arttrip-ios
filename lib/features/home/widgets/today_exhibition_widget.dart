@@ -12,12 +12,14 @@ class TodayExhibitionWidget extends StatelessWidget {
     super.key,
     required this.item,
     this.isLiked = false,
+    this.showCountry = false,
     this.onTap,
     this.likeOnTap,
   });
 
   final ExhibitModel item;
   final bool isLiked;
+  final bool showCountry;
   final Function()? onTap;
   final Function()? likeOnTap;
 
@@ -68,19 +70,17 @@ class TodayExhibitionWidget extends StatelessWidget {
             ),
 
             /// 국가
-            // Container(
-            //   padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-            //   margin: EdgeInsets.only(left: 10.w, top: 16.h),
-            //   decoration: BoxDecoration(
-            //     color: AppColors.textPrimary.withValues(alpha: 0.6),
-            //     borderRadius: BorderRadius.circular(100),
-            //   ),
-            //   child: ArtTripText.pretendard()
-            //       .body02Bold()
-            //       .color(AppColors.textWhite)
-            //       .build()
-            //       .text('일본'),
-            // ),
+            showCountry
+                ? Container(
+                    padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                    margin: EdgeInsets.only(left: 10.w, top: 16.h),
+                    decoration: BoxDecoration(
+                      color: AppColors.textPrimary.withValues(alpha: 0.6),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: ArtTripText.pretendard().body02Bold().color(AppColors.textWhite).build().text('일본'),
+                  )
+                : const SizedBox.shrink(),
 
             /// 즐겨찾기
             // TODO: 즐겨찾기 상태에 따른 아이콘 변경 필요

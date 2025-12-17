@@ -2,7 +2,7 @@
 {
   // Dart UI Guides.
   "dart.previewFlutterUiGuides": true,
-  "dart.lineLength": 120,
+  "dart.lineLength": 80,
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always",
     "quickfix.add.required": "always",
