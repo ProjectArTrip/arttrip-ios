@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 final List<ChangeNotifierProvider> getProviders = [
   ChangeNotifierProvider<HomeViewModel>(
     create: (_) => HomeViewModel(
-      HybridHomeRepository(
+      HomeRepositoryHybrid(
         mock: HomeRepositoryMockImpl(),
         api: HomeRepositoryImpl(DioClient.instance),
       ),
