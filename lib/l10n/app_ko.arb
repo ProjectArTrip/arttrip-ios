@@ -17,5 +17,6 @@
   },
   "domesticExhibition": "국내전시",
   "internationalExhibition": "해외전시",
-  "allItems": "전체"
+  "allItems": "전체",
+  "regionalExhibition": "지역별 전시"
 }
