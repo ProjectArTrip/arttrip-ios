@@ -70,16 +70,21 @@ class TodayExhibitionWidget extends StatelessWidget {
             ),
 
             /// 국가
+            // TODO: 수정 예정
             showCountry
                 ? Container(
-                    padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-                    margin: EdgeInsets.only(left: 10.w, top: 16.h),
-                    decoration: BoxDecoration(
-                      color: AppColors.textPrimary.withValues(alpha: 0.6),
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: ArtTripText.pretendard().body02Bold().color(AppColors.textWhite).build().text('일본'),
-                  )
+                  padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                  margin: EdgeInsets.only(left: 10.w, top: 16.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.textPrimary.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: ArtTripText.pretendard()
+                      .body02Bold()
+                      .color(AppColors.textWhite)
+                      .build()
+                      .text('일본'),
+                )
                 : const SizedBox.shrink(),
 
             /// 즐겨찾기
@@ -96,6 +101,8 @@ class TodayExhibitionWidget extends StatelessWidget {
                 ),
               ),
             ),
+
+            /// 전시 정보
             Container(
               width: 180.w,
               padding: EdgeInsets.all(10.w),
@@ -103,9 +110,17 @@ class TodayExhibitionWidget extends StatelessWidget {
               child: Wrap(
                 runSpacing: 4.h,
                 children: [
-                  ArtTripText.pretendard().title02Bold().color(AppColors.textWhite).build().text(item.title ?? ''),
+                  ArtTripText.pretendard()
+                      .title02Bold()
+                      .color(AppColors.textWhite)
+                      .build()
+                      .text(item.title ?? ''),
                   // TODO: 필드값 수정 예정
-                  ArtTripText.pretendard().body02Regular().color(AppColors.textWhite).build().text(item.title ?? ''),
+                  ArtTripText.pretendard()
+                      .body02Regular()
+                      .color(AppColors.textWhite)
+                      .build()
+                      .text(item.title ?? ''),
                   ArtTripText.pretendard()
                       .body02Regular()
                       .color(AppColors.textWhite)
@@ -113,7 +128,7 @@ class TodayExhibitionWidget extends StatelessWidget {
                       .text(item.exhibitPeriod ?? ''),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

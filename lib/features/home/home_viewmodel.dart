@@ -9,8 +9,11 @@ class HomeViewModel with ChangeNotifier {
   final HomeRepository repository;
 
   AsyncState<List<String>> locations = const AsyncState.loading();
-  AsyncState<List<ExhibitModel>> todayExhibitRecommendations = const AsyncState.loading();
+  AsyncState<List<ExhibitModel>> todayExhibitRecommendations =
+      const AsyncState.loading();
   AsyncState<List<String>> genres = const AsyncState.loading();
+  AsyncState<List<ExhibitModel>> exhibitionsByGenre =
+      const AsyncState.loading();
 
   bool _isDomestic = false;
   late String _selectedLocation;
@@ -103,6 +106,25 @@ class HomeViewModel with ChangeNotifier {
     } else {
       genres = AsyncState.success(result);
       _selectedGenre = result.first;
+    }
+    notifyListeners();
+    await fetchExhibitsByGenre();
+  }
+
+  Future<void> fetchExhibitsByGenre() async {
+    exhibitionsByGenre = const AsyncState.loading();
+    notifyListeners();
+
+    var result = await repository.fetchExhibitionsByGenre(
+      isDomestic: _isDomestic,
+      country: _isDomestic ? null : _selectedLocation,
+      region: _isDomestic ? _selectedLocation : null,
+      genre: _selectedGenre,
+    );
+    if (result == null) {
+      exhibitionsByGenre = const AsyncState.error();
+    } else {
+      exhibitionsByGenre = AsyncState.success(result);
     }
     notifyListeners();
   }

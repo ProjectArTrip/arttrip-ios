@@ -12,6 +12,12 @@ abstract class HomeRepository {
     String? region,
   });
   Future<List<String>?> fetchGenres();
+  Future<List<ExhibitModel>?> fetchExhibitionsByGenre({
+    required bool isDomestic,
+    String? country,
+    String? region,
+    required String genre,
+  });
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -24,7 +30,9 @@ class HomeRepositoryImpl implements HomeRepository {
       var response = await _dio.get('/exhibit/overseas');
       var model = BaseResultModel.fromJson(response.dataOrNull);
       if (model.result is! List) {
-        AppUtil.debugLog('fetchOverseasCountries type inconsistency: ${model.result.runtimeType}');
+        AppUtil.debugLog(
+          'fetchOverseasCountries type inconsistency: ${model.result.runtimeType}',
+        );
         return null;
       }
 
@@ -41,7 +49,9 @@ class HomeRepositoryImpl implements HomeRepository {
       var response = await _dio.get('/exhibit/domestic');
       var model = BaseResultModel.fromJson(response.dataOrNull);
       if (model.result is! List) {
-        AppUtil.debugLog('fetchDomesticRegions type inconsistency: ${model.result.runtimeType}');
+        AppUtil.debugLog(
+          'fetchDomesticRegions type inconsistency: ${model.result.runtimeType}',
+        );
         return null;
       }
 
@@ -60,14 +70,20 @@ class HomeRepositoryImpl implements HomeRepository {
   }) async {
     try {
       var body =
-          !isDomestic ? {'isDomestic': isDomestic, 'country': country} : {'isDomestic': isDomestic, 'region': region};
+          !isDomestic
+              ? {'isDomestic': isDomestic, 'country': country}
+              : {'isDomestic': isDomestic, 'region': region};
       var response = await _dio.post('/home/recommend/today', data: body);
       var model = BaseResultModel.fromJson(response.dataOrNull);
       if (model.result is! List) {
-        AppUtil.debugLog('fetchTodayExhibitRecommendations type inconsistency: ${model.result.runtimeType}');
+        AppUtil.debugLog(
+          'fetchTodayExhibitRecommendations type inconsistency: ${model.result.runtimeType}',
+        );
         return null;
       }
-      return model.result.map<ExhibitModel>((e) => ExhibitModel.fromJson(e)).toList();
+      return model.result
+          .map<ExhibitModel>((e) => ExhibitModel.fromJson(e))
+          .toList();
     } catch (e) {
       AppUtil.debugLog('fetchTodayExhibitRecommendations: $e');
     }
@@ -80,12 +96,45 @@ class HomeRepositoryImpl implements HomeRepository {
       var response = await _dio.get('/exhibit/genre');
       var model = BaseResultModel.fromJson(response.dataOrNull);
       if (model.result is! List) {
-        AppUtil.debugLog('fetchGenres type inconsistency: ${model.result.runtimeType}');
+        AppUtil.debugLog(
+          'fetchGenres type inconsistency: ${model.result.runtimeType}',
+        );
         return null;
       }
       return model.result.map<String>((e) => e.toString()).toList();
     } catch (e) {
       AppUtil.debugLog('fetchGenres: $e');
+    }
+    return null;
+  }
+
+  @override
+  Future<List<ExhibitModel>?> fetchExhibitionsByGenre({
+    required bool isDomestic,
+    String? country,
+    String? region,
+    required String genre,
+  }) async {
+    try {
+      var body = {
+        'isDomestic': isDomestic,
+        if (!isDomestic) 'country': country,
+        if (isDomestic) 'region': region,
+        'singleGenre': genre,
+      };
+      var response = await _dio.post('/home/genre/random', data: body);
+      var model = BaseResultModel.fromJson(response.dataOrNull);
+      if (model.result is! List) {
+        AppUtil.debugLog(
+          'fetchExhibitionsByGenre type inconsistency: ${model.result.runtimeType}',
+        );
+        return null;
+      }
+      return model.result
+          .map<ExhibitModel>((e) => ExhibitModel.fromJson(e))
+          .toList();
+    } catch (e) {
+      AppUtil.debugLog('fetchExhibitionsByGenre: $e');
     }
     return null;
   }

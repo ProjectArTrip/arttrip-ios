@@ -33,7 +33,11 @@ class HomeRepositoryHybrid implements HomeRepository {
     if (AppConsts.useMock) {
       return mock.fetchTodayExhibitRecommendations(isDomestic: isDomestic);
     }
-    return api.fetchTodayExhibitRecommendations(isDomestic: isDomestic, country: country, region: region);
+    return api.fetchTodayExhibitRecommendations(
+      isDomestic: isDomestic,
+      country: country,
+      region: region,
+    );
   }
 
   @override
@@ -42,5 +46,28 @@ class HomeRepositoryHybrid implements HomeRepository {
       return mock.fetchGenres();
     }
     return api.fetchGenres();
+  }
+
+  @override
+  Future<List<ExhibitModel>?> fetchExhibitionsByGenre({
+    required bool isDomestic,
+    String? country,
+    String? region,
+    required String genre,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchExhibitionsByGenre(
+        isDomestic: isDomestic,
+        country: country,
+        region: region,
+        genre: genre,
+      );
+    }
+    return api.fetchExhibitionsByGenre(
+      isDomestic: isDomestic,
+      country: country,
+      region: region,
+      genre: genre,
+    );
   }
 }

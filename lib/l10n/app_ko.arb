@@ -19,5 +19,8 @@
   "internationalExhibition": "해외전시",
   "allItems": "전체",
   "regionalExhibition": "지역별 전시",
-  "recommendedGenreExhibition": "장르별 전시 추천"
+  "recommendedGenreExhibition": "장르별 전시 추천",
+  "ongoing": "진행중",
+  "closingSoon": "마감임박",
+  "upcoming": "진행예정"
 }

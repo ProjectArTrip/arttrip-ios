@@ -2,8 +2,10 @@ import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
+import 'package:arttrip/shared/widgets/exhibition_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,6 +24,7 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
   void _updateSelectedGenre(int index, String genre) {
     var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
     homeViewModel.selectedGenre = genre;
+    homeViewModel.fetchExhibitsByGenre();
     if (_itemKeys![index].currentContext != null) {
       Scrollable.ensureVisible(
         _itemKeys![index].currentContext!,
@@ -35,52 +38,74 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Selector<HomeViewModel, AsyncState<List<String>>>(
-          selector: (_, vm) => vm.genres,
-          builder: (context, state, _) {
-            return AsyncView(
-                state: state,
-                onData: (data) {
-                  if (data.isEmpty) return const SizedBox.shrink();
+        selector: (_, vm) => vm.genres,
+        builder: (context, state, _) {
+          return AsyncView(
+            state: state,
+            onData: (data) {
+              if (data.isEmpty) return const SizedBox.shrink();
 
-                  var itemCount = data.length;
-                  _itemKeys = List.generate(itemCount, (_) => GlobalKey());
+              var itemCount = data.length;
+              _itemKeys = List.generate(itemCount, (_) => GlobalKey());
 
-                  return Padding(
-                    padding: EdgeInsetsGeometry.only(top: 32.h),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 3,
-                      itemBuilder: (context, index) {
-                        switch (index) {
-                          case 0:
-                            return _buildHeader();
-                          case 1:
+              return Padding(
+                padding: EdgeInsetsGeometry.only(top: 32.h),
+                child: Column(
+                  children: [
+                    _buildHeader(),
+                    SizedBox(
+                      height: 64.h,
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: itemCount,
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 16.h,
+                          horizontal: 24.w,
+                        ),
+                        separatorBuilder:
+                            (context, index) => SizedBox(width: 8.w),
+                        itemBuilder: (context, index) {
+                          return _buildGenreItem(
+                            _itemKeys![index],
+                            index,
+                            data[index],
+                          );
+                        },
+                      ),
+                    ),
+                    Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
+                      selector: (_, vm) => vm.exhibitionsByGenre,
+                      builder: (context, state, _) {
+                        return AsyncView(
+                          state: state,
+                          onData: (data) {
                             return SizedBox(
-                              height: 64.h,
+                              height: 100.h,
                               child: ListView.separated(
+                                physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: itemCount,
-                                scrollDirection: Axis.horizontal,
-                                padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
-                                separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                                itemCount: data.length,
+                                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                                separatorBuilder:
+                                    (context, index) => SizedBox(height: 8.h),
                                 itemBuilder: (context, index) {
-                                  return _buildGenreItem(
-                                    _itemKeys![index],
-                                    index,
-                                    data[index],
-                                  );
+                                  var item = data[index];
+                                  return ExhibitionListItem(item: item);
                                 },
                               ),
                             );
-                          default:
-                            return const SizedBox.shrink();
-                        }
+                          },
+                        );
                       },
                     ),
-                  );
-                });
-          }),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -92,9 +117,15 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
         color: Colors.transparent,
         child: Row(
           children: [
-            ArtTripText.pretendard().title01Bold().build().text(context.l10n.recommendedGenreExhibition),
+            ArtTripText.pretendard().title01Bold().build().text(
+              context.l10n.recommendedGenreExhibition,
+            ),
             const Expanded(child: SizedBox.shrink()),
-            SvgPicture.asset(AppAssets.icNoArrowRight, width: 24.w, height: 24.w),
+            SvgPicture.asset(
+              AppAssets.icNoArrowRight,
+              width: 24.w,
+              height: 24.w,
+            ),
           ],
         ),
       ),
@@ -105,7 +136,9 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
     return GestureDetector(
       onTap: () {
         var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-        if (homeViewModel.selectedGenre != genre) _updateSelectedGenre(index, genre);
+        if (homeViewModel.selectedGenre != genre) {
+          _updateSelectedGenre(index, genre);
+        }
       },
       child: Selector<HomeViewModel, String>(
         selector: (_, vm) => vm.selectedGenre,
@@ -118,7 +151,10 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               color: isSelected ? AppColors.primary300 : AppColors.gray0,
-              border: Border.all(color: isSelected ? AppColors.primary300 : AppColors.gray100, width: 1.w),
+              border: Border.all(
+                color: isSelected ? AppColors.primary300 : AppColors.gray100,
+                width: 1.w,
+              ),
             ),
             child: ArtTripText.pretendard()
                 .body01Bold()
