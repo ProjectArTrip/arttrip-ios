@@ -27,6 +27,7 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
   void _updateSelectedRegionIndex(int index, String region) {
     var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
     homeViewModel.selectedRegion = region;
+    homeViewModel.fetchTodayExhibitRecommendations();
     if (_itemKeys![index].currentContext != null) {
       Scrollable.ensureVisible(
         _itemKeys![index].currentContext!,
@@ -49,15 +50,15 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
           case 1:
             return SizedBox(
               height: 64.h,
-              child: Selector<HomeViewModel, AsyncState<List<String>?>>(
+              child: Selector<HomeViewModel, AsyncState<List<String>>>(
                 selector: (_, vm) => vm.regions,
                 builder: (context, state, _) {
                   return AsyncView(
                     state: state,
                     onData: (data) {
-                      if (data?.isEmpty ?? true) return const SizedBox.shrink();
+                      if (data.isEmpty) return const SizedBox.shrink();
 
-                      var itemCount = data!.length;
+                      var itemCount = data.length;
                       _itemKeys = List.generate(itemCount, (_) => GlobalKey());
 
                       return ListView.separated(

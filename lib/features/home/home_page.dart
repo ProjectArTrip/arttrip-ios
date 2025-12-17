@@ -65,6 +65,7 @@ class _HomePageState extends State<HomePage> {
         slivers: [
           const InternationalDomesticTabView(),
           const TodayExhibitRecommendationView(),
+          SliverToBoxAdapter(child: SizedBox(height: 24.h)),
         ],
       ),
     );

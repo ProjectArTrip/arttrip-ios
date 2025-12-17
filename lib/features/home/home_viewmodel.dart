@@ -8,8 +8,8 @@ class HomeViewModel with ChangeNotifier {
   HomeViewModel(this.repository);
   final HomeRepository repository;
 
-  AsyncState<List<String>?> regions = const AsyncState.loading();
-  AsyncState<List<ExhibitModel>?> todayExhibitRecommendations = const AsyncState.loading();
+  AsyncState<List<String>> regions = const AsyncState.loading();
+  AsyncState<List<ExhibitModel>> todayExhibitRecommendations = const AsyncState.loading();
 
   bool _isDomestic = false;
   late String _selectedRegion;
