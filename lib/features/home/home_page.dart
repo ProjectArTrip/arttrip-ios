@@ -3,6 +3,7 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/home/views/international_domestic_tab_view.dart';
+import 'package:arttrip/features/home/views/regional_exhibition_view.dart';
 import 'package:arttrip/features/home/views/today_exhibit_recommendation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,7 +36,8 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: AppColors.gray0,
       appBar: AppBar(
         toolbarHeight: 52.h,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.gray0,
+        surfaceTintColor: AppColors.gray0,
         leadingWidth: 88.w + 24.w,
         leading: Padding(
           padding: EdgeInsets.only(left: 24.w),
@@ -65,6 +67,12 @@ class _HomePageState extends State<HomePage> {
         slivers: [
           const InternationalDomesticTabView(),
           const TodayExhibitRecommendationView(),
+          Selector<HomeViewModel, bool>(
+              selector: (_, vm) => vm.isDomestic,
+              builder: (context, isDomestic, _) {
+                return isDomestic ? const RegionalExhibitionView() : const SliverToBoxAdapter(child: SizedBox.shrink());
+              }),
+              
           SliverToBoxAdapter(child: SizedBox(height: 24.h)),
         ],
       ),
