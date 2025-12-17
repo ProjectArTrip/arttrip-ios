@@ -11,6 +11,7 @@ abstract class HomeRepository {
     String? country,
     String? region,
   });
+  Future<List<String>?> fetchGenres();
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -69,6 +70,22 @@ class HomeRepositoryImpl implements HomeRepository {
       return model.result.map<ExhibitModel>((e) => ExhibitModel.fromJson(e)).toList();
     } catch (e) {
       AppUtil.debugLog('fetchTodayExhibitRecommendations: $e');
+    }
+    return null;
+  }
+
+  @override
+  Future<List<String>?> fetchGenres() async {
+    try {
+      var response = await _dio.get('/exhibit/genre');
+      var model = BaseResultModel.fromJson(response.dataOrNull);
+      if (model.result is! List) {
+        AppUtil.debugLog('fetchGenres type inconsistency: ${model.result.runtimeType}');
+        return null;
+      }
+      return model.result.map<String>((e) => e.toString()).toList();
+    } catch (e) {
+      AppUtil.debugLog('fetchGenres: $e');
     }
     return null;
   }

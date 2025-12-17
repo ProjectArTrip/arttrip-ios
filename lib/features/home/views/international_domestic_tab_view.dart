@@ -24,7 +24,7 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
     _tabController = TabController(length: 2, vsync: this);
   }
 
-  void _updateSelectedLocationIndex(int index, String location) {
+  void _updateSelectedLocation(int index, String location) {
     var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
     homeViewModel.selectedLocation = location;
     homeViewModel.fetchTodayExhibitRecommendations();
@@ -123,7 +123,7 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
     return GestureDetector(
       onTap: () {
         var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-        if (homeViewModel.selectedLocation != location) _updateSelectedLocationIndex(index, location);
+        if (homeViewModel.selectedLocation != location) _updateSelectedLocation(index, location);
       },
       child: Selector<HomeViewModel, String>(
         selector: (_, vm) => vm.selectedLocation,
@@ -131,7 +131,7 @@ class _InternationalDomesticTabViewState extends State<InternationalDomesticTabV
           var isSelected = location == selectedLocationIndex;
           return Container(
             key: key,
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 20.w),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),

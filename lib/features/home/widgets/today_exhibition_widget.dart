@@ -37,6 +37,16 @@ class TodayExhibitionWidget extends StatelessWidget {
               fit: BoxFit.cover,
             ),
 
+            /// 테두리
+            Container(
+              width: 180.w,
+              height: 240.h,
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.gray50),
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+            ),
+
             /// 그라데이션 오버레이
             Align(
               alignment: Alignment.bottomCenter,

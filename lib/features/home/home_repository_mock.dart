@@ -45,4 +45,22 @@ class HomeRepositoryMockImpl implements HomeRepository {
           exhibitPeriod: '2025-10-18 ~ 2026-03-09'),
     ];
   }
+
+  @override
+  Future<List<String>?> fetchGenres() async {
+    await Future.delayed(const Duration(milliseconds: AppConsts.mockLoadingDelayMillis));
+    return [
+      '공예',
+      '근대 미술',
+      '디지털/미디어 아트',
+      '사진',
+      '설치 미술',
+      '순수 미술',
+      '역사/고전 미술',
+      '조각',
+      '팝아트',
+      '현대 미술',
+      '회화',
+    ];
+  }
 }

@@ -35,4 +35,12 @@ class HomeRepositoryHybrid implements HomeRepository {
     }
     return api.fetchTodayExhibitRecommendations(isDomestic: isDomestic, country: country, region: region);
   }
+
+  @override
+  Future<List<String>?> fetchGenres() {
+    if (AppConsts.useMock) {
+      return mock.fetchGenres();
+    }
+    return api.fetchGenres();
+  }
 }

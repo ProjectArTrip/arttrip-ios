@@ -10,26 +10,35 @@ class HomeViewModel with ChangeNotifier {
 
   AsyncState<List<String>> locations = const AsyncState.loading();
   AsyncState<List<ExhibitModel>> todayExhibitRecommendations = const AsyncState.loading();
+  AsyncState<List<String>> genres = const AsyncState.loading();
 
   bool _isDomestic = false;
   late String _selectedLocation;
+  late String _selectedGenre;
 
   bool get isDomestic => _isDomestic;
   String get selectedLocation => _selectedLocation;
+  String get selectedGenre => _selectedGenre;
 
   set isDomestic(bool value) {
     _isDomestic = value;
     notifyListeners();
   }
 
-  void load(BuildContext context) {
-    fetchOverseasCountries(context);
-    fetchTodayExhibitRecommendations();
-  }
-
   set selectedLocation(String region) {
     _selectedLocation = region;
     notifyListeners();
+  }
+
+  set selectedGenre(String genre) {
+    _selectedGenre = genre;
+    notifyListeners();
+  }
+
+  void load(BuildContext context) {
+    fetchOverseasCountries(context);
+    fetchTodayExhibitRecommendations();
+    fetchGenres();
   }
 
   Future<void> fetchOverseasCountries(BuildContext context) async {
@@ -74,6 +83,20 @@ class HomeViewModel with ChangeNotifier {
       todayExhibitRecommendations = const AsyncState.error();
     } else {
       todayExhibitRecommendations = AsyncState.success(result);
+    }
+    notifyListeners();
+  }
+
+  Future<void> fetchGenres() async {
+    genres = const AsyncState.loading();
+    notifyListeners();
+
+    var result = await repository.fetchGenres();
+    if (result == null) {
+      genres = const AsyncState.error();
+    } else {
+      genres = AsyncState.success(result);
+      _selectedGenre = result.first;
     }
     notifyListeners();
   }

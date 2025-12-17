@@ -51,7 +51,7 @@ class _RegionalExhibitionViewState extends State<RegionalExhibitionView> {
                                     radius: 32.w,
                                     backgroundColor: Colors.black,
                                   ),
-                                  ArtTripText.pretendard().body02Bold().build().text(item),
+                                  ArtTripText.pretendard().body02Bold().textAlign(TextAlign.center).build().text(item),
                                 ],
                               );
                             },
