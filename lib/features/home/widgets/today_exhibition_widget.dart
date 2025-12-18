@@ -108,7 +108,7 @@ class TodayExhibitionWidget extends StatelessWidget {
             Container(
               width: 180.w,
               padding: EdgeInsets.all(10.w),
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.bottomLeft,
               child: Wrap(
                 runSpacing: 4.h,
                 children: [
