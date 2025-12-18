@@ -70,4 +70,24 @@ class HomeRepositoryHybrid implements HomeRepository {
       genre: genre,
     );
   }
+
+  @override
+  Future<List<ExhibitModel>?> fetchPersonalizedExhibitions({
+    required bool isDomestic,
+    String? country,
+    String? region,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchPersonalizedExhibitions(
+        isDomestic: isDomestic,
+        country: country,
+        region: region,
+      );
+    }
+    return api.fetchPersonalizedExhibitions(
+      isDomestic: isDomestic,
+      country: country,
+      region: region,
+    );
+  }
 }

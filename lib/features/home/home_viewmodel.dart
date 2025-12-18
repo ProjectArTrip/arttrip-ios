@@ -14,6 +14,8 @@ class HomeViewModel with ChangeNotifier {
   AsyncState<List<String>> genres = const AsyncState.loading();
   AsyncState<List<ExhibitModel>> exhibitionsByGenre =
       const AsyncState.loading();
+  AsyncState<List<ExhibitModel>> personalizedExhibitions =
+      const AsyncState.loading();
 
   bool _isDomestic = false;
   late String _selectedLocation;
@@ -42,6 +44,7 @@ class HomeViewModel with ChangeNotifier {
     _isDomestic ? fetchDomesticRegions() : fetchOverseasCountries(context);
     fetchTodayExhibitRecommendations();
     fetchGenres();
+    fetchPersonalizedExhibitions();
   }
 
   void updateSelectedLocation(String location) {
@@ -125,6 +128,23 @@ class HomeViewModel with ChangeNotifier {
       exhibitionsByGenre = const AsyncState.error();
     } else {
       exhibitionsByGenre = AsyncState.success(result);
+    }
+    notifyListeners();
+  }
+
+  Future<void> fetchPersonalizedExhibitions() async {
+    personalizedExhibitions = const AsyncState.loading();
+    notifyListeners();
+
+    var result = await repository.fetchPersonalizedExhibitions(
+      isDomestic: _isDomestic,
+      country: _isDomestic ? null : _selectedLocation,
+      region: _isDomestic ? _selectedLocation : null,
+    );
+    if (result == null) {
+      personalizedExhibitions = const AsyncState.error();
+    } else {
+      personalizedExhibitions = AsyncState.success(result);
     }
     notifyListeners();
   }

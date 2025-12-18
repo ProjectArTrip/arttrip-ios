@@ -1,5 +1,4 @@
 import 'package:arttrip/core/app_colors.dart';
-import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
@@ -16,15 +15,8 @@ class InternationalDomesticTabView extends StatefulWidget {
 }
 
 class _InternationalDomesticTabViewState
-    extends State<InternationalDomesticTabView> with TickerProviderStateMixin {
+    extends State<InternationalDomesticTabView> {
   List<GlobalKey>? _itemKeys;
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
 
   void _updateSelectedLocation(int index, String location) {
     var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
@@ -40,101 +32,52 @@ class _InternationalDomesticTabViewState
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate((context, index) {
-        switch (index) {
-          /// tabbar
-          case 0:
-            return _buildExhibitionTabBar();
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: 64.h,
+        child: Selector<HomeViewModel, AsyncState<List<String>>>(
+          selector: (_, vm) => vm.locations,
+          builder: (context, state, _) {
+            return AsyncView(
+              state: state,
+              onData: (data) {
+                if (data.isEmpty) return const SizedBox.shrink();
 
-          /// countries
-          case 1:
-            return SizedBox(
-              height: 64.h,
-              child: Selector<HomeViewModel, AsyncState<List<String>>>(
-                selector: (_, vm) => vm.locations,
-                builder: (context, state, _) {
-                  return AsyncView(
-                    state: state,
-                    onData: (data) {
-                      if (data.isEmpty) return const SizedBox.shrink();
+                var itemCount = data.length;
+                _itemKeys = List.generate(itemCount, (_) => GlobalKey());
 
-                      var itemCount = data.length;
-                      _itemKeys = List.generate(itemCount, (_) => GlobalKey());
-
-                      return ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: itemCount,
-                        scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.symmetric(
-                            vertical: 16.h, horizontal: 24.w),
-                        separatorBuilder: (context, index) =>
-                            SizedBox(width: 8.w),
-                        itemBuilder: (context, index) {
-                          return _buildLocationItem(
-                            _itemKeys![index],
-                            index,
-                            data[index],
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
+                return ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: itemCount,
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.only(
+                    left: 24.w,
+                    top: 8.h,
+                    right: 24.w,
+                    bottom: 16.h,
+                  ),
+                  separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                  itemBuilder: (context, index) {
+                    return _buildLocationItem(
+                      _itemKeys![index],
+                      index,
+                      data[index],
+                    );
+                  },
+                );
+              },
             );
-
-          default:
-            return const SizedBox.shrink();
-        }
-      }, childCount: 2),
-    );
-  }
-
-  Container _buildExhibitionTabBar() {
-    return Container(
-      height: 28.h,
-      margin: EdgeInsets.only(top: 16.h),
-      child: TabBar(
-        controller: _tabController,
-        padding: EdgeInsets.symmetric(horizontal: 12.w),
-        dividerHeight: 0,
-        overlayColor:
-            WidgetStateColor.resolveWith((states) => Colors.transparent),
-        indicator: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: AppColors.primary200, width: 2.w))),
-        indicatorWeight: 2.h,
-        labelStyle: ArtTripText.pretendard()
-            .title01Bold()
-            .color(AppColors.textPoint)
-            .build()
-            .style(),
-        unselectedLabelStyle: ArtTripText.pretendard()
-            .title01Bold()
-            .color(AppColors.textTertiary)
-            .build()
-            .style(),
-        labelPadding: EdgeInsets.symmetric(horizontal: 12.w),
-        indicatorSize: TabBarIndicatorSize.label,
-        tabAlignment: TabAlignment.start,
-        isScrollable: true,
-        tabs: [
-          Tab(text: context.l10n.internationalExhibition),
-          Tab(text: context.l10n.domesticExhibition)
-        ],
-        onTap: (index) {
-          var homeViewModel =
-              Provider.of<HomeViewModel>(context, listen: false);
-          homeViewModel.isDomestic = index == 0 ? false : true;
-          homeViewModel.load(context);
-        },
+          },
+        ),
       ),
     );
   }
 
   GestureDetector _buildLocationItem(
-      GlobalKey key, int index, String location) {
+    GlobalKey key,
+    int index,
+    String location,
+  ) {
     return GestureDetector(
       onTap: () {
         var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
@@ -154,8 +97,9 @@ class _InternationalDomesticTabViewState
               borderRadius: BorderRadius.circular(100),
               color: isSelected ? AppColors.primary300 : AppColors.gray0,
               border: Border.all(
-                  color: isSelected ? AppColors.primary300 : AppColors.gray100,
-                  width: 1.w),
+                color: isSelected ? AppColors.primary300 : AppColors.gray100,
+                width: 1.w,
+              ),
             ),
             child: ArtTripText.pretendard()
                 .body01Bold()

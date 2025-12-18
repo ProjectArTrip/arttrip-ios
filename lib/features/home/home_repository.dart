@@ -18,6 +18,11 @@ abstract class HomeRepository {
     String? region,
     required String genre,
   });
+  Future<List<ExhibitModel>?> fetchPersonalizedExhibitions({
+    required bool isDomestic,
+    String? country,
+    String? region,
+  });
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -69,10 +74,11 @@ class HomeRepositoryImpl implements HomeRepository {
     String? region,
   }) async {
     try {
-      var body =
-          !isDomestic
-              ? {'isDomestic': isDomestic, 'country': country}
-              : {'isDomestic': isDomestic, 'region': region};
+      var body = {
+        'isDomestic': isDomestic,
+        if (!isDomestic) 'country': country,
+        if (isDomestic) 'region': region,
+      };
       var response = await _dio.post('/home/recommend/today', data: body);
       var model = BaseResultModel.fromJson(response.dataOrNull);
       if (model.result is! List) {
@@ -135,6 +141,35 @@ class HomeRepositoryImpl implements HomeRepository {
           .toList();
     } catch (e) {
       AppUtil.debugLog('fetchExhibitionsByGenre: $e');
+    }
+    return null;
+  }
+
+  @override
+  Future<List<ExhibitModel>?> fetchPersonalizedExhibitions({
+    required bool isDomestic,
+    String? country,
+    String? region,
+  }) async {
+    try {
+      var body = {
+        'isDomestic': isDomestic,
+        if (!isDomestic) 'country': country,
+        if (isDomestic) 'region': region,
+      };
+      var response = await _dio.post('/home/personalized/random', data: body);
+      var model = BaseResultModel.fromJson(response.dataOrNull);
+      if (model.result is! List) {
+        AppUtil.debugLog(
+          'fetchPersonalizedExhibitions type inconsistency: ${model.result.runtimeType}',
+        );
+        return null;
+      }
+      return model.result
+          .map<ExhibitModel>((e) => ExhibitModel.fromJson(e))
+          .toList();
+    } catch (e) {
+      AppUtil.debugLog('fetchPersonalizedExhibitions: $e');
     }
     return null;
   }

@@ -1,0 +1,120 @@
+import 'package:arttrip/core/app_assets.dart';
+import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/shared/models/exhibit_model.dart';
+import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/async_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
+class PersonalizedExhibitionView extends StatefulWidget {
+  const PersonalizedExhibitionView({super.key});
+
+  @override
+  State<PersonalizedExhibitionView> createState() =>
+      _PersonalizedExhibitionViewState();
+}
+
+class _PersonalizedExhibitionViewState
+    extends State<PersonalizedExhibitionView> {
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
+        selector: (_, vm) => vm.personalizedExhibitions,
+        builder: (context, state, _) {
+          return AsyncView(
+            state: state,
+            onData: (data) {
+              if (data.isEmpty) return const SizedBox.shrink();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 12.h,
+                children: [
+                  // TODO: 유저 이름 동적으로 바꾸기
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 24.w,
+                      top: 32.h,
+                      right: 24.w,
+                    ),
+                    child: ArtTripText.pretendard().title01Bold().build().text(
+                      context.l10n.personalizedRecommendationTitle('김미미'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 190.h,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: data.length,
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      separatorBuilder:
+                          (context, index) => SizedBox(width: 8.w),
+                      itemBuilder: (_, index) {
+                        var item = data[index];
+                        return GestureDetector(
+                          onTap: () {
+                            // TODO: 전시 상세 페이지로 이동
+                          },
+                          child: SizedBox(
+                            width: 120.w,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                /// 전시 이미지
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.r),
+                                  child: Stack(
+                                    children: [
+                                      item.posterUrl?.isNotEmpty == true
+                                          ? CachedNetworkImage(
+                                            imageUrl: item.posterUrl!,
+                                            width: 120.w,
+                                            height: 150.h,
+                                            fit: BoxFit.cover,
+                                          )
+                                          : const SizedBox.shrink(),
+                                      Positioned(
+                                        top: 8.h,
+                                        right: 8.w,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            // TODO: isLiked 동적으로 바꾸기
+                                          },
+                                          child: SvgPicture.asset(
+                                            AppAssets.icLikeCircle(
+                                              isLiked: false,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                /// 전시 제목
+                                ArtTripText.pretendard()
+                                    .body01Bold()
+                                    .ellipsis(2)
+                                    .build()
+                                    .text(item.title ?? ''),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}

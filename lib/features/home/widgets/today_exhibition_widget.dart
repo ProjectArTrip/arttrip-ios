@@ -32,12 +32,14 @@ class TodayExhibitionWidget extends StatelessWidget {
         child: Stack(
           children: [
             /// 백그라운드 이미지
-            CachedNetworkImage(
-              imageUrl: item.posterUrl!,
-              width: 180.w,
-              height: 240.h,
-              fit: BoxFit.cover,
-            ),
+            item.posterUrl?.isNotEmpty == true
+                ? CachedNetworkImage(
+                  imageUrl: item.posterUrl!,
+                  width: 180.w,
+                  height: 240.h,
+                  fit: BoxFit.cover,
+                )
+                : const SizedBox.shrink(),
 
             /// 테두리
             Container(

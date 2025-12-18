@@ -66,8 +66,8 @@ class ExhibitionListItem extends StatelessWidget {
                   child: ArtTripText.pretendard().body02Bold().build().text(
                     item.status == 'ONGOING'
                         ? context.l10n.ongoing
-                        : item.status == 'CLOSING_SOON'
-                        ? context.l10n.closingSoon
+                        : item.status == 'ENDING_SOON'
+                        ? context.l10n.endingSoon
                         : context.l10n.upcoming,
                   ),
                 ),

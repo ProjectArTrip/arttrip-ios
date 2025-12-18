@@ -21,6 +21,7 @@
   "regionalExhibition": "지역별 전시",
   "recommendedGenreExhibition": "장르별 전시 추천",
   "ongoing": "진행중",
-  "closingSoon": "마감임박",
-  "upcoming": "진행예정"
+  "endingSoon": "마감임박",
+  "upcoming": "진행예정",
+  "personalizedRecommendationTitle": "{userName}님을 위한 추천"
 }

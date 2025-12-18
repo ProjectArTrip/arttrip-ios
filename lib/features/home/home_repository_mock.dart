@@ -116,4 +116,42 @@ class HomeRepositoryMockImpl implements HomeRepository {
       ),
     ];
   }
+
+  @override
+  Future<List<ExhibitModel>?> fetchPersonalizedExhibitions({
+    required bool isDomestic,
+    String? country,
+    String? region,
+  }) async {
+    await Future.delayed(
+      const Duration(milliseconds: AppConsts.mockLoadingDelayMillis),
+    );
+    // TODO: 실데이터 값으로 변경 예정
+    return [
+      ExhibitModel(
+        exhibitId: 7,
+        title: 'Koki Tanaka: Provisional Community',
+        posterUrl:
+            'https://arttrip.s3.ap-northeast-2.amazonaws.com/9dc3a4e7-6_fmi.png',
+        status: 'ONGOING',
+        exhibitPeriod: '2025-09-27 ~ 2026-01-05',
+      ),
+      ExhibitModel(
+        exhibitId: 8,
+        title: 'In Sight! Lovis Corinth',
+        posterUrl:
+            'https://arttrip.s3.ap-northeast-2.amazonaws.com/01d632f0-4_fmi.png',
+        status: 'UPCOMING',
+        exhibitPeriod: '2025-07-18 ~ 2026-01-26',
+      ),
+      ExhibitModel(
+        exhibitId: 1,
+        title: 'Matisse – Soulages',
+        posterUrl:
+            'https://arttrip.s3.ap-northeast-2.amazonaws.com/01d632f0-4_fmi.png',
+        status: 'ONGOING',
+        exhibitPeriod: '2025-10-18 ~ 2026-03-09',
+      ),
+    ];
+  }
 }
