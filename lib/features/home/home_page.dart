@@ -2,8 +2,8 @@ import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/features/home/views/domestic_overseas_view.dart';
 import 'package:arttrip/features/home/views/genre_exhibition_view.dart';
-import 'package:arttrip/features/home/views/international_domestic_tab_view.dart';
 import 'package:arttrip/features/home/views/personalized_exhibition_view.dart';
 import 'package:arttrip/features/home/views/regional_exhibition_view.dart';
 import 'package:arttrip/features/home/views/today_exhibit_recommendation_view.dart';
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           slivers: [
             _buildAppBar(),
             _buildExhibitionTabBar(),
-            const InternationalDomesticTabView(),
+            const DomesticOverseasView(),
             const TodayExhibitRecommendationView(),
             const PersonalizedExhibitionView(),
             Selector<HomeViewModel, bool>(

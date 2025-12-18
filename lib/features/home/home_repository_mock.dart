@@ -32,28 +32,20 @@ class HomeRepositoryMockImpl implements HomeRepository {
     );
     return [
       ExhibitModel(
-        exhibitId: 7,
-        title: 'Koki Tanaka: Provisional Community',
+        exhibitId: 13,
+        title: '릴리킴 개인전 《 Ego Travla - between the Seen and the Unseen 》',
         posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/9dc3a4e7-6_fmi.png',
+            'https://arttrip.s3.ap-northeast-2.amazonaws.com/3b368dcf-7_ego.png',
         status: 'ONGOING',
-        exhibitPeriod: '2025-09-27 ~ 2026-01-05',
+        exhibitPeriod: '2025-12-14 ~ 2025-12-27',
       ),
       ExhibitModel(
-        exhibitId: 8,
-        title: 'In Sight! Lovis Corinth',
+        exhibitId: 12,
+        title: '눈이 타오르는 비탈',
         posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/01d632f0-4_fmi.png',
-        status: 'UPCOMING',
-        exhibitPeriod: '2025-07-18 ~ 2026-01-26',
-      ),
-      ExhibitModel(
-        exhibitId: 1,
-        title: 'Matisse – Soulages',
-        posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/01d632f0-4_fmi.png',
-        status: 'ONGOING',
-        exhibitPeriod: '2025-10-18 ~ 2026-03-09',
+            'https://arttrip.s3.ap-northeast-2.amazonaws.com/15e68d85-1_1765512462903.jpg',
+        status: 'FINISHED',
+        exhibitPeriod: '2025-12-13 ~ 2025-12-14',
       ),
     ];
   }
@@ -91,28 +83,20 @@ class HomeRepositoryMockImpl implements HomeRepository {
     // TODO: 실데이터 값으로 변경 예정
     return [
       ExhibitModel(
-        exhibitId: 7,
-        title: 'Koki Tanaka: Provisional Community',
+        exhibitId: 13,
+        title: '릴리킴 개인전 《 Ego Travla - between the Seen and the Unseen 》',
         posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/9dc3a4e7-6_fmi.png',
+            'https://arttrip.s3.ap-northeast-2.amazonaws.com/3b368dcf-7_ego.png',
         status: 'ONGOING',
-        exhibitPeriod: '2025-09-27 ~ 2026-01-05',
+        exhibitPeriod: '2025-12-14 ~ 2025-12-27',
       ),
       ExhibitModel(
-        exhibitId: 8,
-        title: 'In Sight! Lovis Corinth',
+        exhibitId: 12,
+        title: '눈이 타오르는 비탈',
         posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/01d632f0-4_fmi.png',
-        status: 'UPCOMING',
-        exhibitPeriod: '2025-07-18 ~ 2026-01-26',
-      ),
-      ExhibitModel(
-        exhibitId: 1,
-        title: 'Matisse – Soulages',
-        posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/01d632f0-4_fmi.png',
-        status: 'ONGOING',
-        exhibitPeriod: '2025-10-18 ~ 2026-03-09',
+            'https://arttrip.s3.ap-northeast-2.amazonaws.com/15e68d85-1_1765512462903.jpg',
+        status: 'FINISHED',
+        exhibitPeriod: '2025-12-13 ~ 2025-12-14',
       ),
     ];
   }
@@ -129,28 +113,20 @@ class HomeRepositoryMockImpl implements HomeRepository {
     // TODO: 실데이터 값으로 변경 예정
     return [
       ExhibitModel(
-        exhibitId: 7,
-        title: 'Koki Tanaka: Provisional Community',
+        exhibitId: 13,
+        title: '릴리킴 개인전 《 Ego Travla - between the Seen and the Unseen 》',
         posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/9dc3a4e7-6_fmi.png',
+            'https://arttrip.s3.ap-northeast-2.amazonaws.com/3b368dcf-7_ego.png',
         status: 'ONGOING',
-        exhibitPeriod: '2025-09-27 ~ 2026-01-05',
+        exhibitPeriod: '2025-12-14 ~ 2025-12-27',
       ),
       ExhibitModel(
-        exhibitId: 8,
-        title: 'In Sight! Lovis Corinth',
+        exhibitId: 12,
+        title: '눈이 타오르는 비탈',
         posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/01d632f0-4_fmi.png',
-        status: 'UPCOMING',
-        exhibitPeriod: '2025-07-18 ~ 2026-01-26',
-      ),
-      ExhibitModel(
-        exhibitId: 1,
-        title: 'Matisse – Soulages',
-        posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/01d632f0-4_fmi.png',
-        status: 'ONGOING',
-        exhibitPeriod: '2025-10-18 ~ 2026-03-09',
+            'https://arttrip.s3.ap-northeast-2.amazonaws.com/15e68d85-1_1765512462903.jpg',
+        status: 'FINISHED',
+        exhibitPeriod: '2025-12-13 ~ 2025-12-14',
       ),
     ];
   }

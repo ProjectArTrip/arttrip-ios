@@ -1,13 +1,9 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// SnackBar 타입
-enum SnackBarType {
-  success,
-  error,
-  warning,
-  info,
-}
+enum SnackBarType { success, error, warning, info }
 
 /// 공용 SnackBar 유틸리티
 class SnackBarUtils {
@@ -176,10 +172,13 @@ class SnackBarUtils {
       backgroundColor: backgroundColor,
       duration: duration,
       behavior: behavior,
-      margin: margin ?? const EdgeInsets.all(16),
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      margin: margin ?? EdgeInsets.all(16.w),
+      padding:
+          padding ?? EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
       elevation: elevation ?? 4,
-      shape: shape ?? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape:
+          shape ??
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
       action: action,
     );
 

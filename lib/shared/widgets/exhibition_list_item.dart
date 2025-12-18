@@ -24,113 +24,124 @@ class ExhibitionListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      spacing: 12.w,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadiusGeometry.circular(8.r),
-          child: Stack(
-            children: [
-              /// 전시 이미지
-              item.posterUrl?.isNotEmpty == true
-                  ? CachedNetworkImage(
-                    imageUrl: item.posterUrl!,
-                    width: 100.w,
-                    height: 100.w,
-                    fit: BoxFit.cover,
-                  )
-                  : const SizedBox.shrink(),
-
-              /// 전시 상태
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.r),
-                      bottomRight: Radius.circular(16.r),
-                    ),
-                    border: const Border(
-                      right: BorderSide(color: AppColors.gray50),
-                      bottom: BorderSide(color: AppColors.gray50),
-                    ),
-                    color:
-                        item.status == 'ONGOING'
-                            ? AppColors.subLime
-                            : item.status == 'CLOSING_SOON'
-                            ? AppColors.gray0
-                            : AppColors.subRed, // TODO: 색상 확인 필요
-                  ),
-                  child: ArtTripText.pretendard().body02Bold().build().text(
-                    item.status == 'ONGOING'
-                        ? context.l10n.ongoing
-                        : item.status == 'ENDING_SOON'
-                        ? context.l10n.endingSoon
-                        : context.l10n.upcoming,
-                  ),
-                ),
-              ),
-
-              /// 즐겨찾기
-              Positioned(
-                top: 8.h,
-                right: 8.w,
-                child: GestureDetector(
-                  onTap: likeOnTap,
-                  child: SvgPicture.asset(
-                    AppAssets.icLikeCircle(isLiked: isLiked),
-                    width: 24.w,
-                    height: 24.w,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        /// 전시 정보
-        Expanded(
-          child: Column(
-            spacing: 4.h,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '공예',
-                style: TextStyle(
-                  color: AppColors.primary300,
-                  fontSize: 14.sp,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w400,
-                  height: 20 / 14,
-                  letterSpacing: 14 * (-2 / 100),
-                ),
-              ),
-              ArtTripText.pretendard().body01Bold().build().text(
-                item.title ?? '',
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 2.h,
+    return GestureDetector(
+      onTap: onTap,
+      child: ColoredBox(
+        color: Colors.transparent,
+        child: Row(
+          spacing: 12.w,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadiusGeometry.circular(8.r),
+              child: Stack(
                 children: [
-                  // TODO: 미술관명 수정 예정
-                  ArtTripText.pretendard()
-                      .body02Regular()
-                      .color(AppColors.textTertiary)
-                      .build()
-                      .text('미술관명'),
-                  ArtTripText.pretendard()
-                      .body02Regular()
-                      .color(AppColors.textTertiary)
-                      .build()
-                      .text(item.exhibitPeriod ?? ''),
+                  /// 전시 이미지
+                  item.posterUrl?.isNotEmpty == true
+                      ? CachedNetworkImage(
+                        imageUrl: item.posterUrl!,
+                        width: 100.w,
+                        height: 100.w,
+                        fit: BoxFit.cover,
+                      )
+                      : const SizedBox.shrink(),
+
+                  /// 전시 상태
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 4.h,
+                        horizontal: 8.w,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.r),
+                        ),
+                        border:
+                            item.status == 'ENDING_SOON'
+                                ? const Border(
+                                  right: BorderSide(color: AppColors.gray50),
+                                  bottom: BorderSide(color: AppColors.gray50),
+                                )
+                                : null,
+                        color:
+                            item.status == 'ONGOING'
+                                ? AppColors.subLime
+                                : item.status == 'ENDING_SOON'
+                                ? AppColors.gray0
+                                : AppColors.subRed, // TODO: 색상 확인 필요
+                      ),
+                      child: ArtTripText.pretendard().body02Bold().build().text(
+                        item.status == 'ONGOING'
+                            ? context.l10n.ongoing
+                            : item.status == 'ENDING_SOON'
+                            ? context.l10n.endingSoon
+                            : context.l10n.upcoming,
+                      ),
+                    ),
+                  ),
+
+                  /// 즐겨찾기
+                  Positioned(
+                    top: 8.h,
+                    right: 8.w,
+                    child: GestureDetector(
+                      onTap: likeOnTap,
+                      child: SvgPicture.asset(
+                        AppAssets.icLikeCircle(isLiked: isLiked),
+                        width: 24.w,
+                        height: 24.w,
+                      ),
+                    ),
+                  ),
                 ],
               ),
-            ],
-          ),
+            ),
+
+            /// 전시 정보
+            Expanded(
+              child: Column(
+                spacing: 4.h,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '공예',
+                    style: TextStyle(
+                      color: AppColors.primary300,
+                      fontSize: 14.sp,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w400,
+                      height: 20 / 14,
+                      letterSpacing: 14 * (-2 / 100),
+                    ),
+                  ),
+                  ArtTripText.pretendard().body01Bold().build().text(
+                    item.title ?? '',
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 2.h,
+                    children: [
+                      // TODO: 미술관명 수정 예정
+                      ArtTripText.pretendard()
+                          .body02Regular()
+                          .color(AppColors.textTertiary)
+                          .build()
+                          .text('미술관명'),
+                      ArtTripText.pretendard()
+                          .body02Regular()
+                          .color(AppColors.textTertiary)
+                          .build()
+                          .text(item.exhibitPeriod ?? ''),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

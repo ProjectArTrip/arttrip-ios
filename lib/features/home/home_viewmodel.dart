@@ -40,17 +40,31 @@ class HomeViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void _resetToLoading({bool resetLocations = true}) {
+    if (resetLocations) locations = const AsyncState.loading();
+    todayExhibitRecommendations = const AsyncState.loading();
+    genres = const AsyncState.loading();
+    exhibitionsByGenre = const AsyncState.loading();
+    personalizedExhibitions = const AsyncState.loading();
+    notifyListeners();
+  }
+
   void load(BuildContext context) {
-    _isDomestic ? fetchDomesticRegions() : fetchOverseasCountries(context);
-    fetchTodayExhibitRecommendations();
-    fetchGenres();
-    fetchPersonalizedExhibitions();
+    _resetToLoading();
+    (_isDomestic ? fetchDomesticRegions() : fetchOverseasCountries(context))
+        .then((_) {
+          fetchTodayExhibitRecommendations();
+          fetchGenres();
+          fetchPersonalizedExhibitions();
+        });
   }
 
   void updateSelectedLocation(String location) {
     _selectedLocation = location;
+    _resetToLoading(resetLocations: false);
     fetchTodayExhibitRecommendations();
     fetchGenres();
+    fetchPersonalizedExhibitions();
   }
 
   Future<void> fetchOverseasCountries(BuildContext context) async {
@@ -85,7 +99,6 @@ class HomeViewModel with ChangeNotifier {
   Future<void> fetchTodayExhibitRecommendations() async {
     todayExhibitRecommendations = const AsyncState.loading();
     notifyListeners();
-
     var result = await repository.fetchTodayExhibitRecommendations(
       isDomestic: _isDomestic,
       country: _isDomestic ? null : _selectedLocation,
