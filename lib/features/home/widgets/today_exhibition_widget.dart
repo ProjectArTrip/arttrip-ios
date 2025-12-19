@@ -12,12 +12,14 @@ class TodayExhibitionWidget extends StatelessWidget {
     super.key,
     required this.item,
     this.isLiked = false,
+    this.showCountry = false,
     this.onTap,
     this.likeOnTap,
   });
 
   final ExhibitModel item;
   final bool isLiked;
+  final bool showCountry;
   final Function()? onTap;
   final Function()? likeOnTap;
 
@@ -30,11 +32,23 @@ class TodayExhibitionWidget extends StatelessWidget {
         child: Stack(
           children: [
             /// 백그라운드 이미지
-            CachedNetworkImage(
-              imageUrl: item.posterUrl!,
+            item.posterUrl?.isNotEmpty == true
+                ? CachedNetworkImage(
+                  imageUrl: item.posterUrl!,
+                  width: 180.w,
+                  height: 240.h,
+                  fit: BoxFit.cover,
+                )
+                : const SizedBox.shrink(),
+
+            /// 테두리
+            Container(
               width: 180.w,
               height: 240.h,
-              fit: BoxFit.cover,
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.gray50),
+                borderRadius: BorderRadius.circular(8.r),
+              ),
             ),
 
             /// 그라데이션 오버레이
@@ -58,19 +72,22 @@ class TodayExhibitionWidget extends StatelessWidget {
             ),
 
             /// 국가
-            // Container(
-            //   padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-            //   margin: EdgeInsets.only(left: 10.w, top: 16.h),
-            //   decoration: BoxDecoration(
-            //     color: AppColors.textPrimary.withValues(alpha: 0.6),
-            //     borderRadius: BorderRadius.circular(100),
-            //   ),
-            //   child: ArtTripText.pretendard()
-            //       .body02Bold()
-            //       .color(AppColors.textWhite)
-            //       .build()
-            //       .text('일본'),
-            // ),
+            // TODO: 수정 예정
+            showCountry
+                ? Container(
+                  padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                  margin: EdgeInsets.only(left: 10.w, top: 16.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.textPrimary.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: ArtTripText.pretendard()
+                      .body02Bold()
+                      .color(AppColors.textWhite)
+                      .build()
+                      .text('일본'),
+                )
+                : const SizedBox.shrink(),
 
             /// 즐겨찾기
             // TODO: 즐겨찾기 상태에 따른 아이콘 변경 필요
@@ -86,16 +103,26 @@ class TodayExhibitionWidget extends StatelessWidget {
                 ),
               ),
             ),
+
+            /// 전시 정보
             Container(
               width: 180.w,
               padding: EdgeInsets.all(10.w),
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.bottomLeft,
               child: Wrap(
                 runSpacing: 4.h,
                 children: [
-                  ArtTripText.pretendard().title02Bold().color(AppColors.textWhite).build().text(item.title ?? ''),
+                  ArtTripText.pretendard()
+                      .title02Bold()
+                      .color(AppColors.textWhite)
+                      .build()
+                      .text(item.title ?? ''),
                   // TODO: 필드값 수정 예정
-                  ArtTripText.pretendard().body02Regular().color(AppColors.textWhite).build().text(item.title ?? ''),
+                  ArtTripText.pretendard()
+                      .body02Regular()
+                      .color(AppColors.textWhite)
+                      .build()
+                      .text(item.hallName ?? ''),
                   ArtTripText.pretendard()
                       .body02Regular()
                       .color(AppColors.textWhite)
@@ -103,7 +130,7 @@ class TodayExhibitionWidget extends StatelessWidget {
                       .text(item.exhibitPeriod ?? ''),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

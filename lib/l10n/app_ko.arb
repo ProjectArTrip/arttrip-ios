@@ -18,5 +18,11 @@
   "domesticExhibition": "국내전시",
   "internationalExhibition": "해외전시",
   "allItems": "전체",
-  "regionalExhibition": "지역별 전시"
+  "regionalExhibition": "지역별 전시",
+  "recommendedGenreExhibition": "장르별 전시 추천",
+  "onGoing": "진행중",
+  "endingSoon": "마감임박",
+  "upcoming": "전시예정",
+  "personalizedRecommendationTitle": "{userName}님을 위한 추천",
+  "weeklyExhibitionSchedule": "이번주 전시 일정"
 }

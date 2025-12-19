@@ -33,6 +33,84 @@ class HomeRepositoryHybrid implements HomeRepository {
     if (AppConsts.useMock) {
       return mock.fetchTodayExhibitRecommendations(isDomestic: isDomestic);
     }
-    return api.fetchTodayExhibitRecommendations(isDomestic: isDomestic, country: country, region: region);
+    return api.fetchTodayExhibitRecommendations(
+      isDomestic: isDomestic,
+      country: country,
+      region: region,
+    );
+  }
+
+  @override
+  Future<List<String>?> fetchGenres() {
+    if (AppConsts.useMock) {
+      return mock.fetchGenres();
+    }
+    return api.fetchGenres();
+  }
+
+  @override
+  Future<List<ExhibitModel>?> fetchExhibitionsByGenre({
+    required bool isDomestic,
+    String? country,
+    String? region,
+    required String genre,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchExhibitionsByGenre(
+        isDomestic: isDomestic,
+        country: country,
+        region: region,
+        genre: genre,
+      );
+    }
+    return api.fetchExhibitionsByGenre(
+      isDomestic: isDomestic,
+      country: country,
+      region: region,
+      genre: genre,
+    );
+  }
+
+  @override
+  Future<List<ExhibitModel>?> fetchPersonalizedExhibitions({
+    required bool isDomestic,
+    String? country,
+    String? region,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchPersonalizedExhibitions(
+        isDomestic: isDomestic,
+        country: country,
+        region: region,
+      );
+    }
+    return api.fetchPersonalizedExhibitions(
+      isDomestic: isDomestic,
+      country: country,
+      region: region,
+    );
+  }
+
+  @override
+  Future<List<ExhibitModel>?> fetchWeeklyExhibitionsBySelectedDate({
+    required bool isDomestic,
+    String? country,
+    String? region,
+    required String date,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchWeeklyExhibitionsBySelectedDate(
+        isDomestic: isDomestic,
+        country: country,
+        region: region,
+        date: date,
+      );
+    }
+    return api.fetchWeeklyExhibitionsBySelectedDate(
+      isDomestic: isDomestic,
+      country: country,
+      region: region,
+      date: date,
+    );
   }
 }
