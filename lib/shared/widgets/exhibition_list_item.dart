@@ -1,8 +1,8 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
-import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/exhibition_status_badge.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,41 +46,13 @@ class ExhibitionListItem extends StatelessWidget {
                       : const SizedBox.shrink(),
 
                   /// 전시 상태
-                  Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 4.h,
-                        horizontal: 8.w,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16.r),
-                        ),
-                        border:
-                            item.status == 'ENDING_SOON'
-                                ? const Border(
-                                  right: BorderSide(color: AppColors.gray50),
-                                  bottom: BorderSide(color: AppColors.gray50),
-                                )
-                                : null,
-                        color:
-                            item.status == 'ONGOING'
-                                ? AppColors.subLime
-                                : item.status == 'ENDING_SOON'
-                                ? AppColors.gray0
-                                : AppColors.subRed, // TODO: 색상 확인 필요
-                      ),
-                      child: ArtTripText.pretendard().body02Bold().build().text(
-                        item.status == 'ONGOING'
-                            ? context.l10n.ongoing
-                            : item.status == 'ENDING_SOON'
-                            ? context.l10n.endingSoon
-                            : context.l10n.upcoming,
-                      ),
-                    ),
-                  ),
+                  item.status != null
+                      ? Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: ExhibitionStatusBadge(item.status!),
+                      )
+                      : const SizedBox.shrink(),
 
                   /// 즐겨찾기
                   Positioned(

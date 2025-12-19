@@ -14,7 +14,9 @@ class AppAssets {
   static const String icCalendar = 'assets/svg/ic_calendar.svg';
   static const String icSearch = 'assets/svg/ic_search.svg';
   static String icLikeCircle({required bool isLiked}) =>
-      isLiked ? 'assets/svg/ic_like_circle_selected.svg' : 'assets/svg/ic_like_circle_default.svg';
+      isLiked
+          ? 'assets/svg/ic_like_circle_selected.svg'
+          : 'assets/svg/ic_like_circle_default.svg';
   static const String icNoArrowRight = 'assets/svg/ic_no_arrow_right.svg';
 
   // Logo

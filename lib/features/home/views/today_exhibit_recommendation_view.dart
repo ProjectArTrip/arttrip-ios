@@ -29,6 +29,8 @@ class _TodayExhibitRecommendationViewState
           return AsyncView(
             state: state,
             onData: (data) {
+              if (data.isEmpty) return const SizedBox.shrink();
+
               return SizedBox(
                 height: 240.h,
                 child: ListView.separated(
@@ -39,21 +41,19 @@ class _TodayExhibitRecommendationViewState
                   separatorBuilder: (context, index) => SizedBox(width: 8.w),
                   itemBuilder: (context, index) {
                     var item = data[index];
-                    return item.posterUrl?.isNotEmpty == true
-                        ? Selector<HomeViewModel, String>(
-                          selector: (_, vm) => vm.selectedLocation,
-                          builder: (context, selectedLocation, _) {
-                            return TodayExhibitionWidget(
-                              item: item,
-                              isLiked: false,
-                              showCountry:
-                                  selectedLocation == context.l10n.allItems,
-                              onTap: () {},
-                              likeOnTap: () {},
-                            );
-                          },
-                        )
-                        : const SizedBox.shrink();
+                    return Selector<HomeViewModel, String>(
+                      selector: (_, vm) => vm.selectedLocation,
+                      builder: (context, selectedLocation, _) {
+                        return TodayExhibitionWidget(
+                          item: item,
+                          isLiked: false,
+                          showCountry:
+                              selectedLocation == context.l10n.allItems,
+                          onTap: () {},
+                          likeOnTap: () {},
+                        );
+                      },
+                    );
                   },
                 ),
               );

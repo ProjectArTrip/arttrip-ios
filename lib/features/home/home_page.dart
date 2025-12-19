@@ -7,6 +7,7 @@ import 'package:arttrip/features/home/views/genre_exhibition_view.dart';
 import 'package:arttrip/features/home/views/personalized_exhibition_view.dart';
 import 'package:arttrip/features/home/views/regional_exhibition_view.dart';
 import 'package:arttrip/features/home/views/today_exhibit_recommendation_view.dart';
+import 'package:arttrip/features/home/views/weekly_exhibition_schedule_view.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,6 +50,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             const DomesticOverseasView(),
             const TodayExhibitRecommendationView(),
             const PersonalizedExhibitionView(),
+            const WeeklyExhibitionScheduleView(),
             Selector<HomeViewModel, bool>(
               selector: (_, vm) => vm.isDomestic,
               builder: (context, isDomestic, _) {
@@ -155,6 +157,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             context,
             listen: false,
           );
+          if (index == (homeViewModel.isDomestic ? 1 : 0)) return;
+
           homeViewModel.isDomestic = index == 0 ? false : true;
           homeViewModel.load(context);
         },

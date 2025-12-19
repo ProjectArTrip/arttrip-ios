@@ -1,4 +1,5 @@
 import 'package:arttrip/core/app_consts.dart';
+import 'package:arttrip/core/app_urls.dart';
 import 'package:arttrip/features/home/home_repository.dart';
 import 'package:arttrip/shared/models/exhibit_model.dart';
 
@@ -8,7 +9,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   @override
   Future<List<String>?> fetchOverseasCountries() async {
     await Future.delayed(
-      const Duration(milliseconds: AppConsts.mockLoadingDelayMillis),
+      const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
     ); // 실제 딜레이 흉내
     return ['프랑스', '오스트리아', '중국', '일본', '독일', '대한민국'];
   }
@@ -16,7 +17,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   @override
   Future<List<String>?> fetchDomesticRegions() async {
     await Future.delayed(
-      const Duration(milliseconds: AppConsts.mockLoadingDelayMillis),
+      const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
     );
     return ['서울', '경기', '충청', '강원', '전라', '경상', '제주'];
   }
@@ -28,24 +29,24 @@ class HomeRepositoryMockImpl implements HomeRepository {
     String? region,
   }) async {
     await Future.delayed(
-      const Duration(milliseconds: AppConsts.mockLoadingDelayMillis),
+      const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
     );
     return [
       ExhibitModel(
         exhibitId: 13,
         title: '릴리킴 개인전 《 Ego Travla - between the Seen and the Unseen 》',
-        posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/3b368dcf-7_ego.png',
+        posterUrl: AppUrls.posterUrlMock,
         status: 'ONGOING',
-        exhibitPeriod: '2025-12-14 ~ 2025-12-27',
+        exhibitPeriod: '2025.12.14 - 2025.12.27',
+        hallName: '프리미엄 월넛홀',
       ),
       ExhibitModel(
         exhibitId: 12,
         title: '눈이 타오르는 비탈',
-        posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/15e68d85-1_1765512462903.jpg',
+        posterUrl: AppUrls.posterUrlMock,
         status: 'FINISHED',
-        exhibitPeriod: '2025-12-13 ~ 2025-12-14',
+        exhibitPeriod: '2025.12.14 - 2025.12.27',
+        hallName: '프리미엄 월넛홀',
       ),
     ];
   }
@@ -53,7 +54,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   @override
   Future<List<String>?> fetchGenres() async {
     await Future.delayed(
-      const Duration(milliseconds: AppConsts.mockLoadingDelayMillis),
+      const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
     );
     return [
       '공예',
@@ -78,25 +79,24 @@ class HomeRepositoryMockImpl implements HomeRepository {
     required String genre,
   }) async {
     await Future.delayed(
-      const Duration(milliseconds: AppConsts.mockLoadingDelayMillis),
+      const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
     );
-    // TODO: 실데이터 값으로 변경 예정
     return [
       ExhibitModel(
         exhibitId: 13,
         title: '릴리킴 개인전 《 Ego Travla - between the Seen and the Unseen 》',
-        posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/3b368dcf-7_ego.png',
+        posterUrl: AppUrls.posterUrlMock,
         status: 'ONGOING',
-        exhibitPeriod: '2025-12-14 ~ 2025-12-27',
+        exhibitPeriod: '2025.12.14 - 2025.12.27',
+        hallName: '프리미엄 월넛홀',
       ),
       ExhibitModel(
         exhibitId: 12,
         title: '눈이 타오르는 비탈',
-        posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/15e68d85-1_1765512462903.jpg',
+        posterUrl: AppUrls.posterUrlMock,
         status: 'FINISHED',
-        exhibitPeriod: '2025-12-13 ~ 2025-12-14',
+        exhibitPeriod: '2025.12.14 - 2025.12.27',
+        hallName: '프리미엄 월넛홀',
       ),
     ];
   }
@@ -108,25 +108,54 @@ class HomeRepositoryMockImpl implements HomeRepository {
     String? region,
   }) async {
     await Future.delayed(
-      const Duration(milliseconds: AppConsts.mockLoadingDelayMillis),
+      const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
     );
-    // TODO: 실데이터 값으로 변경 예정
     return [
       ExhibitModel(
         exhibitId: 13,
         title: '릴리킴 개인전 《 Ego Travla - between the Seen and the Unseen 》',
-        posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/3b368dcf-7_ego.png',
+        posterUrl: AppUrls.posterUrlMock,
         status: 'ONGOING',
-        exhibitPeriod: '2025-12-14 ~ 2025-12-27',
+        exhibitPeriod: '2025.12.14 - 2025.12.27',
+        hallName: '프리미엄 월넛홀',
       ),
       ExhibitModel(
         exhibitId: 12,
         title: '눈이 타오르는 비탈',
-        posterUrl:
-            'https://arttrip.s3.ap-northeast-2.amazonaws.com/15e68d85-1_1765512462903.jpg',
+        posterUrl: AppUrls.posterUrlMock,
         status: 'FINISHED',
-        exhibitPeriod: '2025-12-13 ~ 2025-12-14',
+        exhibitPeriod: '2025.12.14 - 2025.12.27',
+        hallName: '프리미엄 월넛홀',
+      ),
+    ];
+  }
+
+  @override
+  Future<List<ExhibitModel>?> fetchWeeklyExhibitionsBySelectedDate({
+    required bool isDomestic,
+    String? country,
+    String? region,
+    required String date,
+  }) async {
+    await Future.delayed(
+      const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
+    );
+    return [
+      ExhibitModel(
+        exhibitId: 13,
+        title: '릴리킴 개인전 《 Ego Travla - between the Seen and the Unseen 》',
+        posterUrl: AppUrls.posterUrlMock,
+        status: 'ONGOING',
+        exhibitPeriod: '2025.12.14 - 2025.12.27',
+        hallName: '프리미엄 월넛홀',
+      ),
+      ExhibitModel(
+        exhibitId: 12,
+        title: '눈이 타오르는 비탈',
+        posterUrl: AppUrls.posterUrlMock,
+        status: 'FINISHED',
+        exhibitPeriod: '2025.12.14 - 2025.12.27',
+        hallName: '프리미엄 월넛홀',
       ),
     ];
   }
