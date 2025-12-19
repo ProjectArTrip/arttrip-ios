@@ -122,7 +122,7 @@ class TodayExhibitionWidget extends StatelessWidget {
                       .body02Regular()
                       .color(AppColors.textWhite)
                       .build()
-                      .text(item.title ?? ''),
+                      .text(item.hallName ?? ''),
                   ArtTripText.pretendard()
                       .body02Regular()
                       .color(AppColors.textWhite)

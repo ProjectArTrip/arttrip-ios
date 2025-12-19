@@ -23,6 +23,12 @@ abstract class HomeRepository {
     String? country,
     String? region,
   });
+  Future<List<ExhibitModel>?> fetchWeeklyExhibitionsBySelectedDate({
+    required bool isDomestic,
+    String? country,
+    String? region,
+    required String date,
+  });
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -170,6 +176,37 @@ class HomeRepositoryImpl implements HomeRepository {
           .toList();
     } catch (e) {
       AppUtil.debugLog('fetchPersonalizedExhibitions: $e');
+    }
+    return null;
+  }
+
+  @override
+  Future<List<ExhibitModel>?> fetchWeeklyExhibitionsBySelectedDate({
+    required bool isDomestic,
+    String? country,
+    String? region,
+    required String date,
+  }) async {
+    try {
+      var body = {
+        'isDomestic': isDomestic,
+        if (!isDomestic) 'country': country,
+        if (isDomestic) 'region': region,
+        'date': date,
+      };
+      var response = await _dio.post('/home/personalized/random', data: body);
+      var model = BaseResultModel.fromJson(response.dataOrNull);
+      if (model.result is! List) {
+        AppUtil.debugLog(
+          'fetchWeeklyExhibitionsBySelectedDate type inconsistency: ${model.result.runtimeType}',
+        );
+        return null;
+      }
+      return model.result
+          .map<ExhibitModel>((e) => ExhibitModel.fromJson(e))
+          .toList();
+    } catch (e) {
+      AppUtil.debugLog('fetchWeeklyExhibitionsBySelectedDate: $e');
     }
     return null;
   }
