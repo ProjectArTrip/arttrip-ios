@@ -90,4 +90,27 @@ class HomeRepositoryHybrid implements HomeRepository {
       region: region,
     );
   }
+
+  @override
+  Future<List<ExhibitModel>?> fetchWeeklyExhibitionsBySelectedDate({
+    required bool isDomestic,
+    String? country,
+    String? region,
+    required String date,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchWeeklyExhibitionsBySelectedDate(
+        isDomestic: isDomestic,
+        country: country,
+        region: region,
+        date: date,
+      );
+    }
+    return api.fetchWeeklyExhibitionsBySelectedDate(
+      isDomestic: isDomestic,
+      country: country,
+      region: region,
+      date: date,
+    );
+  }
 }

@@ -13,7 +13,9 @@ abstract class ExhibitModel with _$ExhibitModel {
     String? posterUrl,
     String? status,
     String? exhibitPeriod,
+    String? hallName,
   }) = _ExhibitModel;
 
-  factory ExhibitModel.fromJson(Map<String, dynamic> json) => _$ExhibitModelFromJson(json);
+  factory ExhibitModel.fromJson(Map<String, dynamic> json) =>
+      _$ExhibitModelFromJson(json);
 }

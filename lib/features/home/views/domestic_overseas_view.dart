@@ -1,21 +1,22 @@
 import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
+import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
-class InternationalDomesticTabView extends StatefulWidget {
-  const InternationalDomesticTabView({super.key});
+class DomesticOverseasView extends StatefulWidget {
+  const DomesticOverseasView({super.key});
 
   @override
-  State<InternationalDomesticTabView> createState() =>
-      _InternationalDomesticTabViewState();
+  State<DomesticOverseasView> createState() => _DomesticOverseasViewState();
 }
 
-class _InternationalDomesticTabViewState
-    extends State<InternationalDomesticTabView> {
+class _DomesticOverseasViewState extends State<DomesticOverseasView> {
   List<GlobalKey>? _itemKeys;
 
   void _updateSelectedLocation(int index, String location) {
@@ -64,6 +65,34 @@ class _InternationalDomesticTabViewState
                       data[index],
                     );
                   },
+                );
+              },
+              onLoading: () {
+                return Shimmer(
+                  duration: const Duration(
+                    milliseconds: AppConsts.shimmerDurationMs,
+                  ),
+                  interval: const Duration(
+                    milliseconds: AppConsts.shimmerIntervalMs,
+                  ),
+                  child: SizedBox(
+                    height: 64.h,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24.w,
+                        vertical: 16.h,
+                      ),
+                      itemCount: 5,
+                      separatorBuilder:
+                          (context, index) => SizedBox(width: 8.w),
+                      itemBuilder: (context, index) {
+                        return const ShimmerSkeletonItem(width: 76, height: 32);
+                      },
+                    ),
+                  ),
                 );
               },
             );

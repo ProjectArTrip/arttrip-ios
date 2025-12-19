@@ -108,7 +108,7 @@ class TodayExhibitionWidget extends StatelessWidget {
             Container(
               width: 180.w,
               padding: EdgeInsets.all(10.w),
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.bottomLeft,
               child: Wrap(
                 runSpacing: 4.h,
                 children: [
@@ -122,7 +122,7 @@ class TodayExhibitionWidget extends StatelessWidget {
                       .body02Regular()
                       .color(AppColors.textWhite)
                       .build()
-                      .text(item.title ?? ''),
+                      .text(item.hallName ?? ''),
                   ArtTripText.pretendard()
                       .body02Regular()
                       .color(AppColors.textWhite)

@@ -1,14 +1,17 @@
 import 'package:arttrip/core/app_assets.dart';
+import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
+import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class PersonalizedExhibitionView extends StatefulWidget {
   const PersonalizedExhibitionView({super.key});
@@ -63,6 +66,7 @@ class _PersonalizedExhibitionViewState
                           child: SizedBox(
                             width: 120.w,
                             child: Column(
+                              spacing: 8.h,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 /// 전시 이미지
@@ -89,6 +93,8 @@ class _PersonalizedExhibitionViewState
                                             AppAssets.icLikeCircle(
                                               isLiked: false,
                                             ),
+                                            width: 24.w,
+                                            height: 24.w,
                                           ),
                                         ),
                                       ),
@@ -110,6 +116,66 @@ class _PersonalizedExhibitionViewState
                     ),
                   ),
                 ],
+              );
+            },
+            onLoading: () {
+              return Shimmer(
+                duration: const Duration(
+                  milliseconds: AppConsts.shimmerDurationMs,
+                ),
+                interval: const Duration(
+                  milliseconds: AppConsts.shimmerIntervalMs,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 32.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 12.h,
+                    children: [
+                      ShimmerSkeletonItem(
+                        width: 160,
+                        height: 20,
+                        margin: EdgeInsets.symmetric(horizontal: 24.w),
+                      ),
+                      SizedBox(
+                        height: 190.h,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.symmetric(horizontal: 24.w),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 3,
+                          separatorBuilder:
+                              (context, index) => SizedBox(width: 8.w),
+                          itemBuilder: (context, index) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const ShimmerSkeletonItem(
+                                  width: 120,
+                                  height: 150,
+                                  radius: 8,
+                                ),
+                                SizedBox(height: 8.h),
+                                const ShimmerSkeletonItem(
+                                  width: 120,
+                                  height: 14,
+                                  radius: 8,
+                                ),
+                                SizedBox(height: 4.h),
+                                const ShimmerSkeletonItem(
+                                  width: 120,
+                                  height: 14,
+                                  radius: 8,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
             },
           );

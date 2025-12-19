@@ -1,15 +1,19 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/exhibition_list_item.dart';
+import 'package:arttrip/shared/widgets/exhibition_list_item_skeleton.dart';
+import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class GenreExhibitionView extends StatefulWidget {
   const GenreExhibitionView({super.key});
@@ -53,6 +57,8 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                 child: Column(
                   children: [
                     _buildHeader(),
+
+                    /// 장르 리스트
                     SizedBox(
                       height: 64.h,
                       child: ListView.separated(
@@ -74,32 +80,116 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                         },
                       ),
                     ),
+
+                    /// 장르별 랜덤 전시
                     Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
                       selector: (_, vm) => vm.exhibitionsByGenre,
                       builder: (context, state, _) {
                         return AsyncView(
                           state: state,
                           onData: (data) {
-                            return SizedBox(
-                              height: 100.h,
-                              child: ListView.separated(
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: data.length,
-                                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                                separatorBuilder:
-                                    (context, index) => SizedBox(height: 8.h),
-                                itemBuilder: (context, index) {
-                                  var item = data[index];
-                                  return ExhibitionListItem(item: item);
-                                },
-                              ),
+                            return ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: data.length,
+                              padding: EdgeInsets.symmetric(horizontal: 24.w),
+                              separatorBuilder:
+                                  (context, index) => SizedBox(height: 8.h),
+                              itemBuilder: (context, index) {
+                                var item = data[index];
+                                return ExhibitionListItem(item: item);
+                              },
                             );
                           },
+                          onLoading:
+                              () => Shimmer(
+                                duration: const Duration(
+                                  milliseconds: AppConsts.shimmerDurationMs,
+                                ),
+                                interval: const Duration(
+                                  milliseconds: AppConsts.shimmerIntervalMs,
+                                ),
+                                child: ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 24.w,
+                                  ),
+                                  itemCount: 2,
+                                  separatorBuilder:
+                                      (context, index) => SizedBox(height: 8.h),
+                                  itemBuilder: (context, index) {
+                                    return const ExhibitionListItemSkeleton();
+                                  },
+                                ),
+                              ),
                         );
                       },
                     ),
                   ],
+                ),
+              );
+            },
+            onLoading: () {
+              return Shimmer(
+                duration: const Duration(
+                  milliseconds: AppConsts.shimmerDurationMs,
+                ),
+                interval: const Duration(
+                  milliseconds: AppConsts.shimmerIntervalMs,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 28.h),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const ShimmerSkeletonItem(width: 160, height: 20),
+                            SvgPicture.asset(
+                              AppAssets.icNoArrowRight,
+                              width: 24.w,
+                              height: 24.w,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 64.h,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 24.w,
+                            vertical: 16.h,
+                          ),
+                          itemCount: 5,
+                          separatorBuilder:
+                              (context, index) => SizedBox(width: 8.w),
+                          itemBuilder: (context, index) {
+                            return const ShimmerSkeletonItem(
+                              width: 76,
+                              height: 32,
+                            );
+                          },
+                        ),
+                      ),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        itemCount: 2,
+                        separatorBuilder:
+                            (context, index) => SizedBox(height: 8.h),
+                        itemBuilder: (context, index) {
+                          return const ExhibitionListItemSkeleton();
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
