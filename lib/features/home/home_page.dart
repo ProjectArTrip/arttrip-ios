@@ -8,7 +8,6 @@ import 'package:arttrip/features/home/views/personalized_exhibition_view.dart';
 import 'package:arttrip/features/home/views/regional_exhibition_view.dart';
 import 'package:arttrip/features/home/views/today_exhibit_recommendation_view.dart';
 import 'package:arttrip/features/home/views/weekly_exhibition_schedule_view.dart';
-import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -64,12 +63,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             SliverToBoxAdapter(child: SizedBox(height: 24.h)),
           ],
         ),
-      ),
-      // TODO: 임시 버튼 - 전시 상세 페이지 진입 테스트용
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Routes.push(context, '/exhibit/1'),
-        backgroundColor: AppColors.primary300,
-        child: const Icon(Icons.art_track, color: Colors.white),
       ),
     );
   }

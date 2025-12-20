@@ -38,6 +38,7 @@
   "debug.toolBarLocation": "commandCenter",
   // ARB 파일 메타데이터 경고 숨기기
   "arb-editor.suppressedWarnings": [
-    "missing_metadata_for_key"
+    "missing_metadata_for_key",
+    "placeholder_without_metadata"
   ],
 }
