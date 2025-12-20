@@ -8,14 +8,23 @@
   "splashSlogan": "The world's exhibitions, in your hands.",
   "loginKakao": "Login with Kakao",
   "loginGoogle": "Login with Google",
-  "@loginGoogle": {
-    "description": "Google login button label"
-  },
   "loginApple": "Login with Apple",
-  "@loginApple": {
-    "description": "Apple login button label"
-  },
   "domesticExhibition": "domesticExhibition",
   "internationalExhibition": "internationalExhibition",
-  "allItems": "All"
+  "allItems": "All",
+  "regionalExhibition": "Regional Exhibition",
+  "recommendedGenreExhibition": "Genre Exhibition",
+  "onGoing": "Ongoing",
+  "endingSoon": "Ending Soon",
+  "upcoming": "Upcoming",
+  "personalizedRecommendationTitle": "Recommended for {userName}",
+  "weeklyExhibitionSchedule": "This Week's Exhibitions",
+  "exhibitDetailTab": "Details",
+  "exhibitMapTab": "Map",
+  "exhibitReviewTab": "Reviews",
+  "exhibitAddress": "Address",
+  "exhibitOpeningHours": "Hours",
+  "exhibitPhone": "Phone",
+  "exhibitDescription": "Description",
+  "goToHomepage": "Visit Website"
 }
