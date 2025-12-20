@@ -2,6 +2,7 @@ import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/home/widgets/today_exhibition_widget.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
@@ -49,7 +50,10 @@ class _TodayExhibitRecommendationViewState
                           isLiked: false,
                           showCountry:
                               selectedLocation == context.l10n.allItems,
-                          onTap: () {},
+                          onTap: () => Routes.push(
+                            context,
+                            '/exhibit/${item.exhibitId}',
+                          ),
                           likeOnTap: () {},
                         );
                       },

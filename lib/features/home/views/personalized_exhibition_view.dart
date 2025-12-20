@@ -2,6 +2,7 @@ import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
@@ -60,9 +61,11 @@ class _PersonalizedExhibitionViewState
                       itemBuilder: (_, index) {
                         var item = data[index];
                         return GestureDetector(
-                          onTap: () {
-                            // TODO: 전시 상세 페이지로 이동
-                          },
+                          onTap:
+                              () => Routes.push(
+                                context,
+                                '/exhibit/${item.exhibitId}',
+                              ),
                           child: SizedBox(
                             width: 120.w,
                             child: Column(

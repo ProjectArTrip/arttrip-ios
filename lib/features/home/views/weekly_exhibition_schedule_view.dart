@@ -4,6 +4,7 @@ import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
@@ -53,7 +54,14 @@ class _WeeklyExhibitionScheduleViewState
                           return Column(
                             spacing: 8.h,
                             children: List.generate(data.length, (index) {
-                              return ExhibitionListItem(item: data[index]);
+                              var item = data[index];
+                              return ExhibitionListItem(
+                                item: item,
+                                onTap: () => Routes.push(
+                                  context,
+                                  '/exhibit/${item.exhibitId}',
+                                ),
+                              );
                             }),
                           );
                         },
