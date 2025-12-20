@@ -1,3 +1,4 @@
+import 'package:arttrip/features/exhibit/view/exhibit_detail_page.dart';
 import 'package:arttrip/features/login/login_page.dart';
 import 'package:arttrip/features/onboarding/view/keywords_page.dart';
 import 'package:arttrip/features/splash/view/splash_view.dart';
@@ -40,6 +41,19 @@ final appRouter = GoRouter(
       path: '/onboarding/keywords',
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const KeywordsPage());
+      },
+    ),
+
+    // 전시 상세 페이지
+    GoRoute(
+      path: '/exhibit/:id',
+      pageBuilder: (context, state) {
+        var id = int.parse(state.pathParameters['id']!);
+        return buildPage(
+          context,
+          state,
+          child: ExhibitDetailPage(exhibitId: id),
+        );
       },
     ),
   ],

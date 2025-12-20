@@ -19,10 +19,7 @@ class AuthApiService extends BaseApiService {
   }) {
     return post<ApiResponse<AuthTokenResult>>(
       '/auth/social',
-      data: {
-        'provider': provider,
-        'idToken': idToken,
-      },
+      data: {'provider': provider, 'idToken': idToken},
       fromJson: (data) {
         var json = data as Map<String, dynamic>;
         return ApiResponse.fromJson(
@@ -41,9 +38,7 @@ class AuthApiService extends BaseApiService {
   }) {
     return post<ApiResponse<AuthTokenResult>>(
       '/auth/app/reissue',
-      data: {
-        'refreshToken': refreshToken,
-      },
+      data: {'refreshToken': refreshToken},
       fromJson: (data) {
         var json = data as Map<String, dynamic>;
         return ApiResponse.fromJson(
@@ -61,19 +56,23 @@ class AuthApiService extends BaseApiService {
   Future<ApiResult<void>> logout({required String refreshToken}) async {
     try {
       var accessToken = TokenStorageService.instance.getAccessToken();
-      var dio = Dio(BaseOptions(
-        baseUrl: Env.apiBaseUrl,
-        headers: {
-          'Content-Type': 'application/json',
-          if (accessToken != null) 'Authorization': 'Bearer $accessToken',
-        },
-      ));
+      var dio = Dio(
+        BaseOptions(
+          baseUrl: Env.apiBaseUrl,
+          headers: {
+            'Content-Type': 'application/json',
+            if (accessToken != null) 'Authorization': 'Bearer $accessToken',
+          },
+        ),
+      );
 
       await dio.post('/auth/app/logout', data: {'refreshToken': refreshToken});
-      return ApiResult.success(null);
+      return const ApiResult.success(null);
     } catch (e) {
       // 로그아웃 실패해도 로컬 로그아웃은 진행되므로 에러 무시
-      return ApiResult.failure(NetworkException.unexpected(message: e.toString()));
+      return ApiResult.failure(
+        NetworkException.unexpected(message: e.toString()),
+      );
     }
   }
 }

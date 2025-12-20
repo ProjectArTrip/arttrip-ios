@@ -111,10 +111,7 @@ class RetryInterceptor extends Interceptor {
 
   /// 재시도하지 않을 경로인지 확인
   bool _isNoRetryPath(String path) {
-    const noRetryPaths = [
-      '/auth/app/logout',
-      '/auth/social',
-    ];
+    const noRetryPaths = ['/auth/app/logout', '/auth/social'];
     return noRetryPaths.any((p) => path.contains(p));
   }
 
@@ -129,7 +126,9 @@ class RetryInterceptor extends Interceptor {
   Duration _getDelay(int retryCount) {
     if (useExponentialBackoff) {
       // 지수 백오프: baseDelay * 2^retryCount + 랜덤 지터
-      var baseDelay = retryDelays.isNotEmpty ? retryDelays.first : const Duration(seconds: 1);
+      var baseDelay = retryDelays.isNotEmpty
+          ? retryDelays.first
+          : const Duration(seconds: 1);
       var exponentialDelay = baseDelay * pow(2, retryCount);
       var jitter = Duration(milliseconds: Random().nextInt(1000));
       return exponentialDelay + jitter;
@@ -140,7 +139,9 @@ class RetryInterceptor extends Interceptor {
       return retryDelays[retryCount];
     }
 
-    return retryDelays.isNotEmpty ? retryDelays.last : const Duration(seconds: 1);
+    return retryDelays.isNotEmpty
+        ? retryDelays.last
+        : const Duration(seconds: 1);
   }
 
   /// 현재 재시도 횟수 조회

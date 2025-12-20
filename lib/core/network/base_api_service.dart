@@ -153,7 +153,9 @@ abstract class BaseApiService {
     T Function(Map<String, dynamic> json) fromJson,
   ) {
     if (data is List) {
-      return data.map((item) => fromJson(item as Map<String, dynamic>)).toList();
+      return data
+          .map((item) => fromJson(item as Map<String, dynamic>))
+          .toList();
     }
     return [];
   }

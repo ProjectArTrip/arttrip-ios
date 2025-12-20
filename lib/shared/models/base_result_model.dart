@@ -15,5 +15,6 @@ abstract class BaseResultModel with _$BaseResultModel {
     result, // List, Map, Nullable 등의 타입을 받습니다.
   }) = _BaseResultModel;
 
-  factory BaseResultModel.fromJson(Map<String, dynamic> json) => _$BaseResultModelFromJson(json);
+  factory BaseResultModel.fromJson(Map<String, dynamic> json) =>
+      _$BaseResultModelFromJson(json);
 }

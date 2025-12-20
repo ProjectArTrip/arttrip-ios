@@ -14,11 +14,7 @@ class KakaoLoginResult {
     required String idToken,
     required KakaoUserInfo user,
   }) {
-    return KakaoLoginResult(
-      isSuccess: true,
-      idToken: idToken,
-      user: user,
-    );
+    return KakaoLoginResult(isSuccess: true, idToken: idToken, user: user);
   }
 
   factory KakaoLoginResult.failure(String message) {
@@ -87,16 +83,15 @@ class KakaoLoginService {
 
       // OIDC ID Token 확인
       if (token.idToken == null) {
-        return KakaoLoginResult.failure('OIDC ID Token을 받지 못했습니다. 카카오 개발자 콘솔에서 OpenID Connect 활성화를 확인해주세요.');
+        return KakaoLoginResult.failure(
+          'OIDC ID Token을 받지 못했습니다. 카카오 개발자 콘솔에서 OpenID Connect 활성화를 확인해주세요.',
+        );
       }
 
       // 사용자 정보 조회
       var user = await _getUserInfo();
 
-      return KakaoLoginResult.success(
-        idToken: token.idToken!,
-        user: user,
-      );
+      return KakaoLoginResult.success(idToken: token.idToken!, user: user);
     } catch (e) {
       debugPrint('카카오 로그인 실패: $e');
       return KakaoLoginResult.failure(_getErrorMessage(e));

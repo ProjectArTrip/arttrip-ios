@@ -16,7 +16,8 @@ abstract class Keyword with _$Keyword {
     required String type, // "GENRE" | "STYLE"
   }) = _Keyword;
 
-  factory Keyword.fromJson(Map<String, dynamic> json) => _$KeywordFromJson(json);
+  factory Keyword.fromJson(Map<String, dynamic> json) =>
+      _$KeywordFromJson(json);
 
   bool get isGenre => type == 'GENRE';
   bool get isStyle => type == 'STYLE';

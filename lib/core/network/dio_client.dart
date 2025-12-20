@@ -85,7 +85,8 @@ class DioClient {
           ...options.headers,
         },
         // 2xx만 성공으로 처리, 나머지는 DioException 발생
-        validateStatus: (status) => status != null && status >= 200 && status < 300,
+        validateStatus: (status) =>
+            status != null && status >= 200 && status < 300,
       ),
     );
 
@@ -108,10 +109,7 @@ class DioClient {
     // 재시도 인터셉터
     if (options.enableRetry) {
       _dio.interceptors.add(
-        RetryInterceptor(
-          dio: _dio,
-          maxRetries: options.maxRetries,
-        ),
+        RetryInterceptor(dio: _dio, maxRetries: options.maxRetries),
       );
     }
 
@@ -122,9 +120,7 @@ class DioClient {
 
     // 에러 핸들링 인터셉터 (마지막에 추가)
     _dio.interceptors.add(
-      ErrorInterceptor(
-        enableLogging: options.enableLogging && kDebugMode,
-      ),
+      ErrorInterceptor(enableLogging: options.enableLogging && kDebugMode),
     );
 
     _isInitialized = true;

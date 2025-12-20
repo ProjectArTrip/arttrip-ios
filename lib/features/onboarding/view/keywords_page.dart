@@ -65,9 +65,17 @@ class _KeywordsPageState extends State<KeywordsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ArtTripText.pretendard().headline().color(_textColor).build().text('관심있는 키워드를\n골라주세요!'),
+          ArtTripText.pretendard()
+              .headline()
+              .color(_textColor)
+              .build()
+              .text('관심있는 키워드를\n골라주세요!'),
           SizedBox(height: 8.h),
-          ArtTripText.pretendard().body01Regular().color(_textColor).build().text('한 가지 이상 선택이 가능해요.'),
+          ArtTripText.pretendard()
+              .body01Regular()
+              .color(_textColor)
+              .build()
+              .text('한 가지 이상 선택이 가능해요.'),
         ],
       ),
     );
@@ -89,11 +97,7 @@ class _KeywordsPageState extends State<KeywordsPage> {
             vm: vm,
           ),
           SizedBox(height: 32.h),
-          _buildSection(
-            title: '전시 스타일을 골라 주세요',
-            keywords: vm.styles,
-            vm: vm,
-          ),
+          _buildSection(title: '전시 스타일을 골라 주세요', keywords: vm.styles, vm: vm),
         ],
       ),
     );

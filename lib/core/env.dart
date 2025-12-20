@@ -5,7 +5,8 @@ class Env {
   Env._();
 
   /// 카카오 Native App Key
-  static String get kakaoNativeAppKey => dotenv.env['KAKAO_NATIVE_APP_KEY'] ?? '';
+  static String get kakaoNativeAppKey =>
+      dotenv.env['KAKAO_NATIVE_APP_KEY'] ?? '';
 
   /// API Base URL
   static String get apiBaseUrl => dotenv.env['API_BASE_URL'] ?? '';

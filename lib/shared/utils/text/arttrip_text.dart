@@ -15,7 +15,8 @@ class ArtTripText {
 
   TextDecoration? textDecoration;
 
-  static ScaleTypeBuilder pretendard() => ScaleTypeBuilderImpl(FontFamilyType.pretendard.fontName);
+  static ScaleTypeBuilder pretendard() =>
+      ScaleTypeBuilderImpl(FontFamilyType.pretendard.fontName);
 }
 
 abstract class ScaleTypeBuilder {

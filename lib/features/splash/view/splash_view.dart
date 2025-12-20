@@ -57,16 +57,11 @@ class _SplashViewState extends State<SplashView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CircularProgressIndicator(
-              color: Colors.white,
-            ),
+            const CircularProgressIndicator(color: Colors.white),
             SizedBox(height: 16.h),
             Text(
               '로그인 확인 중...',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14.sp,
-              ),
+              style: TextStyle(color: Colors.white, fontSize: 14.sp),
             ),
           ],
         ),

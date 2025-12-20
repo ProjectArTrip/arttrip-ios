@@ -14,7 +14,8 @@ class StyleBuilderImpl implements StyleBuilder {
   StyleBuilder color(Color color) => this.._style.color = color;
 
   @override
-  StyleBuilder decoration(TextDecoration textDecoration) => this.._style.textDecoration = textDecoration;
+  StyleBuilder decoration(TextDecoration textDecoration) =>
+      this.._style.textDecoration = textDecoration;
 
   @override
   StyleBuilder ellipsis(int? maxLine) => this.._style.ellipsis = maxLine;
@@ -23,7 +24,8 @@ class StyleBuilderImpl implements StyleBuilder {
   StyleBuilder fontSize(double fontSize) => this.._style.fontSize = fontSize;
 
   @override
-  StyleBuilder fontWeight(FontWeight fontWeight) => this.._style.fontWeight = fontWeight;
+  StyleBuilder fontWeight(FontWeight fontWeight) =>
+      this.._style.fontWeight = fontWeight;
 
   @override
   StyleBuilder height(double height) => this.._style.height = height;
@@ -32,14 +34,18 @@ class StyleBuilderImpl implements StyleBuilder {
   StyleBuilder clearHeight() => this.._style.height = null;
 
   @override
-  StyleBuilder letterSpacing(double letterSpacing) => this.._style.letterSpacing = letterSpacing;
+  StyleBuilder letterSpacing(double letterSpacing) =>
+      this.._style.letterSpacing = letterSpacing;
 
   @override
-  StyleBuilder textAlign(TextAlign textAlign) => this.._style.textAlign = textAlign;
+  StyleBuilder textAlign(TextAlign textAlign) =>
+      this.._style.textAlign = textAlign;
 
   @override
-  StyleBuilder textDecoration(TextDecoration textDecoration) => this.._style.textDecoration = textDecoration;
+  StyleBuilder textDecoration(TextDecoration textDecoration) =>
+      this.._style.textDecoration = textDecoration;
 
   @override
-  StyleBuilder fontFamily(String fontFamily) => this.._style.fontFamily = fontFamily;
+  StyleBuilder fontFamily(String fontFamily) =>
+      this.._style.fontFamily = fontFamily;
 }

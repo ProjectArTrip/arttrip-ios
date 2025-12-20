@@ -26,21 +26,26 @@ class KeywordChip extends StatelessWidget {
       child: Container(
         width: 100.w,
         height: 40.h,
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: isSelected ? _selectedBgColor : Colors.transparent,
           borderRadius: BorderRadius.circular(40.r),
-          border: isSelected ? null : Border.all(color: _unselectedBorderColor, width: 1),
+          border: isSelected
+              ? null
+              : Border.all(color: _unselectedBorderColor, width: 1),
         ),
         alignment: Alignment.center,
-        child: Text(
-          label,
-          style: TextStyle(
-            fontFamily: 'Pretendard',
-            fontSize: 14.sp,
-            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w300,
-            color: isSelected ? Colors.white : _textColor,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w300,
+              color: isSelected ? Colors.white : _textColor,
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
         ),
       ),
     );

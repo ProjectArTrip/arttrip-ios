@@ -13,7 +13,8 @@ class AuthTokenResult {
     required this.firstLogin,
   });
 
-  factory AuthTokenResult.fromJson(Map<String, dynamic> json) => _$AuthTokenResultFromJson(json);
+  factory AuthTokenResult.fromJson(Map<String, dynamic> json) =>
+      _$AuthTokenResultFromJson(json);
 
   final String accessToken;
   final String refreshToken;

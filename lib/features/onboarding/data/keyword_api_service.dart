@@ -12,14 +12,13 @@ class KeywordApiService extends BaseApiService {
       '/auth/allkeywords',
       fromJson: (data) {
         var json = data as Map<String, dynamic>;
-        return ApiResponse.fromJson(
-          json,
-          (obj) {
-            if (obj == null) return <Keyword>[];
-            var list = obj as List<dynamic>;
-            return list.map((e) => Keyword.fromJson(e as Map<String, dynamic>)).toList();
-          },
-        );
+        return ApiResponse.fromJson(json, (obj) {
+          if (obj == null) return <Keyword>[];
+          var list = obj as List<dynamic>;
+          return list
+              .map((e) => Keyword.fromJson(e as Map<String, dynamic>))
+              .toList();
+        });
       },
     );
   }
@@ -33,10 +32,7 @@ class KeywordApiService extends BaseApiService {
       data: {'keywordIds': keywordIds},
       fromJson: (data) {
         var json = data as Map<String, dynamic>;
-        return ApiResponse.fromJson(
-          json,
-          (obj) => obj as String? ?? '',
-        );
+        return ApiResponse.fromJson(json, (obj) => obj as String? ?? '');
       },
     );
   }

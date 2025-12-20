@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 /// 트랜지션 타입
-enum TransitionType {
-  none,
-  fade,
-  slideUp,
-  slideDown,
-}
+enum TransitionType { none, fade, slideUp, slideDown }
 
 /// 네비게이션 래퍼 클래스
 ///
@@ -37,7 +32,9 @@ class Routes {
       allParams['trans'] = transition.name;
     }
 
-    var fullPath = allParams.isEmpty ? uri.path : uri.replace(queryParameters: allParams).toString();
+    var fullPath = allParams.isEmpty
+        ? uri.path
+        : uri.replace(queryParameters: allParams).toString();
 
     if (replace) {
       context.pushReplacement(fullPath, extra: extra);
@@ -108,7 +105,9 @@ class Routes {
   }) {
     var uri = Uri.parse(path);
     var allParams = <String, String>{...uri.queryParameters, ...?params};
-    var fullPath = allParams.isEmpty ? uri.path : uri.replace(queryParameters: allParams).toString();
+    var fullPath = allParams.isEmpty
+        ? uri.path
+        : uri.replace(queryParameters: allParams).toString();
 
     context.go(fullPath, extra: extra);
   }

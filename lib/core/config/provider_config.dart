@@ -1,5 +1,8 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/network/network.dart';
+import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
+import 'package:arttrip/features/exhibit/data/exhibit_repository_mock.dart';
+import 'package:arttrip/features/exhibit/viewmodel/exhibit_detail_viewmodel.dart';
 import 'package:arttrip/features/home/home_repository.dart';
 import 'package:arttrip/features/home/home_repository_hybrid.dart';
 import 'package:arttrip/features/home/home_repository_mock.dart';
@@ -12,10 +15,24 @@ import 'package:provider/provider.dart';
 final List<ChangeNotifierProvider> getProviders = [
   ChangeNotifierProvider<HomeViewModel>(
     create: (_) => HomeViewModel(
-        HomeRepositoryHybrid(mock: HomeRepositoryMockImpl(), api: HomeRepositoryImpl(DioClient.instance))),
+      HomeRepositoryHybrid(
+        mock: HomeRepositoryMockImpl(),
+        api: HomeRepositoryImpl(DioClient.instance),
+      ),
+    ),
   ),
   ChangeNotifierProvider<KeywordsViewModel>(
     create: (_) => KeywordsViewModel(
-        AppConsts.useMock ? KeywordsRepositoryMockImpl() : KeywordsRepositoryImpl(DioClient.instance)),
+      AppConsts.useMock
+          ? KeywordsRepositoryMockImpl()
+          : KeywordsRepositoryImpl(DioClient.instance),
+    ),
+  ),
+  ChangeNotifierProvider<ExhibitDetailViewModel>(
+    create: (_) => ExhibitDetailViewModel(
+      AppConsts.useMock
+          ? ExhibitRepositoryMockImpl()
+          : ExhibitRepositoryImpl(DioClient.instance),
+    ),
   ),
 ];

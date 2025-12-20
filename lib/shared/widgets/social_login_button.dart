@@ -30,7 +30,9 @@ class SocialLoginButton extends StatelessWidget {
           foregroundColor: textColor,
           elevation: 0,
           shadowColor: Colors.transparent,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.r),
+          ),
           splashFactory: NoSplash.splashFactory,
           overlayColor: Colors.transparent,
         ),

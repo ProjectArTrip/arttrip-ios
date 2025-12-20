@@ -11,15 +11,11 @@ class AuthResult {
     this.errorMessage,
   });
 
-  factory AuthResult.success({required bool firstLogin}) => AuthResult(
-        isSuccess: true,
-        firstLogin: firstLogin,
-      );
+  factory AuthResult.success({required bool firstLogin}) =>
+      AuthResult(isSuccess: true, firstLogin: firstLogin);
 
-  factory AuthResult.failure(String message) => AuthResult(
-        isSuccess: false,
-        errorMessage: message,
-      );
+  factory AuthResult.failure(String message) =>
+      AuthResult(isSuccess: false, errorMessage: message);
 
   final bool isSuccess;
   final bool? firstLogin;

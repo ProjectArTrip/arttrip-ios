@@ -21,13 +21,13 @@ class ApiResponse<T> {
   factory ApiResponse.fromJson(
     Map<String, dynamic> json,
     T Function(Object? json) fromJsonT,
-  ) =>
-      _$ApiResponseFromJson(json, fromJsonT);
+  ) => _$ApiResponseFromJson(json, fromJsonT);
 
   final bool isSuccess;
   final String code;
   final String message;
   final T? result;
 
-  Map<String, dynamic> toJson(Object? Function(T value) toJsonT) => _$ApiResponseToJson(this, toJsonT);
+  Map<String, dynamic> toJson(Object? Function(T value) toJsonT) =>
+      _$ApiResponseToJson(this, toJsonT);
 }

@@ -10,21 +10,22 @@ class TextGeneratorImpl implements TextGenerator {
   @override
   TextStyle style() {
     return TextStyle(
-        color: _style.color,
-        fontSize: _style.fontSize.sp,
-        fontWeight: _style.fontWeight,
-        height: _style.height,
-        letterSpacing: _style.letterSpacing.sp,
-        decoration: _style.textDecoration,
-        leadingDistribution: TextLeadingDistribution.even);
+      color: _style.color,
+      fontSize: _style.fontSize.sp,
+      fontWeight: _style.fontWeight,
+      height: _style.height,
+      letterSpacing: _style.letterSpacing.sp,
+      decoration: _style.textDecoration,
+      leadingDistribution: TextLeadingDistribution.even,
+    );
   }
 
   @override
   Widget text(String text) => Text(
-        text,
-        maxLines: _style.ellipsis,
-        overflow: _style.ellipsis != null ? TextOverflow.ellipsis : null,
-        textAlign: _style.textAlign,
-        style: style(),
-      );
+    text,
+    maxLines: _style.ellipsis,
+    overflow: _style.ellipsis != null ? TextOverflow.ellipsis : null,
+    textAlign: _style.textAlign,
+    style: style(),
+  );
 }

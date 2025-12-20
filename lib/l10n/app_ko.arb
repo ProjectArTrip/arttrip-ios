@@ -8,13 +8,7 @@
   "splashSlogan": "세상의 전시, 내 손 안에.",
   "loginKakao": "카카오로 로그인",
   "loginGoogle": "Google로 로그인",
-  "@loginGoogle": {
-    "description": "Google login button label"
-  },
   "loginApple": "Apple로 로그인",
-  "@loginApple": {
-    "description": "Apple login button label"
-  },
   "domesticExhibition": "국내전시",
   "internationalExhibition": "해외전시",
   "allItems": "전체",
@@ -24,5 +18,13 @@
   "endingSoon": "마감임박",
   "upcoming": "전시예정",
   "personalizedRecommendationTitle": "{userName}님을 위한 추천",
-  "weeklyExhibitionSchedule": "이번주 전시 일정"
+  "weeklyExhibitionSchedule": "이번주 전시 일정",
+  "exhibitDetailTab": "상세 정보",
+  "exhibitMapTab": "지도",
+  "exhibitReviewTab": "리뷰",
+  "exhibitAddress": "주소",
+  "exhibitOpeningHours": "운영시간",
+  "exhibitPhone": "전화번호",
+  "exhibitDescription": "전시설명",
+  "goToHomepage": "홈페이지 바로 가기"
 }

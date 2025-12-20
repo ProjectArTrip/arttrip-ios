@@ -5,10 +5,6 @@ class StorageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('보관함'),
-      ),
-    );
+    return const Scaffold(body: Center(child: Text('보관함')));
   }
 }
