@@ -17,7 +17,10 @@ class AppAssets {
   static const String icPhone = 'assets/svg/ic_phone.svg';
   static const String icTime = 'assets/svg/ic_time.svg';
   static String icLikeCircle({required bool isLiked}) =>
-      isLiked ? 'assets/svg/ic_like_circle_selected.svg' : 'assets/svg/ic_like_circle_default.svg';
+      isLiked
+          ? 'assets/svg/ic_like_circle_selected.svg'
+          : 'assets/svg/ic_like_circle_default.svg';
+  static const String icNoArrowRight = 'assets/svg/ic_no_arrow_right.svg';
 
   // Logo
   static const String icLogoWhite = 'assets/svg/ic_logo_white.svg';
