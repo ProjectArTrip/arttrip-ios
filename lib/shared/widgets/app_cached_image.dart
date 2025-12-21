@@ -17,7 +17,6 @@ class AppCachedImage extends StatelessWidget {
     this.height,
     this.fit = BoxFit.cover,
     this.borderRadius,
-    this.debugShowPlaceholder = true, // 테스트용: true면 placeholder만 표시
   });
 
   final String imageUrl;
@@ -25,15 +24,9 @@ class AppCachedImage extends StatelessWidget {
   final double? height;
   final BoxFit fit;
   final BorderRadius? borderRadius;
-  final bool debugShowPlaceholder;
 
   @override
   Widget build(BuildContext context) {
-    // 테스트용: placeholder만 표시
-    if (debugShowPlaceholder) {
-      return _buildPlaceholder();
-    }
-
     Widget image = CachedNetworkImage(
       imageUrl: imageUrl,
       width: width,
