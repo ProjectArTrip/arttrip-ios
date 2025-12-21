@@ -26,5 +26,8 @@
   "exhibitOpeningHours": "Hours",
   "exhibitPhone": "Phone",
   "exhibitDescription": "Description",
-  "goToHomepage": "Visit Website"
+  "goToHomepage": "Visit Website",
+  "noInfo": "No information",
+  "copy": "Copy",
+  "copyCompleted": "Copied to clipboard"
 }

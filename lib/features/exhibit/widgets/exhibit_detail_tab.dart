@@ -5,6 +5,7 @@ import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_info_row.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 전시 상세 정보 탭 콘텐츠
@@ -32,28 +33,39 @@ class ExhibitDetailTab extends StatelessWidget {
     var infoItems = <Widget>[];
 
     if (exhibit.hallAddress.isNotEmpty) {
-      infoItems.add(ExhibitInfoRow(
-        iconPath: AppAssets.icLocation2,
-        label: context.l10n.exhibitAddress,
-        value: exhibit.hallAddress,
-      ));
+      infoItems.add(
+        ExhibitInfoRow(
+          iconPath: AppAssets.icLocation2,
+          label: context.l10n.exhibitAddress,
+          value: exhibit.hallAddress,
+          extraWidget: _buildCopyButton(context, exhibit.hallAddress),
+        ),
+      );
     }
 
-    if (exhibit.hallOpeningHours.isNotEmpty) {
-      infoItems.add(ExhibitInfoRow(
+    infoItems.add(
+      ExhibitInfoRow(
         iconPath: AppAssets.icTime,
         label: context.l10n.exhibitOpeningHours,
-        value: exhibit.hallOpeningHours,
-      ));
-    }
+        value:
+            exhibit.hallOpeningHours.isNotEmpty
+                ? exhibit.hallOpeningHours
+                : context.l10n.noInfo,
+        isEmpty: exhibit.hallOpeningHours.isEmpty,
+      ),
+    );
 
-    if (exhibit.hallPhone.isNotEmpty) {
-      infoItems.add(ExhibitInfoRow(
+    infoItems.add(
+      ExhibitInfoRow(
         iconPath: AppAssets.icPhone,
         label: context.l10n.exhibitPhone,
-        value: exhibit.hallPhone,
-      ));
-    }
+        value:
+            exhibit.hallPhone.isNotEmpty
+                ? exhibit.hallPhone
+                : context.l10n.noInfo,
+        isEmpty: exhibit.hallPhone.isEmpty,
+      ),
+    );
 
     if (infoItems.isEmpty) {
       return const SizedBox.shrink();
@@ -67,18 +79,36 @@ class ExhibitDetailTab extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Column(
-        children: infoItems
-            .expand((item) => [item, SizedBox(height: 12.h)])
-            .toList()
-          ..removeLast(),
+        children:
+            infoItems.expand((item) => [item, SizedBox(height: 12.h)]).toList()
+              ..removeLast(),
       ),
+    );
+  }
+
+  Widget _buildCopyButton(BuildContext context, String text) {
+    return GestureDetector(
+      onTap: () {
+        Clipboard.setData(ClipboardData(text: text));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.l10n.copyCompleted),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      },
+      child: ArtTripText.pretendard()
+          .body02Regular()
+          .color(AppColors.textPoint)
+          .build()
+          .text(context.l10n.copy),
     );
   }
 
   Widget _buildDescriptionBox(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
       decoration: BoxDecoration(
         color: AppColors.subLightGray,
         borderRadius: BorderRadius.circular(8.r),

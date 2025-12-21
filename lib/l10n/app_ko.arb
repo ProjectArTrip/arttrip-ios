@@ -26,5 +26,8 @@
   "exhibitOpeningHours": "운영시간",
   "exhibitPhone": "전화번호",
   "exhibitDescription": "전시설명",
-  "goToHomepage": "홈페이지 바로 가기"
+  "goToHomepage": "홈페이지 바로 가기",
+  "noInfo": "정보 없음",
+  "copy": "복사",
+  "copyCompleted": "복사가 완료되었습니다"
 }
