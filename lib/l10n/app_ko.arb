@@ -29,5 +29,8 @@
   "goToHomepage": "홈페이지 바로 가기",
   "noInfo": "정보 없음",
   "copy": "복사",
-  "copyCompleted": "복사가 완료되었습니다"
+  "copyCompleted": "복사가 완료되었습니다",
+  "exhibitReviewCount": "전시 리뷰",
+  "writeReview": "리뷰쓰기",
+  "noReviews": "아직 작성된 리뷰가 없습니다."
 }

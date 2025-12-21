@@ -5,6 +5,7 @@ import 'package:arttrip/features/exhibit/viewmodel/exhibit_detail_viewmodel.dart
 import 'package:arttrip/features/exhibit/widgets/exhibit_detail_tab.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_header_section.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_poster_image.dart';
+import 'package:arttrip/features/exhibit/widgets/exhibit_review_tab.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_tab_bar.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/init_widget.dart';
@@ -24,17 +25,28 @@ class ExhibitDetailPage extends StatefulWidget {
 class _ExhibitDetailPageState extends State<ExhibitDetailPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  int _currentTabIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(_onTabChanged);
   }
 
   @override
   void dispose() {
+    _tabController.removeListener(_onTabChanged);
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _onTabChanged() {
+    if (!_tabController.indexIsChanging) {
+      setState(() {
+        _currentTabIndex = _tabController.index;
+      });
+    }
   }
 
   @override
@@ -112,20 +124,19 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
                     ),
                   ),
 
-                  // 탭바 (고정)
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: ExhibitTabBarDelegate(
-                      child: Container(
-                        color: AppColors.gray0,
-                        padding: EdgeInsets.symmetric(horizontal: 24.w),
-                        child: ExhibitTabBar(tabController: _tabController),
-                      ),
+                  // 탭바
+                  SliverToBoxAdapter(
+                    child: Container(
+                      color: AppColors.gray0,
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      child: ExhibitTabBar(tabController: _tabController),
                     ),
                   ),
 
                   // 탭 콘텐츠
-                  SliverToBoxAdapter(child: _buildTabContent(context, exhibit)),
+                  SliverToBoxAdapter(
+                    child: _buildTabContent(exhibit),
+                  ),
                 ],
               ),
             );
@@ -135,17 +146,16 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
     );
   }
 
-  Widget _buildTabContent(BuildContext context, ExhibitDetail exhibit) {
-    return SizedBox(
-      height: 500.h,
-      child: TabBarView(
-        controller: _tabController,
-        children: [
-          ExhibitDetailTab(exhibit: exhibit),
-          ExhibitPlaceholderTab(label: context.l10n.exhibitMapTab),
-          ExhibitPlaceholderTab(label: context.l10n.exhibitReviewTab),
-        ],
-      ),
-    );
+  Widget _buildTabContent(ExhibitDetail exhibit) {
+    switch (_currentTabIndex) {
+      case 0:
+        return ExhibitDetailTabContent(exhibit: exhibit);
+      case 1:
+        return ExhibitPlaceholderTabContent(label: context.l10n.exhibitMapTab);
+      case 2:
+        return ExhibitReviewTabContent(exhibitId: widget.exhibitId);
+      default:
+        return const SizedBox.shrink();
+    }
   }
 }

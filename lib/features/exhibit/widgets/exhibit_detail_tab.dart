@@ -9,14 +9,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 전시 상세 정보 탭 콘텐츠
-class ExhibitDetailTab extends StatelessWidget {
-  const ExhibitDetailTab({super.key, required this.exhibit});
+class ExhibitDetailTabContent extends StatelessWidget {
+  const ExhibitDetailTabContent({super.key, required this.exhibit});
 
   final ExhibitDetail exhibit;
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,11 +47,8 @@ class ExhibitDetailTab extends StatelessWidget {
       ExhibitInfoRow(
         iconPath: AppAssets.icTime,
         label: context.l10n.exhibitOpeningHours,
-        value:
-            exhibit.hallOpeningHours.isNotEmpty
-                ? exhibit.hallOpeningHours
-                : context.l10n.noInfo,
-        isEmpty: exhibit.hallOpeningHours.isEmpty,
+        value: exhibit.hallOpeningHours ?? context.l10n.noInfo,
+        isEmpty: exhibit.hallOpeningHours == null,
       ),
     );
 
@@ -59,11 +56,8 @@ class ExhibitDetailTab extends StatelessWidget {
       ExhibitInfoRow(
         iconPath: AppAssets.icPhone,
         label: context.l10n.exhibitPhone,
-        value:
-            exhibit.hallPhone.isNotEmpty
-                ? exhibit.hallPhone
-                : context.l10n.noInfo,
-        isEmpty: exhibit.hallPhone.isEmpty,
+        value: exhibit.hallPhone ?? context.l10n.noInfo,
+        isEmpty: exhibit.hallPhone == null,
       ),
     );
 
@@ -133,20 +127,23 @@ class ExhibitDetailTab extends StatelessWidget {
   }
 }
 
-/// 플레이스홀더 탭 (지도, 리뷰)
-class ExhibitPlaceholderTab extends StatelessWidget {
-  const ExhibitPlaceholderTab({super.key, required this.label});
+/// 플레이스홀더 탭 (지도)
+class ExhibitPlaceholderTabContent extends StatelessWidget {
+  const ExhibitPlaceholderTabContent({super.key, required this.label});
 
   final String label;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ArtTripText.pretendard()
-          .body01Regular()
-          .color(AppColors.textTertiary)
-          .build()
-          .text(label),
+    return SizedBox(
+      height: 200.h,
+      child: Center(
+        child: ArtTripText.pretendard()
+            .body01Regular()
+            .color(AppColors.textTertiary)
+            .build()
+            .text(label),
+      ),
     );
   }
 }

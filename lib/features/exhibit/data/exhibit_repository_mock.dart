@@ -1,5 +1,6 @@
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_review.dart';
 
 class ExhibitRepositoryMockImpl implements ExhibitRepository {
   ExhibitRepositoryMockImpl();
@@ -23,6 +24,40 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
       hallAddress: '서울 강남구 역삼로 000 10층',
       hallOpeningHours: 'AM 10:30 - PM 19:00',
       hallPhone: '000 - 123 - 1234',
+    );
+  }
+
+  @override
+  Future<ExhibitReviewListResponse?> fetchExhibitReviews(
+    int exhibitId, {
+    String? cursor,
+    int size = 10,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    var startIndex = cursor != null ? int.parse(cursor) : 0;
+    var mockReviews = List.generate(
+      size,
+      (index) => ExhibitReview(
+        reviewId: startIndex + index + 1,
+        visitDate: '2025-08-30',
+        content: '감성적인거 좋아하는 사람들 추천합니다 :)',
+        thumbnailUrl:
+            index % 3 == 0
+                ? 'https://picsum.photos/200/200?random=${startIndex + index}'
+                : '',
+        nickname: '전시조아${startIndex + index + 1}',
+      ),
+    );
+
+    var nextIndex = startIndex + size;
+    var hasNext = nextIndex < 30;
+
+    return ExhibitReviewListResponse(
+      reviews: mockReviews,
+      nextCursor: hasNext ? nextIndex.toString() : null,
+      hasNext: hasNext,
+      reviewTotalCount: 30,
     );
   }
 }

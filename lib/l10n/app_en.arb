@@ -29,5 +29,8 @@
   "goToHomepage": "Visit Website",
   "noInfo": "No information",
   "copy": "Copy",
-  "copyCompleted": "Copied to clipboard"
+  "copyCompleted": "Copied to clipboard",
+  "exhibitReviewCount": "Exhibition Reviews",
+  "writeReview": "Write Review",
+  "noReviews": "No reviews yet."
 }
