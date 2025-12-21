@@ -180,13 +180,17 @@ class ExhibitDetail with _$ExhibitDetail {
   const factory ExhibitDetail({
     required int exhibitId,
     required String title,
-    // ...
+    // nullable 필드는 String? 사용
+    String? hallOpeningHours,
+    String? hallPhone,
   }) = _ExhibitDetail;
 
   factory ExhibitDetail.fromJson(Map<String, dynamic> json) =>
       _$ExhibitDetailFromJson(json);
 }
 ```
+
+**nullable 필드 처리**: API에서 null이 올 수 있는 필드는 `String?`으로 nullable 타입 사용
 
 코드 생성:
 ```bash
@@ -246,6 +250,43 @@ if (infoItems.isEmpty) {
   return const SizedBox.shrink();
 }
 ```
+
+## 스크롤 패턴
+
+### DraggableScrollableSheet + 탭 콘텐츠
+
+`DraggableScrollableSheet` 내부에서 탭 콘텐츠를 구현할 때 **Flutter의 알려진 한계**가 있습니다:
+
+- `DraggableScrollableSheet` + `NestedScrollView` + `TabBarView` 조합은 스크롤 통합이 안 됨 ([GitHub Issue #64157](https://github.com/flutter/flutter/issues/64157))
+- 바텀시트 확장과 탭 콘텐츠 스크롤 통합을 동시에 구현하기 어려움
+
+**현재 해결책**: `CustomScrollView` + 탭 인덱스 기반 콘텐츠 전환
+
+```dart
+// 탭바 스와이프 전환 없이, 클릭으로만 탭 전환
+CustomScrollView(
+  controller: scrollController,
+  slivers: [
+    SliverToBoxAdapter(child: Header),
+    SliverToBoxAdapter(child: TabBar),
+    SliverToBoxAdapter(child: _buildTabContent()),  // 탭 인덱스에 따라 전환
+  ],
+)
+
+Widget _buildTabContent() {
+  switch (_currentTabIndex) {
+    case 0: return ExhibitDetailTabContent(...);
+    case 1: return ExhibitMapTabContent(...);
+    case 2: return ExhibitReviewTabContent(...);
+  }
+}
+```
+
+**트레이드오프**:
+- ✅ 바텀시트 확장/축소 동작
+- ✅ 헤더 + 탭바 + 콘텐츠 통합 스크롤
+- ❌ 탭바 상단 고정 (pinned)
+- ❌ 탭 스와이프 전환
 
 ## 주의사항
 
