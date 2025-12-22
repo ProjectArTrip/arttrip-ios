@@ -1,3 +1,4 @@
+import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
 
@@ -6,7 +7,9 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
 
   @override
   Future<ExhibitDetail?> fetchExhibitDetail(int exhibitId) async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(
+      const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
+    );
 
     return ExhibitDetail(
       exhibitId: exhibitId,
@@ -24,5 +27,13 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
       hallOpeningHours: 'AM 10:30 - PM 19:00',
       hallPhone: '000 - 123 - 1234',
     );
+  }
+
+  @override
+  Future<String?> updateFavoriteExhibit(int exhibitId, bool isFavorite) async {
+    await Future.delayed(
+      const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
+    );
+    return null;
   }
 }

@@ -3,12 +3,13 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/home/views/domestic_overseas_view.dart';
-import 'package:arttrip/features/home/views/genre_exhibition_view.dart';
-import 'package:arttrip/features/home/views/personalized_exhibition_view.dart';
-import 'package:arttrip/features/home/views/regional_exhibition_view.dart';
-import 'package:arttrip/features/home/views/today_exhibit_recommendation_view.dart';
-import 'package:arttrip/features/home/views/weekly_exhibition_schedule_view.dart';
+import 'package:arttrip/features/home/views/genre_exhibits_view.dart';
+import 'package:arttrip/features/home/views/personalized_exhibits_view.dart';
+import 'package:arttrip/features/home/views/regional_exhibits_view.dart';
+import 'package:arttrip/features/home/views/today_exhibits_recommendation_view.dart';
+import 'package:arttrip/features/home/views/weekly_exhibits_schedule_view.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -46,20 +47,36 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           controller: _scrollController,
           slivers: [
             _buildAppBar(),
-            _buildExhibitionTabBar(),
-            const DomesticOverseasView(),
-            const TodayExhibitRecommendationView(),
-            const PersonalizedExhibitionView(),
-            const WeeklyExhibitionScheduleView(),
+            _buildExhibitTabBar(),
+            Selector<HomeViewModel, bool>(
+              selector: (_, vm) => vm.isDomestic,
+              builder: (context, isDomestic, _) {
+                if (isDomestic) {
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
+                }
+                return const DomesticOverseasView();
+              },
+            ),
+            Selector<HomeViewModel, bool>(
+              selector: (_, vm) => vm.isDomestic,
+              builder: (context, isDomestic, _) {
+                return SliverPadding(
+                  padding: EdgeInsets.only(top: isDomestic ? 16.h : 0),
+                  sliver: const TodayExhibitsRecommendationView(),
+                );
+              },
+            ),
+            const PersonalizedExhibitsView(),
+            const WeeklyExhibitsScheduleView(),
             Selector<HomeViewModel, bool>(
               selector: (_, vm) => vm.isDomestic,
               builder: (context, isDomestic, _) {
                 return isDomestic
-                    ? const RegionalExhibitionView()
+                    ? const RegionalExhibitsView()
                     : const SliverToBoxAdapter(child: SizedBox.shrink());
               },
             ),
-            const GenreExhibitionView(),
+            const GenreExhibitsView(),
             SliverToBoxAdapter(child: SizedBox(height: 24.h)),
           ],
         ),
@@ -80,14 +97,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Row(
               spacing: 20.w,
               children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: SvgPicture.asset(
-                    AppAssets.icNotification,
-                    width: 24.w,
-                    height: 24.w,
-                  ),
-                ),
+                const AlertBadge(),
                 GestureDetector(
                   onTap: () {},
                   child: SvgPicture.asset(
@@ -112,7 +122,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  SliverAppBar _buildExhibitionTabBar() {
+  SliverAppBar _buildExhibitTabBar() {
     return SliverAppBar(
       pinned: true,
       toolbarHeight: 28.h + 8.h,

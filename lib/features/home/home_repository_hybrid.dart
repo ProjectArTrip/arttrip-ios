@@ -1,6 +1,6 @@
 import 'package:arttrip/core/app_consts.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_repository.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
 
 class HomeRepositoryHybrid implements HomeRepository {
   HomeRepositoryHybrid({required this.mock, required this.api});
@@ -49,21 +49,21 @@ class HomeRepositoryHybrid implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchExhibitionsByGenre({
+  Future<List<ExhibitModel>?> fetchExhibitsByGenre({
     required bool isDomestic,
     String? country,
     String? region,
     required String genre,
   }) {
     if (AppConsts.useMock) {
-      return mock.fetchExhibitionsByGenre(
+      return mock.fetchExhibitsByGenre(
         isDomestic: isDomestic,
         country: country,
         region: region,
         genre: genre,
       );
     }
-    return api.fetchExhibitionsByGenre(
+    return api.fetchExhibitsByGenre(
       isDomestic: isDomestic,
       country: country,
       region: region,
@@ -72,19 +72,19 @@ class HomeRepositoryHybrid implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchPersonalizedExhibitions({
+  Future<List<ExhibitModel>?> fetchPersonalizedExhibits({
     required bool isDomestic,
     String? country,
     String? region,
   }) {
     if (AppConsts.useMock) {
-      return mock.fetchPersonalizedExhibitions(
+      return mock.fetchPersonalizedExhibits(
         isDomestic: isDomestic,
         country: country,
         region: region,
       );
     }
-    return api.fetchPersonalizedExhibitions(
+    return api.fetchPersonalizedExhibits(
       isDomestic: isDomestic,
       country: country,
       region: region,
@@ -92,21 +92,21 @@ class HomeRepositoryHybrid implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchWeeklyExhibitionsBySelectedDate({
+  Future<List<ExhibitModel>?> fetchWeeklyExhibitsBySelectedDate({
     required bool isDomestic,
     String? country,
     String? region,
     required String date,
   }) {
     if (AppConsts.useMock) {
-      return mock.fetchWeeklyExhibitionsBySelectedDate(
+      return mock.fetchWeeklyExhibitsBySelectedDate(
         isDomestic: isDomestic,
         country: country,
         region: region,
         date: date,
       );
     }
-    return api.fetchWeeklyExhibitionsBySelectedDate(
+    return api.fetchWeeklyExhibitsBySelectedDate(
       isDomestic: isDomestic,
       country: country,
       region: region,

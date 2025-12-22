@@ -1,27 +1,27 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class TodayExhibitionWidget extends StatelessWidget {
-  const TodayExhibitionWidget({
+class TodayExhibitWidget extends StatelessWidget {
+  const TodayExhibitWidget({
     super.key,
     required this.item,
-    this.isLiked = false,
-    this.showCountry = false,
+    this.isFavorite = false,
+    this.location,
     this.onTap,
-    this.likeOnTap,
+    this.favoriteOnTap,
   });
 
   final ExhibitModel item;
-  final bool isLiked;
-  final bool showCountry;
+  final bool isFavorite;
+  final String? location;
   final Function()? onTap;
-  final Function()? likeOnTap;
+  final Function()? favoriteOnTap;
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +72,7 @@ class TodayExhibitionWidget extends StatelessWidget {
             ),
 
             /// 국가
-            // TODO: 수정 예정
-            showCountry
+            location?.isNotEmpty == true
                 ? Container(
                   padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                   margin: EdgeInsets.only(left: 10.w, top: 16.h),
@@ -85,19 +84,18 @@ class TodayExhibitionWidget extends StatelessWidget {
                       .body02Bold()
                       .color(AppColors.textWhite)
                       .build()
-                      .text('일본'),
+                      .text(location!),
                 )
                 : const SizedBox.shrink(),
 
             /// 즐겨찾기
-            // TODO: 즐겨찾기 상태에 따른 아이콘 변경 필요
             Positioned(
               top: 16.h,
               right: 16.w,
               child: GestureDetector(
-                onTap: likeOnTap,
+                onTap: favoriteOnTap,
                 child: SvgPicture.asset(
-                  AppAssets.icLikeCircle(isLiked: isLiked),
+                  AppAssets.icLikeCircle(isLiked: isFavorite),
                   width: 24.w,
                   height: 24.w,
                 ),
@@ -117,7 +115,6 @@ class TodayExhibitionWidget extends StatelessWidget {
                       .color(AppColors.textWhite)
                       .build()
                       .text(item.title ?? ''),
-                  // TODO: 필드값 수정 예정
                   ArtTripText.pretendard()
                       .body02Regular()
                       .color(AppColors.textWhite)

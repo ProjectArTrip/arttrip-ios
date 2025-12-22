@@ -1,9 +1,11 @@
 import 'package:arttrip/core/app_assets.dart';
+import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
+import 'package:arttrip/features/exhibit/viewmodel/exhibit_viewmodel.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/routes/routes.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
@@ -14,21 +16,20 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class PersonalizedExhibitionView extends StatefulWidget {
-  const PersonalizedExhibitionView({super.key});
+class PersonalizedExhibitsView extends StatefulWidget {
+  const PersonalizedExhibitsView({super.key});
 
   @override
-  State<PersonalizedExhibitionView> createState() =>
-      _PersonalizedExhibitionViewState();
+  State<PersonalizedExhibitsView> createState() =>
+      _PersonalizedExhibitsViewState();
 }
 
-class _PersonalizedExhibitionViewState
-    extends State<PersonalizedExhibitionView> {
+class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
-        selector: (_, vm) => vm.personalizedExhibitions,
+        selector: (_, vm) => vm.personalizedExhibits,
         builder: (context, state, _) {
           return AsyncView(
             state: state,
@@ -60,6 +61,7 @@ class _PersonalizedExhibitionViewState
                           (context, index) => SizedBox(width: 8.w),
                       itemBuilder: (_, index) {
                         var item = data[index];
+                        var location = item.countryName ?? item.regionName;
                         return GestureDetector(
                           onTap:
                               () => Routes.push(
@@ -85,32 +87,72 @@ class _PersonalizedExhibitionViewState
                                             fit: BoxFit.cover,
                                           )
                                           : const SizedBox.shrink(),
-                                      Positioned(
-                                        top: 8.h,
-                                        right: 8.w,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            // TODO: isLiked 동적으로 바꾸기
-                                          },
-                                          child: SvgPicture.asset(
-                                            AppAssets.icLikeCircle(
-                                              isLiked: false,
+                                      location?.isNotEmpty == true
+                                          ? Container(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 4.h,
+                                              horizontal: 8.w,
                                             ),
-                                            width: 24.w,
-                                            height: 24.w,
-                                          ),
-                                        ),
+                                            margin: EdgeInsets.only(
+                                              left: 8.w,
+                                              top: 9.h,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: AppColors.textPrimary
+                                                  .withValues(alpha: 0.6),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            child: ArtTripText.pretendard()
+                                                .body02Bold()
+                                                .color(AppColors.textWhite)
+                                                .build()
+                                                .text(location!),
+                                          )
+                                          : const SizedBox.shrink(),
+                                      Selector<ExhibitViewModel, bool>(
+                                        selector:
+                                            (_, vm) =>
+                                                vm.isFavorite(item.exhibitId),
+                                        builder: (context, isFavorite, _) {
+                                          return Positioned(
+                                            top: 8.h,
+                                            right: 8.w,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                var exhibitViewModel =
+                                                    Provider.of<
+                                                      ExhibitViewModel
+                                                    >(context, listen: false);
+                                                exhibitViewModel
+                                                    .updateFavoriteExhibit(
+                                                      item.exhibitId,
+                                                      !isFavorite,
+                                                    );
+                                              },
+                                              child: SvgPicture.asset(
+                                                AppAssets.icLikeCircle(
+                                                  isLiked: isFavorite,
+                                                ),
+                                                width: 24.w,
+                                                height: 24.w,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ],
                                   ),
                                 ),
 
                                 /// 전시 제목
-                                ArtTripText.pretendard()
-                                    .body01Bold()
-                                    .ellipsis(2)
-                                    .build()
-                                    .text(item.title ?? ''),
+                                Expanded(
+                                  child: ArtTripText.pretendard()
+                                      .body01Bold()
+                                      .ellipsis(2)
+                                      .build()
+                                      .text(item.title ?? ''),
+                                ),
                               ],
                             ),
                           ),

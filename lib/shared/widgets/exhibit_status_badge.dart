@@ -6,17 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 리스트 아이템용 전시 상태 배지 (이미지 모서리에 붙는 형태)
-class ExhibitionStatusBadge extends StatelessWidget {
-  const ExhibitionStatusBadge(this.status, {super.key});
+class ExhibitStatusBadge extends StatelessWidget {
+  const ExhibitStatusBadge(this.status, {super.key});
 
   final String status;
 
   @override
   Widget build(BuildContext context) {
+    if (status == ExhibitionStatus.finished.status) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(16.r)),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8.r),
+          bottomRight: Radius.circular(8.r),
+        ),
         border:
             status == ExhibitionStatus.endingSoon.status
                 ? const Border(
