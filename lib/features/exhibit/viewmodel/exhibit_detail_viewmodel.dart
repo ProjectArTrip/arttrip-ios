@@ -26,6 +26,13 @@ class ExhibitDetailViewModel with ChangeNotifier {
   bool get hasMoreReviews => _hasNextReview;
   bool get isLoadingMoreReviews => _isLoadingMore;
 
+  // 즐겨찾기 상태
+  bool _isFavorite = false;
+  bool _isFavoriteLoading = false;
+
+  bool get isFavorite => _isFavorite;
+  bool get isFavoriteLoading => _isFavoriteLoading;
+
   /// 전시 상세 정보 로드
   Future<void> fetchExhibitDetail(int exhibitId) async {
     _exhibitState = const AsyncState.loading();
@@ -84,6 +91,35 @@ class ExhibitDetailViewModel with ChangeNotifier {
     }
 
     _isLoadingMore = false;
+    notifyListeners();
+  }
+
+  /// 즐겨찾기 상태 확인
+  Future<void> checkFavorite(int exhibitId) async {
+    var result = await _repository.checkFavorite(exhibitId);
+    _isFavorite = result?.isFavorite ?? false;
+    notifyListeners();
+  }
+
+  /// 즐겨찾기 토글
+  Future<void> toggleFavorite(int exhibitId) async {
+    if (_isFavoriteLoading) return;
+
+    _isFavoriteLoading = true;
+    notifyListeners();
+
+    bool success;
+    if (_isFavorite) {
+      success = await _repository.removeFavorite(exhibitId);
+    } else {
+      success = await _repository.addFavorite(exhibitId);
+    }
+
+    if (success) {
+      _isFavorite = !_isFavorite;
+    }
+
+    _isFavoriteLoading = false;
     notifyListeners();
   }
 }

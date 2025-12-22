@@ -21,6 +21,8 @@ class AppAssets {
           ? 'assets/svg/ic_like_circle_selected.svg'
           : 'assets/svg/ic_like_circle_default.svg';
   static const String icNoArrowRight = 'assets/svg/ic_no_arrow_right.svg';
+  static const String icHeart = 'assets/svg/ic_heart.svg';
+  static const String icEmptyHeart = 'assets/svg/ic_empty_heart.svg';
 
   // Logo
   static const String icLogoWhite = 'assets/svg/ic_logo_white.svg';

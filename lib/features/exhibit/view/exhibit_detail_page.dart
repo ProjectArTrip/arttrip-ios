@@ -1,3 +1,4 @@
+import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
@@ -11,6 +12,7 @@ import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/init_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 /// 전시 상세 페이지
@@ -53,9 +55,9 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
   Widget build(BuildContext context) {
     return InitWidget(
       init: () {
-        context.read<ExhibitDetailViewModel>().fetchExhibitDetail(
-          widget.exhibitId,
-        );
+        var vm = context.read<ExhibitDetailViewModel>();
+        vm.fetchExhibitDetail(widget.exhibitId);
+        vm.checkFavorite(widget.exhibitId);
       },
       child: Scaffold(
         backgroundColor: AppColors.gray0,
@@ -63,6 +65,25 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
           backgroundColor: AppColors.gray0,
           elevation: 0,
           scrolledUnderElevation: 0,
+          actions: [
+            Selector<ExhibitDetailViewModel, bool>(
+              selector: (_, vm) => vm.isFavorite,
+              builder: (context, isFavorite, _) {
+                return IconButton(
+                  onPressed: () {
+                    context.read<ExhibitDetailViewModel>().toggleFavorite(
+                      widget.exhibitId,
+                    );
+                  },
+                  icon: SvgPicture.asset(
+                    isFavorite ? AppAssets.icHeart : AppAssets.icEmptyHeart,
+                    width: 24.w,
+                    height: 24.w,
+                  ),
+                );
+              },
+            ),
+          ],
         ),
         body: Selector<ExhibitDetailViewModel, AsyncState<ExhibitDetail>>(
           selector: (_, vm) => vm.exhibitState,
@@ -153,7 +174,10 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
       case 1:
         return ExhibitPlaceholderTabContent(label: context.l10n.exhibitMapTab);
       case 2:
-        return ExhibitReviewTabContent(exhibitId: widget.exhibitId);
+        return ExhibitReviewTabContent(
+          exhibitId: widget.exhibitId,
+          exhibit: exhibit,
+        );
       default:
         return const SizedBox.shrink();
     }
