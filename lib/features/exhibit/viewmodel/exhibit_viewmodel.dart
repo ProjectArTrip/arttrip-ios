@@ -25,7 +25,9 @@ class ExhibitViewModel with ChangeNotifier {
   }
 
   /// 즐겨찾기 상태 업데이트
-  void updateFavoriteExhibit(int exhibitId, bool isFavorite) {
+  void updateFavoriteExhibit(int? exhibitId, bool isFavorite) {
+    if (exhibitId == null) return;
+
     _exhibitRepository.updateFavoriteExhibit(exhibitId, isFavorite);
     _favoriteMap[exhibitId] = isFavorite;
     notifyListeners();

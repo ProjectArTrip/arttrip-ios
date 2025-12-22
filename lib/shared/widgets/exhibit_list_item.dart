@@ -14,13 +14,13 @@ class ExhibitListItem extends StatelessWidget {
     required this.item,
     this.isFavorite = false,
     this.onTap,
-    this.likeOnTap,
+    this.favoriteOnTap,
   });
 
   final ExhibitModel item;
   final bool isFavorite;
   final Function()? onTap;
-  final Function()? likeOnTap;
+  final Function()? favoriteOnTap;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class ExhibitListItem extends StatelessWidget {
                     top: 8.h,
                     right: 8.w,
                     child: GestureDetector(
-                      onTap: likeOnTap,
+                      onTap: favoriteOnTap,
                       child: SvgPicture.asset(
                         AppAssets.icLikeCircle(isLiked: isFavorite),
                         width: 24.w,

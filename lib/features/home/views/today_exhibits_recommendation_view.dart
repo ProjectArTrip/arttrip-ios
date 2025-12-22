@@ -62,15 +62,14 @@ class _TodayExhibitsRecommendationViewState
                                     context,
                                     '/exhibit/${item.exhibitId}',
                                   ),
-                              likeOnTap: () {
-                                if (item.exhibitId == null) return;
+                              favoriteOnTap: () {
                                 var exhibitViewModel =
                                     Provider.of<ExhibitViewModel>(
                                       context,
                                       listen: false,
                                     );
                                 exhibitViewModel.updateFavoriteExhibit(
-                                  item.exhibitId!,
+                                  item.exhibitId,
                                   !isFavorite,
                                 );
                               },

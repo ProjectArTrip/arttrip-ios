@@ -14,14 +14,14 @@ class TodayExhibitWidget extends StatelessWidget {
     this.isFavorite = false,
     this.location,
     this.onTap,
-    this.likeOnTap,
+    this.favoriteOnTap,
   });
 
   final ExhibitModel item;
   final bool isFavorite;
   final String? location;
   final Function()? onTap;
-  final Function()? likeOnTap;
+  final Function()? favoriteOnTap;
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +93,7 @@ class TodayExhibitWidget extends StatelessWidget {
               top: 16.h,
               right: 16.w,
               child: GestureDetector(
-                onTap: likeOnTap,
+                onTap: favoriteOnTap,
                 child: SvgPicture.asset(
                   AppAssets.icLikeCircle(isLiked: isFavorite),
                   width: 24.w,

@@ -3,6 +3,7 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
+import 'package:arttrip/features/exhibit/viewmodel/exhibit_viewmodel.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
@@ -109,21 +110,36 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
                                                 .text(location!),
                                           )
                                           : const SizedBox.shrink(),
-                                      Positioned(
-                                        top: 8.h,
-                                        right: 8.w,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            // TODO: isLiked 동적으로 바꾸기
-                                          },
-                                          child: SvgPicture.asset(
-                                            AppAssets.icLikeCircle(
-                                              isLiked: false,
+                                      Selector<ExhibitViewModel, bool>(
+                                        selector:
+                                            (_, vm) =>
+                                                vm.isFavorite(item.exhibitId),
+                                        builder: (context, isFavorite, _) {
+                                          return Positioned(
+                                            top: 8.h,
+                                            right: 8.w,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                var exhibitViewModel =
+                                                    Provider.of<
+                                                      ExhibitViewModel
+                                                    >(context, listen: false);
+                                                exhibitViewModel
+                                                    .updateFavoriteExhibit(
+                                                      item.exhibitId,
+                                                      !isFavorite,
+                                                    );
+                                              },
+                                              child: SvgPicture.asset(
+                                                AppAssets.icLikeCircle(
+                                                  isLiked: isFavorite,
+                                                ),
+                                                width: 24.w,
+                                                height: 24.w,
+                                              ),
                                             ),
-                                            width: 24.w,
-                                            height: 24.w,
-                                          ),
-                                        ),
+                                          );
+                                        },
                                       ),
                                     ],
                                   ),
