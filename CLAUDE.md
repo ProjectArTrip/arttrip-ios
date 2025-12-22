@@ -41,6 +41,7 @@ lib/
 | `view/` | 라우팅되는 전체 페이지 | `exhibit_detail_page.dart` |
 | `views/` | 페이지 내 독립적인 섹션 | `weekly_exhibition_schedule_view.dart` |
 | `widgets/` | 재사용 가능한 작은 위젯 | `exhibit_header_section.dart` |
+| `widgets/{기능명}/` | 특정 기능 관련 위젯 그룹 | `widgets/write_review/` |
 
 ## 코딩 스타일
 
@@ -65,27 +66,51 @@ color: _primaryColor
 
 ### 텍스트 스타일
 
-**`ArtTripText` 빌더 패턴 사용**
+**모든 텍스트는 반드시 `ArtTripText` 사용 (TextStyle 직접 정의 금지)**
 
 ```dart
-// Good
+// Good - 텍스트 위젯
 ArtTripText.pretendard()
     .body01Bold()
     .color(AppColors.textPrimary)
     .build()
     .text('텍스트')
 
-// Bad
+// Good - TextField 등에서 TextStyle이 필요한 경우
+TextField(
+  style: ArtTripText.pretendard()
+      .body01Regular()
+      .color(AppColors.textPrimary)
+      .build()
+      .style(),  // .style()로 TextStyle 추출
+  decoration: InputDecoration(
+    hintStyle: ArtTripText.pretendard()
+        .body01Regular()
+        .color(AppColors.textTertiary)
+        .build()
+        .style(),
+  ),
+)
+
+// Bad - TextStyle 직접 정의
 Text(
   '텍스트',
   style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
 )
+
+// Bad - TextField에서 TextStyle 직접 정의
+TextField(
+  style: TextStyle(fontFamily: 'Pretendard', fontSize: 14.sp),
+)
 ```
 
 사용 가능한 스타일:
-- `headline()` - 헤드라인
-- `title01Bold/Light()`, `title02Bold/Light()` - 제목
-- `body01Bold/Regular/Light()`, `body02Bold/Regular/Light()`, `body03Regular()` - 본문
+- `headline()` - 헤드라인 (20px/28px)
+- `title01Bold/Light()` - 제목1 (18px/20px)
+- `title02Bold/Light()` - 제목2 (16px/18px)
+- `body01Bold/Regular/Light()` - 본문1 (14px/20px 또는 16px)
+- `body02Bold/Regular/Light()` - 본문2 (12px)
+- `body03Regular()` - 본문3 (11px)
 
 ### 상태 관리
 
@@ -127,6 +152,42 @@ Selector<ExhibitDetailViewModel, AsyncState<ExhibitDetail>>(
 ```
 
 **주의**: `AsyncView`에서 `onError`는 생략하고 기본 에러 UI 사용
+
+### ViewModel Provider 등록
+
+**모든 ViewModel은 `provider_config.dart`에 전역 등록**
+
+```dart
+// lib/core/config/provider_config.dart
+ChangeNotifierProvider<WriteReviewViewModel>(
+  create: (_) => WriteReviewViewModel(
+    AppConsts.useMock
+        ? ExhibitRepositoryMockImpl()
+        : ExhibitRepositoryImpl(DioClient.instance),
+  ),
+),
+```
+
+**페이지에서 ChangeNotifierProvider 직접 사용 금지**
+
+```dart
+// Bad - 페이지에서 직접 Provider 생성
+return ChangeNotifierProvider(
+  create: (_) => WriteReviewViewModel(...),  // ❌
+  child: Scaffold(...),
+);
+
+// Good - InitWidget + reset() 패턴
+return InitWidget(
+  init: () => context.read<WriteReviewViewModel>().reset(),  // ✅
+  child: Scaffold(...),
+);
+```
+
+**이유**:
+- 일관된 Provider 관리 (한 곳에서 모든 ViewModel 확인)
+- 모달이 다시 열릴 때 이전 상태가 남아있는 문제 방지
+- `reset()` 메서드로 명시적 상태 초기화
 
 ### 반응형 UI
 
@@ -229,9 +290,40 @@ enum ExhibitionStatus {
 ```dart
 import 'package:arttrip/routes/routes.dart';
 
-// 페이지 이동
+// 기본 페이지 이동
 Routes.push(context, '/exhibit/${item.exhibitId}');
+
+// 모달 페이지 (결과 반환)
+var result = await Routes.modal<bool>(
+  context,
+  '/exhibit/write-review/$exhibitId',
+  extra: WriteReviewParams(...),
+);
+if (result == true) {
+  // 성공 처리
+}
 ```
+
+### 라우트 정의 패턴
+
+**Path Parameter + Extra 조합**
+
+```dart
+// 라우트 정의 (app_router.dart)
+GoRoute(
+  path: '/exhibit/write-review/:id',
+  pageBuilder: (context, state) {
+    var id = int.parse(state.pathParameters['id']!);
+    var params = state.extra as WriteReviewParams;
+    return buildPage(context, state, child: WriteReviewPage(exhibitId: id, params: params));
+  },
+),
+```
+
+**규칙**:
+- ID 등 필수 값: path parameter 사용 (`:id`)
+- 복잡한 객체: extra로 전달
+- 모달 결과: 제네릭 타입으로 반환값 지정 (`Routes.modal<bool>`)
 
 ## UI 패턴
 
@@ -287,6 +379,81 @@ Widget _buildTabContent() {
 - ✅ 헤더 + 탭바 + 콘텐츠 통합 스크롤
 - ❌ 탭바 상단 고정 (pinned)
 - ❌ 탭 스와이프 전환
+
+## API / Repository 패턴
+
+### Repository 메서드 구조
+
+**일관된 패턴 유지**
+
+```dart
+@override
+Future<ModelType?> fetchSomething(int id) async {
+  try {
+    var response = await _dio.get('/endpoint/$id');
+    var apiResponse = ApiResponse<ModelType>.fromJson(
+      response.dataOrNull,
+      (obj) => ModelType.fromJson(obj as Map<String, dynamic>),
+    );
+    return apiResponse.result;
+  } catch (e) {
+    AppUtil.debugLog('fetchSomething: $e');
+  }
+  return null;
+}
+```
+
+**규칙**:
+- `try-catch`로 감싸고 `AppUtil.debugLog`로 에러 로깅
+- `ApiResponse.fromJson`으로 응답 파싱 후 `apiResponse.result` 반환
+- 실패 시 `null` 반환
+
+### Form-data 요청 (파일 업로드)
+
+**JSON 필드 + 파일 업로드 조합**
+
+```dart
+Future<Result?> createWithFiles({
+  required int id,
+  required List<XFile> files,
+  required String data,
+}) async {
+  try {
+    // JSON 필드는 MultipartFile.fromString + contentType 지정
+    var requestJson = jsonEncode({'field': data});
+    var formData = FormData.fromMap({
+      'request': MultipartFile.fromString(
+        requestJson,
+        contentType: DioMediaType.parse('application/json'),
+      ),
+    });
+
+    // 파일 추가 (for-in 사용)
+    for (var file in files) {
+      formData.files.add(
+        MapEntry(
+          'files',
+          await MultipartFile.fromFile(file.path, filename: file.name),
+        ),
+      );
+    }
+
+    var response = await _dio.post('/endpoint/$id', data: formData);
+    var apiResponse = ApiResponse<Result>.fromJson(
+      response.dataOrNull,
+      (obj) => Result.fromJson(obj as Map<String, dynamic>),
+    );
+    return apiResponse.result;
+  } catch (e) {
+    AppUtil.debugLog('createWithFiles: $e');
+  }
+  return null;
+}
+```
+
+**주의**:
+- JSON 필드에 `contentType: DioMediaType.parse('application/json')` 필수
+- 파일 리스트가 빈 배열이면 파일 없이 요청됨 (선택적 파일 업로드)
 
 ## 주의사항
 
