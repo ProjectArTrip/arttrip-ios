@@ -32,5 +32,15 @@
   "copyCompleted": "Copied to clipboard",
   "exhibitReviewCount": "Exhibition Reviews",
   "writeReview": "Write Review",
-  "noReviews": "No reviews yet."
+  "noReviews": "No reviews yet.",
+  "writeReviewTitle": "Write Review",
+  "visitDateLabel": "Visit Date",
+  "visitDatePlaceholder": "Select visit date",
+  "photoAttachLabel": "Attach Photos",
+  "photoAttachHint": "(Up to 4 photos)",
+  "reviewContentLabel": "Review",
+  "reviewContentPlaceholder": "Write your review",
+  "submitReview": "Submit",
+  "reviewSubmitError": "Failed to submit review",
+  "imageUploadError": "Failed to upload images"
 }

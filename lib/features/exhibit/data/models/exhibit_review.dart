@@ -13,7 +13,7 @@ abstract class ExhibitReview with _$ExhibitReview {
     required String visitDate,
     required String content,
     required String thumbnailUrl,
-    required String nickname,
+    String? nickname,
   }) = _ExhibitReview;
 
   factory ExhibitReview.fromJson(Map<String, dynamic> json) =>

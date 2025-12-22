@@ -38,7 +38,7 @@ class ReviewListItem extends StatelessWidget {
               .body02Bold()
               .color(const Color(0xFFA5A5AF))
               .build()
-              .text(review.nickname),
+              .text(review.nickname ?? '익명'),
         ),
         SizedBox(width: 10.w),
         ArtTripText.pretendard()

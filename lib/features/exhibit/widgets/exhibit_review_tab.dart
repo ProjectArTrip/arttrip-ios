@@ -1,38 +1,66 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review.dart';
+import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
 import 'package:arttrip/features/exhibit/viewmodel/exhibit_detail_viewmodel.dart';
 import 'package:arttrip/features/exhibit/widgets/review_list_item.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/app_confirm_dialog.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
-import 'package:arttrip/shared/widgets/init_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 /// 전시 리뷰 탭 콘텐츠
-class ExhibitReviewTabContent extends StatelessWidget {
-  const ExhibitReviewTabContent({super.key, required this.exhibitId});
+class ExhibitReviewTabContent extends StatefulWidget {
+  const ExhibitReviewTabContent({
+    super.key,
+    required this.exhibitId,
+    required this.exhibit,
+  });
 
   final int exhibitId;
+  final ExhibitDetail exhibit;
+
+  @override
+  State<ExhibitReviewTabContent> createState() =>
+      _ExhibitReviewTabContentState();
+}
+
+class _ExhibitReviewTabContentState extends State<ExhibitReviewTabContent> {
+  bool _hasShownPrompt = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ExhibitDetailViewModel>().fetchExhibitReviews(
+        widget.exhibitId,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return InitWidget(
-      init: () {
-        context.read<ExhibitDetailViewModel>().fetchExhibitReviews(exhibitId);
+    return Selector<ExhibitDetailViewModel, int>(
+      selector: (_, vm) => vm.reviewTotalCount,
+      builder: (context, totalCount, _) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (totalCount > 0) ...[
+              _buildHeaderBox(context),
+              SizedBox(height: 16.h),
+            ],
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: _buildReviewContent(context),
+            ),
+          ],
+        );
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeaderBox(context),
-          SizedBox(height: 16.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: _buildReviewContent(context),
-          ),
-        ],
-      ),
     );
   }
 
@@ -79,9 +107,7 @@ class ExhibitReviewTabContent extends StatelessWidget {
       width: double.infinity,
       height: 48.h,
       child: OutlinedButton(
-        onPressed: () {
-          // TODO: 리뷰 작성 화면 이동
-        },
+        onPressed: () => _onWriteReviewPressed(context),
         style: OutlinedButton.styleFrom(
           backgroundColor: AppColors.gray0,
           foregroundColor: AppColors.textPrimary,
@@ -99,6 +125,25 @@ class ExhibitReviewTabContent extends StatelessWidget {
     );
   }
 
+  Future<void> _onWriteReviewPressed(BuildContext context) async {
+    var result = await Routes.modal<bool>(
+      context,
+      '/exhibit/write-review/${widget.exhibitId}',
+      extra: WriteReviewParams(
+        posterUrl: widget.exhibit.posterUrl,
+        title: widget.exhibit.title,
+        hallName: widget.exhibit.hallName,
+      ),
+    );
+
+    // 리뷰 등록 성공 시 목록 새로고침
+    if (result == true && context.mounted) {
+      await context.read<ExhibitDetailViewModel>().fetchExhibitReviews(
+        widget.exhibitId,
+      );
+    }
+  }
+
   Widget _buildReviewContent(BuildContext context) {
     return Selector<ExhibitDetailViewModel, AsyncState<List<ExhibitReview>>>(
       selector: (_, vm) => vm.reviewsState,
@@ -107,6 +152,7 @@ class ExhibitReviewTabContent extends StatelessWidget {
           state: state,
           onData: (reviews) {
             if (reviews.isEmpty) {
+              _showReviewPromptIfNeeded(context);
               return _buildEmptyState(context);
             }
             return _buildReviewItems(context, reviews);
@@ -116,9 +162,53 @@ class ExhibitReviewTabContent extends StatelessWidget {
     );
   }
 
+  void _showReviewPromptIfNeeded(BuildContext context) {
+    if (_hasShownPrompt) return;
+    _hasShownPrompt = true;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!context.mounted) return;
+      _showReviewPromptDialog(context);
+    });
+  }
+
+  Future<void> _showReviewPromptDialog(BuildContext context) async {
+    var result = await AppConfirmDialog.show(
+      context: context,
+      title: context.l10n.reviewPromptTitle,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            context.l10n.reviewPromptContent,
+            textAlign: TextAlign.center,
+            style:
+                ArtTripText.pretendard()
+                    .body01Regular()
+                    .color(AppColors.textPrimary)
+                    .build()
+                    .style(),
+          ),
+          SizedBox(height: 16.h),
+          ArtTripText.pretendard()
+              .body01Bold()
+              .color(AppColors.textPrimary)
+              .build()
+              .text(context.l10n.reviewPromptQuestion),
+        ],
+      ),
+      cancelText: context.l10n.cancel,
+      confirmText: context.l10n.writeReviewButton,
+    );
+
+    if (result == true && context.mounted) {
+      await _onWriteReviewPressed(context);
+    }
+  }
+
   Widget _buildEmptyState(BuildContext context) {
     return SizedBox(
-      height: 200.h,
+      height: 150.h,
       child: Center(
         child: ArtTripText.pretendard()
             .body01Regular()

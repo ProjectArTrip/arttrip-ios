@@ -1,9 +1,15 @@
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review.dart';
+import 'package:arttrip/features/exhibit/data/models/favorite_check_result.dart';
+import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ExhibitRepositoryMockImpl implements ExhibitRepository {
   ExhibitRepositoryMockImpl();
+
+  // Mock 즐겨찾기 상태 저장
+  final Set<int> _favorites = {};
 
   @override
   Future<ExhibitDetail?> fetchExhibitDetail(int exhibitId) async {
@@ -59,5 +65,54 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
       hasNext: hasNext,
       reviewTotalCount: 30,
     );
+  }
+
+  @override
+  Future<ReviewCreateResult?> createReview({
+    required int exhibitId,
+    required List<XFile> images,
+    required String date,
+    required String content,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    return ReviewCreateResult(
+      reviewId: DateTime.now().millisecondsSinceEpoch,
+      exhibitId: exhibitId,
+      visitDate: date,
+      content: content,
+      images:
+          images
+              .asMap()
+              .entries
+              .map(
+                (e) => ReviewImage(
+                  id: e.key,
+                  url: 'https://picsum.photos/200/200?random=${e.key}',
+                ),
+              )
+              .toList(),
+      createdAt: DateTime.now().toIso8601String(),
+    );
+  }
+
+  @override
+  Future<FavoriteCheckResult?> checkFavorite(int exhibitId) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    return FavoriteCheckResult(isFavorite: _favorites.contains(exhibitId));
+  }
+
+  @override
+  Future<bool> addFavorite(int exhibitId) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    _favorites.add(exhibitId);
+    return true;
+  }
+
+  @override
+  Future<bool> removeFavorite(int exhibitId) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    _favorites.remove(exhibitId);
+    return true;
   }
 }
