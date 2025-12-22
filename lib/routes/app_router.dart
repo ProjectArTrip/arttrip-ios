@@ -6,6 +6,7 @@ import 'package:arttrip/features/splash/view/splash_view.dart';
 import 'package:arttrip/routes/main_shell_route.dart';
 import 'package:arttrip/routes/route_builder.dart';
 import 'package:arttrip/routes/route_params.dart';
+import 'package:arttrip/shared/pages/alerts_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -69,6 +70,14 @@ final appRouter = GoRouter(
           state,
           child: RegionalExhibitsPage(regionName),
         );
+      },
+    ),
+
+    // 알림 리스트 화면
+    GoRoute(
+      path: '/alerts',
+      pageBuilder: (context, state) {
+        return buildPage(context, state, child: const AlertsPage());
       },
     ),
   ],

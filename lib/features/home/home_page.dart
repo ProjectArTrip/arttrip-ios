@@ -9,6 +9,7 @@ import 'package:arttrip/features/home/views/regional_exhibits_view.dart';
 import 'package:arttrip/features/home/views/today_exhibits_recommendation_view.dart';
 import 'package:arttrip/features/home/views/weekly_exhibits_schedule_view.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -96,14 +97,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Row(
               spacing: 20.w,
               children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: SvgPicture.asset(
-                    AppAssets.icNotification,
-                    width: 24.w,
-                    height: 24.w,
-                  ),
-                ),
+                const AlertBadge(),
                 GestureDetector(
                   onTap: () {},
                   child: SvgPicture.asset(

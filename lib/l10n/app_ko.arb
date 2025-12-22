@@ -29,5 +29,6 @@
   "goToHomepage": "홈페이지 바로 가기",
   "noOngoingExhibitionsOnDate": "해당 날짜에 진행중인 전시가 존재하지 않습니다.",
   "noExhibitionsInGenre": "{genre} 장르의 전시가 존재하지 않습니다.",
-  "totalCount": "총 {count}개"
+  "totalCount": "총 {count}개",
+  "alert": "알림"
 }
