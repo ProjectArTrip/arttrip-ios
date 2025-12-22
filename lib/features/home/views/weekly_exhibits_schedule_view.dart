@@ -4,9 +4,7 @@ import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
-import 'package:arttrip/features/exhibit/viewmodel/exhibit_viewmodel.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
-import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
@@ -57,32 +55,7 @@ class _WeeklyExhibitsScheduleViewState
                             spacing: 8.h,
                             children: List.generate(data.length, (index) {
                               var item = data[index];
-                              return Selector<ExhibitViewModel, bool>(
-                                selector:
-                                    (_, vm) => vm.isFavorite(item.exhibitId),
-                                builder: (context, isFavorite, _) {
-                                  return ExhibitListItem(
-                                    item: item,
-                                    isFavorite: isFavorite,
-                                    onTap:
-                                        () => Routes.push(
-                                          context,
-                                          '/exhibit/${item.exhibitId}',
-                                        ),
-                                    favoriteOnTap: () {
-                                      var exhibitViewModel =
-                                          Provider.of<ExhibitViewModel>(
-                                            context,
-                                            listen: false,
-                                          );
-                                      exhibitViewModel.updateFavoriteExhibit(
-                                        item.exhibitId,
-                                        !isFavorite,
-                                      );
-                                    },
-                                  );
-                                },
-                              );
+                              return ExhibitListItem(item: item);
                             }),
                           );
                         },

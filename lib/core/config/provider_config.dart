@@ -12,9 +12,11 @@ import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/onboarding/data/keywords_repository.dart';
 import 'package:arttrip/features/onboarding/data/keywords_repository_mock.dart';
 import 'package:arttrip/features/onboarding/viewmodel/keywords_viewmodel.dart';
+import 'package:arttrip/shared/viewmodels/alert_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 final getProviders = [
+  ChangeNotifierProvider(create: (_) => AlertViewModel()),
   ChangeNotifierProvider(
     create:
         (_) => ExhibitViewModel(
