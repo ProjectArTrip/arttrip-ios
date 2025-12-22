@@ -15,12 +15,14 @@ class AlertBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap:
-          () => Routes.push(context, '/alerts').then((_) {
-            if (context.mounted) {
-              Provider.of<AlertViewModel>(context, listen: false).unreadCount =
-                  0;
-            }
-          }),
+          isUnread == null
+              ? () => Routes.push(context, '/alerts').then((_) {
+                if (context.mounted) {
+                  Provider.of<AlertViewModel>(context, listen: false)
+                      .unreadCount = 0;
+                }
+              })
+              : null,
       child: SizedBox(
         width: 24.w,
         height: 24.w,
