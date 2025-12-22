@@ -1,11 +1,9 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_urls.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_repository.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
 
 class HomeRepositoryMockImpl implements HomeRepository {
-  HomeRepositoryMockImpl();
-
   @override
   Future<List<String>?> fetchOverseasCountries() async {
     await Future.delayed(
@@ -39,14 +37,16 @@ class HomeRepositoryMockImpl implements HomeRepository {
         status: 'ONGOING',
         exhibitPeriod: '2025.12.14 - 2025.12.27',
         hallName: '프리미엄 월넛홀',
+        countryName: '프랑스',
       ),
       ExhibitModel(
         exhibitId: 12,
         title: '눈이 타오르는 비탈',
         posterUrl: AppUrls.posterUrlMock,
-        status: 'FINISHED',
+        status: 'ENDING_SOON',
         exhibitPeriod: '2025.12.14 - 2025.12.27',
         hallName: '프리미엄 월넛홀',
+        countryName: '일본',
       ),
     ];
   }
@@ -72,7 +72,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchExhibitionsByGenre({
+  Future<List<ExhibitModel>?> fetchExhibitsByGenre({
     required bool isDomestic,
     String? country,
     String? region,
@@ -94,7 +94,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
         exhibitId: 12,
         title: '눈이 타오르는 비탈',
         posterUrl: AppUrls.posterUrlMock,
-        status: 'FINISHED',
+        status: 'ENDING_SOON',
         exhibitPeriod: '2025.12.14 - 2025.12.27',
         hallName: '프리미엄 월넛홀',
       ),
@@ -102,7 +102,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchPersonalizedExhibitions({
+  Future<List<ExhibitModel>?> fetchPersonalizedExhibits({
     required bool isDomestic,
     String? country,
     String? region,
@@ -118,20 +118,22 @@ class HomeRepositoryMockImpl implements HomeRepository {
         status: 'ONGOING',
         exhibitPeriod: '2025.12.14 - 2025.12.27',
         hallName: '프리미엄 월넛홀',
+        countryName: '프랑스',
       ),
       ExhibitModel(
         exhibitId: 12,
         title: '눈이 타오르는 비탈',
         posterUrl: AppUrls.posterUrlMock,
-        status: 'FINISHED',
+        status: 'ENDING_SOON',
         exhibitPeriod: '2025.12.14 - 2025.12.27',
         hallName: '프리미엄 월넛홀',
+        countryName: '일본',
       ),
     ];
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchWeeklyExhibitionsBySelectedDate({
+  Future<List<ExhibitModel>?> fetchWeeklyExhibitsBySelectedDate({
     required bool isDomestic,
     String? country,
     String? region,
@@ -153,7 +155,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
         exhibitId: 12,
         title: '눈이 타오르는 비탈',
         posterUrl: AppUrls.posterUrlMock,
-        status: 'FINISHED',
+        status: 'UPCOMING',
         exhibitPeriod: '2025.12.14 - 2025.12.27',
         hallName: '프리미엄 월넛홀',
       ),

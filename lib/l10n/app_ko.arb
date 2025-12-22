@@ -47,5 +47,9 @@
   "reviewPromptContent": "전시 리뷰를 작성하시면\n해당 국가 스탬프가 자동 발급됩니다.",
   "reviewPromptQuestion": "리뷰를 작성하시겠습니까?",
   "cancel": "취소",
-  "writeReviewButton": "리뷰 작성"
+  "writeReviewButton": "리뷰 작성",
+  "noOngoingExhibitionsOnDate": "해당 날짜에 진행중인 전시가 존재하지 않습니다.",
+  "noExhibitionsInGenre": "{genre} 장르의 전시가 존재하지 않습니다.",
+  "totalCount": "총 {count}개",
+  "alert": "알림"
 }

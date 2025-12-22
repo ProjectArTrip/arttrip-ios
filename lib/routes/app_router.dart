@@ -1,13 +1,16 @@
 import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
 import 'package:arttrip/features/exhibit/view/exhibit_detail_page.dart';
 import 'package:arttrip/features/exhibit/view/write_review_page.dart';
+import 'package:arttrip/features/home/regional_exhibits_page.dart';
 import 'package:arttrip/features/login/login_page.dart';
 import 'package:arttrip/features/onboarding/view/keywords_page.dart';
 import 'package:arttrip/features/splash/view/splash_view.dart';
 import 'package:arttrip/routes/main_shell_route.dart';
 import 'package:arttrip/routes/route_builder.dart';
 import 'package:arttrip/routes/route_params.dart';
+import 'package:arttrip/shared/pages/alerts_page.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 /// 앱 라우터 정의
@@ -72,5 +75,30 @@ final appRouter = GoRouter(
         );
       },
     ),
+
+    // 홈 > 국내전시 > 지역별 전체 화면
+    GoRoute(
+      path: '/home/:regionName',
+      pageBuilder: (context, state) {
+        var regionName = state.pathParameters['regionName']!;
+        return buildPage(
+          context,
+          state,
+          child: RegionalExhibitsPage(regionName),
+        );
+      },
+    ),
+
+    // 알림 리스트 화면
+    GoRoute(
+      path: '/alerts',
+      pageBuilder: (context, state) {
+        return buildPage(context, state, child: const AlertsPage());
+      },
+    ),
   ],
 );
+
+extension GoRouterX on BuildContext {
+  String get currentUri => GoRouter.of(this).state.uri.toString();
+}

@@ -3,13 +3,12 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
-import 'package:arttrip/routes/routes.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
-import 'package:arttrip/shared/widgets/exhibition_list_item.dart';
-import 'package:arttrip/shared/widgets/exhibition_list_item_skeleton.dart';
+import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
+import 'package:arttrip/shared/widgets/exhibit_list_item_skeleton.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,16 +16,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class WeeklyExhibitionScheduleView extends StatefulWidget {
-  const WeeklyExhibitionScheduleView({super.key});
+class WeeklyExhibitsScheduleView extends StatefulWidget {
+  const WeeklyExhibitsScheduleView({super.key});
 
   @override
-  State<WeeklyExhibitionScheduleView> createState() =>
-      _WeeklyExhibitionScheduleViewState();
+  State<WeeklyExhibitsScheduleView> createState() =>
+      _WeeklyExhibitsScheduleViewState();
 }
 
-class _WeeklyExhibitionScheduleViewState
-    extends State<WeeklyExhibitionScheduleView> {
+class _WeeklyExhibitsScheduleViewState
+    extends State<WeeklyExhibitsScheduleView> {
   @override
   Widget build(BuildContext context) {
     return Selector<HomeViewModel, AsyncState<List<DateTime>>>(
@@ -43,25 +42,20 @@ class _WeeklyExhibitionScheduleViewState
                   _buildHeader(),
                   _buildWeeklyCalendar(currentWeek),
                   Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
-                    selector: (_, vm) => vm.weeklyExhibitionsBySelectedDate,
+                    selector: (_, vm) => vm.weeklyExhibitsBySelectedDate,
                     builder: (context, state, _) {
                       return AsyncView(
                         state: state,
                         onData: (data) {
-                          // TODO: 빈값 수정 예정
-                          if (data.isEmpty) return const SizedBox.shrink();
+                          if (data.isEmpty) {
+                            return _buildNoExhibitions();
+                          }
 
                           return Column(
                             spacing: 8.h,
                             children: List.generate(data.length, (index) {
                               var item = data[index];
-                              return ExhibitionListItem(
-                                item: item,
-                                onTap: () => Routes.push(
-                                  context,
-                                  '/exhibit/${item.exhibitId}',
-                                ),
-                              );
+                              return ExhibitListItem(item: item);
                             }),
                           );
                         },
@@ -75,13 +69,14 @@ class _WeeklyExhibitionScheduleViewState
                             ),
                             child: Column(
                               children: [
-                                const ExhibitionListItemSkeleton(),
+                                const ExhibitListItemSkeleton(),
                                 SizedBox(height: 8.h),
-                                const ExhibitionListItemSkeleton(),
+                                const ExhibitListItemSkeleton(),
                               ],
                             ),
                           );
                         },
+                        onError: ({error}) => _buildNoExhibitions(),
                       );
                     },
                   ),
@@ -148,7 +143,7 @@ class _WeeklyExhibitionScheduleViewState
                     ),
                     color: Colors.transparent,
                     child: Column(
-                      spacing: 4.h,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
                           width: 28.w,
@@ -232,12 +227,40 @@ class _WeeklyExhibitionScheduleViewState
                 }),
               ),
               SizedBox(height: 20.h),
-              const ExhibitionListItemSkeleton(),
+              const ExhibitListItemSkeleton(),
               SizedBox(height: 8.h),
-              const ExhibitionListItemSkeleton(),
+              const ExhibitListItemSkeleton(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Container _buildNoExhibitions() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.only(
+        left: 28.w,
+        top: 24.h,
+        right: 27.w,
+        bottom: 28.h,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.subLightGray,
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: Column(
+        spacing: 8.h,
+        children: [
+          SvgPicture.asset(AppAssets.icNotFound, width: 40.w, height: 40.w),
+          ArtTripText.pretendard()
+              .body01Regular()
+              .color(AppColors.textTertiary)
+              .textAlign(TextAlign.center)
+              .build()
+              .text(context.l10n.noOngoingExhibitionsOnDate),
+        ],
       ),
     );
   }

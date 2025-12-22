@@ -2,13 +2,12 @@ import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
-import 'package:arttrip/routes/routes.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
-import 'package:arttrip/shared/widgets/exhibition_list_item.dart';
-import 'package:arttrip/shared/widgets/exhibition_list_item_skeleton.dart';
+import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
+import 'package:arttrip/shared/widgets/exhibit_list_item_skeleton.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,14 +15,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class GenreExhibitionView extends StatefulWidget {
-  const GenreExhibitionView({super.key});
+class GenreExhibitsView extends StatefulWidget {
+  const GenreExhibitsView({super.key});
 
   @override
-  State<GenreExhibitionView> createState() => _GenreExhibitionViewState();
+  State<GenreExhibitsView> createState() => _GenreExhibitsViewState();
 }
 
-class _GenreExhibitionViewState extends State<GenreExhibitionView> {
+class _GenreExhibitsViewState extends State<GenreExhibitsView> {
   List<GlobalKey>? _itemKeys;
 
   void _updateSelectedGenre(int index, String genre) {
@@ -47,10 +46,10 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
         builder: (context, state, _) {
           return AsyncView(
             state: state,
-            onData: (data) {
-              if (data.isEmpty) return const SizedBox.shrink();
+            onData: (genres) {
+              if (genres.isEmpty) return const SizedBox.shrink();
 
-              var itemCount = data.length;
+              var itemCount = genres.length;
               _itemKeys = List.generate(itemCount, (_) => GlobalKey());
 
               return Padding(
@@ -76,7 +75,7 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                           return _buildGenreItem(
                             _itemKeys![index],
                             index,
-                            data[index],
+                            genres[index],
                           );
                         },
                       ),
@@ -84,11 +83,19 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
 
                     /// 장르별 랜덤 전시
                     Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
-                      selector: (_, vm) => vm.exhibitionsByGenre,
+                      selector: (_, vm) => vm.exhibitsByGenre,
                       builder: (context, state, _) {
                         return AsyncView(
                           state: state,
                           onData: (data) {
+                            if (data.isEmpty) {
+                              var selectedGenre =
+                                  Provider.of<HomeViewModel>(
+                                    context,
+                                    listen: false,
+                                  ).selectedGenre;
+                              return _buildNoExhibitions(selectedGenre);
+                            }
                             return ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
@@ -98,13 +105,7 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                                   (context, index) => SizedBox(height: 8.h),
                               itemBuilder: (context, index) {
                                 var item = data[index];
-                                return ExhibitionListItem(
-                                  item: item,
-                                  onTap: () => Routes.push(
-                                    context,
-                                    '/exhibit/${item.exhibitId}',
-                                  ),
-                                );
+                                return ExhibitListItem(item: item);
                               },
                             );
                           },
@@ -126,7 +127,7 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                                   separatorBuilder:
                                       (context, index) => SizedBox(height: 8.h),
                                   itemBuilder: (context, index) {
-                                    return const ExhibitionListItemSkeleton();
+                                    return const ExhibitListItemSkeleton();
                                   },
                                 ),
                               ),
@@ -192,7 +193,7 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                         separatorBuilder:
                             (context, index) => SizedBox(height: 8.h),
                         itemBuilder: (context, index) {
-                          return const ExhibitionListItemSkeleton();
+                          return const ExhibitListItemSkeleton();
                         },
                       ),
                     ],
@@ -260,6 +261,35 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                 .text(genre),
           );
         },
+      ),
+    );
+  }
+
+  Container _buildNoExhibitions(String genre) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: 24.w),
+      padding: EdgeInsets.only(
+        left: 28.w,
+        top: 24.h,
+        right: 27.w,
+        bottom: 28.h,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.subLightGray,
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: Column(
+        spacing: 8.h,
+        children: [
+          SvgPicture.asset(AppAssets.icNotFound, width: 40.w, height: 40.w),
+          ArtTripText.pretendard()
+              .body01Regular()
+              .color(AppColors.textTertiary)
+              .textAlign(TextAlign.center)
+              .build()
+              .text(context.l10n.noExhibitionsInGenre(genre)),
+        ],
       ),
     );
   }
