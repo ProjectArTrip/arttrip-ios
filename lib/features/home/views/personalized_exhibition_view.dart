@@ -106,11 +106,13 @@ class _PersonalizedExhibitionViewState
                                 ),
 
                                 /// 전시 제목
-                                ArtTripText.pretendard()
-                                    .body01Bold()
-                                    .ellipsis(2)
-                                    .build()
-                                    .text(item.title ?? ''),
+                                Expanded(
+                                  child: ArtTripText.pretendard()
+                                      .body01Bold()
+                                      .ellipsis(2)
+                                      .build()
+                                      .text(item.title ?? ''),
+                                ),
                               ],
                             ),
                           ),

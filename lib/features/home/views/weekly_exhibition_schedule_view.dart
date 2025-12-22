@@ -57,10 +57,11 @@ class _WeeklyExhibitionScheduleViewState
                               var item = data[index];
                               return ExhibitionListItem(
                                 item: item,
-                                onTap: () => Routes.push(
-                                  context,
-                                  '/exhibit/${item.exhibitId}',
-                                ),
+                                onTap:
+                                    () => Routes.push(
+                                      context,
+                                      '/exhibit/${item.exhibitId}',
+                                    ),
                               );
                             }),
                           );
@@ -148,7 +149,7 @@ class _WeeklyExhibitionScheduleViewState
                     ),
                     color: Colors.transparent,
                     child: Column(
-                      spacing: 4.h,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
                           width: 28.w,

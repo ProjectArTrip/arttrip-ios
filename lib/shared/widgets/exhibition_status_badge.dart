@@ -13,10 +13,17 @@ class ExhibitionStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (status == ExhibitionStatus.finished.status) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(16.r)),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8.r),
+          bottomRight: Radius.circular(8.r),
+        ),
         border:
             status == ExhibitionStatus.endingSoon.status
                 ? const Border(
