@@ -1,31 +1,25 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
+import 'package:arttrip/features/exhibit/viewmodel/exhibit_viewmodel.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/exhibit_status_badge.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class ExhibitListItem extends StatelessWidget {
-  const ExhibitListItem({
-    super.key,
-    required this.item,
-    this.isFavorite = false,
-    this.onTap,
-    this.favoriteOnTap,
-  });
+  const ExhibitListItem({super.key, required this.item});
 
   final ExhibitModel item;
-  final bool isFavorite;
-  final Function()? onTap;
-  final Function()? favoriteOnTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => Routes.push(context, '/exhibit/${item.exhibitId}'),
       child: ColoredBox(
         color: Colors.transparent,
         child: Row(
@@ -58,13 +52,28 @@ class ExhibitListItem extends StatelessWidget {
                   Positioned(
                     top: 8.h,
                     right: 8.w,
-                    child: GestureDetector(
-                      onTap: favoriteOnTap,
-                      child: SvgPicture.asset(
-                        AppAssets.icLikeCircle(isLiked: isFavorite),
-                        width: 24.w,
-                        height: 24.w,
-                      ),
+                    child: Selector<ExhibitViewModel, bool>(
+                      selector: (_, vm) => vm.isFavorite(item.exhibitId),
+                      builder: (context, isFavorite, _) {
+                        return GestureDetector(
+                          onTap: () {
+                            var exhibitViewModel =
+                                Provider.of<ExhibitViewModel>(
+                                  context,
+                                  listen: false,
+                                );
+                            exhibitViewModel.updateFavoriteExhibit(
+                              item.exhibitId,
+                              !isFavorite,
+                            );
+                          },
+                          child: SvgPicture.asset(
+                            AppAssets.icLikeCircle(isLiked: isFavorite),
+                            width: 24.w,
+                            height: 24.w,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
