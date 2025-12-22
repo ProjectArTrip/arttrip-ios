@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
@@ -53,19 +54,26 @@ class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
                             (context, index) => SizedBox(width: 8.w),
                         itemBuilder: (context, index) {
                           var item = data[index];
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CircleAvatar(
-                                radius: 32.w,
-                                backgroundColor: Colors.black,
+                          return GestureDetector(
+                            onTap: () => Routes.push(context, '/home/$item'),
+                            child: ColoredBox(
+                              color: Colors.transparent,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 32.w,
+                                    backgroundColor: Colors.black,
+                                  ),
+                                  ArtTripText.pretendard()
+                                      .body02Bold()
+                                      .textAlign(TextAlign.center)
+                                      .build()
+                                      .text(item),
+                                ],
                               ),
-                              ArtTripText.pretendard()
-                                  .body02Bold()
-                                  .textAlign(TextAlign.center)
-                                  .build()
-                                  .text(item),
-                            ],
+                            ),
                           );
                         },
                       ),
