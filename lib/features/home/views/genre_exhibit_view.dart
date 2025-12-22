@@ -2,13 +2,13 @@ import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/routes/routes.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
-import 'package:arttrip/shared/widgets/exhibition_list_item.dart';
-import 'package:arttrip/shared/widgets/exhibition_list_item_skeleton.dart';
+import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
+import 'package:arttrip/shared/widgets/exhibit_list_item_skeleton.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,14 +16,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class GenreExhibitionView extends StatefulWidget {
-  const GenreExhibitionView({super.key});
+class GenreExhibitView extends StatefulWidget {
+  const GenreExhibitView({super.key});
 
   @override
-  State<GenreExhibitionView> createState() => _GenreExhibitionViewState();
+  State<GenreExhibitView> createState() => _GenreExhibitViewState();
 }
 
-class _GenreExhibitionViewState extends State<GenreExhibitionView> {
+class _GenreExhibitViewState extends State<GenreExhibitView> {
   List<GlobalKey>? _itemKeys;
 
   void _updateSelectedGenre(int index, String genre) {
@@ -84,12 +84,12 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
 
                     /// 장르별 랜덤 전시
                     Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
-                      selector: (_, vm) => vm.exhibitionsByGenre,
+                      selector: (_, vm) => vm.exhibitsByGenre,
                       builder: (context, state, _) {
                         return AsyncView(
                           state: state,
                           onData: (data) {
-                            if (data.isNotEmpty) {
+                            if (data.isEmpty) {
                               var selectedGenre =
                                   Provider.of<HomeViewModel>(
                                     context,
@@ -106,7 +106,7 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                                   (context, index) => SizedBox(height: 8.h),
                               itemBuilder: (context, index) {
                                 var item = data[index];
-                                return ExhibitionListItem(
+                                return ExhibitListItem(
                                   item: item,
                                   onTap:
                                       () => Routes.push(
@@ -135,7 +135,7 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                                   separatorBuilder:
                                       (context, index) => SizedBox(height: 8.h),
                                   itemBuilder: (context, index) {
-                                    return const ExhibitionListItemSkeleton();
+                                    return const ExhibitListItemSkeleton();
                                   },
                                 ),
                               ),
@@ -201,7 +201,7 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                         separatorBuilder:
                             (context, index) => SizedBox(height: 8.h),
                         itemBuilder: (context, index) {
-                          return const ExhibitionListItemSkeleton();
+                          return const ExhibitListItemSkeleton();
                         },
                       ),
                     ],

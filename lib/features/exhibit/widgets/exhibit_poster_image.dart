@@ -1,5 +1,5 @@
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
-import 'package:arttrip/shared/widgets/exhibition_status_badge.dart';
+import 'package:arttrip/shared/widgets/exhibit_status_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

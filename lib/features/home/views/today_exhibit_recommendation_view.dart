@@ -1,9 +1,9 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
-import 'package:arttrip/features/home/widgets/today_exhibition_widget.dart';
+import 'package:arttrip/features/home/widgets/today_exhibit_widget.dart';
 import 'package:arttrip/routes/routes.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +45,7 @@ class _TodayExhibitRecommendationViewState
                     return Selector<HomeViewModel, String>(
                       selector: (_, vm) => vm.selectedLocation,
                       builder: (context, selectedLocation, _) {
-                        return TodayExhibitionWidget(
+                        return TodayExhibitWidget(
                           item: item,
                           isLiked: false,
                           location:

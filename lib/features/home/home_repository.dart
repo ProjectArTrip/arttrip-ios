@@ -1,7 +1,7 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/shared/models/base_result_model.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
 
 abstract class HomeRepository {
   Future<List<String>?> fetchOverseasCountries();
@@ -12,18 +12,18 @@ abstract class HomeRepository {
     String? region,
   });
   Future<List<String>?> fetchGenres();
-  Future<List<ExhibitModel>?> fetchExhibitionsByGenre({
+  Future<List<ExhibitModel>?> fetchExhibitsByGenre({
     required bool isDomestic,
     String? country,
     String? region,
     required String genre,
   });
-  Future<List<ExhibitModel>?> fetchPersonalizedExhibitions({
+  Future<List<ExhibitModel>?> fetchPersonalizedExhibits({
     required bool isDomestic,
     String? country,
     String? region,
   });
-  Future<List<ExhibitModel>?> fetchWeeklyExhibitionsBySelectedDate({
+  Future<List<ExhibitModel>?> fetchWeeklyExhibitsBySelectedDate({
     required bool isDomestic,
     String? country,
     String? region,
@@ -121,7 +121,7 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchExhibitionsByGenre({
+  Future<List<ExhibitModel>?> fetchExhibitsByGenre({
     required bool isDomestic,
     String? country,
     String? region,
@@ -138,7 +138,7 @@ class HomeRepositoryImpl implements HomeRepository {
       var model = BaseResultModel.fromJson(response.dataOrNull);
       if (model.result is! List) {
         AppUtil.debugLog(
-          'fetchExhibitionsByGenre type inconsistency: ${model.result.runtimeType}',
+          'fetchExhibitsByGenre type inconsistency: ${model.result.runtimeType}',
         );
         return null;
       }
@@ -146,13 +146,13 @@ class HomeRepositoryImpl implements HomeRepository {
           .map<ExhibitModel>((e) => ExhibitModel.fromJson(e))
           .toList();
     } catch (e) {
-      AppUtil.debugLog('fetchExhibitionsByGenre: $e');
+      AppUtil.debugLog('fetchExhibitsByGenre: $e');
     }
     return null;
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchPersonalizedExhibitions({
+  Future<List<ExhibitModel>?> fetchPersonalizedExhibits({
     required bool isDomestic,
     String? country,
     String? region,
@@ -167,7 +167,7 @@ class HomeRepositoryImpl implements HomeRepository {
       var model = BaseResultModel.fromJson(response.dataOrNull);
       if (model.result is! List) {
         AppUtil.debugLog(
-          'fetchPersonalizedExhibitions type inconsistency: ${model.result.runtimeType}',
+          'fetchPersonalizedExhibits type inconsistency: ${model.result.runtimeType}',
         );
         return null;
       }
@@ -175,13 +175,13 @@ class HomeRepositoryImpl implements HomeRepository {
           .map<ExhibitModel>((e) => ExhibitModel.fromJson(e))
           .toList();
     } catch (e) {
-      AppUtil.debugLog('fetchPersonalizedExhibitions: $e');
+      AppUtil.debugLog('fetchPersonalizedExhibits: $e');
     }
     return null;
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchWeeklyExhibitionsBySelectedDate({
+  Future<List<ExhibitModel>?> fetchWeeklyExhibitsBySelectedDate({
     required bool isDomestic,
     String? country,
     String? region,
@@ -198,7 +198,7 @@ class HomeRepositoryImpl implements HomeRepository {
       var model = BaseResultModel.fromJson(response.dataOrNull);
       if (model.result is! List) {
         AppUtil.debugLog(
-          'fetchWeeklyExhibitionsBySelectedDate type inconsistency: ${model.result.runtimeType}',
+          'fetchWeeklyExhibitsBySelectedDate type inconsistency: ${model.result.runtimeType}',
         );
         return null;
       }
@@ -206,7 +206,7 @@ class HomeRepositoryImpl implements HomeRepository {
           .map<ExhibitModel>((e) => ExhibitModel.fromJson(e))
           .toList();
     } catch (e) {
-      AppUtil.debugLog('fetchWeeklyExhibitionsBySelectedDate: $e');
+      AppUtil.debugLog('fetchWeeklyExhibitsBySelectedDate: $e');
     }
     return null;
   }

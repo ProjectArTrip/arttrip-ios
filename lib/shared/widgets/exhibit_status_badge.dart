@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 리스트 아이템용 전시 상태 배지 (이미지 모서리에 붙는 형태)
-class ExhibitionStatusBadge extends StatelessWidget {
-  const ExhibitionStatusBadge(this.status, {super.key});
+class ExhibitStatusBadge extends StatelessWidget {
+  const ExhibitStatusBadge(this.status, {super.key});
 
   final String status;
 

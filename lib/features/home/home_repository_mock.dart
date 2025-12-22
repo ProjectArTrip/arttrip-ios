@@ -1,11 +1,9 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_urls.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_repository.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
 
 class HomeRepositoryMockImpl implements HomeRepository {
-  HomeRepositoryMockImpl();
-
   @override
   Future<List<String>?> fetchOverseasCountries() async {
     await Future.delayed(
@@ -74,7 +72,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchExhibitionsByGenre({
+  Future<List<ExhibitModel>?> fetchExhibitsByGenre({
     required bool isDomestic,
     String? country,
     String? region,
@@ -104,7 +102,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchPersonalizedExhibitions({
+  Future<List<ExhibitModel>?> fetchPersonalizedExhibits({
     required bool isDomestic,
     String? country,
     String? region,
@@ -133,7 +131,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchWeeklyExhibitionsBySelectedDate({
+  Future<List<ExhibitModel>?> fetchWeeklyExhibitsBySelectedDate({
     required bool isDomestic,
     String? country,
     String? region,

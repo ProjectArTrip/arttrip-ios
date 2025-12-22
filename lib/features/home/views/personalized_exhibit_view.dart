@@ -1,9 +1,10 @@
 import 'package:arttrip/core/app_assets.dart';
+import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/routes/routes.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
@@ -14,21 +15,20 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class PersonalizedExhibitionView extends StatefulWidget {
-  const PersonalizedExhibitionView({super.key});
+class PersonalizedExhibitView extends StatefulWidget {
+  const PersonalizedExhibitView({super.key});
 
   @override
-  State<PersonalizedExhibitionView> createState() =>
-      _PersonalizedExhibitionViewState();
+  State<PersonalizedExhibitView> createState() =>
+      _PersonalizedExhibitViewState();
 }
 
-class _PersonalizedExhibitionViewState
-    extends State<PersonalizedExhibitionView> {
+class _PersonalizedExhibitViewState extends State<PersonalizedExhibitView> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
-        selector: (_, vm) => vm.personalizedExhibitions,
+        selector: (_, vm) => vm.personalizedExhibits,
         builder: (context, state, _) {
           return AsyncView(
             state: state,
@@ -60,6 +60,7 @@ class _PersonalizedExhibitionViewState
                           (context, index) => SizedBox(width: 8.w),
                       itemBuilder: (_, index) {
                         var item = data[index];
+                        var location = item.countryName ?? item.regionName;
                         return GestureDetector(
                           onTap:
                               () => Routes.push(
@@ -83,6 +84,29 @@ class _PersonalizedExhibitionViewState
                                             width: 120.w,
                                             height: 150.h,
                                             fit: BoxFit.cover,
+                                          )
+                                          : const SizedBox.shrink(),
+                                      location?.isNotEmpty == true
+                                          ? Container(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 4.h,
+                                              horizontal: 8.w,
+                                            ),
+                                            margin: EdgeInsets.only(
+                                              left: 10.w,
+                                              top: 16.h,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: AppColors.textPrimary
+                                                  .withValues(alpha: 0.6),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            child: ArtTripText.pretendard()
+                                                .body02Bold()
+                                                .color(AppColors.textWhite)
+                                                .build()
+                                                .text(location!),
                                           )
                                           : const SizedBox.shrink(),
                                       Positioned(

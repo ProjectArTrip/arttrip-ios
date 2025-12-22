@@ -1,15 +1,15 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
-import 'package:arttrip/shared/widgets/exhibition_status_badge.dart';
+import 'package:arttrip/shared/widgets/exhibit_status_badge.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class ExhibitionListItem extends StatelessWidget {
-  const ExhibitionListItem({
+class ExhibitListItem extends StatelessWidget {
+  const ExhibitListItem({
     super.key,
     required this.item,
     this.isLiked = false,
@@ -50,7 +50,7 @@ class ExhibitionListItem extends StatelessWidget {
                       ? Positioned(
                         right: 0,
                         bottom: 0,
-                        child: ExhibitionStatusBadge(item.status!),
+                        child: ExhibitStatusBadge(item.status!),
                       )
                       : const SizedBox.shrink(),
 

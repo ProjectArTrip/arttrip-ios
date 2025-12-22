@@ -1,14 +1,14 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class TodayExhibitionWidget extends StatelessWidget {
-  const TodayExhibitionWidget({
+class TodayExhibitWidget extends StatelessWidget {
+  const TodayExhibitWidget({
     super.key,
     required this.item,
     this.isLiked = false,

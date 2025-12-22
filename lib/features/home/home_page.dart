@@ -3,11 +3,11 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/home/views/domestic_overseas_view.dart';
-import 'package:arttrip/features/home/views/genre_exhibition_view.dart';
-import 'package:arttrip/features/home/views/personalized_exhibition_view.dart';
-import 'package:arttrip/features/home/views/regional_exhibition_view.dart';
+import 'package:arttrip/features/home/views/genre_exhibit_view.dart';
+import 'package:arttrip/features/home/views/personalized_exhibit_view.dart';
+import 'package:arttrip/features/home/views/regional_exhibit_view.dart';
 import 'package:arttrip/features/home/views/today_exhibit_recommendation_view.dart';
-import 'package:arttrip/features/home/views/weekly_exhibition_schedule_view.dart';
+import 'package:arttrip/features/home/views/weekly_exhibit_schedule_view.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           controller: _scrollController,
           slivers: [
             _buildAppBar(),
-            _buildExhibitionTabBar(),
+            _buildExhibitTabBar(),
             Selector<HomeViewModel, bool>(
               selector: (_, vm) => vm.isDomestic,
               builder: (context, isDomestic, _) {
@@ -65,17 +65,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 );
               },
             ),
-            const PersonalizedExhibitionView(),
-            const WeeklyExhibitionScheduleView(),
+            const PersonalizedExhibitView(),
+            const WeeklyExhibitScheduleView(),
             Selector<HomeViewModel, bool>(
               selector: (_, vm) => vm.isDomestic,
               builder: (context, isDomestic, _) {
                 return isDomestic
-                    ? const RegionalExhibitionView()
+                    ? const RegionalExhibitView()
                     : const SliverToBoxAdapter(child: SizedBox.shrink());
               },
             ),
-            const GenreExhibitionView(),
+            const GenreExhibitView(),
             SliverToBoxAdapter(child: SizedBox(height: 24.h)),
           ],
         ),
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  SliverAppBar _buildExhibitionTabBar() {
+  SliverAppBar _buildExhibitTabBar() {
     return SliverAppBar(
       pinned: true,
       toolbarHeight: 28.h + 8.h,

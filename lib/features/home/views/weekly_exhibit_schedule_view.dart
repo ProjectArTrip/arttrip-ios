@@ -3,13 +3,13 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/routes/routes.dart';
-import 'package:arttrip/shared/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
-import 'package:arttrip/shared/widgets/exhibition_list_item.dart';
-import 'package:arttrip/shared/widgets/exhibition_list_item_skeleton.dart';
+import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
+import 'package:arttrip/shared/widgets/exhibit_list_item_skeleton.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,16 +17,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class WeeklyExhibitionScheduleView extends StatefulWidget {
-  const WeeklyExhibitionScheduleView({super.key});
+class WeeklyExhibitScheduleView extends StatefulWidget {
+  const WeeklyExhibitScheduleView({super.key});
 
   @override
-  State<WeeklyExhibitionScheduleView> createState() =>
-      _WeeklyExhibitionScheduleViewState();
+  State<WeeklyExhibitScheduleView> createState() =>
+      _WeeklyExhibitScheduleViewState();
 }
 
-class _WeeklyExhibitionScheduleViewState
-    extends State<WeeklyExhibitionScheduleView> {
+class _WeeklyExhibitScheduleViewState extends State<WeeklyExhibitScheduleView> {
   @override
   Widget build(BuildContext context) {
     return Selector<HomeViewModel, AsyncState<List<DateTime>>>(
@@ -43,7 +42,7 @@ class _WeeklyExhibitionScheduleViewState
                   _buildHeader(),
                   _buildWeeklyCalendar(currentWeek),
                   Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
-                    selector: (_, vm) => vm.weeklyExhibitionsBySelectedDate,
+                    selector: (_, vm) => vm.weeklyExhibitsBySelectedDate,
                     builder: (context, state, _) {
                       return AsyncView(
                         state: state,
@@ -56,7 +55,7 @@ class _WeeklyExhibitionScheduleViewState
                             spacing: 8.h,
                             children: List.generate(data.length, (index) {
                               var item = data[index];
-                              return ExhibitionListItem(
+                              return ExhibitListItem(
                                 item: item,
                                 onTap:
                                     () => Routes.push(
@@ -77,9 +76,9 @@ class _WeeklyExhibitionScheduleViewState
                             ),
                             child: Column(
                               children: [
-                                const ExhibitionListItemSkeleton(),
+                                const ExhibitListItemSkeleton(),
                                 SizedBox(height: 8.h),
-                                const ExhibitionListItemSkeleton(),
+                                const ExhibitListItemSkeleton(),
                               ],
                             ),
                           );
@@ -235,9 +234,9 @@ class _WeeklyExhibitionScheduleViewState
                 }),
               ),
               SizedBox(height: 20.h),
-              const ExhibitionListItemSkeleton(),
+              const ExhibitListItemSkeleton(),
               SizedBox(height: 8.h),
-              const ExhibitionListItemSkeleton(),
+              const ExhibitListItemSkeleton(),
             ],
           ),
         ),
