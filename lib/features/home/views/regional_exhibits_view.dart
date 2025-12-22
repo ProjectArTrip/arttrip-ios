@@ -9,14 +9,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class RegionalExhibitView extends StatefulWidget {
-  const RegionalExhibitView({super.key});
+class RegionalExhibitsView extends StatefulWidget {
+  const RegionalExhibitsView({super.key});
 
   @override
-  State<RegionalExhibitView> createState() => _RegionalExhibitViewState();
+  State<RegionalExhibitsView> createState() => _RegionalExhibitsViewState();
 }
 
-class _RegionalExhibitViewState extends State<RegionalExhibitView> {
+class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(

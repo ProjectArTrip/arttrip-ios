@@ -3,11 +3,11 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/home/views/domestic_overseas_view.dart';
-import 'package:arttrip/features/home/views/genre_exhibit_view.dart';
-import 'package:arttrip/features/home/views/personalized_exhibit_view.dart';
-import 'package:arttrip/features/home/views/regional_exhibit_view.dart';
-import 'package:arttrip/features/home/views/today_exhibit_recommendation_view.dart';
-import 'package:arttrip/features/home/views/weekly_exhibit_schedule_view.dart';
+import 'package:arttrip/features/home/views/genre_exhibits_view.dart';
+import 'package:arttrip/features/home/views/personalized_exhibits_view.dart';
+import 'package:arttrip/features/home/views/regional_exhibits_view.dart';
+import 'package:arttrip/features/home/views/today_exhibits_recommendation_view.dart';
+import 'package:arttrip/features/home/views/weekly_exhibits_schedule_view.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -61,21 +61,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               builder: (context, isDomestic, _) {
                 return SliverPadding(
                   padding: EdgeInsets.only(top: isDomestic ? 16.h : 0),
-                  sliver: const TodayExhibitRecommendationView(),
+                  sliver: const TodayExhibitsRecommendationView(),
                 );
               },
             ),
-            const PersonalizedExhibitView(),
-            const WeeklyExhibitScheduleView(),
+            const PersonalizedExhibitsView(),
+            const WeeklyExhibitsScheduleView(),
             Selector<HomeViewModel, bool>(
               selector: (_, vm) => vm.isDomestic,
               builder: (context, isDomestic, _) {
                 return isDomestic
-                    ? const RegionalExhibitView()
+                    ? const RegionalExhibitsView()
                     : const SliverToBoxAdapter(child: SizedBox.shrink());
               },
             ),
-            const GenreExhibitView(),
+            const GenreExhibitsView(),
             SliverToBoxAdapter(child: SizedBox(height: 24.h)),
           ],
         ),

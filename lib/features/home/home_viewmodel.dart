@@ -1,13 +1,15 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
+import 'package:arttrip/features/exhibit/viewmodel/exhibit_viewmodel.dart';
 import 'package:arttrip/features/home/home_repository.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:flutter/material.dart';
 
 class HomeViewModel with ChangeNotifier {
-  HomeViewModel(this.repository);
-  final HomeRepository repository;
+  HomeViewModel({required this.exhibitVM, required this.homeRepository});
+  final ExhibitViewModel exhibitVM;
+  final HomeRepository homeRepository;
 
   AsyncState<List<String>> locations = const AsyncState.loading();
   AsyncState<List<ExhibitModel>> todayExhibitRecommendations =
@@ -93,7 +95,7 @@ class HomeViewModel with ChangeNotifier {
     locations = const AsyncState.loading();
     notifyListeners();
 
-    var result = await repository.fetchOverseasCountries();
+    var result = await homeRepository.fetchOverseasCountries();
     if (result == null || context.mounted == false) {
       locations = const AsyncState.error();
     } else {
@@ -108,7 +110,7 @@ class HomeViewModel with ChangeNotifier {
     locations = const AsyncState.loading();
     notifyListeners();
 
-    var result = await repository.fetchDomesticRegions();
+    var result = await homeRepository.fetchDomesticRegions();
     if (result == null) {
       locations = const AsyncState.error();
     } else {
@@ -121,7 +123,7 @@ class HomeViewModel with ChangeNotifier {
   Future<void> fetchTodayExhibitRecommendations() async {
     todayExhibitRecommendations = const AsyncState.loading();
     notifyListeners();
-    var result = await repository.fetchTodayExhibitRecommendations(
+    var result = await homeRepository.fetchTodayExhibitRecommendations(
       isDomestic: _isDomestic,
       country: _isDomestic ? null : _selectedLocation,
       region: _isDomestic ? _selectedLocation : null,
@@ -129,6 +131,7 @@ class HomeViewModel with ChangeNotifier {
     if (result == null) {
       todayExhibitRecommendations = const AsyncState.error();
     } else {
+      exhibitVM.initializeFromExhibits(result);
       todayExhibitRecommendations = AsyncState.success(result);
     }
     notifyListeners();
@@ -138,7 +141,7 @@ class HomeViewModel with ChangeNotifier {
     genres = const AsyncState.loading();
     notifyListeners();
 
-    var result = await repository.fetchGenres();
+    var result = await homeRepository.fetchGenres();
     if (result == null) {
       genres = const AsyncState.error();
     } else {
@@ -153,7 +156,7 @@ class HomeViewModel with ChangeNotifier {
     exhibitsByGenre = const AsyncState.loading();
     notifyListeners();
 
-    var result = await repository.fetchExhibitsByGenre(
+    var result = await homeRepository.fetchExhibitsByGenre(
       isDomestic: _isDomestic,
       country: _isDomestic ? null : _selectedLocation,
       region: _isDomestic ? _selectedLocation : null,
@@ -163,6 +166,7 @@ class HomeViewModel with ChangeNotifier {
       exhibitsByGenre = const AsyncState.error();
     } else {
       exhibitsByGenre = AsyncState.success(result);
+      exhibitVM.initializeFromExhibits(result);
     }
     notifyListeners();
   }
@@ -171,7 +175,7 @@ class HomeViewModel with ChangeNotifier {
     personalizedExhibits = const AsyncState.loading();
     notifyListeners();
 
-    var result = await repository.fetchPersonalizedExhibits(
+    var result = await homeRepository.fetchPersonalizedExhibits(
       isDomestic: _isDomestic,
       country: _isDomestic ? null : _selectedLocation,
       region: _isDomestic ? _selectedLocation : null,
@@ -180,6 +184,7 @@ class HomeViewModel with ChangeNotifier {
       personalizedExhibits = const AsyncState.error();
     } else {
       personalizedExhibits = AsyncState.success(result);
+      exhibitVM.initializeFromExhibits(result);
     }
     notifyListeners();
   }
@@ -192,7 +197,7 @@ class HomeViewModel with ChangeNotifier {
     weeklyExhibitsBySelectedDate = const AsyncState.loading();
     notifyListeners();
 
-    var result = await repository.fetchWeeklyExhibitsBySelectedDate(
+    var result = await homeRepository.fetchWeeklyExhibitsBySelectedDate(
       isDomestic: _isDomestic,
       country: _isDomestic ? null : _selectedLocation,
       region: _isDomestic ? _selectedLocation : null,
@@ -202,6 +207,7 @@ class HomeViewModel with ChangeNotifier {
       weeklyExhibitsBySelectedDate = const AsyncState.error();
     } else {
       weeklyExhibitsBySelectedDate = AsyncState.success(result);
+      exhibitVM.initializeFromExhibits(result);
     }
     notifyListeners();
   }

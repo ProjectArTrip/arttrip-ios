@@ -118,6 +118,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
         status: 'ONGOING',
         exhibitPeriod: '2025.12.14 - 2025.12.27',
         hallName: '프리미엄 월넛홀',
+        countryName: '프랑스',
       ),
       ExhibitModel(
         exhibitId: 12,
@@ -126,6 +127,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
         status: 'ENDING_SOON',
         exhibitPeriod: '2025.12.14 - 2025.12.27',
         hallName: '프리미엄 월넛홀',
+        countryName: '일본',
       ),
     ];
   }

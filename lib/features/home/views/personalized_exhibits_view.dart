@@ -15,15 +15,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class PersonalizedExhibitView extends StatefulWidget {
-  const PersonalizedExhibitView({super.key});
+class PersonalizedExhibitsView extends StatefulWidget {
+  const PersonalizedExhibitsView({super.key});
 
   @override
-  State<PersonalizedExhibitView> createState() =>
-      _PersonalizedExhibitViewState();
+  State<PersonalizedExhibitsView> createState() =>
+      _PersonalizedExhibitsViewState();
 }
 
-class _PersonalizedExhibitViewState extends State<PersonalizedExhibitView> {
+class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -93,8 +93,8 @@ class _PersonalizedExhibitViewState extends State<PersonalizedExhibitView> {
                                               horizontal: 8.w,
                                             ),
                                             margin: EdgeInsets.only(
-                                              left: 10.w,
-                                              top: 16.h,
+                                              left: 8.w,
+                                              top: 9.h,
                                             ),
                                             decoration: BoxDecoration(
                                               color: AppColors.textPrimary

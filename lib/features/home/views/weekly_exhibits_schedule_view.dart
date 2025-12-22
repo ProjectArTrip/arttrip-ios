@@ -17,15 +17,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class WeeklyExhibitScheduleView extends StatefulWidget {
-  const WeeklyExhibitScheduleView({super.key});
+class WeeklyExhibitsScheduleView extends StatefulWidget {
+  const WeeklyExhibitsScheduleView({super.key});
 
   @override
-  State<WeeklyExhibitScheduleView> createState() =>
-      _WeeklyExhibitScheduleViewState();
+  State<WeeklyExhibitsScheduleView> createState() =>
+      _WeeklyExhibitsScheduleViewState();
 }
 
-class _WeeklyExhibitScheduleViewState extends State<WeeklyExhibitScheduleView> {
+class _WeeklyExhibitsScheduleViewState
+    extends State<WeeklyExhibitsScheduleView> {
   @override
   Widget build(BuildContext context) {
     return Selector<HomeViewModel, AsyncState<List<DateTime>>>(

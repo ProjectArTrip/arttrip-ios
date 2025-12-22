@@ -16,14 +16,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class GenreExhibitView extends StatefulWidget {
-  const GenreExhibitView({super.key});
+class GenreExhibitsView extends StatefulWidget {
+  const GenreExhibitsView({super.key});
 
   @override
-  State<GenreExhibitView> createState() => _GenreExhibitViewState();
+  State<GenreExhibitsView> createState() => _GenreExhibitsViewState();
 }
 
-class _GenreExhibitViewState extends State<GenreExhibitView> {
+class _GenreExhibitsViewState extends State<GenreExhibitsView> {
   List<GlobalKey>? _itemKeys;
 
   void _updateSelectedGenre(int index, String genre) {

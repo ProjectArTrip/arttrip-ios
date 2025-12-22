@@ -11,14 +11,14 @@ class TodayExhibitWidget extends StatelessWidget {
   const TodayExhibitWidget({
     super.key,
     required this.item,
-    this.isLiked = false,
+    this.isFavorite = false,
     this.location,
     this.onTap,
     this.likeOnTap,
   });
 
   final ExhibitModel item;
-  final bool isLiked;
+  final bool isFavorite;
   final String? location;
   final Function()? onTap;
   final Function()? likeOnTap;
@@ -89,14 +89,13 @@ class TodayExhibitWidget extends StatelessWidget {
                 : const SizedBox.shrink(),
 
             /// 즐겨찾기
-            // TODO: 즐겨찾기 상태에 따른 아이콘 변경 필요
             Positioned(
               top: 16.h,
               right: 16.w,
               child: GestureDetector(
                 onTap: likeOnTap,
                 child: SvgPicture.asset(
-                  AppAssets.icLikeCircle(isLiked: isLiked),
+                  AppAssets.icLikeCircle(isLiked: isFavorite),
                   width: 24.w,
                   height: 24.w,
                 ),

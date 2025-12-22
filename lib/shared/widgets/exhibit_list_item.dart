@@ -12,13 +12,13 @@ class ExhibitListItem extends StatelessWidget {
   const ExhibitListItem({
     super.key,
     required this.item,
-    this.isLiked = false,
+    this.isFavorite = false,
     this.onTap,
     this.likeOnTap,
   });
 
   final ExhibitModel item;
-  final bool isLiked;
+  final bool isFavorite;
   final Function()? onTap;
   final Function()? likeOnTap;
 
@@ -61,7 +61,7 @@ class ExhibitListItem extends StatelessWidget {
                     child: GestureDetector(
                       onTap: likeOnTap,
                       child: SvgPicture.asset(
-                        AppAssets.icLikeCircle(isLiked: isLiked),
+                        AppAssets.icLikeCircle(isLiked: isFavorite),
                         width: 24.w,
                         height: 24.w,
                       ),
