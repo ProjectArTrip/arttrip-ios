@@ -48,8 +48,9 @@ class _WeeklyExhibitionScheduleViewState
                       return AsyncView(
                         state: state,
                         onData: (data) {
-                          // TODO: 빈값 수정 예정
-                          if (data.isEmpty) return const SizedBox.shrink();
+                          if (data.isEmpty) {
+                            return _buildNoExhibitions();
+                          }
 
                           return Column(
                             spacing: 8.h,
@@ -83,6 +84,7 @@ class _WeeklyExhibitionScheduleViewState
                             ),
                           );
                         },
+                        onError: ({error}) => _buildNoExhibitions(),
                       );
                     },
                   ),
@@ -239,6 +241,34 @@ class _WeeklyExhibitionScheduleViewState
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Container _buildNoExhibitions() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.only(
+        left: 28.w,
+        top: 24.h,
+        right: 27.w,
+        bottom: 28.h,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.subLightGray,
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: Column(
+        spacing: 8.h,
+        children: [
+          SvgPicture.asset(AppAssets.icNotFound, width: 40.w, height: 40.w),
+          ArtTripText.pretendard()
+              .body01Regular()
+              .color(AppColors.textTertiary)
+              .textAlign(TextAlign.center)
+              .build()
+              .text(context.l10n.noOngoingExhibitionsOnDate),
+        ],
       ),
     );
   }

@@ -12,14 +12,14 @@ class TodayExhibitionWidget extends StatelessWidget {
     super.key,
     required this.item,
     this.isLiked = false,
-    this.showCountry = false,
+    this.location,
     this.onTap,
     this.likeOnTap,
   });
 
   final ExhibitModel item;
   final bool isLiked;
-  final bool showCountry;
+  final String? location;
   final Function()? onTap;
   final Function()? likeOnTap;
 
@@ -72,8 +72,7 @@ class TodayExhibitionWidget extends StatelessWidget {
             ),
 
             /// 국가
-            // TODO: 수정 예정
-            showCountry
+            location?.isNotEmpty == true
                 ? Container(
                   padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                   margin: EdgeInsets.only(left: 10.w, top: 16.h),
@@ -85,7 +84,7 @@ class TodayExhibitionWidget extends StatelessWidget {
                       .body02Bold()
                       .color(AppColors.textWhite)
                       .build()
-                      .text('일본'),
+                      .text(location!),
                 )
                 : const SizedBox.shrink(),
 
@@ -117,7 +116,6 @@ class TodayExhibitionWidget extends StatelessWidget {
                       .color(AppColors.textWhite)
                       .build()
                       .text(item.title ?? ''),
-                  // TODO: 필드값 수정 예정
                   ArtTripText.pretendard()
                       .body02Regular()
                       .color(AppColors.textWhite)

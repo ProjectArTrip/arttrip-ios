@@ -48,12 +48,15 @@ class _TodayExhibitRecommendationViewState
                         return TodayExhibitionWidget(
                           item: item,
                           isLiked: false,
-                          showCountry:
-                              selectedLocation == context.l10n.allItems,
-                          onTap: () => Routes.push(
-                            context,
-                            '/exhibit/${item.exhibitId}',
-                          ),
+                          location:
+                              selectedLocation == context.l10n.allItems
+                                  ? item.countryName ?? item.regionName
+                                  : null,
+                          onTap:
+                              () => Routes.push(
+                                context,
+                                '/exhibit/${item.exhibitId}',
+                              ),
                           likeOnTap: () {},
                         );
                       },

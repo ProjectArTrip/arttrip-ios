@@ -95,12 +95,11 @@ class ExhibitionListItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 2.h,
                     children: [
-                      // TODO: 미술관명 수정 예정
                       ArtTripText.pretendard()
                           .body02Regular()
                           .color(AppColors.textTertiary)
                           .build()
-                          .text('미술관명'),
+                          .text(item.hallName ?? ''),
                       ArtTripText.pretendard()
                           .body02Regular()
                           .color(AppColors.textTertiary)

@@ -47,10 +47,10 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
         builder: (context, state, _) {
           return AsyncView(
             state: state,
-            onData: (data) {
-              if (data.isEmpty) return const SizedBox.shrink();
+            onData: (genres) {
+              if (genres.isEmpty) return const SizedBox.shrink();
 
-              var itemCount = data.length;
+              var itemCount = genres.length;
               _itemKeys = List.generate(itemCount, (_) => GlobalKey());
 
               return Padding(
@@ -76,7 +76,7 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                           return _buildGenreItem(
                             _itemKeys![index],
                             index,
-                            data[index],
+                            genres[index],
                           );
                         },
                       ),
@@ -89,6 +89,14 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                         return AsyncView(
                           state: state,
                           onData: (data) {
+                            if (data.isNotEmpty) {
+                              var selectedGenre =
+                                  Provider.of<HomeViewModel>(
+                                    context,
+                                    listen: false,
+                                  ).selectedGenre;
+                              return _buildNoExhibitions(selectedGenre);
+                            }
                             return ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
@@ -100,10 +108,11 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                                 var item = data[index];
                                 return ExhibitionListItem(
                                   item: item,
-                                  onTap: () => Routes.push(
-                                    context,
-                                    '/exhibit/${item.exhibitId}',
-                                  ),
+                                  onTap:
+                                      () => Routes.push(
+                                        context,
+                                        '/exhibit/${item.exhibitId}',
+                                      ),
                                 );
                               },
                             );
@@ -260,6 +269,35 @@ class _GenreExhibitionViewState extends State<GenreExhibitionView> {
                 .text(genre),
           );
         },
+      ),
+    );
+  }
+
+  Container _buildNoExhibitions(String genre) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: 24.w),
+      padding: EdgeInsets.only(
+        left: 28.w,
+        top: 24.h,
+        right: 27.w,
+        bottom: 28.h,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.subLightGray,
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: Column(
+        spacing: 8.h,
+        children: [
+          SvgPicture.asset(AppAssets.icNotFound, width: 40.w, height: 40.w),
+          ArtTripText.pretendard()
+              .body01Regular()
+              .color(AppColors.textTertiary)
+              .textAlign(TextAlign.center)
+              .build()
+              .text(context.l10n.noExhibitionsInGenre(genre)),
+        ],
       ),
     );
   }

@@ -47,8 +47,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           slivers: [
             _buildAppBar(),
             _buildExhibitionTabBar(),
-            const DomesticOverseasView(),
-            const TodayExhibitRecommendationView(),
+            Selector<HomeViewModel, bool>(
+              selector: (_, vm) => vm.isDomestic,
+              builder: (context, isDomestic, _) {
+                if (isDomestic) {
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
+                }
+                return const DomesticOverseasView();
+              },
+            ),
+            Selector<HomeViewModel, bool>(
+              selector: (_, vm) => vm.isDomestic,
+              builder: (context, isDomestic, _) {
+                return SliverPadding(
+                  padding: EdgeInsets.only(top: isDomestic ? 16.h : 0),
+                  sliver: const TodayExhibitRecommendationView(),
+                );
+              },
+            ),
             const PersonalizedExhibitionView(),
             const WeeklyExhibitionScheduleView(),
             Selector<HomeViewModel, bool>(
