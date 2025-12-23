@@ -48,7 +48,7 @@ class HomeViewModel with ChangeNotifier {
   List<DateTime>? _weeklyCalendarCache;
   final Map<String, Map<String, List<ExhibitModel>>>
   _weeklyExhibitsBySelectedDateCache = {};
-  Map<String, List<String>> _genresCache = {};
+  final Map<String, List<String>> _genresCache = {};
   final Map<String, Map<String, List<ExhibitModel>>> _exhibitsByGenreCache = {};
 
   final DateTime _today = DateTime.now();
