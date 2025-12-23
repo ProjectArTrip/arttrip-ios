@@ -52,5 +52,13 @@
   "noOngoingExhibitionsOnDate": "해당 날짜에 진행중인 전시가 존재하지 않습니다.",
   "noExhibitionsInGenre": "{genre} 장르의 전시가 존재하지 않습니다.",
   "totalCount": "총 {count}개",
-  "alert": "알림"
+  "alert": "알림",
+  "calendarYearMonth": "{year}년 {month}월",
+  "weekdaySun": "일",
+  "weekdayMon": "월",
+  "weekdayTue": "화",
+  "weekdayWed": "수",
+  "weekdayThu": "목",
+  "weekdayFri": "금",
+  "weekdaySat": "토"
 }

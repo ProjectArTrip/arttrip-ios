@@ -2,6 +2,7 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/viewmodel/write_review_viewmodel.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/calendar_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -69,12 +70,11 @@ class VisitDateSection extends StatelessWidget {
     BuildContext context,
     WriteReviewViewModel vm,
   ) async {
-    var picked = await showDatePicker(
+    var picked = await showCalendarBottomSheet(
       context: context,
-      initialDate: vm.visitDate ?? DateTime.now(),
+      initialDate: vm.visitDate,
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
-      locale: const Locale('ko'),
     );
 
     if (picked != null) {
