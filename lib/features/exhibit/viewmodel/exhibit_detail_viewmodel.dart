@@ -36,6 +36,9 @@ class ExhibitDetailViewModel with ChangeNotifier {
   /// 전시 상세 정보 로드
   Future<void> fetchExhibitDetail(int exhibitId) async {
     _exhibitState = const AsyncState.loading();
+    // 이전 전시의 리뷰 데이터 초기화
+    _reviewsState = const AsyncState.loading();
+    _reviewTotalCount = 0;
     notifyListeners();
 
     var exhibit = await _repository.fetchExhibitDetail(exhibitId);
