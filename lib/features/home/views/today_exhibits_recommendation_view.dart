@@ -13,7 +13,9 @@ import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class TodayExhibitsRecommendationView extends StatefulWidget {
-  const TodayExhibitsRecommendationView({super.key});
+  const TodayExhibitsRecommendationView(this.isDomestic, {super.key});
+
+  final bool isDomestic;
 
   @override
   State<TodayExhibitsRecommendationView> createState() =>
@@ -54,7 +56,8 @@ class _TodayExhibitsRecommendationViewState
                               item: item,
                               isFavorite: isFavorite,
                               location:
-                                  selectedLocation == context.l10n.allItems
+                                  (selectedLocation == context.l10n.allItems &&
+                                          !widget.isDomestic)
                                       ? item.countryName ?? item.regionName
                                       : null,
                               onTap:

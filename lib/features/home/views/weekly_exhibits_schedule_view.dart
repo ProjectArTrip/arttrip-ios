@@ -2,6 +2,7 @@ import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_utils.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
@@ -42,7 +43,14 @@ class _WeeklyExhibitsScheduleViewState
                   _buildHeader(),
                   _buildWeeklyCalendar(currentWeek),
                   Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
-                    selector: (_, vm) => vm.weeklyExhibitsBySelectedDate,
+                    selector:
+                        (_, vm) =>
+                            vm.weeklyExhibitsBySelectedDate[vm.isDomestic
+                                ? LocationType.domestic.name
+                                : LocationType.overseas.name]![vm
+                                .selectedDateInWeek
+                                .day
+                                .toString()]!,
                     builder: (context, state, _) {
                       return AsyncView(
                         state: state,
