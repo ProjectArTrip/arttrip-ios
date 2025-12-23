@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   padding: EdgeInsets.only(top: isDomestic ? 16.h : 0),
                   sliver: TodayExhibitsRecommendationView(isDomestic),
                 ),
-                PersonalizedExhibitsView(isDomestic),
+                const PersonalizedExhibitsView(),
                 const WeeklyExhibitsScheduleView(),
                 isDomestic
                     ? const RegionalExhibitsView()

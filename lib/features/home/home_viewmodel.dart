@@ -18,14 +18,26 @@ class HomeViewModel with ChangeNotifier {
   AsyncState<List<String>> domesticRegions = const AsyncState.loading();
   AsyncState<List<ExhibitModel>> todayExhibitRecommendations =
       const AsyncState.loading();
-  AsyncState<List<String>> genres = const AsyncState.loading();
-  AsyncState<List<ExhibitModel>> exhibitsByGenre = const AsyncState.loading();
+  Map<String, AsyncState<List<String>>> genres = {
+    LocationType.overseas.name: const AsyncState.loading(),
+    LocationType.domestic.name: const AsyncState.loading(),
+  };
+  Map<String, AsyncState<List<ExhibitModel>>> exhibitsByGenre = {
+    LocationType.overseas.name: const AsyncState.loading(),
+    LocationType.domestic.name: const AsyncState.loading(),
+  };
   Map<String, AsyncState<List<ExhibitModel>>> personalizedExhibits = {
     LocationType.overseas.name: const AsyncState.loading(),
     LocationType.domestic.name: const AsyncState.loading(),
   };
-  Map<String, AsyncState<List<ExhibitModel>>> weeklyExhibitsBySelectedDate = {
-    DateTime.now().day.toString(): const AsyncState.loading(),
+  Map<String, Map<String, AsyncState<List<ExhibitModel>>>>
+  weeklyExhibitsBySelectedDate = {
+    LocationType.overseas.name: {
+      DateTime.now().day.toString(): const AsyncState.loading(),
+    },
+    LocationType.domestic.name: {
+      DateTime.now().day.toString(): const AsyncState.loading(),
+    },
   };
   AsyncState<List<DateTime>> weeklyCalendar = const AsyncState.loading();
 
@@ -34,9 +46,10 @@ class HomeViewModel with ChangeNotifier {
   final Map<String, List<ExhibitModel>> _todayExhibitRecommendationsCache = {};
   final Map<String, List<ExhibitModel>> _personalizedExhibitsCache = {};
   List<DateTime>? _weeklyCalendarCache;
-  final Map<String, List<ExhibitModel>> _weeklyExhibitsBySelectedDateCache = {};
-  List<String>? _genresCache;
-  final Map<String, List<ExhibitModel>> _exhibitsByGenreCache = {};
+  final Map<String, Map<String, List<ExhibitModel>>>
+  _weeklyExhibitsBySelectedDateCache = {};
+  Map<String, List<String>> _genresCache = {};
+  final Map<String, Map<String, List<ExhibitModel>>> _exhibitsByGenreCache = {};
 
   final DateTime _today = DateTime.now();
   bool _isDomestic = false;
@@ -48,6 +61,10 @@ class HomeViewModel with ChangeNotifier {
   String get selectedLocation => _selectedLocation;
   String get selectedGenre => _selectedGenre;
   DateTime get selectedDateInWeek => _selectedDateInWeek;
+  String get locationType =>
+      _isDomestic ? LocationType.domestic.name : LocationType.overseas.name;
+
+  List<String>? get domesticRegionsCache => _domesticRegionsCache;
 
   set isDomestic(bool value) {
     _isDomestic = value;
@@ -72,13 +89,13 @@ class HomeViewModel with ChangeNotifier {
   void _resetToLoading({bool resetLocations = true}) {
     if (resetLocations) overseasCountries = const AsyncState.loading();
     todayExhibitRecommendations = const AsyncState.loading();
-    genres = const AsyncState.loading();
-    exhibitsByGenre = const AsyncState.loading();
+    genres[locationType] = const AsyncState.loading();
+    exhibitsByGenre[locationType] = const AsyncState.loading();
     personalizedExhibits = {
       LocationType.overseas.name: const AsyncState.loading(),
       LocationType.domestic.name: const AsyncState.loading(),
     };
-    weeklyExhibitsBySelectedDate[_today.day.toString()] =
+    weeklyExhibitsBySelectedDate[locationType]![_today.day.toString()] =
         const AsyncState.loading();
     weeklyCalendar = const AsyncState.loading();
     notifyListeners();
@@ -184,36 +201,36 @@ class HomeViewModel with ChangeNotifier {
   }
 
   Future<void> fetchGenres() async {
-    if (_genresCache != null) {
-      _selectedGenre = _genresCache!.first;
-      genres = AsyncState.success(_genresCache!);
+    if (_genresCache[locationType] != null) {
+      _selectedGenre = _genresCache[locationType]!.first;
+      genres[locationType] = AsyncState.success(_genresCache[locationType]!);
       notifyListeners();
       return;
     }
-    genres = const AsyncState.loading();
+    genres[locationType] = const AsyncState.loading();
     notifyListeners();
 
     var result = await homeRepository.fetchGenres();
     if (result == null) {
-      genres = const AsyncState.error();
+      genres[locationType] = const AsyncState.error();
     } else {
-      genres = AsyncState.success(result);
+      genres[locationType] = AsyncState.success(result);
       _selectedGenre = result.first;
-      _genresCache = result;
+      _genresCache[locationType] = result;
     }
     notifyListeners();
     await fetchExhibitsByGenre();
   }
 
   Future<void> fetchExhibitsByGenre() async {
-    if (_exhibitsByGenreCache[_selectedGenre] != null) {
-      exhibitsByGenre = AsyncState.success(
-        _exhibitsByGenreCache[_selectedGenre]!,
+    if (_exhibitsByGenreCache[locationType]?[_selectedGenre] != null) {
+      exhibitsByGenre[locationType] = AsyncState.success(
+        _exhibitsByGenreCache[locationType]![_selectedGenre]!,
       );
       notifyListeners();
       return;
     }
-    exhibitsByGenre = const AsyncState.loading();
+    exhibitsByGenre[locationType] = const AsyncState.loading();
     notifyListeners();
 
     var result = await homeRepository.fetchExhibitsByGenre(
@@ -223,11 +240,11 @@ class HomeViewModel with ChangeNotifier {
       genre: _selectedGenre,
     );
     if (result == null) {
-      exhibitsByGenre = const AsyncState.error();
+      exhibitsByGenre[locationType] = const AsyncState.error();
     } else {
-      exhibitsByGenre = AsyncState.success(result);
+      exhibitsByGenre[locationType] = AsyncState.success(result);
       exhibitVM.initializeFromExhibits(result);
-      _exhibitsByGenreCache[_selectedGenre] = result;
+      (_exhibitsByGenreCache[locationType] ??= {})[_selectedGenre] = result;
     }
     notifyListeners();
   }
@@ -266,15 +283,18 @@ class HomeViewModel with ChangeNotifier {
     if (isInitialLoad) _selectedDateInWeek = _today;
     var selectedDateDay = _selectedDateInWeek.day.toString();
 
-    if (_weeklyExhibitsBySelectedDateCache[selectedDateDay] != null) {
-      weeklyExhibitsBySelectedDate[selectedDateDay] = AsyncState.success(
-        _weeklyExhibitsBySelectedDateCache[selectedDateDay]!,
-      );
+    if (_weeklyExhibitsBySelectedDateCache[locationType]?[selectedDateDay] !=
+        null) {
+      weeklyExhibitsBySelectedDate[locationType]![selectedDateDay] =
+          AsyncState.success(
+            _weeklyExhibitsBySelectedDateCache[locationType]![selectedDateDay]!,
+          );
       notifyListeners();
       return;
     }
 
-    weeklyExhibitsBySelectedDate[selectedDateDay] = const AsyncState.loading();
+    (weeklyExhibitsBySelectedDate[locationType] ??= {})[selectedDateDay] =
+        const AsyncState.loading();
     notifyListeners();
 
     var result = await homeRepository.fetchWeeklyExhibitsBySelectedDate(
@@ -284,13 +304,15 @@ class HomeViewModel with ChangeNotifier {
       date: AppUtil.formatDateYMD(date),
     );
     if (result == null) {
-      weeklyExhibitsBySelectedDate[selectedDateDay] = const AsyncState.error();
+      (weeklyExhibitsBySelectedDate[locationType] ??= {})[selectedDateDay] =
+          const AsyncState.error();
     } else {
-      weeklyExhibitsBySelectedDate[selectedDateDay] = AsyncState.success(
-        result,
-      );
+      (weeklyExhibitsBySelectedDate[locationType] ??=
+          {})[selectedDateDay] = AsyncState.success(result);
       exhibitVM.initializeFromExhibits(result);
-      _weeklyExhibitsBySelectedDateCache[selectedDateDay] = result;
+      (_weeklyExhibitsBySelectedDateCache[locationType] ??=
+              {})[selectedDateDay] =
+          result;
     }
     notifyListeners();
   }

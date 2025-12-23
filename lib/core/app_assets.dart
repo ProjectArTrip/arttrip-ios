@@ -26,6 +26,7 @@ class AppAssets {
   static const String icFilter = 'assets/svg/ic_filter.svg';
   static const String icHeart = 'assets/svg/ic_heart.svg';
   static const String icEmptyHeart = 'assets/svg/ic_empty_heart.svg';
+  static const String icClose = 'assets/svg/ic_close.svg';
 
   // Logo
   static const String icLogoWhite = 'assets/svg/ic_logo_white.svg';

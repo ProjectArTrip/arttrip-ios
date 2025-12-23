@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
@@ -42,7 +43,11 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Selector<HomeViewModel, AsyncState<List<String>>>(
-        selector: (_, vm) => vm.genres,
+        selector:
+            (_, vm) =>
+                vm.genres[vm.isDomestic
+                    ? LocationType.domestic.name
+                    : LocationType.overseas.name]!,
         builder: (context, state, _) {
           return AsyncView(
             state: state,
@@ -83,7 +88,11 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
 
                     /// 장르별 랜덤 전시
                     Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
-                      selector: (_, vm) => vm.exhibitsByGenre,
+                      selector:
+                          (_, vm) =>
+                              vm.exhibitsByGenre[vm.isDomestic
+                                  ? LocationType.domestic.name
+                                  : LocationType.overseas.name]!,
                       builder: (context, state, _) {
                         return AsyncView(
                           state: state,

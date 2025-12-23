@@ -18,9 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class PersonalizedExhibitsView extends StatefulWidget {
-  const PersonalizedExhibitsView(this.isDomestic, {super.key});
-
-  final bool isDomestic;
+  const PersonalizedExhibitsView({super.key});
 
   @override
   State<PersonalizedExhibitsView> createState() =>
@@ -34,7 +32,7 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
       child: Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
         selector:
             (_, vm) =>
-                vm.personalizedExhibits[widget.isDomestic
+                vm.personalizedExhibits[vm.isDomestic
                     ? LocationType.domestic.name
                     : LocationType.overseas.name]!,
         builder: (context, state, _) {
