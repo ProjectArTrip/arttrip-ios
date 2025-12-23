@@ -5,6 +5,7 @@ import 'package:arttrip/features/exhibit/data/exhibit_repository_hybrid.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository_mock.dart';
 import 'package:arttrip/features/exhibit/viewmodel/exhibit_detail_viewmodel.dart';
 import 'package:arttrip/features/exhibit/viewmodel/exhibit_viewmodel.dart';
+import 'package:arttrip/features/exhibit/viewmodel/write_review_viewmodel.dart';
 import 'package:arttrip/features/home/home_repository.dart';
 import 'package:arttrip/features/home/home_repository_hybrid.dart';
 import 'package:arttrip/features/home/home_repository_mock.dart';
@@ -48,6 +49,14 @@ final getProviders = [
   ChangeNotifierProvider<ExhibitDetailViewModel>(
     create:
         (_) => ExhibitDetailViewModel(
+          AppConsts.useMock
+              ? ExhibitRepositoryMockImpl()
+              : ExhibitRepositoryImpl(DioClient.instance),
+        ),
+  ),
+  ChangeNotifierProvider<WriteReviewViewModel>(
+    create:
+        (_) => WriteReviewViewModel(
           AppConsts.useMock
               ? ExhibitRepositoryMockImpl()
               : ExhibitRepositoryImpl(DioClient.instance),

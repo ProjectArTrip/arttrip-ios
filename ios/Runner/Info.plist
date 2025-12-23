@@ -66,6 +66,8 @@
 				</array>
 			</dict>
 		</array>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>사진을 첨부하기 위해 갤러리 접근 권한이 필요합니다.</string>
 		<!--스플래시 화면에서 상단 시스템바 아이콘 색상을 검정으로 고정-->
 		<key>UIStatusBarStyle</key>
     	<string>UIStatusBarStyleDarkContent</string>

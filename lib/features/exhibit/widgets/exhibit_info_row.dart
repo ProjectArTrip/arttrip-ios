@@ -12,12 +12,14 @@ class ExhibitInfoRow extends StatelessWidget {
     required this.label,
     required this.value,
     this.extraWidget,
+    this.isEmpty = false,
   });
 
   final String iconPath;
   final String label;
   final String value;
   final Widget? extraWidget;
+  final bool isEmpty;
 
   @override
   Widget build(BuildContext context) {
@@ -35,15 +37,19 @@ class ExhibitInfoRow extends StatelessWidget {
               .text(label),
         ),
         Expanded(
-          child: Column(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ArtTripText.pretendard()
-                  .body02Light()
-                  .color(AppColors.textPrimary)
-                  .build()
-                  .text(value),
-              if (extraWidget != null) ...[SizedBox(height: 4.h), extraWidget!],
+              Flexible(
+                child: ArtTripText.pretendard()
+                    .body02Regular()
+                    .color(
+                      isEmpty ? AppColors.textTertiary : AppColors.textPrimary,
+                    )
+                    .build()
+                    .text(value),
+              ),
+              if (extraWidget != null) ...[SizedBox(width: 12.w), extraWidget!],
             ],
           ),
         ),

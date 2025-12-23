@@ -1,4 +1,6 @@
+import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
 import 'package:arttrip/features/exhibit/view/exhibit_detail_page.dart';
+import 'package:arttrip/features/exhibit/view/write_review_page.dart';
 import 'package:arttrip/features/home/regional_exhibits_page.dart';
 import 'package:arttrip/features/login/login_page.dart';
 import 'package:arttrip/features/onboarding/view/keywords_page.dart';
@@ -44,6 +46,20 @@ final appRouter = GoRouter(
       path: '/onboarding/keywords',
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const KeywordsPage());
+      },
+    ),
+
+    // 리뷰 작성 페이지 (모달)
+    GoRoute(
+      path: '/exhibit/write-review/:id',
+      pageBuilder: (context, state) {
+        var id = int.parse(state.pathParameters['id']!);
+        var params = state.extra as WriteReviewParams;
+        return buildPage(
+          context,
+          state,
+          child: WriteReviewPage(exhibitId: id, params: params),
+        );
       },
     ),
 

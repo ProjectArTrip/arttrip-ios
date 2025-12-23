@@ -24,6 +24,8 @@ class AppAssets {
   static const String icNoArrowLeft = 'assets/svg/ic_no_arrow_left.svg';
   static const String icNotFound = 'assets/svg/ic_not_found.svg';
   static const String icFilter = 'assets/svg/ic_filter.svg';
+  static const String icHeart = 'assets/svg/ic_heart.svg';
+  static const String icEmptyHeart = 'assets/svg/ic_empty_heart.svg';
 
   // Logo
   static const String icLogoWhite = 'assets/svg/ic_logo_white.svg';

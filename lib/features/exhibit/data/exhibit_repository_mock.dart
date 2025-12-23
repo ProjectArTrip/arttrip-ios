@@ -1,9 +1,16 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_review.dart';
+import 'package:arttrip/features/exhibit/data/models/favorite_check_result.dart';
+import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ExhibitRepositoryMockImpl implements ExhibitRepository {
   ExhibitRepositoryMockImpl();
+
+  // Mock 즐겨찾기 상태 저장
+  final Set<int> _favorites = {};
 
   @override
   Future<ExhibitDetail?> fetchExhibitDetail(int exhibitId) async {
@@ -30,10 +37,97 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
   }
 
   @override
-  Future<String?> updateFavoriteExhibit(int exhibitId, bool isFavorite) async {
+  Future<ExhibitReviewListResponse?> fetchExhibitReviews(
+    int exhibitId, {
+    String? cursor,
+    int size = 10,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    var startIndex = cursor != null ? int.parse(cursor) : 0;
+    var mockReviews = List.generate(
+      size,
+      (index) => ExhibitReview(
+        reviewId: startIndex + index + 1,
+        visitDate: '2025-08-30',
+        content: '감성적인거 좋아하는 사람들 추천합니다 :)',
+        thumbnailUrl:
+            index % 3 == 0
+                ? 'https://picsum.photos/200/200?random=${startIndex + index}'
+                : '',
+        nickname: '전시조아${startIndex + index + 1}',
+      ),
+    );
+
+    var nextIndex = startIndex + size;
+    var hasNext = nextIndex < 30;
+
+    return ExhibitReviewListResponse(
+      reviews: mockReviews,
+      nextCursor: hasNext ? nextIndex.toString() : null,
+      hasNext: hasNext,
+      reviewTotalCount: 30,
+    );
+  }
+
+  @override
+  Future<ReviewCreateResult?> createReview({
+    required int exhibitId,
+    required List<XFile> images,
+    required String date,
+    required String content,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    return ReviewCreateResult(
+      reviewId: DateTime.now().millisecondsSinceEpoch,
+      exhibitId: exhibitId,
+      visitDate: date,
+      content: content,
+      images:
+          images
+              .asMap()
+              .entries
+              .map(
+                (e) => ReviewImage(
+                  id: e.key,
+                  url: 'https://picsum.photos/200/200?random=${e.key}',
+                ),
+              )
+              .toList(),
+      createdAt: DateTime.now().toIso8601String(),
+    );
+  }
+
+  @override
+  Future<FavoriteCheckResult?> checkFavorite(int exhibitId) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    return FavoriteCheckResult(isFavorite: _favorites.contains(exhibitId));
+  }
+
+  @override
+  Future<bool> addFavorite(int exhibitId) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    _favorites.add(exhibitId);
+    return true;
+  }
+
+  @override
+  Future<bool> removeFavorite(int exhibitId) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    _favorites.remove(exhibitId);
+    return true;
+  }
+
+  @override
+  Future<void> updateFavoriteExhibit(int exhibitId, bool isFavorite) async {
     await Future.delayed(
       const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
     );
-    return null;
+    if (isFavorite) {
+      _favorites.add(exhibitId);
+    } else {
+      _favorites.remove(exhibitId);
+    }
   }
 }
