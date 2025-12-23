@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:arttrip/core/app_utils.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/exhibit/viewmodel/exhibit_viewmodel.dart';
@@ -11,16 +14,29 @@ class HomeViewModel with ChangeNotifier {
   final ExhibitViewModel exhibitVM;
   final HomeRepository homeRepository;
 
-  AsyncState<List<String>> locations = const AsyncState.loading();
+  AsyncState<List<String>> overseasCountries = const AsyncState.loading();
+  AsyncState<List<String>> domesticRegions = const AsyncState.loading();
   AsyncState<List<ExhibitModel>> todayExhibitRecommendations =
       const AsyncState.loading();
   AsyncState<List<String>> genres = const AsyncState.loading();
   AsyncState<List<ExhibitModel>> exhibitsByGenre = const AsyncState.loading();
-  AsyncState<List<ExhibitModel>> personalizedExhibits =
-      const AsyncState.loading();
-  AsyncState<List<ExhibitModel>> weeklyExhibitsBySelectedDate =
-      const AsyncState.loading();
+  Map<String, AsyncState<List<ExhibitModel>>> personalizedExhibits = {
+    LocationType.overseas.name: const AsyncState.loading(),
+    LocationType.domestic.name: const AsyncState.loading(),
+  };
+  Map<String, AsyncState<List<ExhibitModel>>> weeklyExhibitsBySelectedDate = {
+    DateTime.now().day.toString(): const AsyncState.loading(),
+  };
   AsyncState<List<DateTime>> weeklyCalendar = const AsyncState.loading();
+
+  List<String>? _overseasCountriesCache;
+  List<String>? _domesticRegionsCache;
+  final Map<String, List<ExhibitModel>> _todayExhibitRecommendationsCache = {};
+  final Map<String, List<ExhibitModel>> _personalizedExhibitsCache = {};
+  List<DateTime>? _weeklyCalendarCache;
+  final Map<String, List<ExhibitModel>> _weeklyExhibitsBySelectedDateCache = {};
+  List<String>? _genresCache;
+  final Map<String, List<ExhibitModel>> _exhibitsByGenreCache = {};
 
   final DateTime _today = DateTime.now();
   bool _isDomestic = false;
@@ -54,31 +70,36 @@ class HomeViewModel with ChangeNotifier {
   }
 
   void _resetToLoading({bool resetLocations = true}) {
-    if (resetLocations) locations = const AsyncState.loading();
+    if (resetLocations) overseasCountries = const AsyncState.loading();
     todayExhibitRecommendations = const AsyncState.loading();
     genres = const AsyncState.loading();
     exhibitsByGenre = const AsyncState.loading();
-    personalizedExhibits = const AsyncState.loading();
-    weeklyExhibitsBySelectedDate = const AsyncState.loading();
+    personalizedExhibits = {
+      LocationType.overseas.name: const AsyncState.loading(),
+      LocationType.domestic.name: const AsyncState.loading(),
+    };
+    weeklyExhibitsBySelectedDate[_today.day.toString()] =
+        const AsyncState.loading();
     weeklyCalendar = const AsyncState.loading();
     notifyListeners();
   }
 
-  void load(BuildContext context) {
-    _resetToLoading();
-    (_isDomestic ? fetchDomesticRegions() : fetchOverseasCountries(context))
-        .then((_) {
-          fetchTodayExhibitRecommendations();
-          fetchGenres();
-          fetchPersonalizedExhibits();
-          fetchWeeklyExhibitsBySelectedDate(_today, isInitialLoad: true);
-          getWeeklyCalendar();
-        });
+  Future<void> load(BuildContext context, {bool refresh = false}) async {
+    if (refresh) _resetToLoading();
+    await (_isDomestic
+        ? fetchDomesticRegions()
+        : fetchOverseasCountries(context));
+
+    unawaited(fetchTodayExhibitRecommendations());
+    unawaited(fetchGenres());
+    unawaited(fetchPersonalizedExhibits());
+    unawaited(fetchWeeklyExhibitsBySelectedDate(_today, isInitialLoad: true));
+    unawaited(getWeeklyCalendar());
   }
 
   void updateSelectedLocation(String location) {
     _selectedLocation = location;
-    _resetToLoading(resetLocations: false);
+    // _resetToLoading(resetLocations: false);
     fetchTodayExhibitRecommendations();
     fetchGenres();
     fetchPersonalizedExhibits();
@@ -92,52 +113,83 @@ class HomeViewModel with ChangeNotifier {
   }
 
   Future<void> fetchOverseasCountries(BuildContext context) async {
-    locations = const AsyncState.loading();
+    if (_overseasCountriesCache != null) {
+      _selectedLocation = context.l10n.allItems;
+      overseasCountries = AsyncState.success(_overseasCountriesCache!);
+      notifyListeners();
+      return;
+    }
+
+    overseasCountries = const AsyncState.loading();
     notifyListeners();
 
     var result = await homeRepository.fetchOverseasCountries();
     if (result == null || context.mounted == false) {
-      locations = const AsyncState.error();
+      overseasCountries = const AsyncState.error();
     } else {
       result = [context.l10n.allItems, ...result];
       _selectedLocation = context.l10n.allItems;
-      locations = AsyncState.success(result);
+      overseasCountries = AsyncState.success(result);
+      _overseasCountriesCache = result;
     }
     notifyListeners();
   }
 
   Future<void> fetchDomesticRegions() async {
-    locations = const AsyncState.loading();
+    if (_domesticRegionsCache != null) {
+      domesticRegions = AsyncState.success(_domesticRegionsCache!);
+      notifyListeners();
+      return;
+    }
+
+    domesticRegions = const AsyncState.loading();
     notifyListeners();
 
     var result = await homeRepository.fetchDomesticRegions();
     if (result == null) {
-      locations = const AsyncState.error();
+      domesticRegions = const AsyncState.error();
     } else {
-      if (result.isNotEmpty) _selectedLocation = result[0];
-      locations = AsyncState.success(result);
+      domesticRegions = AsyncState.success(result);
+      _domesticRegionsCache = result;
     }
     notifyListeners();
   }
 
   Future<void> fetchTodayExhibitRecommendations() async {
+    var key = _isDomestic ? LocationType.domestic.name : _selectedLocation;
+    if (_todayExhibitRecommendationsCache[key] != null) {
+      todayExhibitRecommendations = AsyncState.success(
+        _todayExhibitRecommendationsCache[_selectedLocation]!,
+      );
+      notifyListeners();
+      return;
+    }
+
     todayExhibitRecommendations = const AsyncState.loading();
     notifyListeners();
+
     var result = await homeRepository.fetchTodayExhibitRecommendations(
       isDomestic: _isDomestic,
       country: _isDomestic ? null : _selectedLocation,
-      region: _isDomestic ? _selectedLocation : null,
+      region: _isDomestic ? '전체' : null,
     );
     if (result == null) {
       todayExhibitRecommendations = const AsyncState.error();
     } else {
       exhibitVM.initializeFromExhibits(result);
       todayExhibitRecommendations = AsyncState.success(result);
+      _todayExhibitRecommendationsCache[key] = result;
     }
     notifyListeners();
   }
 
   Future<void> fetchGenres() async {
+    if (_genresCache != null) {
+      _selectedGenre = _genresCache!.first;
+      genres = AsyncState.success(_genresCache!);
+      notifyListeners();
+      return;
+    }
     genres = const AsyncState.loading();
     notifyListeners();
 
@@ -147,12 +199,20 @@ class HomeViewModel with ChangeNotifier {
     } else {
       genres = AsyncState.success(result);
       _selectedGenre = result.first;
+      _genresCache = result;
     }
     notifyListeners();
     await fetchExhibitsByGenre();
   }
 
   Future<void> fetchExhibitsByGenre() async {
+    if (_exhibitsByGenreCache[_selectedGenre] != null) {
+      exhibitsByGenre = AsyncState.success(
+        _exhibitsByGenreCache[_selectedGenre]!,
+      );
+      notifyListeners();
+      return;
+    }
     exhibitsByGenre = const AsyncState.loading();
     notifyListeners();
 
@@ -167,12 +227,21 @@ class HomeViewModel with ChangeNotifier {
     } else {
       exhibitsByGenre = AsyncState.success(result);
       exhibitVM.initializeFromExhibits(result);
+      _exhibitsByGenreCache[_selectedGenre] = result;
     }
     notifyListeners();
   }
 
   Future<void> fetchPersonalizedExhibits() async {
-    personalizedExhibits = const AsyncState.loading();
+    var location = _isDomestic ? LocationType.domestic : LocationType.overseas;
+    var cached = _personalizedExhibitsCache[location.name];
+    if (cached != null) {
+      personalizedExhibits[location.name] = AsyncState.success(cached);
+      notifyListeners();
+      return;
+    }
+
+    personalizedExhibits[location.name] = const AsyncState.loading();
     notifyListeners();
 
     var result = await homeRepository.fetchPersonalizedExhibits(
@@ -181,10 +250,11 @@ class HomeViewModel with ChangeNotifier {
       region: _isDomestic ? _selectedLocation : null,
     );
     if (result == null) {
-      personalizedExhibits = const AsyncState.error();
+      personalizedExhibits[location.name] = const AsyncState.error();
     } else {
-      personalizedExhibits = AsyncState.success(result);
+      personalizedExhibits[location.name] = AsyncState.success(result);
       exhibitVM.initializeFromExhibits(result);
+      _personalizedExhibitsCache[location.name] = result;
     }
     notifyListeners();
   }
@@ -194,7 +264,17 @@ class HomeViewModel with ChangeNotifier {
     bool isInitialLoad = false,
   }) async {
     if (isInitialLoad) _selectedDateInWeek = _today;
-    weeklyExhibitsBySelectedDate = const AsyncState.loading();
+    var selectedDateDay = _selectedDateInWeek.day.toString();
+
+    if (_weeklyExhibitsBySelectedDateCache[selectedDateDay] != null) {
+      weeklyExhibitsBySelectedDate[selectedDateDay] = AsyncState.success(
+        _weeklyExhibitsBySelectedDateCache[selectedDateDay]!,
+      );
+      notifyListeners();
+      return;
+    }
+
+    weeklyExhibitsBySelectedDate[selectedDateDay] = const AsyncState.loading();
     notifyListeners();
 
     var result = await homeRepository.fetchWeeklyExhibitsBySelectedDate(
@@ -204,15 +284,23 @@ class HomeViewModel with ChangeNotifier {
       date: AppUtil.formatDateYMD(date),
     );
     if (result == null) {
-      weeklyExhibitsBySelectedDate = const AsyncState.error();
+      weeklyExhibitsBySelectedDate[selectedDateDay] = const AsyncState.error();
     } else {
-      weeklyExhibitsBySelectedDate = AsyncState.success(result);
+      weeklyExhibitsBySelectedDate[selectedDateDay] = AsyncState.success(
+        result,
+      );
       exhibitVM.initializeFromExhibits(result);
+      _weeklyExhibitsBySelectedDateCache[selectedDateDay] = result;
     }
     notifyListeners();
   }
 
   Future<void> getWeeklyCalendar() async {
+    if (_weeklyCalendarCache != null) {
+      weeklyCalendar = AsyncState.success(_weeklyCalendarCache!);
+      notifyListeners();
+      return;
+    }
     weeklyCalendar = const AsyncState.loading();
     notifyListeners();
 
@@ -220,6 +308,7 @@ class HomeViewModel with ChangeNotifier {
     var result = AppUtil.getCurrentWeek(_today);
 
     weeklyCalendar = AsyncState.success(result);
+    _weeklyCalendarCache = result;
     notifyListeners();
   }
 }

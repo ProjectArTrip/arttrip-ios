@@ -42,7 +42,12 @@ class _WeeklyExhibitsScheduleViewState
                   _buildHeader(),
                   _buildWeeklyCalendar(currentWeek),
                   Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
-                    selector: (_, vm) => vm.weeklyExhibitsBySelectedDate,
+                    selector:
+                        (_, vm) =>
+                            vm.weeklyExhibitsBySelectedDate[vm
+                                .selectedDateInWeek
+                                .day
+                                .toString()]!,
                     builder: (context, state, _) {
                       return AsyncView(
                         state: state,

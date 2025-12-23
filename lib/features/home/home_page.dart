@@ -42,43 +42,32 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: AppColors.gray0,
       body: SafeArea(
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: _scrollController,
-          slivers: [
-            _buildAppBar(),
-            _buildExhibitTabBar(),
-            Selector<HomeViewModel, bool>(
-              selector: (_, vm) => vm.isDomestic,
-              builder: (context, isDomestic, _) {
-                if (isDomestic) {
-                  return const SliverToBoxAdapter(child: SizedBox.shrink());
-                }
-                return const DomesticOverseasView();
-              },
-            ),
-            Selector<HomeViewModel, bool>(
-              selector: (_, vm) => vm.isDomestic,
-              builder: (context, isDomestic, _) {
-                return SliverPadding(
+        child: Selector<HomeViewModel, bool>(
+          selector: (_, vm) => vm.isDomestic,
+          builder: (context, isDomestic, _) {
+            return CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: _scrollController,
+              slivers: [
+                _buildAppBar(),
+                _buildExhibitTabBar(),
+                isDomestic
+                    ? const SliverToBoxAdapter(child: SizedBox.shrink())
+                    : const DomesticOverseasView(),
+                SliverPadding(
                   padding: EdgeInsets.only(top: isDomestic ? 16.h : 0),
-                  sliver: const TodayExhibitsRecommendationView(),
-                );
-              },
-            ),
-            const PersonalizedExhibitsView(),
-            const WeeklyExhibitsScheduleView(),
-            Selector<HomeViewModel, bool>(
-              selector: (_, vm) => vm.isDomestic,
-              builder: (context, isDomestic, _) {
-                return isDomestic
+                  sliver: TodayExhibitsRecommendationView(isDomestic),
+                ),
+                PersonalizedExhibitsView(isDomestic),
+                const WeeklyExhibitsScheduleView(),
+                isDomestic
                     ? const RegionalExhibitsView()
-                    : const SliverToBoxAdapter(child: SizedBox.shrink());
-              },
-            ),
-            const GenreExhibitsView(),
-            SliverToBoxAdapter(child: SizedBox(height: 24.h)),
-          ],
+                    : const SliverToBoxAdapter(child: SizedBox.shrink()),
+                const GenreExhibitsView(),
+                SliverToBoxAdapter(child: SizedBox(height: 24.h)),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -162,7 +151,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           Tab(text: context.l10n.internationalExhibition),
           Tab(text: context.l10n.domesticExhibition),
         ],
-        onTap: (index) {
+        onTap: (index) async {
           var homeViewModel = Provider.of<HomeViewModel>(
             context,
             listen: false,
@@ -170,7 +159,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           if (index == (homeViewModel.isDomestic ? 1 : 0)) return;
 
           homeViewModel.isDomestic = index == 0 ? false : true;
-          homeViewModel.load(context);
+          await homeViewModel.load(context);
         },
       ),
     );

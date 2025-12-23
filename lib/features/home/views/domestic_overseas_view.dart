@@ -37,7 +37,7 @@ class _DomesticOverseasViewState extends State<DomesticOverseasView> {
       child: SizedBox(
         height: 64.h,
         child: Selector<HomeViewModel, AsyncState<List<String>>>(
-          selector: (_, vm) => vm.locations,
+          selector: (_, vm) => vm.overseasCountries,
           builder: (context, state, _) {
             return AsyncView(
               state: state,

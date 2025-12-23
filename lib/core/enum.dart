@@ -16,3 +16,5 @@ enum ExhibitionStatus {
   const ExhibitionStatus(this.status);
   final String status;
 }
+
+enum LocationType { overseas, domestic }

@@ -24,7 +24,7 @@ class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
       padding: EdgeInsetsGeometry.only(top: 32.h),
       sliver: SliverToBoxAdapter(
         child: Selector<HomeViewModel, AsyncState<List<String>>>(
-          selector: (_, vm) => vm.locations,
+          selector: (_, vm) => vm.domesticRegions,
           builder: (context, state, _) {
             return AsyncView(
               state: state,
