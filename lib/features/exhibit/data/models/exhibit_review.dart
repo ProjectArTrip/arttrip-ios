@@ -12,7 +12,7 @@ abstract class ExhibitReview with _$ExhibitReview {
     required int reviewId,
     required String visitDate,
     required String content,
-    required String thumbnailUrl,
+    String? thumbnailUrl,
     String? nickname,
   }) = _ExhibitReview;
 

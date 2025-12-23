@@ -19,7 +19,7 @@ class ReviewListItem extends StatelessWidget {
         _buildHeader(),
         SizedBox(height: 12.h),
         _buildContent(),
-        if (review.thumbnailUrl.isNotEmpty) ...[
+        if (review.thumbnailUrl?.isNotEmpty ?? false) ...[
           SizedBox(height: 20.h),
           _buildThumbnail(),
         ],
@@ -60,7 +60,7 @@ class ReviewListItem extends StatelessWidget {
 
   Widget _buildThumbnail() {
     return AppCachedImage(
-      imageUrl: review.thumbnailUrl,
+      imageUrl: review.thumbnailUrl!,
       width: 100.w,
       height: 100.w,
       borderRadius: BorderRadius.circular(8.r),
