@@ -60,5 +60,6 @@
   "weekdayWed": "수",
   "weekdayThu": "목",
   "weekdayFri": "금",
-  "weekdaySat": "토"
+  "weekdaySat": "토",
+  "noMapInfo": "지도 정보가 없습니다"
 }

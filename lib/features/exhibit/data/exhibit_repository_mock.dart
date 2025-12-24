@@ -33,6 +33,8 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
       hallAddress: '서울 강남구 역삼로 000 10층',
       hallOpeningHours: 'AM 10:30 - PM 19:00',
       hallPhone: '000 - 123 - 1234',
+      hallLatitude: 48.8606, // 루브르 박물관 테스트 좌표
+      hallLongitude: 2.3376,
     );
   }
 

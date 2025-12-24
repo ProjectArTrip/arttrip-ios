@@ -22,6 +22,8 @@ abstract class ExhibitDetail with _$ExhibitDetail {
     required String hallAddress,
     String? hallOpeningHours,
     String? hallPhone,
+    double? hallLatitude,
+    double? hallLongitude,
   }) = _ExhibitDetail;
 
   factory ExhibitDetail.fromJson(Map<String, dynamic> json) =>

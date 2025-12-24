@@ -1,10 +1,10 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
-import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
 import 'package:arttrip/features/exhibit/viewmodel/exhibit_detail_viewmodel.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_detail_tab.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_header_section.dart';
+import 'package:arttrip/features/exhibit/widgets/exhibit_map_tab.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_poster_image.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_review_tab.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_tab_bar.dart';
@@ -172,7 +172,7 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
       case 0:
         return ExhibitDetailTabContent(exhibit: exhibit);
       case 1:
-        return ExhibitPlaceholderTabContent(label: context.l10n.exhibitMapTab);
+        return ExhibitMapTabContent(exhibit: exhibit);
       case 2:
         return ExhibitReviewTabContent(
           exhibitId: widget.exhibitId,
