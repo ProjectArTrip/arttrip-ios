@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 키워드 선택 칩 위젯
-class KeywordChip extends StatelessWidget {
-  const KeywordChip({
+class KeywordModelChip extends StatelessWidget {
+  const KeywordModelChip({
     super.key,
     required this.label,
     required this.isSelected,

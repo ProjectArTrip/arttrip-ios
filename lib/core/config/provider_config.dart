@@ -38,17 +38,17 @@ final getProviders = [
         ),
     update: (_, __, homeVM) => homeVM!,
   ),
-  ChangeNotifierProvider<KeywordsViewModel>(
+  ChangeNotifierProvider<KeywordModelsViewModel>(
     create:
-        (_) => KeywordsViewModel(
+        (_) => KeywordModelsViewModel(
           AppConsts.useMock
-              ? KeywordsRepositoryMockImpl()
-              : KeywordsRepositoryImpl(DioClient.instance),
+              ? KeywordModelsRepositoryMockImpl()
+              : KeywordModelsRepositoryImpl(DioClient.instance),
         ),
   ),
-  ChangeNotifierProvider<ExhibitDetailViewModel>(
+  ChangeNotifierProvider<ExhibitDetailModelViewModel>(
     create:
-        (_) => ExhibitDetailViewModel(
+        (_) => ExhibitDetailModelViewModel(
           AppConsts.useMock
               ? ExhibitRepositoryMockImpl()
               : ExhibitRepositoryImpl(DioClient.instance),

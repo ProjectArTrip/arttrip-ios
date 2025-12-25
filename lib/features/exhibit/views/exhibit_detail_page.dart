@@ -1,6 +1,6 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
 import 'package:arttrip/features/exhibit/viewmodels/exhibit_detail_viewmodel.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_detail_tab.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_header_section.dart';
@@ -16,15 +16,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 /// 전시 상세 페이지
-class ExhibitDetailPage extends StatefulWidget {
-  const ExhibitDetailPage({super.key, required this.exhibitId});
+class ExhibitDetailModelPage extends StatefulWidget {
+  const ExhibitDetailModelPage({super.key, required this.exhibitId});
   final int exhibitId;
 
   @override
-  State<ExhibitDetailPage> createState() => _ExhibitDetailPageState();
+  State<ExhibitDetailModelPage> createState() => _ExhibitDetailModelPageState();
 }
 
-class _ExhibitDetailPageState extends State<ExhibitDetailPage>
+class _ExhibitDetailModelPageState extends State<ExhibitDetailModelPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _currentTabIndex = 0;
@@ -55,8 +55,8 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
   Widget build(BuildContext context) {
     return InitWidget(
       init: () {
-        var vm = context.read<ExhibitDetailViewModel>();
-        vm.fetchExhibitDetail(widget.exhibitId);
+        var vm = context.read<ExhibitDetailModelViewModel>();
+        vm.fetchExhibitDetailModel(widget.exhibitId);
         vm.checkFavorite(widget.exhibitId);
       },
       child: Scaffold(
@@ -66,12 +66,12 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
           elevation: 0,
           scrolledUnderElevation: 0,
           actions: [
-            Selector<ExhibitDetailViewModel, bool>(
+            Selector<ExhibitDetailModelViewModel, bool>(
               selector: (_, vm) => vm.isFavorite,
               builder: (context, isFavorite, _) {
                 return IconButton(
                   onPressed: () {
-                    context.read<ExhibitDetailViewModel>().toggleFavorite(
+                    context.read<ExhibitDetailModelViewModel>().toggleFavorite(
                       widget.exhibitId,
                     );
                   },
@@ -85,10 +85,10 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
             ),
           ],
         ),
-        body: Selector<ExhibitDetailViewModel, AsyncState<ExhibitDetail>>(
+        body: Selector<ExhibitDetailModelViewModel, AsyncState<ExhibitDetailModel>>(
           selector: (_, vm) => vm.exhibitState,
           builder: (context, state, _) {
-            return AsyncView<ExhibitDetail>(
+            return AsyncView<ExhibitDetailModel>(
               state: state,
               onData: (exhibit) => _buildContent(exhibit),
             );
@@ -98,7 +98,7 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
     );
   }
 
-  Widget _buildContent(ExhibitDetail exhibit) {
+  Widget _buildContent(ExhibitDetailModel exhibit) {
     return Stack(
       children: [
         // 배경 이미지 (고정)
@@ -167,14 +167,14 @@ class _ExhibitDetailPageState extends State<ExhibitDetailPage>
     );
   }
 
-  Widget _buildTabContent(ExhibitDetail exhibit) {
+  Widget _buildTabContent(ExhibitDetailModel exhibit) {
     switch (_currentTabIndex) {
       case 0:
-        return ExhibitDetailTabContent(exhibit: exhibit);
+        return ExhibitDetailModelTabContent(exhibit: exhibit);
       case 1:
         return ExhibitMapTabContent(exhibit: exhibit);
       case 2:
-        return ExhibitReviewTabContent(
+        return ExhibitReviewModelTabContent(
           exhibitId: widget.exhibitId,
           exhibit: exhibit,
         );

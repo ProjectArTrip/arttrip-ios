@@ -1,6 +1,6 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ExhibitMapTabContent extends StatelessWidget {
   const ExhibitMapTabContent({super.key, required this.exhibit});
 
-  final ExhibitDetail exhibit;
+  final ExhibitDetailModel exhibit;
 
   @override
   Widget build(BuildContext context) {

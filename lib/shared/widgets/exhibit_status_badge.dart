@@ -63,8 +63,8 @@ class ExhibitStatusBadge extends StatelessWidget {
 }
 
 /// 상세 페이지용 전시 상태 배지 (독립적인 칩 형태)
-class ExhibitDetailStatusBadge extends StatelessWidget {
-  const ExhibitDetailStatusBadge(this.status, {super.key});
+class ExhibitDetailModelStatusBadge extends StatelessWidget {
+  const ExhibitDetailModelStatusBadge(this.status, {super.key});
 
   final String status;
 

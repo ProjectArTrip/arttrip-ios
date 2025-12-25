@@ -1,7 +1,7 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_info_row.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +9,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// 전시 상세 정보 탭 콘텐츠
-class ExhibitDetailTabContent extends StatelessWidget {
-  const ExhibitDetailTabContent({super.key, required this.exhibit});
+class ExhibitDetailModelTabContent extends StatelessWidget {
+  const ExhibitDetailModelTabContent({super.key, required this.exhibit});
 
-  final ExhibitDetail exhibit;
+  final ExhibitDetailModel exhibit;
 
   @override
   Widget build(BuildContext context) {

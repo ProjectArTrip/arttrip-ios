@@ -1,33 +1,33 @@
 import 'package:arttrip/features/onboarding/data/keywords_repository.dart';
-import 'package:arttrip/features/onboarding/data/models/keyword.dart';
+import 'package:arttrip/features/onboarding/data/models/keyword_model.dart';
 import 'package:flutter/material.dart';
 
-class KeywordsViewModel with ChangeNotifier {
-  KeywordsViewModel(this.repository);
-  final KeywordsRepository repository;
+class KeywordModelsViewModel with ChangeNotifier {
+  KeywordModelsViewModel(this.repository);
+  final KeywordModelsRepository repository;
 
-  List<Keyword> _genres = [];
-  List<Keyword> _styles = [];
-  final Set<int> _selectedKeywordIds = {};
+  List<KeywordModel> _genres = [];
+  List<KeywordModel> _styles = [];
+  final Set<int> _selectedKeywordModelIds = {};
 
   bool _isLoading = true;
   bool _isSaving = false;
   String? _errorMessage;
 
-  List<Keyword> get genres => _genres;
-  List<Keyword> get styles => _styles;
-  Set<int> get selectedKeywordIds => _selectedKeywordIds;
+  List<KeywordModel> get genres => _genres;
+  List<KeywordModel> get styles => _styles;
+  Set<int> get selectedKeywordModelIds => _selectedKeywordModelIds;
   bool get isLoading => _isLoading;
   bool get isSaving => _isSaving;
   String? get errorMessage => _errorMessage;
-  bool get canSubmit => _selectedKeywordIds.isNotEmpty;
+  bool get canSubmit => _selectedKeywordModelIds.isNotEmpty;
 
-  Future<void> fetchKeywords() async {
+  Future<void> fetchKeywordModels() async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
-    var keywords = await repository.fetchAllKeywords();
+    var keywords = await repository.fetchAllKeywordModels();
 
     if (keywords != null) {
       _genres = keywords.where((k) => k.isGenre).toList();
@@ -40,26 +40,26 @@ class KeywordsViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleKeyword(int keywordId) {
-    if (_selectedKeywordIds.contains(keywordId)) {
-      _selectedKeywordIds.remove(keywordId);
+  void toggleKeywordModel(int keywordId) {
+    if (_selectedKeywordModelIds.contains(keywordId)) {
+      _selectedKeywordModelIds.remove(keywordId);
     } else {
-      _selectedKeywordIds.add(keywordId);
+      _selectedKeywordModelIds.add(keywordId);
     }
     notifyListeners();
   }
 
   bool isSelected(int keywordId) {
-    return _selectedKeywordIds.contains(keywordId);
+    return _selectedKeywordModelIds.contains(keywordId);
   }
 
-  Future<bool> saveKeywords() async {
+  Future<bool> saveKeywordModels() async {
     if (!canSubmit || _isSaving) return false;
 
     _isSaving = true;
     notifyListeners();
 
-    var success = await repository.saveKeywords(_selectedKeywordIds.toList());
+    var success = await repository.saveKeywordModels(_selectedKeywordModelIds.toList());
 
     _isSaving = false;
     notifyListeners();

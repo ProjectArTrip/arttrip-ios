@@ -1,7 +1,7 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_review.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
 import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
 import 'package:arttrip/features/exhibit/viewmodels/exhibit_detail_viewmodel.dart';
 import 'package:arttrip/features/exhibit/widgets/review_list_item.dart';
@@ -14,29 +14,29 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 /// 전시 리뷰 탭 콘텐츠
-class ExhibitReviewTabContent extends StatefulWidget {
-  const ExhibitReviewTabContent({
+class ExhibitReviewModelTabContent extends StatefulWidget {
+  const ExhibitReviewModelTabContent({
     super.key,
     required this.exhibitId,
     required this.exhibit,
   });
 
   final int exhibitId;
-  final ExhibitDetail exhibit;
+  final ExhibitDetailModel exhibit;
 
   @override
-  State<ExhibitReviewTabContent> createState() =>
-      _ExhibitReviewTabContentState();
+  State<ExhibitReviewModelTabContent> createState() =>
+      _ExhibitReviewModelTabContentState();
 }
 
-class _ExhibitReviewTabContentState extends State<ExhibitReviewTabContent> {
+class _ExhibitReviewModelTabContentState extends State<ExhibitReviewModelTabContent> {
   bool _hasShownPrompt = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ExhibitDetailViewModel>().fetchExhibitReviews(
+      context.read<ExhibitDetailModelViewModel>().fetchExhibitReviewModels(
         widget.exhibitId,
       );
     });
@@ -44,7 +44,7 @@ class _ExhibitReviewTabContentState extends State<ExhibitReviewTabContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<ExhibitDetailViewModel, int>(
+    return Selector<ExhibitDetailModelViewModel, int>(
       selector: (_, vm) => vm.reviewTotalCount,
       builder: (context, totalCount, _) {
         return Column(
@@ -72,7 +72,7 @@ class _ExhibitReviewTabContentState extends State<ExhibitReviewTabContent> {
         color: AppColors.subLightGray,
         borderRadius: BorderRadius.circular(8.r),
       ),
-      child: Selector<ExhibitDetailViewModel, int>(
+      child: Selector<ExhibitDetailModelViewModel, int>(
         selector: (_, vm) => vm.reviewTotalCount,
         builder: (context, totalCount, _) {
           return Column(
@@ -138,17 +138,17 @@ class _ExhibitReviewTabContentState extends State<ExhibitReviewTabContent> {
 
     // 리뷰 등록 성공 시 목록 새로고침
     if (result == true && context.mounted) {
-      await context.read<ExhibitDetailViewModel>().fetchExhibitReviews(
+      await context.read<ExhibitDetailModelViewModel>().fetchExhibitReviewModels(
         widget.exhibitId,
       );
     }
   }
 
   Widget _buildReviewContent(BuildContext context) {
-    return Selector<ExhibitDetailViewModel, AsyncState<List<ExhibitReview>>>(
+    return Selector<ExhibitDetailModelViewModel, AsyncState<List<ExhibitReviewModel>>>(
       selector: (_, vm) => vm.reviewsState,
       builder: (context, state, _) {
-        return AsyncView<List<ExhibitReview>>(
+        return AsyncView<List<ExhibitReviewModel>>(
           state: state,
           onData: (reviews) {
             if (reviews.isEmpty) {
@@ -219,8 +219,8 @@ class _ExhibitReviewTabContentState extends State<ExhibitReviewTabContent> {
     );
   }
 
-  Widget _buildReviewItems(BuildContext context, List<ExhibitReview> reviews) {
-    return Selector<ExhibitDetailViewModel, bool>(
+  Widget _buildReviewItems(BuildContext context, List<ExhibitReviewModel> reviews) {
+    return Selector<ExhibitDetailModelViewModel, bool>(
       selector: (_, vm) => vm.isLoadingMoreReviews,
       builder: (context, isLoadingMore, _) {
         return Column(

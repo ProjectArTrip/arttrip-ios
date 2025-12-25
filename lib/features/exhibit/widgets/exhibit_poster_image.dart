@@ -24,7 +24,7 @@ class ExhibitPosterImage extends StatelessWidget {
           Positioned(
             top: 16.h,
             left: 24.w,
-            child: ExhibitDetailStatusBadge(status!),
+            child: ExhibitDetailModelStatusBadge(status!),
           ),
       ],
     );

@@ -1,5 +1,5 @@
 import 'package:arttrip/core/app_colors.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_review.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ReviewListItem extends StatelessWidget {
   const ReviewListItem({super.key, required this.review});
 
-  final ExhibitReview review;
+  final ExhibitReviewModel review;
 
   @override
   Widget build(BuildContext context) {

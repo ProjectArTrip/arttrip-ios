@@ -1,16 +1,16 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'exhibit_detail.freezed.dart';
-part 'exhibit_detail.g.dart';
+part 'exhibit_detail_model.freezed.dart';
+part 'exhibit_detail_model.g.dart';
 
 /// 전시 상세 모델
 ///
 /// /home/{id} 응답의 result 필드
 @freezed
-abstract class ExhibitDetail with _$ExhibitDetail {
-  const ExhibitDetail._();
+abstract class ExhibitDetailModel with _$ExhibitDetailModel {
+  const ExhibitDetailModel._();
 
-  factory ExhibitDetail({
+  factory ExhibitDetailModel({
     required int exhibitId,
     required String title,
     required String description,
@@ -24,10 +24,10 @@ abstract class ExhibitDetail with _$ExhibitDetail {
     String? hallPhone,
     double? hallLatitude,
     double? hallLongitude,
-  }) = _ExhibitDetail;
+  }) = _ExhibitDetailModel;
 
-  factory ExhibitDetail.fromJson(Map<String, dynamic> json) =>
-      _$ExhibitDetailFromJson(json);
+  factory ExhibitDetailModel.fromJson(Map<String, dynamic> json) =>
+      _$ExhibitDetailModelFromJson(json);
 
   /// 진행 중 여부
   bool get isOngoing => status == 'ONGOING';

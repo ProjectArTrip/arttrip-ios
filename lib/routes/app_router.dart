@@ -45,7 +45,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/onboarding/keywords',
       pageBuilder: (context, state) {
-        return buildPage(context, state, child: const KeywordsPage());
+        return buildPage(context, state, child: const KeywordModelsPage());
       },
     ),
 
@@ -71,7 +71,7 @@ final appRouter = GoRouter(
         return buildPage(
           context,
           state,
-          child: ExhibitDetailPage(exhibitId: id),
+          child: ExhibitDetailModelPage(exhibitId: id),
         );
       },
     ),
