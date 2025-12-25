@@ -1,7 +1,7 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
-import 'package:arttrip/features/exhibit/viewmodel/exhibit_viewmodel.dart';
+import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/exhibit_status_badge.dart';

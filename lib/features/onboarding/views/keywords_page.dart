@@ -1,5 +1,5 @@
 import 'package:arttrip/features/onboarding/data/models/keyword.dart';
-import 'package:arttrip/features/onboarding/viewmodel/keywords_viewmodel.dart';
+import 'package:arttrip/features/onboarding/viewmodels/keywords_viewmodel.dart';
 import 'package:arttrip/features/onboarding/widgets/keyword_chip.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/snackbar_utils.dart';

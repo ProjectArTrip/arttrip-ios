@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
-import 'package:arttrip/features/exhibit/viewmodel/write_review_viewmodel.dart';
+import 'package:arttrip/features/exhibit/viewmodels/write_review_viewmodel.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

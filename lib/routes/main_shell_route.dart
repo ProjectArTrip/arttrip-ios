@@ -1,8 +1,8 @@
 import 'package:arttrip/features/home/home_page.dart';
-import 'package:arttrip/features/map/view/map_view.dart';
-import 'package:arttrip/features/my/view/my_view.dart';
-import 'package:arttrip/features/stamp/view/stamp_view.dart';
-import 'package:arttrip/features/storage/view/storage_view.dart';
+import 'package:arttrip/features/map/views/map_view.dart';
+import 'package:arttrip/features/my/views/my_view.dart';
+import 'package:arttrip/features/stamp/views/stamp_view.dart';
+import 'package:arttrip/features/storage/views/storage_view.dart';
 import 'package:arttrip/routes/route_builder.dart';
 import 'package:arttrip/shared/widgets/main_shell.dart';
 import 'package:flutter/material.dart';

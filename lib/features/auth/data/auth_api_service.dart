@@ -2,7 +2,7 @@ import 'package:arttrip/core/env.dart';
 import 'package:arttrip/core/network/models/api_response.dart';
 import 'package:arttrip/core/network/network.dart';
 import 'package:arttrip/features/auth/data/models/auth_token_result.dart';
-import 'package:arttrip/features/auth/service/token_storage_service.dart';
+import 'package:arttrip/features/auth/services/token_storage_service.dart';
 import 'package:dio/dio.dart';
 
 /// 인증 관련 API 서비스

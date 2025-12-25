@@ -4,7 +4,7 @@ import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
-import 'package:arttrip/features/exhibit/viewmodel/exhibit_viewmodel.dart';
+import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
 import 'package:arttrip/features/home/home_repository.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:flutter/material.dart';

@@ -1,10 +1,10 @@
 import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
-import 'package:arttrip/features/exhibit/view/exhibit_detail_page.dart';
-import 'package:arttrip/features/exhibit/view/write_review_page.dart';
+import 'package:arttrip/features/exhibit/views/exhibit_detail_page.dart';
+import 'package:arttrip/features/exhibit/views/write_review_page.dart';
 import 'package:arttrip/features/home/regional_exhibits_page.dart';
 import 'package:arttrip/features/login/login_page.dart';
-import 'package:arttrip/features/onboarding/view/keywords_page.dart';
-import 'package:arttrip/features/splash/view/splash_view.dart';
+import 'package:arttrip/features/onboarding/views/keywords_page.dart';
+import 'package:arttrip/features/splash/views/splash_view.dart';
 import 'package:arttrip/routes/main_shell_route.dart';
 import 'package:arttrip/routes/route_builder.dart';
 import 'package:arttrip/routes/route_params.dart';

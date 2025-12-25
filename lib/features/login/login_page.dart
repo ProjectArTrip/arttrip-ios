@@ -1,7 +1,7 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
-import 'package:arttrip/features/auth/service/auth_service.dart';
+import 'package:arttrip/features/auth/services/auth_service.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/snackbar_utils.dart';
 import 'package:arttrip/shared/widgets/social_login_button.dart';

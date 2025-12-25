@@ -1,4 +1,4 @@
-import 'package:arttrip/features/auth/service/auth_service.dart';
+import 'package:arttrip/features/auth/services/auth_service.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:flutter/material.dart';
 

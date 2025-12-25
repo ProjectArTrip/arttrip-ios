@@ -16,10 +16,10 @@ lib/
 │   └── network/                 # API/네트워크 관련
 │
 ├── features/{feature}/          # 기능별 모듈
-│   ├── view/                    # 페이지 (라우팅 대상)
-│   ├── views/                   # 페이지 내 독립적인 섹션 뷰
+│   ├── views/                   # 페이지 및 섹션 뷰
 │   ├── widgets/                 # 재사용 가능한 위젯
-│   ├── viewmodel/               # ViewModel (상태 관리)
+│   ├── viewmodels/              # ViewModel (상태 관리)
+│   ├── services/                # 서비스 (비즈니스 로직)
 │   └── data/
 │       ├── models/              # 데이터 모델
 │       ├── *_repository.dart    # Repository
@@ -27,6 +27,8 @@ lib/
 │
 ├── shared/                      # 공통 컴포넌트
 │   ├── widgets/                 # 공용 위젯 (AsyncView, etc.)
+│   ├── viewmodels/              # 공용 ViewModel
+│   ├── pages/                   # 공용 페이지
 │   ├── models/                  # 공용 모델
 │   └── utils/                   # 유틸리티 (ArtTripText, etc.)
 │
@@ -38,10 +40,14 @@ lib/
 
 | 폴더 | 용도 | 예시 |
 |------|------|------|
-| `view/` | 라우팅되는 전체 페이지 | `exhibit_detail_page.dart` |
-| `views/` | 페이지 내 독립적인 섹션 | `weekly_exhibition_schedule_view.dart` |
+| `views/` | 페이지 및 섹션 뷰 | `exhibit_detail_page.dart`, `splash_view.dart` |
 | `widgets/` | 재사용 가능한 작은 위젯 | `exhibit_header_section.dart` |
 | `widgets/{기능명}/` | 특정 기능 관련 위젯 그룹 | `widgets/write_review/` |
+| `viewmodels/` | ViewModel (상태 관리) | `exhibit_detail_viewmodel.dart` |
+| `services/` | 서비스 (비즈니스 로직) | `auth_service.dart`, `token_storage_service.dart` |
+| `models/` | 데이터 모델 | `exhibit_detail.dart` |
+
+**폴더 네이밍 규칙**: 여러 파일을 담는 폴더는 **복수형** 사용 (`views/`, `widgets/`, `viewmodels/`, `services/`, `models/`)
 
 ## 코딩 스타일
 

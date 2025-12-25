@@ -3,7 +3,7 @@ import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review.dart';
 import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
-import 'package:arttrip/features/exhibit/viewmodel/exhibit_detail_viewmodel.dart';
+import 'package:arttrip/features/exhibit/viewmodels/exhibit_detail_viewmodel.dart';
 import 'package:arttrip/features/exhibit/widgets/review_list_item.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
