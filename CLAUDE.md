@@ -51,6 +51,41 @@ lib/
 
 ## 코딩 스타일
 
+### StatefulWidget 메서드 순서
+
+**라이프사이클 메서드 먼저, 커스텀 메서드는 build 아래**
+
+```dart
+class _MyPageState extends State<MyPage> {
+  // 1. 멤버 변수
+  late TabController _tabController;
+
+  // 2. initState
+  @override
+  void initState() { ... }
+
+  // 3. dispose
+  @override
+  void dispose() { ... }
+
+  // 4. build
+  @override
+  Widget build(BuildContext context) { ... }
+
+  // 5. 커스텀 메서드들
+  Widget _buildContent() { ... }
+  void _onTabChanged() { ... }
+}
+```
+
+### 코드 포맷팅
+
+**코드 작성 후 항상 `dart format .` 실행**
+
+```bash
+dart format .
+```
+
 ### 색상
 
 **항상 `AppColors` 사용, 로컬 Color 상수 금지**
