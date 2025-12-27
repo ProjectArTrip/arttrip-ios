@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Row(
               spacing: 20.w,
               children: [
-                const AlertBadge(),
+                const AlertBadge(path: '/alerts'),
                 GestureDetector(
                   onTap: () {},
                   child: SvgPicture.asset(
