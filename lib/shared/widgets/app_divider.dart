@@ -7,16 +7,18 @@ class AppDivider extends StatelessWidget {
     super.key,
     this.height = 1,
     this.color = AppColors.gray100,
+    this.horizontalPadding = 24,
   });
 
   final double height;
   final Color color;
+  final double horizontalPadding;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height.h,
-      color: color,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding.w),
+      child: Container(height: height.h, color: color),
     );
   }
 }
