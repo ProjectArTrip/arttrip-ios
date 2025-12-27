@@ -42,5 +42,12 @@
   "reviewContentPlaceholder": "Write your review",
   "submitReview": "Submit",
   "reviewSubmitError": "Failed to submit review",
-  "imageUploadError": "Failed to upload images"
+  "imageUploadError": "Failed to upload images",
+  "myPageTitle": "My Page",
+  "myRecentExhibits": "Recently Viewed",
+  "myReviews": "My Reviews",
+  "myTasteAnalysis": "Taste Analysis",
+  "settings": "Settings",
+  "logout": "Logout",
+  "logoutConfirmMessage": "Are you sure you want to logout?"
 }

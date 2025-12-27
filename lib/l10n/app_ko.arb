@@ -61,5 +61,12 @@
   "weekdayThu": "목",
   "weekdayFri": "금",
   "weekdaySat": "토",
-  "noMapInfo": "지도 정보가 없습니다"
+  "noMapInfo": "지도 정보가 없습니다",
+  "myPageTitle": "마이페이지",
+  "myRecentExhibits": "최근 본 전시",
+  "myReviews": "나의 리뷰",
+  "myTasteAnalysis": "나의 취향 분석",
+  "settings": "설정",
+  "logout": "로그아웃",
+  "logoutConfirmMessage": "정말 로그아웃 하시겠습니까?"
 }

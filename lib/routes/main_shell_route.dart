@@ -1,6 +1,6 @@
 import 'package:arttrip/features/home/home_page.dart';
 import 'package:arttrip/features/map/views/map_view.dart';
-import 'package:arttrip/features/my/views/my_view.dart';
+import 'package:arttrip/features/my/views/my_page.dart';
 import 'package:arttrip/features/stamp/views/stamp_view.dart';
 import 'package:arttrip/features/storage/views/storage_view.dart';
 import 'package:arttrip/routes/route_builder.dart';
@@ -78,7 +78,7 @@ final mainShellRoute = StatefulShellRoute.indexedStack(
         GoRoute(
           path: '/my',
           pageBuilder: (context, state) {
-            return buildPage(context, state, child: const MyView());
+            return buildPage(context, state, child: const MyPage());
           },
         ),
       ],
