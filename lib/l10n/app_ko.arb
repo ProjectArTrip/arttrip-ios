@@ -75,5 +75,9 @@
   "changeProfileImage": "프로필 이미지 변경",
   "pickFromGallery": "사진 가져오기",
   "takePhoto": "사진 촬영",
-  "deleteImage": "이미지 삭제하기"
+  "deleteImage": "이미지 삭제하기",
+  "changeNicknameTitle": "닉네임을 변경하시겠습니까?",
+  "changeNicknamePlaceholder": "닉네임 입력 (최대 10자)",
+  "changeNicknameButton": "변경하기",
+  "duplicateNicknameError": "중복된 닉네임입니다."
 }

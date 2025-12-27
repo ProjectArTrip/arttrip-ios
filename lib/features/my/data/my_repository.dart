@@ -12,6 +12,9 @@ abstract class MyRepository {
   });
   Future<bool> uploadProfileImage(XFile image);
   Future<bool> deleteProfileImage();
+
+  /// 닉네임 변경 - 성공 시 null, 실패 시 에러 메시지 반환
+  Future<String?> updateNickname(String nickname);
 }
 
 class MyRepositoryImpl implements MyRepository {
@@ -67,5 +70,29 @@ class MyRepositoryImpl implements MyRepository {
       AppUtil.debugLog('deleteProfileImage: $e');
     }
     return false;
+  }
+
+  @override
+  Future<String?> updateNickname(String nickname) async {
+    try {
+      var response = await _dio.patch(
+        '/my/nickname',
+        data: {'nickName': nickname},
+      );
+      var apiResponse = ApiResponse<void>.fromJson(response.dataOrNull, (_) {});
+      if (apiResponse.isSuccess) {
+        return null; // 성공
+      }
+      return apiResponse.message;
+    } on DioException catch (e) {
+      var data = e.response?.data;
+      if (data is Map<String, dynamic>) {
+        return data['message'] as String? ?? '닉네임 변경에 실패했습니다.';
+      }
+      AppUtil.debugLog('updateNickname: $e');
+    } catch (e) {
+      AppUtil.debugLog('updateNickname: $e');
+    }
+    return '닉네임 변경에 실패했습니다.';
   }
 }

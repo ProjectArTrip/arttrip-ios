@@ -56,5 +56,9 @@
   "changeProfileImage": "Change Profile Image",
   "pickFromGallery": "Choose from Gallery",
   "takePhoto": "Take Photo",
-  "deleteImage": "Delete Image"
+  "deleteImage": "Delete Image",
+  "changeNicknameTitle": "Change your nickname?",
+  "changeNicknamePlaceholder": "Enter nickname (max 10 chars)",
+  "changeNicknameButton": "Change",
+  "duplicateNicknameError": "This nickname is already taken."
 }

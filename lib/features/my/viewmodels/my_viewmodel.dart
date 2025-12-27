@@ -45,4 +45,13 @@ class MyViewModel with ChangeNotifier {
     }
     return result;
   }
+
+  /// 닉네임 변경 - 성공 시 null, 실패 시 에러 메시지 반환
+  Future<String?> updateNickname(String nickname) async {
+    var error = await _repository.updateNickname(nickname);
+    if (error == null) {
+      await fetchUserProfile();
+    }
+    return error;
+  }
 }

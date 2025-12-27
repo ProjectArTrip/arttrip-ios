@@ -23,4 +23,10 @@ class MyRepositoryMockImpl implements MyRepository {
     await Future.delayed(const Duration(milliseconds: 500));
     return true;
   }
+
+  @override
+  Future<String?> updateNickname(String nickname) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return null; // 성공
+  }
 }

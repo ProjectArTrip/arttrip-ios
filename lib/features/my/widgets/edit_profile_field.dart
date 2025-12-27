@@ -30,18 +30,26 @@ class EditProfileField extends StatelessWidget {
   }
 
   Widget _buildLabel() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ArtTripText.pretendard()
-            .body01Regular()
-            .color(AppColors.textPrimary)
-            .build()
-            .text(label),
-        SizedBox(width: 10.w),
-        if (showArrow)
-          SvgPicture.asset(AppAssets.icNoArrowRight, width: 24.w, height: 24.w),
-      ],
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ArtTripText.pretendard()
+              .body01Regular()
+              .color(AppColors.textPrimary)
+              .build()
+              .text(label),
+          SizedBox(width: 10.w),
+          if (showArrow)
+            SvgPicture.asset(
+              AppAssets.icNoArrowRight,
+              width: 24.w,
+              height: 24.w,
+            ),
+        ],
+      ),
     );
   }
 

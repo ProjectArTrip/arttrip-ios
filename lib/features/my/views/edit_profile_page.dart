@@ -7,6 +7,7 @@ import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
 import 'package:arttrip/features/my/widgets/edit_profile_field.dart';
 import 'package:arttrip/features/my/widgets/profile_image_bottom_sheet.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
+import 'package:arttrip/shared/widgets/app_input_dialog.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
@@ -45,10 +46,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(height: 16.h),
               _buildProfileImage(),
               SizedBox(height: 24.h),
-              EditProfileField(
-                label: context.l10n.nicknameLabel,
-                value: widget.profile.nickName ?? '',
-                showArrow: true,
+              Selector<MyViewModel, AsyncState<UserProfileModel>>(
+                selector: (_, vm) => vm.profileState,
+                builder: (context, state, _) {
+                  var nickname =
+                      state.data?.nickName ?? widget.profile.nickName ?? '';
+                  return EditProfileField(
+                    onTap: () => _onNicknameTap(nickname),
+                    label: context.l10n.nicknameLabel,
+                    value: nickname,
+                    showArrow: true,
+                  );
+                },
               ),
               SizedBox(height: 24.h),
               EditProfileField(
@@ -131,6 +140,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
         height: 18.w,
         child: SvgPicture.asset(AppAssets.icGroup),
       ),
+    );
+  }
+
+  Future<void> _onNicknameTap(String currentNickname) async {
+    await AppInputDialog.show(
+      context: context,
+      title: context.l10n.changeNicknameTitle,
+      hintText: context.l10n.changeNicknamePlaceholder,
+      cancelText: context.l10n.cancel,
+      confirmText: context.l10n.changeNicknameButton,
+      initialValue: currentNickname,
+      maxLength: 10,
+      validator: (value, initial) {
+        if (value == initial) return ''; // 같으면 버튼 비활성화 (에러 메시지는 표시 안함)
+        return null;
+      },
+      asyncValidator: (value) async {
+        return await context.read<MyViewModel>().updateNickname(value);
+      },
     );
   }
 
