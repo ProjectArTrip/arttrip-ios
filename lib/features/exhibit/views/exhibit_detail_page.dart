@@ -43,14 +43,6 @@ class _ExhibitDetailModelPageState extends State<ExhibitDetailModelPage>
     super.dispose();
   }
 
-  void _onTabChanged() {
-    if (!_tabController.indexIsChanging) {
-      setState(() {
-        _currentTabIndex = _tabController.index;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return InitWidget(
@@ -58,6 +50,7 @@ class _ExhibitDetailModelPageState extends State<ExhibitDetailModelPage>
         var vm = context.read<ExhibitDetailModelViewModel>();
         vm.fetchExhibitDetailModel(widget.exhibitId);
         vm.checkFavorite(widget.exhibitId);
+        vm.fetchExhibitReviewModels(widget.exhibitId);
       },
       child: Scaffold(
         backgroundColor: AppColors.gray0,
@@ -132,34 +125,37 @@ class _ExhibitDetailModelPageState extends State<ExhibitDetailModelPage>
                   topRight: Radius.circular(20.r),
                 ),
               ),
-              child: CustomScrollView(
-                controller: scrollController,
-                slivers: [
-                  // 제목/장소/기간 섹션
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(24.w, 20.h, 24.w, 24.h),
-                      child: ExhibitHeaderSection(
-                        title: exhibit.title,
-                        hallName: exhibit.hallName,
-                        exhibitPeriod: exhibit.exhibitPeriod,
-                        ticketUrl: exhibit.ticketUrl,
+              child: NotificationListener<ScrollNotification>(
+                onNotification: _onScrollNotification,
+                child: CustomScrollView(
+                  controller: scrollController,
+                  slivers: [
+                    // 제목/장소/기간 섹션
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(24.w, 20.h, 24.w, 24.h),
+                        child: ExhibitHeaderSection(
+                          title: exhibit.title,
+                          hallName: exhibit.hallName,
+                          exhibitPeriod: exhibit.exhibitPeriod,
+                          ticketUrl: exhibit.ticketUrl,
+                        ),
                       ),
                     ),
-                  ),
 
-                  // 탭바
-                  SliverToBoxAdapter(
-                    child: Container(
-                      color: AppColors.gray0,
-                      padding: EdgeInsets.symmetric(horizontal: 24.w),
-                      child: ExhibitTabBar(tabController: _tabController),
+                    // 탭바
+                    SliverToBoxAdapter(
+                      child: Container(
+                        color: AppColors.gray0,
+                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        child: ExhibitTabBar(tabController: _tabController),
+                      ),
                     ),
-                  ),
 
-                  // 탭 콘텐츠
-                  SliverToBoxAdapter(child: _buildTabContent(exhibit)),
-                ],
+                    // 탭 콘텐츠
+                    SliverToBoxAdapter(child: _buildTabContent(exhibit)),
+                  ],
+                ),
               ),
             );
           },
@@ -182,5 +178,25 @@ class _ExhibitDetailModelPageState extends State<ExhibitDetailModelPage>
       default:
         return const SizedBox.shrink();
     }
+  }
+
+  void _onTabChanged() {
+    if (!_tabController.indexIsChanging) {
+      setState(() {
+        _currentTabIndex = _tabController.index;
+      });
+    }
+  }
+
+  /// 리뷰 탭에서 스크롤 끝 도달 시 추가 리뷰 로드
+  bool _onScrollNotification(ScrollNotification notification) {
+    if (_currentTabIndex == 2 &&
+        notification.metrics.pixels >=
+            notification.metrics.maxScrollExtent - 100) {
+      context.read<ExhibitDetailModelViewModel>().fetchMoreReviews(
+        widget.exhibitId,
+      );
+    }
+    return false;
   }
 }

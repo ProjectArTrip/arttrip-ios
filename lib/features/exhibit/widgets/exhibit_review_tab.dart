@@ -31,18 +31,6 @@ class ExhibitReviewModelTabContent extends StatefulWidget {
 
 class _ExhibitReviewModelTabContentState
     extends State<ExhibitReviewModelTabContent> {
-  bool _hasShownPrompt = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ExhibitDetailModelViewModel>().fetchExhibitReviewModels(
-        widget.exhibitId,
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Selector<ExhibitDetailModelViewModel, int>(
@@ -51,10 +39,8 @@ class _ExhibitReviewModelTabContentState
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (totalCount > 0) ...[
-              _buildHeaderBox(context),
-              SizedBox(height: 16.h),
-            ],
+            _buildHeaderBox(context),
+            SizedBox(height: 16.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: _buildReviewContent(context),
@@ -127,6 +113,11 @@ class _ExhibitReviewModelTabContentState
   }
 
   Future<void> _onWriteReviewPressed(BuildContext context) async {
+    // 다이얼로그로 리뷰 작성 확인
+    var confirmed = await _showReviewPromptDialog(context);
+    if (confirmed != true || !context.mounted) return;
+
+    // 리뷰 작성 페이지로 이동
     var result = await Routes.modal<bool>(
       context,
       '/exhibit/write-review/${widget.exhibitId}',
@@ -156,7 +147,6 @@ class _ExhibitReviewModelTabContentState
           state: state,
           onData: (reviews) {
             if (reviews.isEmpty) {
-              _showReviewPromptIfNeeded(context);
               return _buildEmptyState(context);
             }
             return _buildReviewItems(context, reviews);
@@ -166,18 +156,8 @@ class _ExhibitReviewModelTabContentState
     );
   }
 
-  void _showReviewPromptIfNeeded(BuildContext context) {
-    if (_hasShownPrompt) return;
-    _hasShownPrompt = true;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!context.mounted) return;
-      _showReviewPromptDialog(context);
-    });
-  }
-
-  Future<void> _showReviewPromptDialog(BuildContext context) async {
-    var result = await AppConfirmDialog.show(
+  Future<bool?> _showReviewPromptDialog(BuildContext context) {
+    return AppConfirmDialog.show(
       context: context,
       title: context.l10n.reviewPromptTitle,
       content: Column(
@@ -204,10 +184,6 @@ class _ExhibitReviewModelTabContentState
       cancelText: context.l10n.cancel,
       confirmText: context.l10n.writeReviewButton,
     );
-
-    if (result == true && context.mounted) {
-      await _onWriteReviewPressed(context);
-    }
   }
 
   Widget _buildEmptyState(BuildContext context) {
