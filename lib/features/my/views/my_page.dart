@@ -41,10 +41,7 @@ class MyPage extends StatelessWidget {
           child: Column(
             children: [
               _buildProfileSection(context),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: const AppDivider(),
-              ),
+              const AppDivider(),
               SizedBox(height: 20.h),
               _buildMenuList(context),
             ],
@@ -65,7 +62,7 @@ class MyPage extends StatelessWidget {
               (profile) => MyProfileSection(
                 profile: profile,
                 onTap: () {
-                  // 프로필 상세 페이지 (추후 구현)
+                  Routes.push(context, '/my/edit-profile', extra: profile);
                 },
               ),
         );

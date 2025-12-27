@@ -68,5 +68,12 @@
   "myTasteAnalysis": "나의 취향 분석",
   "settings": "설정",
   "logout": "로그아웃",
-  "logoutConfirmMessage": "정말 로그아웃 하시겠습니까?"
+  "logoutConfirmMessage": "정말 로그아웃 하시겠습니까?",
+  "editProfileTitle": "내 정보 수정",
+  "nicknameLabel": "닉네임",
+  "emailLabel": "대표 이메일",
+  "changeProfileImage": "프로필 이미지 변경",
+  "pickFromGallery": "사진 가져오기",
+  "takePhoto": "사진 촬영",
+  "deleteImage": "이미지 삭제하기"
 }

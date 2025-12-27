@@ -49,5 +49,12 @@
   "myTasteAnalysis": "Taste Analysis",
   "settings": "Settings",
   "logout": "Logout",
-  "logoutConfirmMessage": "Are you sure you want to logout?"
+  "logoutConfirmMessage": "Are you sure you want to logout?",
+  "editProfileTitle": "Edit Profile",
+  "nicknameLabel": "Nickname",
+  "emailLabel": "Email",
+  "changeProfileImage": "Change Profile Image",
+  "pickFromGallery": "Choose from Gallery",
+  "takePhoto": "Take Photo",
+  "deleteImage": "Delete Image"
 }

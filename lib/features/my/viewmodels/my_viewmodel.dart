@@ -2,6 +2,7 @@ import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:arttrip/features/my/data/my_repository.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MyViewModel with ChangeNotifier {
   MyViewModel(this._repository);
@@ -27,5 +28,21 @@ class MyViewModel with ChangeNotifier {
     _profileState = const AsyncState.loading();
     notifyListeners();
     fetchUserProfile();
+  }
+
+  Future<bool> uploadProfileImage(XFile image) async {
+    var result = await _repository.uploadProfileImage(image);
+    if (result) {
+      await fetchUserProfile();
+    }
+    return result;
+  }
+
+  Future<bool> deleteProfileImage() async {
+    var result = await _repository.deleteProfileImage();
+    if (result) {
+      await fetchUserProfile();
+    }
+    return result;
   }
 }

@@ -3,6 +3,8 @@ import 'package:arttrip/features/exhibit/views/exhibit_detail_page.dart';
 import 'package:arttrip/features/exhibit/views/write_review_page.dart';
 import 'package:arttrip/features/home/regional_exhibits_page.dart';
 import 'package:arttrip/features/login/login_page.dart';
+import 'package:arttrip/features/my/data/models/user_profile_model.dart';
+import 'package:arttrip/features/my/views/edit_profile_page.dart';
 import 'package:arttrip/features/onboarding/views/keywords_page.dart';
 import 'package:arttrip/features/splash/views/splash_view.dart';
 import 'package:arttrip/routes/main_shell_route.dart';
@@ -94,6 +96,19 @@ final appRouter = GoRouter(
       path: '/alerts',
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const AlertsPage());
+      },
+    ),
+
+    // 내 정보 수정 페이지
+    GoRoute(
+      path: '/my/edit-profile',
+      pageBuilder: (context, state) {
+        var profile = state.extra as UserProfileModel;
+        return buildPage(
+          context,
+          state,
+          child: EditProfilePage(profile: profile),
+        );
       },
     ),
   ],
