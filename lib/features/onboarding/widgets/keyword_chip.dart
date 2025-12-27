@@ -30,9 +30,10 @@ class KeywordModelChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected ? _selectedBgColor : Colors.transparent,
           borderRadius: BorderRadius.circular(40.r),
-          border: isSelected
-              ? null
-              : Border.all(color: _unselectedBorderColor, width: 1),
+          border:
+              isSelected
+                  ? null
+                  : Border.all(color: _unselectedBorderColor, width: 1),
         ),
         alignment: Alignment.center,
         child: FittedBox(

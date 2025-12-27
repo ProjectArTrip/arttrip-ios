@@ -41,20 +41,21 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: vm.isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildHeader(),
-                    _buildDivider(),
-                    Expanded(child: _buildContent(vm)),
-                    _buildSubmitButton(vm),
-                  ],
+        child:
+            vm.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildHeader(),
+                      _buildDivider(),
+                      Expanded(child: _buildContent(vm)),
+                      _buildSubmitButton(vm),
+                    ],
+                  ),
                 ),
-              ),
       ),
     );
   }
@@ -139,13 +140,14 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
         Wrap(
           spacing: 8.w,
           runSpacing: 12.h,
-          children: keywords.map((keyword) {
-            return KeywordModelChip(
-              label: keyword.name,
-              isSelected: vm.isSelected(keyword.keywordId),
-              onTap: () => vm.toggleKeywordModel(keyword.keywordId),
-            );
-          }).toList(),
+          children:
+              keywords.map((keyword) {
+                return KeywordModelChip(
+                  label: keyword.name,
+                  isSelected: vm.isSelected(keyword.keywordId),
+                  onTap: () => vm.toggleKeywordModel(keyword.keywordId),
+                );
+              }).toList(),
         ),
       ],
     );
@@ -169,23 +171,24 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
             ),
             elevation: 0,
           ),
-          child: vm.isSaving
-              ? SizedBox(
-                  width: 24.w,
-                  height: 24.h,
-                  child: const CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 2,
+          child:
+              vm.isSaving
+                  ? SizedBox(
+                    width: 24.w,
+                    height: 24.h,
+                    child: const CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                  : Text(
+                    '완료',
+                    style: TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                )
-              : Text(
-                  '완료',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
         ),
       ),
     );

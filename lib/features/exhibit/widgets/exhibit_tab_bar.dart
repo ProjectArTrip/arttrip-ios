@@ -19,16 +19,18 @@ class ExhibitTabBar extends StatelessWidget {
         controller: tabController,
         labelColor: AppColors.primary300,
         unselectedLabelColor: AppColors.textTertiary,
-        labelStyle: ArtTripText.pretendard()
-            .body01Bold()
-            .color(AppColors.primary300)
-            .build()
-            .style(),
-        unselectedLabelStyle: ArtTripText.pretendard()
-            .body01Bold()
-            .color(AppColors.textTertiary)
-            .build()
-            .style(),
+        labelStyle:
+            ArtTripText.pretendard()
+                .body01Bold()
+                .color(AppColors.primary300)
+                .build()
+                .style(),
+        unselectedLabelStyle:
+            ArtTripText.pretendard()
+                .body01Bold()
+                .color(AppColors.textTertiary)
+                .build()
+                .style(),
         indicatorColor: AppColors.primary200,
         indicatorSize: TabBarIndicatorSize.tab,
         indicatorWeight: 2,

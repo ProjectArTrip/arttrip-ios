@@ -29,7 +29,8 @@ class ExhibitReviewModelTabContent extends StatefulWidget {
       _ExhibitReviewModelTabContentState();
 }
 
-class _ExhibitReviewModelTabContentState extends State<ExhibitReviewModelTabContent> {
+class _ExhibitReviewModelTabContentState
+    extends State<ExhibitReviewModelTabContent> {
   bool _hasShownPrompt = false;
 
   @override
@@ -138,14 +139,17 @@ class _ExhibitReviewModelTabContentState extends State<ExhibitReviewModelTabCont
 
     // 리뷰 등록 성공 시 목록 새로고침
     if (result == true && context.mounted) {
-      await context.read<ExhibitDetailModelViewModel>().fetchExhibitReviewModels(
-        widget.exhibitId,
-      );
+      await context
+          .read<ExhibitDetailModelViewModel>()
+          .fetchExhibitReviewModels(widget.exhibitId);
     }
   }
 
   Widget _buildReviewContent(BuildContext context) {
-    return Selector<ExhibitDetailModelViewModel, AsyncState<List<ExhibitReviewModel>>>(
+    return Selector<
+      ExhibitDetailModelViewModel,
+      AsyncState<List<ExhibitReviewModel>>
+    >(
       selector: (_, vm) => vm.reviewsState,
       builder: (context, state, _) {
         return AsyncView<List<ExhibitReviewModel>>(
@@ -219,7 +223,10 @@ class _ExhibitReviewModelTabContentState extends State<ExhibitReviewModelTabCont
     );
   }
 
-  Widget _buildReviewItems(BuildContext context, List<ExhibitReviewModel> reviews) {
+  Widget _buildReviewItems(
+    BuildContext context,
+    List<ExhibitReviewModel> reviews,
+  ) {
     return Selector<ExhibitDetailModelViewModel, bool>(
       selector: (_, vm) => vm.isLoadingMoreReviews,
       builder: (context, isLoadingMore, _) {

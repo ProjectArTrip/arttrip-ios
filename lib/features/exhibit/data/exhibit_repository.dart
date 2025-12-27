@@ -68,8 +68,9 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
       );
       var apiResponse = ApiResponse<ExhibitReviewListResponseModel>.fromJson(
         response.dataOrNull,
-        (obj) =>
-            ExhibitReviewListResponseModel.fromJson(obj as Map<String, dynamic>),
+        (obj) => ExhibitReviewListResponseModel.fromJson(
+          obj as Map<String, dynamic>,
+        ),
       );
       return apiResponse.result;
     } catch (e) {

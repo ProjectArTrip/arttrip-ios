@@ -13,7 +13,8 @@ class ExhibitDetailModelViewModel with ChangeNotifier {
   AsyncState<ExhibitDetailModel> get exhibitState => _exhibitState;
 
   // 리뷰 목록 상태
-  AsyncState<List<ExhibitReviewModel>> _reviewsState = const AsyncState.loading();
+  AsyncState<List<ExhibitReviewModel>> _reviewsState =
+      const AsyncState.loading();
   AsyncState<List<ExhibitReviewModel>> get reviewsState => _reviewsState;
 
   // 리뷰 페이지네이션 상태

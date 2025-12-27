@@ -17,7 +17,9 @@ class KeywordModelsRepositoryImpl implements KeywordModelsRepository {
     try {
       var response = await _dio.get('/auth/allkeywords');
       var model = BaseResultModel.fromJson(response.dataOrNull);
-      return model.result.map<KeywordModel>((e) => KeywordModel.fromJson(e)).toList();
+      return model.result
+          .map<KeywordModel>((e) => KeywordModel.fromJson(e))
+          .toList();
     } catch (e) {
       AppUtil.debugLog('fetchAllKeywordModels: $e');
     }

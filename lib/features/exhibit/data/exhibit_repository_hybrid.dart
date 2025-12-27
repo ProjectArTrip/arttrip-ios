@@ -27,7 +27,11 @@ class ExhibitRepositoryHybrid implements ExhibitRepository {
     int size = 10,
   }) {
     if (AppConsts.useMock) {
-      return mock.fetchExhibitReviewModels(exhibitId, cursor: cursor, size: size);
+      return mock.fetchExhibitReviewModels(
+        exhibitId,
+        cursor: cursor,
+        size: size,
+      );
     }
     return api.fetchExhibitReviewModels(exhibitId, cursor: cursor, size: size);
   }

@@ -24,7 +24,8 @@ abstract class ExhibitReviewModel with _$ExhibitReviewModel {
 ///
 /// /reviews/{exhibitId}/detail 응답의 result 필드
 @freezed
-abstract class ExhibitReviewListResponseModel with _$ExhibitReviewListResponseModel {
+abstract class ExhibitReviewListResponseModel
+    with _$ExhibitReviewListResponseModel {
   const ExhibitReviewListResponseModel._();
 
   factory ExhibitReviewListResponseModel({

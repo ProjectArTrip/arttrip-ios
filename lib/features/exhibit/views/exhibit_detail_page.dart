@@ -85,7 +85,10 @@ class _ExhibitDetailModelPageState extends State<ExhibitDetailModelPage>
             ),
           ],
         ),
-        body: Selector<ExhibitDetailModelViewModel, AsyncState<ExhibitDetailModel>>(
+        body: Selector<
+          ExhibitDetailModelViewModel,
+          AsyncState<ExhibitDetailModel>
+        >(
           selector: (_, vm) => vm.exhibitState,
           builder: (context, state, _) {
             return AsyncView<ExhibitDetailModel>(
@@ -155,9 +158,7 @@ class _ExhibitDetailModelPageState extends State<ExhibitDetailModelPage>
                   ),
 
                   // 탭 콘텐츠
-                  SliverToBoxAdapter(
-                    child: _buildTabContent(exhibit),
-                  ),
+                  SliverToBoxAdapter(child: _buildTabContent(exhibit)),
                 ],
               ),
             );
