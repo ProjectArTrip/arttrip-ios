@@ -12,12 +12,14 @@ class MyMenuItem extends StatelessWidget {
     required this.onTap,
     this.textColor,
     this.showArrow = true,
+    this.trailing,
   });
 
   final String title;
   final VoidCallback onTap;
   final Color? textColor;
   final bool showArrow;
+  final String? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,12 @@ class MyMenuItem extends StatelessWidget {
                   .build()
                   .text(title),
             ),
+            if (trailing != null)
+              ArtTripText.pretendard()
+                  .body01Bold()
+                  .color(AppColors.textPrimary)
+                  .build()
+                  .text(trailing!),
             if (showArrow)
               SvgPicture.asset(
                 AppAssets.icNoArrowRight,

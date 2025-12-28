@@ -111,9 +111,7 @@ class MyPage extends StatelessWidget {
         SizedBox(height: 24.h),
         MyMenuItem(
           title: context.l10n.settings,
-          onTap: () {
-            // 설정 (추후 구현)
-          },
+          onTap: () => Routes.push(context, '/my/settings'),
         ),
         SizedBox(height: 24.h),
         MyMenuItem(

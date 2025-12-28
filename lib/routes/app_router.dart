@@ -5,12 +5,14 @@ import 'package:arttrip/features/home/regional_exhibits_page.dart';
 import 'package:arttrip/features/login/login_page.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:arttrip/features/my/views/edit_profile_page.dart';
+import 'package:arttrip/features/my/views/settings_page.dart';
 import 'package:arttrip/features/onboarding/views/keywords_page.dart';
 import 'package:arttrip/features/splash/views/splash_view.dart';
 import 'package:arttrip/routes/main_shell_route.dart';
 import 'package:arttrip/routes/route_builder.dart';
 import 'package:arttrip/routes/route_params.dart';
 import 'package:arttrip/shared/pages/alerts_page.dart';
+import 'package:arttrip/shared/pages/webview_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -108,6 +110,27 @@ final appRouter = GoRouter(
           context,
           state,
           child: EditProfilePage(profile: profile),
+        );
+      },
+    ),
+
+    // 설정 페이지
+    GoRoute(
+      path: '/my/settings',
+      pageBuilder: (context, state) {
+        return buildPage(context, state, child: const SettingsPage());
+      },
+    ),
+
+    // WebView 페이지 (개인정보 처리방침, 서비스 이용약관 등)
+    GoRoute(
+      path: '/webview',
+      pageBuilder: (context, state) {
+        var params = state.extra as WebViewParams;
+        return buildPage(
+          context,
+          state,
+          child: WebViewPage(title: params.title, url: params.url),
         );
       },
     ),

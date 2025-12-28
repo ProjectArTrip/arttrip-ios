@@ -60,5 +60,18 @@
   "changeNicknameTitle": "Change your nickname?",
   "changeNicknamePlaceholder": "Enter nickname (max 10 chars)",
   "changeNicknameButton": "Change",
-  "duplicateNicknameError": "This nickname is already taken."
+  "duplicateNicknameError": "This nickname is already taken.",
+  "settingsTitle": "Settings",
+  "permissionSettings": "Permission Settings",
+  "notificationSettings": "Notification Settings",
+  "arttripInfo": "ArtTrip Info",
+  "notices": "Notices",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "appVersion": "App Version",
+  "deleteAccount": "Delete Account",
+  "deleteAccountTitle": "Delete Account",
+  "deleteAccountContent": "When you leave ArtTrip, your data\n(favorites, reviews, stamps, etc.)\nwill be permanently deleted.",
+  "deleteAccountQuestion": "Do you want to proceed?",
+  "deleteAccountButton": "Delete"
 }
