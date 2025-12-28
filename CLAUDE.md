@@ -366,6 +366,24 @@ GoRoute(
 - 복잡한 객체: extra로 전달
 - 모달 결과: 제네릭 타입으로 반환값 지정 (`Routes.modal<bool>`)
 
+### 라우트 파라미터 모델
+
+**라우트 전달용 파라미터 클래스는 `route_params.dart`에 정의**
+
+```dart
+// lib/routes/route_params.dart
+class WebViewParams {
+  const WebViewParams({required this.title, required this.url});
+
+  final String title;
+  final String url;
+}
+```
+
+**위치 규칙**:
+- 라우트 전달용 파라미터: `lib/routes/route_params.dart`
+- 일반 데이터 모델: `lib/features/{feature}/data/models/`
+
 ## UI 패턴
 
 ### 조건부 표시
