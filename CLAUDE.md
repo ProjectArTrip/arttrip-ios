@@ -16,10 +16,10 @@ lib/
 │   └── network/                 # API/네트워크 관련
 │
 ├── features/{feature}/          # 기능별 모듈
-│   ├── view/                    # 페이지 (라우팅 대상)
-│   ├── views/                   # 페이지 내 독립적인 섹션 뷰
+│   ├── views/                   # 페이지 및 섹션 뷰
 │   ├── widgets/                 # 재사용 가능한 위젯
-│   ├── viewmodel/               # ViewModel (상태 관리)
+│   ├── viewmodels/              # ViewModel (상태 관리)
+│   ├── services/                # 서비스 (비즈니스 로직)
 │   └── data/
 │       ├── models/              # 데이터 모델
 │       ├── *_repository.dart    # Repository
@@ -27,6 +27,8 @@ lib/
 │
 ├── shared/                      # 공통 컴포넌트
 │   ├── widgets/                 # 공용 위젯 (AsyncView, etc.)
+│   ├── viewmodels/              # 공용 ViewModel
+│   ├── pages/                   # 공용 페이지
 │   ├── models/                  # 공용 모델
 │   └── utils/                   # 유틸리티 (ArtTripText, etc.)
 │
@@ -38,12 +40,51 @@ lib/
 
 | 폴더 | 용도 | 예시 |
 |------|------|------|
-| `view/` | 라우팅되는 전체 페이지 | `exhibit_detail_page.dart` |
-| `views/` | 페이지 내 독립적인 섹션 | `weekly_exhibition_schedule_view.dart` |
+| `views/` | 페이지 및 섹션 뷰 | `exhibit_detail_page.dart`, `splash_view.dart` |
 | `widgets/` | 재사용 가능한 작은 위젯 | `exhibit_header_section.dart` |
 | `widgets/{기능명}/` | 특정 기능 관련 위젯 그룹 | `widgets/write_review/` |
+| `viewmodels/` | ViewModel (상태 관리) | `exhibit_detail_viewmodel.dart` |
+| `services/` | 서비스 (비즈니스 로직) | `auth_service.dart`, `token_storage_service.dart` |
+| `models/` | 데이터 모델 | `exhibit_detail.dart` |
+
+**폴더 네이밍 규칙**: 여러 파일을 담는 폴더는 **복수형** 사용 (`views/`, `widgets/`, `viewmodels/`, `services/`, `models/`)
 
 ## 코딩 스타일
+
+### StatefulWidget 메서드 순서
+
+**라이프사이클 메서드 먼저, 커스텀 메서드는 build 아래**
+
+```dart
+class _MyPageState extends State<MyPage> {
+  // 1. 멤버 변수
+  late TabController _tabController;
+
+  // 2. initState
+  @override
+  void initState() { ... }
+
+  // 3. dispose
+  @override
+  void dispose() { ... }
+
+  // 4. build
+  @override
+  Widget build(BuildContext context) { ... }
+
+  // 5. 커스텀 메서드들
+  Widget _buildContent() { ... }
+  void _onTabChanged() { ... }
+}
+```
+
+### 코드 포맷팅
+
+**코드 작성 후 항상 `dart format .` 실행**
+
+```bash
+dart format .
+```
 
 ### 색상
 
@@ -325,6 +366,24 @@ GoRoute(
 - 복잡한 객체: extra로 전달
 - 모달 결과: 제네릭 타입으로 반환값 지정 (`Routes.modal<bool>`)
 
+### 라우트 파라미터 모델
+
+**라우트 전달용 파라미터 클래스는 `route_params.dart`에 정의**
+
+```dart
+// lib/routes/route_params.dart
+class WebViewParams {
+  const WebViewParams({required this.title, required this.url});
+
+  final String title;
+  final String url;
+}
+```
+
+**위치 규칙**:
+- 라우트 전달용 파라미터: `lib/routes/route_params.dart`
+- 일반 데이터 모델: `lib/features/{feature}/data/models/`
+
 ## UI 패턴
 
 ### 조건부 표시
@@ -455,6 +514,189 @@ Future<Result?> createWithFiles({
 - JSON 필드에 `contentType: DioMediaType.parse('application/json')` 필수
 - 파일 리스트가 빈 배열이면 파일 없이 요청됨 (선택적 파일 업로드)
 
+## 버튼 구현 패턴
+
+**GestureDetector + Container 사용 (OutlinedButton/ElevatedButton 사용 금지)**
+
+```dart
+// Good - GestureDetector + Container
+GestureDetector(
+  onTap: () => Navigator.of(context).pop(),
+  child: Container(
+    height: 48.h,
+    decoration: BoxDecoration(
+      color: AppColors.gray0,
+      border: Border.all(color: const Color(0xFFDBDBDB)),
+      borderRadius: BorderRadius.circular(12.r),
+    ),
+    alignment: Alignment.center,
+    child: ArtTripText.pretendard()
+        .body01Bold()
+        .color(AppColors.textPrimary)
+        .build()
+        .text('취소'),
+  ),
+)
+
+// Bad - OutlinedButton/ElevatedButton
+OutlinedButton(
+  onPressed: () => Navigator.of(context).pop(),
+  child: Text('취소'),
+)
+```
+
+**비활성화 상태 처리**:
+- `onTap: _canConfirm ? _onPressed : null`
+- 배경색 조건부 변경: `color: _canConfirm ? AppColors.primary300 : AppColors.primary100`
+
+## 다이얼로그 패턴
+
+### 공용 다이얼로그
+
+| 위젯 | 용도 | 파일 |
+|------|------|------|
+| `AppConfirmDialog` | 확인/취소 다이얼로그 | `shared/widgets/app_confirm_dialog.dart` |
+| `AppInputDialog` | 입력 + 검증 다이얼로그 | `shared/widgets/app_input_dialog.dart` |
+
+### 다이얼로그 구조
+
+**static show() 헬퍼 메서드 패턴**
+
+```dart
+class AppInputDialog extends StatefulWidget {
+  // ...
+
+  /// 다이얼로그 표시 헬퍼 메서드
+  static Future<String?> show({
+    required BuildContext context,
+    required String title,
+    // ...
+  }) {
+    return showDialog<String>(
+      context: context,
+      builder: (context) => AppInputDialog(...),
+    );
+  }
+}
+
+// 사용
+var result = await AppInputDialog.show(
+  context: context,
+  title: context.l10n.changeNicknameTitle,
+  // ...
+);
+```
+
+### 입력 다이얼로그 검증 패턴
+
+```dart
+AppInputDialog.show(
+  context: context,
+  title: context.l10n.changeNicknameTitle,
+  hintText: context.l10n.changeNicknamePlaceholder,
+  cancelText: context.l10n.cancel,
+  confirmText: context.l10n.changeNicknameButton,
+  initialValue: currentNickname,
+  maxLength: 10,
+  // 동기 검증 - 빈 문자열 반환 시 버튼만 비활성화 (에러 메시지 없음)
+  validator: (value, initial) {
+    if (value == initial) return '';  // 기존값과 같으면 변경 불가
+    return null;  // 유효
+  },
+  // 비동기 검증 - API 호출
+  asyncValidator: (value) async {
+    return await context.read<MyViewModel>().updateNickname(value);
+  },
+);
+```
+
+## Repository 에러 처리 패턴
+
+### 에러 메시지 반환 패턴
+
+**API 호출 결과를 에러 메시지로 반환하는 경우**
+
+```dart
+/// 닉네임 변경 - 성공 시 null, 실패 시 에러 메시지 반환
+Future<String?> updateNickname(String nickname) async {
+  try {
+    var response = await _dio.patch('/my/nickname', data: {'nickName': nickname});
+    var apiResponse = ApiResponse<void>.fromJson(response.dataOrNull, (_) {});
+    if (apiResponse.isSuccess) {
+      return null;  // 성공
+    }
+    return apiResponse.message;  // 서버 에러 메시지
+  } on DioException catch (e) {
+    // HTTP 에러 (400, 409 등)에서 메시지 추출
+    var data = e.response?.data;
+    if (data is Map<String, dynamic>) {
+      return data['message'] as String? ?? '기본 에러 메시지';
+    }
+    AppUtil.debugLog('updateNickname: $e');
+  } catch (e) {
+    AppUtil.debugLog('updateNickname: $e');
+  }
+  return '기본 에러 메시지';
+}
+```
+
+**반환값 규칙**:
+- `null` 반환 = 성공
+- `String` 반환 = 실패 (에러 메시지)
+
+### ViewModel에서 사용
+
+```dart
+/// 닉네임 변경 - 성공 시 null, 실패 시 에러 메시지 반환
+Future<String?> updateNickname(String nickname) async {
+  var error = await _repository.updateNickname(nickname);
+  if (error == null) {
+    await fetchUserProfile();  // 성공 시 데이터 새로고침
+  }
+  return error;
+}
+```
+
+## 바텀시트 패턴
+
+### 공용 함수 형태
+
+```dart
+// profile_image_bottom_sheet.dart
+enum ProfileImageAction { gallery, camera, delete }
+
+Future<ProfileImageAction?> showProfileImageBottomSheet(BuildContext context) {
+  return showModalBottomSheet<ProfileImageAction>(
+    context: context,
+    // ...
+  );
+}
+
+// 사용
+var action = await showProfileImageBottomSheet(context);
+if (action == null) return;
+
+switch (action) {
+  case ProfileImageAction.gallery:
+    await _pickImageFromGallery();
+    break;
+  // ...
+}
+```
+
+## 파일 네이밍 규칙
+
+| 유형 | 패턴 | 예시 |
+|------|------|------|
+| 페이지 | `*_page.dart` | `edit_profile_page.dart` |
+| 위젯 | `*_widget.dart` 또는 기능명 | `edit_profile_field.dart` |
+| 다이얼로그 | `*_dialog.dart` | `app_input_dialog.dart` |
+| 바텀시트 | `*_bottom_sheet.dart` | `profile_image_bottom_sheet.dart` |
+| ViewModel | `*_viewmodel.dart` | `my_viewmodel.dart` |
+| Repository | `*_repository.dart` | `my_repository.dart` |
+| Repository Mock | `*_repository_mock.dart` | `my_repository_mock.dart` |
+| 모델 | `*_model.dart` | `user_profile_model.dart` |
+
 ## 주의사항
 
 1. **CLAUDE.md 업데이트 필수**: 프로젝트 구조, 패턴, 규칙 변경 시 이 문서 업데이트
@@ -462,3 +704,4 @@ Future<Result?> createWithFiles({
 3. **Lint 준수**: `flutter analyze` 통과 확인
 4. **코드 생성 파일 수정 금지**: `.freezed.dart`, `.g.dart` 파일 직접 수정 금지
 5. **기존 위젯 수정 주의**: 다른 곳에서 사용 중인 위젯 수정 시, 영향 범위 확인 후 필요시 새 위젯 생성
+6. **AI 관련 언급 금지**: 커밋 메시지, PR, 문서에서 Claude, AI, 자동 생성 등 AI 도움을 받은 느낌의 문구 사용 금지. 개발자가 직접 작성한 것처럼 자연스럽게 작성

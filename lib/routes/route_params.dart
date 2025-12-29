@@ -21,3 +21,11 @@ class _NullConverter extends Converter<Object?, Object?> {
   @override
   Object? convert(Object? input) => null;
 }
+
+/// WebView 페이지 파라미터
+class WebViewParams {
+  const WebViewParams({required this.title, required this.url});
+
+  final String title;
+  final String url;
+}

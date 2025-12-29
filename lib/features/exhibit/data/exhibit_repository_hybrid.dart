@@ -1,7 +1,7 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_review.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
 import 'package:arttrip/features/exhibit/data/models/favorite_check_result.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,23 +13,27 @@ class ExhibitRepositoryHybrid implements ExhibitRepository {
   final ExhibitRepositoryImpl api;
 
   @override
-  Future<ExhibitDetail?> fetchExhibitDetail(int exhibitId) {
+  Future<ExhibitDetailModel?> fetchExhibitDetailModel(int exhibitId) {
     if (AppConsts.useMock) {
-      return mock.fetchExhibitDetail(exhibitId);
+      return mock.fetchExhibitDetailModel(exhibitId);
     }
-    return api.fetchExhibitDetail(exhibitId);
+    return api.fetchExhibitDetailModel(exhibitId);
   }
 
   @override
-  Future<ExhibitReviewListResponse?> fetchExhibitReviews(
+  Future<ExhibitReviewListResponseModel?> fetchExhibitReviewModels(
     int exhibitId, {
     String? cursor,
     int size = 10,
   }) {
     if (AppConsts.useMock) {
-      return mock.fetchExhibitReviews(exhibitId, cursor: cursor, size: size);
+      return mock.fetchExhibitReviewModels(
+        exhibitId,
+        cursor: cursor,
+        size: size,
+      );
     }
-    return api.fetchExhibitReviews(exhibitId, cursor: cursor, size: size);
+    return api.fetchExhibitReviewModels(exhibitId, cursor: cursor, size: size);
   }
 
   @override

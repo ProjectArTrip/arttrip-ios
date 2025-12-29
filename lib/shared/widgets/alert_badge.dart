@@ -7,16 +7,17 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class AlertBadge extends StatelessWidget {
-  const AlertBadge({super.key, this.isUnread});
+  const AlertBadge({super.key, this.isUnread, required this.path});
 
   final bool? isUnread;
+  final String path;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap:
           isUnread == null
-              ? () => Routes.push(context, '/alerts').then((_) {
+              ? () => Routes.push(context, path).then((_) {
                 if (context.mounted) {
                   Provider.of<AlertViewModel>(context, listen: false)
                       .unreadCount = 0;
