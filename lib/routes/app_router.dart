@@ -1,14 +1,18 @@
 import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
-import 'package:arttrip/features/exhibit/view/exhibit_detail_page.dart';
-import 'package:arttrip/features/exhibit/view/write_review_page.dart';
+import 'package:arttrip/features/exhibit/views/exhibit_detail_page.dart';
+import 'package:arttrip/features/exhibit/views/write_review_page.dart';
 import 'package:arttrip/features/home/regional_exhibits_page.dart';
 import 'package:arttrip/features/login/login_page.dart';
-import 'package:arttrip/features/onboarding/view/keywords_page.dart';
-import 'package:arttrip/features/splash/view/splash_view.dart';
+import 'package:arttrip/features/my/data/models/user_profile_model.dart';
+import 'package:arttrip/features/my/views/edit_profile_page.dart';
+import 'package:arttrip/features/my/views/settings_page.dart';
+import 'package:arttrip/features/onboarding/views/keywords_page.dart';
+import 'package:arttrip/features/splash/views/splash_view.dart';
 import 'package:arttrip/routes/main_shell_route.dart';
 import 'package:arttrip/routes/route_builder.dart';
 import 'package:arttrip/routes/route_params.dart';
 import 'package:arttrip/shared/pages/alerts_page.dart';
+import 'package:arttrip/shared/pages/webview_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -45,7 +49,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/onboarding/keywords',
       pageBuilder: (context, state) {
-        return buildPage(context, state, child: const KeywordsPage());
+        return buildPage(context, state, child: const KeywordModelsPage());
       },
     ),
 
@@ -71,7 +75,7 @@ final appRouter = GoRouter(
         return buildPage(
           context,
           state,
-          child: ExhibitDetailPage(exhibitId: id),
+          child: ExhibitDetailModelPage(exhibitId: id),
         );
       },
     ),
@@ -94,6 +98,40 @@ final appRouter = GoRouter(
       path: '/alerts',
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const AlertsPage());
+      },
+    ),
+
+    // 내 정보 수정 페이지
+    GoRoute(
+      path: '/my/edit-profile',
+      pageBuilder: (context, state) {
+        var profile = state.extra as UserProfileModel;
+        return buildPage(
+          context,
+          state,
+          child: EditProfilePage(profile: profile),
+        );
+      },
+    ),
+
+    // 설정 페이지
+    GoRoute(
+      path: '/my/settings',
+      pageBuilder: (context, state) {
+        return buildPage(context, state, child: const SettingsPage());
+      },
+    ),
+
+    // WebView 페이지 (개인정보 처리방침, 서비스 이용약관 등)
+    GoRoute(
+      path: '/webview',
+      pageBuilder: (context, state) {
+        var params = state.extra as WebViewParams;
+        return buildPage(
+          context,
+          state,
+          child: WebViewPage(title: params.title, url: params.url),
+        );
       },
     ),
   ],

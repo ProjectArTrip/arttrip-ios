@@ -24,10 +24,8 @@ abstract class ReviewCreateResult with _$ReviewCreateResult {
 /// 리뷰 이미지 모델
 @freezed
 abstract class ReviewImage with _$ReviewImage {
-  const factory ReviewImage({
-    required int id,
-    required String url,
-  }) = _ReviewImage;
+  const factory ReviewImage({required int id, required String url}) =
+      _ReviewImage;
 
   factory ReviewImage.fromJson(Map<String, dynamic> json) =>
       _$ReviewImageFromJson(json);

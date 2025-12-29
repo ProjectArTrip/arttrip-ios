@@ -1,7 +1,7 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_review.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
 import 'package:arttrip/features/exhibit/data/models/favorite_check_result.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,12 +13,12 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
   final Set<int> _favorites = {};
 
   @override
-  Future<ExhibitDetail?> fetchExhibitDetail(int exhibitId) async {
+  Future<ExhibitDetailModel?> fetchExhibitDetailModel(int exhibitId) async {
     await Future.delayed(
       const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
     );
 
-    return ExhibitDetail(
+    return ExhibitDetailModel(
       exhibitId: exhibitId,
       title: '메이지·다이쇼 시대 예술의 장식적 취향을 통해 본 아르누보와 그 주변 환경',
       description:
@@ -33,11 +33,13 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
       hallAddress: '서울 강남구 역삼로 000 10층',
       hallOpeningHours: 'AM 10:30 - PM 19:00',
       hallPhone: '000 - 123 - 1234',
+      hallLatitude: 48.8606, // 루브르 박물관 테스트 좌표
+      hallLongitude: 2.3376,
     );
   }
 
   @override
-  Future<ExhibitReviewListResponse?> fetchExhibitReviews(
+  Future<ExhibitReviewListResponseModel?> fetchExhibitReviewModels(
     int exhibitId, {
     String? cursor,
     int size = 10,
@@ -47,7 +49,7 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
     var startIndex = cursor != null ? int.parse(cursor) : 0;
     var mockReviews = List.generate(
       size,
-      (index) => ExhibitReview(
+      (index) => ExhibitReviewModel(
         reviewId: startIndex + index + 1,
         visitDate: '2025-08-30',
         content: '감성적인거 좋아하는 사람들 추천합니다 :)',
@@ -62,7 +64,7 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
     var nextIndex = startIndex + size;
     var hasNext = nextIndex < 30;
 
-    return ExhibitReviewListResponse(
+    return ExhibitReviewListResponseModel(
       reviews: mockReviews,
       nextCursor: hasNext ? nextIndex.toString() : null,
       hasNext: hasNext,

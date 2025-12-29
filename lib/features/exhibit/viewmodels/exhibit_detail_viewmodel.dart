@@ -1,20 +1,21 @@
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_review.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:flutter/foundation.dart';
 
-class ExhibitDetailViewModel with ChangeNotifier {
-  ExhibitDetailViewModel(this._repository);
+class ExhibitDetailModelViewModel with ChangeNotifier {
+  ExhibitDetailModelViewModel(this._repository);
   final ExhibitRepository _repository;
 
   // 전시 상세 상태
-  AsyncState<ExhibitDetail> _exhibitState = const AsyncState.loading();
-  AsyncState<ExhibitDetail> get exhibitState => _exhibitState;
+  AsyncState<ExhibitDetailModel> _exhibitState = const AsyncState.loading();
+  AsyncState<ExhibitDetailModel> get exhibitState => _exhibitState;
 
   // 리뷰 목록 상태
-  AsyncState<List<ExhibitReview>> _reviewsState = const AsyncState.loading();
-  AsyncState<List<ExhibitReview>> get reviewsState => _reviewsState;
+  AsyncState<List<ExhibitReviewModel>> _reviewsState =
+      const AsyncState.loading();
+  AsyncState<List<ExhibitReviewModel>> get reviewsState => _reviewsState;
 
   // 리뷰 페이지네이션 상태
   String? _nextCursor;
@@ -34,14 +35,14 @@ class ExhibitDetailViewModel with ChangeNotifier {
   bool get isFavoriteLoading => _isFavoriteLoading;
 
   /// 전시 상세 정보 로드
-  Future<void> fetchExhibitDetail(int exhibitId) async {
+  Future<void> fetchExhibitDetailModel(int exhibitId) async {
     _exhibitState = const AsyncState.loading();
     // 이전 전시의 리뷰 데이터 초기화
     _reviewsState = const AsyncState.loading();
     _reviewTotalCount = 0;
     notifyListeners();
 
-    var exhibit = await _repository.fetchExhibitDetail(exhibitId);
+    var exhibit = await _repository.fetchExhibitDetailModel(exhibitId);
     if (exhibit != null) {
       _exhibitState = AsyncState.success(exhibit);
     } else {
@@ -52,13 +53,13 @@ class ExhibitDetailViewModel with ChangeNotifier {
   }
 
   /// 리뷰 목록 로드 (초기)
-  Future<void> fetchExhibitReviews(int exhibitId) async {
+  Future<void> fetchExhibitReviewModels(int exhibitId) async {
     _reviewsState = const AsyncState.loading();
     _nextCursor = null;
     _hasNextReview = true;
     notifyListeners();
 
-    var response = await _repository.fetchExhibitReviews(exhibitId);
+    var response = await _repository.fetchExhibitReviewModels(exhibitId);
     if (response != null) {
       _reviewsState = AsyncState.success(response.reviews);
       _nextCursor = response.nextCursor;
@@ -78,7 +79,7 @@ class ExhibitDetailViewModel with ChangeNotifier {
     _isLoadingMore = true;
     notifyListeners();
 
-    var response = await _repository.fetchExhibitReviews(
+    var response = await _repository.fetchExhibitReviewModels(
       exhibitId,
       cursor: _nextCursor,
     );

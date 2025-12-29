@@ -63,18 +63,16 @@ class AppConfirmDialog extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: SizedBox(
-                    height: 48.h,
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: AppColors.gray0,
-                        foregroundColor: AppColors.textPrimary,
-                        side: const BorderSide(color: Color(0xFFDBDBDB)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(false),
+                    child: Container(
+                      height: 48.h,
+                      decoration: BoxDecoration(
+                        color: AppColors.gray0,
+                        border: Border.all(color: const Color(0xFFDBDBDB)),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
+                      alignment: Alignment.center,
                       child: ArtTripText.pretendard()
                           .body01Bold()
                           .color(AppColors.textPrimary)
@@ -85,17 +83,15 @@ class AppConfirmDialog extends StatelessWidget {
                 ),
                 SizedBox(width: 12.w),
                 Expanded(
-                  child: SizedBox(
-                    height: 48.h,
-                    child: ElevatedButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary300,
-                        foregroundColor: AppColors.gray0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(true),
+                    child: Container(
+                      height: 48.h,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary300,
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
+                      alignment: Alignment.center,
                       child: ArtTripText.pretendard()
                           .body01Bold()
                           .color(AppColors.gray0)

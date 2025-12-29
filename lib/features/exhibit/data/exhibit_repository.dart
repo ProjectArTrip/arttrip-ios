@@ -4,8 +4,8 @@ import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/api_result.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/core/network/models/api_response.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_detail.dart';
-import 'package:arttrip/features/exhibit/data/models/exhibit_review.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
 import 'package:arttrip/features/exhibit/data/models/favorite_check_result.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
 import 'package:arttrip/shared/models/base_result_model.dart';
@@ -13,8 +13,8 @@ import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 
 abstract class ExhibitRepository {
-  Future<ExhibitDetail?> fetchExhibitDetail(int exhibitId);
-  Future<ExhibitReviewListResponse?> fetchExhibitReviews(
+  Future<ExhibitDetailModel?> fetchExhibitDetailModel(int exhibitId);
+  Future<ExhibitReviewListResponseModel?> fetchExhibitReviewModels(
     int exhibitId, {
     String? cursor,
     int size = 10,
@@ -36,22 +36,22 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   final DioClient _dio;
 
   @override
-  Future<ExhibitDetail?> fetchExhibitDetail(int exhibitId) async {
+  Future<ExhibitDetailModel?> fetchExhibitDetailModel(int exhibitId) async {
     try {
       var response = await _dio.get('/exhibit/$exhibitId');
-      var apiResponse = ApiResponse<ExhibitDetail>.fromJson(
+      var apiResponse = ApiResponse<ExhibitDetailModel>.fromJson(
         response.dataOrNull,
-        (obj) => ExhibitDetail.fromJson(obj as Map<String, dynamic>),
+        (obj) => ExhibitDetailModel.fromJson(obj as Map<String, dynamic>),
       );
       return apiResponse.result;
     } catch (e) {
-      AppUtil.debugLog('fetchExhibitDetail: $e');
+      AppUtil.debugLog('fetchExhibitDetailModel: $e');
     }
     return null;
   }
 
   @override
-  Future<ExhibitReviewListResponse?> fetchExhibitReviews(
+  Future<ExhibitReviewListResponseModel?> fetchExhibitReviewModels(
     int exhibitId, {
     String? cursor,
     int size = 10,
@@ -66,14 +66,15 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
         '/reviews/$exhibitId/detail',
         queryParameters: queryParams,
       );
-      var apiResponse = ApiResponse<ExhibitReviewListResponse>.fromJson(
+      var apiResponse = ApiResponse<ExhibitReviewListResponseModel>.fromJson(
         response.dataOrNull,
-        (obj) =>
-            ExhibitReviewListResponse.fromJson(obj as Map<String, dynamic>),
+        (obj) => ExhibitReviewListResponseModel.fromJson(
+          obj as Map<String, dynamic>,
+        ),
       );
       return apiResponse.result;
     } catch (e) {
-      AppUtil.debugLog('fetchExhibitReviews: $e');
+      AppUtil.debugLog('fetchExhibitReviewModels: $e');
     }
     return null;
   }

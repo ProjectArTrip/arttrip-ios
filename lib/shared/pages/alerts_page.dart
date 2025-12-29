@@ -38,7 +38,7 @@ class _AlertsPageState extends State<AlertsPage> {
                   children: [
                     Padding(
                       padding: EdgeInsetsGeometry.all(12.w),
-                      child: AlertBadge(isUnread: isUnread),
+                      child: AlertBadge(isUnread: isUnread, path: '/alerts'),
                     ),
                     Expanded(
                       child: Column(

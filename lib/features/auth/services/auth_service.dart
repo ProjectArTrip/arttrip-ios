@@ -1,6 +1,6 @@
 import 'package:arttrip/features/auth/data/auth_api_service.dart';
-import 'package:arttrip/features/auth/service/token_storage_service.dart';
-import 'package:arttrip/features/login/service/kakao_login_service.dart';
+import 'package:arttrip/features/auth/services/token_storage_service.dart';
+import 'package:arttrip/features/login/services/kakao_login_service.dart';
 import 'package:flutter/foundation.dart';
 
 /// 인증 결과

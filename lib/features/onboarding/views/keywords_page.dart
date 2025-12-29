@@ -1,5 +1,5 @@
-import 'package:arttrip/features/onboarding/data/models/keyword.dart';
-import 'package:arttrip/features/onboarding/viewmodel/keywords_viewmodel.dart';
+import 'package:arttrip/features/onboarding/data/models/keyword_model.dart';
+import 'package:arttrip/features/onboarding/viewmodels/keywords_viewmodel.dart';
 import 'package:arttrip/features/onboarding/widgets/keyword_chip.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/snackbar_utils.dart';
@@ -11,14 +11,14 @@ import 'package:provider/provider.dart';
 /// 관심 키워드 선택 페이지
 ///
 /// 신규 사용자(firstLogin: true)가 최초 로그인 시 이동하는 온보딩 화면
-class KeywordsPage extends StatefulWidget {
-  const KeywordsPage({super.key});
+class KeywordModelsPage extends StatefulWidget {
+  const KeywordModelsPage({super.key});
 
   @override
-  State<KeywordsPage> createState() => _KeywordsPageState();
+  State<KeywordModelsPage> createState() => _KeywordModelsPageState();
 }
 
-class _KeywordsPageState extends State<KeywordsPage> {
+class _KeywordModelsPageState extends State<KeywordModelsPage> {
   // 색상 상수
   static const _primaryColor = Color(0xFF7859FF);
   static const _textColor = Color(0xFF111111);
@@ -30,31 +30,32 @@ class _KeywordsPageState extends State<KeywordsPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<KeywordsViewModel>().fetchKeywords();
+      context.read<KeywordModelsViewModel>().fetchKeywordModels();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    var vm = context.watch<KeywordsViewModel>();
+    var vm = context.watch<KeywordModelsViewModel>();
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: vm.isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildHeader(),
-                    _buildDivider(),
-                    Expanded(child: _buildContent(vm)),
-                    _buildSubmitButton(vm),
-                  ],
+        child:
+            vm.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildHeader(),
+                      _buildDivider(),
+                      Expanded(child: _buildContent(vm)),
+                      _buildSubmitButton(vm),
+                    ],
+                  ),
                 ),
-              ),
       ),
     );
   }
@@ -85,7 +86,7 @@ class _KeywordsPageState extends State<KeywordsPage> {
     return const Divider(color: Color(0xFFDBDBDB), height: 1, thickness: 1);
   }
 
-  Widget _buildContent(KeywordsViewModel vm) {
+  Widget _buildContent(KeywordModelsViewModel vm) {
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(vertical: 24.h),
       child: Column(
@@ -105,8 +106,8 @@ class _KeywordsPageState extends State<KeywordsPage> {
 
   Widget _buildSection({
     required String title,
-    required List<Keyword> keywords,
-    required KeywordsViewModel vm,
+    required List<KeywordModel> keywords,
+    required KeywordModelsViewModel vm,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,19 +140,20 @@ class _KeywordsPageState extends State<KeywordsPage> {
         Wrap(
           spacing: 8.w,
           runSpacing: 12.h,
-          children: keywords.map((keyword) {
-            return KeywordChip(
-              label: keyword.name,
-              isSelected: vm.isSelected(keyword.keywordId),
-              onTap: () => vm.toggleKeyword(keyword.keywordId),
-            );
-          }).toList(),
+          children:
+              keywords.map((keyword) {
+                return KeywordModelChip(
+                  label: keyword.name,
+                  isSelected: vm.isSelected(keyword.keywordId),
+                  onTap: () => vm.toggleKeywordModel(keyword.keywordId),
+                );
+              }).toList(),
         ),
       ],
     );
   }
 
-  Widget _buildSubmitButton(KeywordsViewModel vm) {
+  Widget _buildSubmitButton(KeywordModelsViewModel vm) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.h),
       child: SizedBox(
@@ -169,23 +171,24 @@ class _KeywordsPageState extends State<KeywordsPage> {
             ),
             elevation: 0,
           ),
-          child: vm.isSaving
-              ? SizedBox(
-                  width: 24.w,
-                  height: 24.h,
-                  child: const CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 2,
+          child:
+              vm.isSaving
+                  ? SizedBox(
+                    width: 24.w,
+                    height: 24.h,
+                    child: const CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                  : Text(
+                    '완료',
+                    style: TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                )
-              : Text(
-                  '완료',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
         ),
       ),
     );
@@ -193,8 +196,8 @@ class _KeywordsPageState extends State<KeywordsPage> {
 
   // ===== Methods =====
 
-  Future<void> _handleSubmit(KeywordsViewModel vm) async {
-    var success = await vm.saveKeywords();
+  Future<void> _handleSubmit(KeywordModelsViewModel vm) async {
+    var success = await vm.saveKeywordModels();
 
     if (success) {
       if (mounted) {

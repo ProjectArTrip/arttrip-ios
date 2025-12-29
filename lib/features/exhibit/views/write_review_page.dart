@@ -1,7 +1,7 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
-import 'package:arttrip/features/exhibit/viewmodel/write_review_viewmodel.dart';
+import 'package:arttrip/features/exhibit/viewmodels/write_review_viewmodel.dart';
 import 'package:arttrip/features/exhibit/widgets/write_review/photo_attach_section.dart';
 import 'package:arttrip/features/exhibit/widgets/write_review/review_content_section.dart';
 import 'package:arttrip/features/exhibit/widgets/write_review/submit_review_button.dart';
