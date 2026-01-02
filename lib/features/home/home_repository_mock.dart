@@ -2,6 +2,7 @@ import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_urls.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_repository.dart';
+import 'package:arttrip/shared/models/region_model.dart';
 
 class HomeRepositoryMockImpl implements HomeRepository {
   @override
@@ -13,11 +14,18 @@ class HomeRepositoryMockImpl implements HomeRepository {
   }
 
   @override
-  Future<List<String>?> fetchDomesticRegions() async {
+  Future<List<RegionModel>?> fetchDomesticRegions() async {
     await Future.delayed(
       const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
     );
-    return ['서울', '경기', '충청', '강원', '전라', '경상', '제주'];
+    return [
+      RegionModel(region: '서울', imageUrl: AppUrls.posterUrlMock),
+      RegionModel(region: '경기', imageUrl: AppUrls.posterUrlMock),
+      RegionModel(region: '전라', imageUrl: AppUrls.posterUrlMock),
+      RegionModel(region: '제주', imageUrl: AppUrls.posterUrlMock),
+      RegionModel(region: '경상', imageUrl: AppUrls.posterUrlMock),
+      RegionModel(region: '강원', imageUrl: AppUrls.posterUrlMock),
+    ];
   }
 
   @override

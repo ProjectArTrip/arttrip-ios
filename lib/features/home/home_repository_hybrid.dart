@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_repository.dart';
+import 'package:arttrip/shared/models/region_model.dart';
 
 class HomeRepositoryHybrid implements HomeRepository {
   HomeRepositoryHybrid({required this.mock, required this.api});
@@ -17,7 +18,7 @@ class HomeRepositoryHybrid implements HomeRepository {
   }
 
   @override
-  Future<List<String>?> fetchDomesticRegions() {
+  Future<List<RegionModel>?> fetchDomesticRegions() {
     if (AppConsts.useMock) {
       return mock.fetchDomesticRegions();
     }

@@ -2,7 +2,9 @@ import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/routes/routes.dart';
+import 'package:arttrip/shared/models/region_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/app_cached_image.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +25,7 @@ class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
     return SliverPadding(
       padding: EdgeInsetsGeometry.only(top: 32.h),
       sliver: SliverToBoxAdapter(
-        child: Selector<HomeViewModel, AsyncState<List<String>>>(
+        child: Selector<HomeViewModel, AsyncState<List<RegionModel>>>(
           selector: (_, vm) => vm.domesticRegions,
           builder: (context, state, _) {
             return AsyncView(
@@ -55,22 +57,35 @@ class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
                         itemBuilder: (context, index) {
                           var item = data[index];
                           return GestureDetector(
-                            onTap: () => Routes.push(context, '/home/$item'),
+                            onTap:
+                                () => Routes.push(
+                                  context,
+                                  '/home/${item.region}',
+                                ),
                             child: ColoredBox(
                               color: Colors.transparent,
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  CircleAvatar(
-                                    radius: 32.w,
-                                    backgroundColor: Colors.black,
+                                  ClipRRect(
+                                    borderRadius: BorderRadiusGeometry.circular(
+                                      100,
+                                    ),
+                                    child:
+                                        item.imageUrl.isNotEmpty
+                                            ? AppCachedImage(
+                                              imageUrl: item.imageUrl,
+                                              width: 64.w,
+                                              height: 64.w,
+                                            )
+                                            : const SizedBox.shrink(),
                                   ),
                                   ArtTripText.pretendard()
                                       .body02Bold()
                                       .textAlign(TextAlign.center)
                                       .build()
-                                      .text(item),
+                                      .text(item.region),
                                 ],
                               ),
                             ),

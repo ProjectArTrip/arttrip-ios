@@ -6,6 +6,7 @@ import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
 import 'package:arttrip/features/home/home_repository.dart';
+import 'package:arttrip/shared/models/region_model.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class HomeViewModel with ChangeNotifier {
   final HomeRepository homeRepository;
 
   AsyncState<List<String>> overseasCountries = const AsyncState.loading();
-  AsyncState<List<String>> domesticRegions = const AsyncState.loading();
+  AsyncState<List<RegionModel>> domesticRegions = const AsyncState.loading();
   AsyncState<List<ExhibitModel>> todayExhibitRecommendations =
       const AsyncState.loading();
   Map<String, AsyncState<List<String>>> genres = {
@@ -42,7 +43,7 @@ class HomeViewModel with ChangeNotifier {
   AsyncState<List<DateTime>> weeklyCalendar = const AsyncState.loading();
 
   List<String>? _overseasCountriesCache;
-  List<String>? _domesticRegionsCache;
+  List<RegionModel>? _domesticRegionsCache;
   final Map<String, List<ExhibitModel>> _todayExhibitRecommendationsCache = {};
   final Map<String, List<ExhibitModel>> _personalizedExhibitsCache = {};
   List<DateTime>? _weeklyCalendarCache;
@@ -65,7 +66,7 @@ class HomeViewModel with ChangeNotifier {
       _isDomestic ? LocationType.domestic.name : LocationType.overseas.name;
 
   List<String>? get overseasCountriesCache => _overseasCountriesCache;
-  List<String>? get domesticRegionsCache => _domesticRegionsCache;
+  List<RegionModel>? get domesticRegionsCache => _domesticRegionsCache;
 
   set isDomestic(bool value) {
     _isDomestic = value;
@@ -177,7 +178,7 @@ class HomeViewModel with ChangeNotifier {
     var key = _isDomestic ? LocationType.domestic.name : _selectedLocation;
     if (_todayExhibitRecommendationsCache[key] != null) {
       todayExhibitRecommendations = AsyncState.success(
-        _todayExhibitRecommendationsCache[_selectedLocation]!,
+        _todayExhibitRecommendationsCache[key]!,
       );
       notifyListeners();
       return;
