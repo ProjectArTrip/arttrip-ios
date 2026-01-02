@@ -20,7 +20,7 @@ class ExhibitViewModel with ChangeNotifier {
       var id = exhibit.exhibitId;
       if (id == null) continue;
 
-      _favoriteMap.putIfAbsent(id, () => exhibit.isFavorite);
+      _favoriteMap.putIfAbsent(id, () => exhibit.favorite);
     }
   }
 

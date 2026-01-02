@@ -64,6 +64,7 @@ class HomeViewModel with ChangeNotifier {
   String get locationType =>
       _isDomestic ? LocationType.domestic.name : LocationType.overseas.name;
 
+  List<String>? get overseasCountriesCache => _overseasCountriesCache;
   List<String>? get domesticRegionsCache => _domesticRegionsCache;
 
   set isDomestic(bool value) {

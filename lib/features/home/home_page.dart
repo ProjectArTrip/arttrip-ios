@@ -8,6 +8,7 @@ import 'package:arttrip/features/home/views/personalized_exhibits_view.dart';
 import 'package:arttrip/features/home/views/regional_exhibits_view.dart';
 import 'package:arttrip/features/home/views/today_exhibits_recommendation_view.dart';
 import 'package:arttrip/features/home/views/weekly_exhibits_schedule_view.dart';
+import 'package:arttrip/features/home/widgets/date_filter_bottom_sheet.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:flutter/material.dart';
@@ -83,27 +84,33 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SvgPicture.asset(AppAssets.icLogoBlack, width: 88.w, height: 28.h),
-            Row(
-              spacing: 20.w,
-              children: [
-                const AlertBadge(path: '/alerts'),
-                GestureDetector(
-                  onTap: () {},
-                  child: SvgPicture.asset(
-                    AppAssets.icCalendar,
-                    width: 24.w,
-                    height: 24.w,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: SvgPicture.asset(
-                    AppAssets.icSearch,
-                    width: 24.w,
-                    height: 24.w,
-                  ),
-                ),
-              ],
+            Selector<HomeViewModel, bool>(
+              selector: (_, vm) => vm.isDomestic,
+              builder: (context, isDomestic, _) {
+                return Row(
+                  spacing: 20.w,
+                  children: [
+                    const AlertBadge(path: '/alerts'),
+                    if (!isDomestic)
+                      GestureDetector(
+                        onTap: () => _showDateFilterBottomSheet(),
+                        child: SvgPicture.asset(
+                          AppAssets.icCalendar,
+                          width: 24.w,
+                          height: 24.w,
+                        ),
+                      ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: SvgPicture.asset(
+                        AppAssets.icSearch,
+                        width: 24.w,
+                        height: 24.w,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ],
         ),
@@ -162,6 +169,37 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           await homeViewModel.load(context);
         },
       ),
+    );
+  }
+
+  void _showDateFilterBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.only(
+          topLeft: Radius.circular(16.r),
+          topRight: Radius.circular(16.r),
+        ),
+      ),
+      backgroundColor: AppColors.subLightGray,
+      isScrollControlled: true,
+      builder:
+          (_) => Selector<HomeViewModel, List<String>?>(
+            selector: (_, vm) => vm.overseasCountriesCache,
+            builder: (context, overseasCountries, _) {
+              if (overseasCountries == null) {
+                return Container(
+                  height: MediaQuery.of(context).size.height / 2,
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(
+                    color: AppColors.primary300,
+                  ),
+                );
+              }
+              return DateFilterBottomSheet(overseasCountries);
+            },
+          ),
     );
   }
 }

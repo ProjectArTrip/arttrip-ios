@@ -114,4 +114,13 @@ class ScaleTypeBuilderImpl extends ScaleTypeBuilder {
     _style.letterSpacing = 0;
     return StyleBuilderImpl(_style);
   }
+
+  @override
+  StyleBuilder font(double fontSize) {
+    _style.fontWeight = FontWeight.w400;
+    _style.fontSize = fontSize;
+    _style.height = 16 / _style.fontSize;
+    _style.letterSpacing = _style.fontSize * (-2 / 100);
+    return StyleBuilderImpl(_style);
+  }
 }

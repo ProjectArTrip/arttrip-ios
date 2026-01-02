@@ -16,7 +16,7 @@ abstract class ExhibitModel with _$ExhibitModel {
     String? hallName,
     String? countryName,
     String? regionName,
-    @Default(false) bool isFavorite, // TODO: 컬럼명 확인 필요
+    @Default(false) bool favorite,
   }) = _ExhibitModel;
 
   factory ExhibitModel.fromJson(Map<String, dynamic> json) =>
