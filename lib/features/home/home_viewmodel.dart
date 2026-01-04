@@ -215,11 +215,12 @@ class HomeViewModel with ChangeNotifier {
     var result = await homeRepository.fetchGenres();
     if (result == null) {
       genres[locationType] = const AsyncState.error();
-    } else {
-      genres[locationType] = AsyncState.success(result);
-      _selectedGenre = result.first;
-      _genresCache[locationType] = result;
+      notifyListeners();
+      return;
     }
+    genres[locationType] = AsyncState.success(result);
+    _selectedGenre = result.first;
+    _genresCache[locationType] = result;
     notifyListeners();
     await fetchExhibitsByGenre();
   }
