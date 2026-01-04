@@ -60,10 +60,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 },
               ),
               SizedBox(height: 24.h),
-              EditProfileField(
-                label: context.l10n.emailLabel,
-                valueColor: AppColors.textTertiary,
-                value: 'abcd1234@naver.com',
+              Selector<MyViewModel, AsyncState<UserProfileModel>>(
+                selector: (_, vm) => vm.profileState,
+                builder: (context, state, _) {
+                  var email = state.data?.email ?? widget.profile.email ?? '';
+                  return EditProfileField(
+                    label: context.l10n.emailLabel,
+                    valueColor: AppColors.textTertiary,
+                    value: email,
+                  );
+                },
               ),
             ],
           ),

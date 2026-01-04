@@ -9,7 +9,11 @@ class MyRepositoryMockImpl implements MyRepository {
     int height = 100,
   }) async {
     await Future.delayed(const Duration(milliseconds: 500));
-    return const UserProfileModel(nickName: '이유지', profileImage: null);
+    return const UserProfileModel(
+      nickName: '이유지',
+      profileImage: null,
+      email: 'test@example.com',
+    );
   }
 
   @override
