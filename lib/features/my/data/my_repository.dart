@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/core/network/models/api_response.dart';
+import 'package:arttrip/features/my/data/models/my_review_model.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,6 +16,17 @@ abstract class MyRepository {
 
   /// 닉네임 변경 - 성공 시 null, 실패 시 에러 메시지 반환
   Future<String?> updateNickname(String nickname);
+
+  /// 나의 리뷰 목록 조회
+  Future<MyReviewListResponseModel?> fetchMyReviews({
+    String? cursor,
+    int size = 10,
+    int width = 72,
+    int height = 72,
+  });
+
+  /// 리뷰 삭제
+  Future<bool> deleteReview(int reviewId);
 }
 
 class MyRepositoryImpl implements MyRepository {
@@ -94,5 +106,49 @@ class MyRepositoryImpl implements MyRepository {
       AppUtil.debugLog('updateNickname: $e');
     }
     return '닉네임 변경에 실패했습니다.';
+  }
+
+  @override
+  Future<MyReviewListResponseModel?> fetchMyReviews({
+    String? cursor,
+    int size = 10,
+    int width = 72,
+    int height = 72,
+  }) async {
+    try {
+      var queryParams = <String, dynamic>{
+        'size': size,
+        'w': width,
+        'h': height,
+      };
+      if (cursor != null) {
+        queryParams['cursor'] = cursor;
+      }
+      var response = await _dio.get(
+        '/reviews/all',
+        queryParameters: queryParams,
+      );
+      var apiResponse = ApiResponse<MyReviewListResponseModel>.fromJson(
+        response.dataOrNull,
+        (obj) =>
+            MyReviewListResponseModel.fromJson(obj as Map<String, dynamic>),
+      );
+      return apiResponse.result;
+    } catch (e) {
+      AppUtil.debugLog('fetchMyReviews: $e');
+    }
+    return null;
+  }
+
+  @override
+  Future<bool> deleteReview(int reviewId) async {
+    try {
+      var response = await _dio.delete('/reviews/$reviewId');
+      var apiResponse = ApiResponse<void>.fromJson(response.dataOrNull, (_) {});
+      return apiResponse.isSuccess;
+    } catch (e) {
+      AppUtil.debugLog('deleteReview: $e');
+    }
+    return false;
   }
 }
