@@ -29,6 +29,7 @@ class AppAssets {
   static const String icClose = 'assets/svg/ic_close.svg';
   static const String icEmptyProfile = 'assets/svg/ic_empty_profile.svg';
   static const String icGroup = 'assets/svg/ic_group.svg';
+  static const String icTablerWorld = 'assets/svg/ic_tabler_world.svg';
 
   // Logo
   static const String icLogoWhite = 'assets/svg/ic_logo_white.svg';

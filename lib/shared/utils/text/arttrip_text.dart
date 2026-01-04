@@ -37,6 +37,9 @@ abstract class ScaleTypeBuilder {
   StyleBuilder body02Regular();
   StyleBuilder body02Light();
   StyleBuilder body03Regular();
+
+  // custom
+  StyleBuilder font(double fontSize);
 }
 
 abstract class StyleBuilder {

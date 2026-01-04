@@ -2,6 +2,7 @@ import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/shared/models/region_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:flutter/material.dart';
@@ -133,7 +134,7 @@ class _RegionalExhibitsPageState extends State<RegionalExhibitsPage> {
                     ArtTripText.pretendard().body01Bold().build().text(
                       context.l10n.domestic,
                     ),
-                    Selector<HomeViewModel, List<String>>(
+                    Selector<HomeViewModel, List<RegionModel>>(
                       selector: (_, vm) => vm.domesticRegionsCache!,
                       builder: (context, domesticRegionsCache, _) {
                         return Wrap(
@@ -143,10 +144,10 @@ class _RegionalExhibitsPageState extends State<RegionalExhibitsPage> {
                             index,
                           ) {
                             var item = domesticRegionsCache[index];
-                            var isSelected = selectedRegion == item;
+                            var isSelected = selectedRegion == item.region;
                             return GestureDetector(
                               onTap: () {
-                                _regionName.value = item;
+                                _regionName.value = item.region;
                                 Navigator.pop(context);
                               },
                               child: Container(
@@ -167,11 +168,11 @@ class _RegionalExhibitsPageState extends State<RegionalExhibitsPage> {
                                             .body01Bold()
                                             .color(AppColors.textWhite)
                                             .build()
-                                            .text(item)
+                                            .text(item.region)
                                         : ArtTripText.pretendard()
                                             .body01Light()
                                             .build()
-                                            .text(item),
+                                            .text(item.region),
                               ),
                             );
                           }),

@@ -2,10 +2,11 @@ import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/shared/models/base_result_model.dart';
+import 'package:arttrip/shared/models/region_model.dart';
 
 abstract class HomeRepository {
   Future<List<String>?> fetchOverseasCountries();
-  Future<List<String>?> fetchDomesticRegions();
+  Future<List<RegionModel>?> fetchDomesticRegions();
   Future<List<ExhibitModel>?> fetchTodayExhibitRecommendations({
     required bool isDomestic,
     String? country,
@@ -55,10 +56,11 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<List<String>?> fetchDomesticRegions() async {
+  Future<List<RegionModel>?> fetchDomesticRegions() async {
     try {
       var response = await _dio.get('/exhibit/domestic');
       var model = BaseResultModel.fromJson(response.dataOrNull);
+
       if (model.result is! List) {
         AppUtil.debugLog(
           'fetchDomesticRegions type inconsistency: ${model.result.runtimeType}',
@@ -66,7 +68,9 @@ class HomeRepositoryImpl implements HomeRepository {
         return null;
       }
 
-      return model.result.map<String>((e) => e.toString()).toList();
+      return model.result
+          .map<RegionModel>((e) => RegionModel.fromJson(e))
+          .toList();
     } catch (e) {
       AppUtil.debugLog('fetchDomesticRegions: $e');
     }

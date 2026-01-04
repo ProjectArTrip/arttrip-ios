@@ -58,7 +58,9 @@ class _TodayExhibitsRecommendationViewState
                               location:
                                   (selectedLocation == context.l10n.allItems &&
                                           !widget.isDomestic)
-                                      ? item.countryName ?? item.regionName
+                                      ? item.countryName
+                                      : widget.isDomestic
+                                      ? item.regionName
                                       : null,
                               onTap:
                                   () => Routes.push(
