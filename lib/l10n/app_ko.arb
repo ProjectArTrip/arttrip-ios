@@ -96,5 +96,12 @@
   "selectCountryAndDate": "국가 및 날짜 선택",
   "country": "국가",
   "date": "날짜",
-  "apply": "적용하기"
+  "apply": "적용하기",
+  "save": "저장하기",
+  "complete": "완료",
+  "keywordSelectionTitle": "관심있는 키워드를\n골라주세요!",
+  "keywordSelectionHint": "한 가지 이상 선택이 가능해요.",
+  "keywordGenreQuestion": "좋아하는 전시 장르는 무엇인가요?",
+  "keywordStyleQuestion": "전시 스타일을 골라 주세요",
+  "keywordSaveError": "키워드 저장에 실패했습니다"
 }

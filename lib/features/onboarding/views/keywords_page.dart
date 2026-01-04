@@ -1,9 +1,11 @@
+import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/onboarding/data/models/keyword_model.dart';
 import 'package:arttrip/features/onboarding/viewmodels/keywords_viewmodel.dart';
 import 'package:arttrip/features/onboarding/widgets/keyword_chip.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/snackbar_utils.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -11,8 +13,10 @@ import 'package:provider/provider.dart';
 /// 관심 키워드 선택 페이지
 ///
 /// 신규 사용자(firstLogin: true)가 최초 로그인 시 이동하는 온보딩 화면
+/// isEditMode: true이면 마이페이지에서 취향 수정 모드로 진입
 class KeywordModelsPage extends StatefulWidget {
-  const KeywordModelsPage({super.key});
+  const KeywordModelsPage({super.key, this.isEditMode = false});
+  final bool isEditMode;
 
   @override
   State<KeywordModelsPage> createState() => _KeywordModelsPageState();
@@ -30,7 +34,9 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<KeywordModelsViewModel>().fetchKeywordModels();
+      var vm = context.read<KeywordModelsViewModel>();
+      vm.reset();
+      vm.fetchKeywordModels(loadUserSelection: widget.isEditMode);
     });
   }
 
@@ -40,19 +46,28 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar:
+          widget.isEditMode
+              ? CommonAppBar(
+                title: context.l10n.myTasteAnalysis,
+                showBackButton: true,
+              )
+              : const CommonAppBar(showBackButton: false),
       body: SafeArea(
+        bottom: false,
         child:
             vm.isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : Padding(
+                : SingleChildScrollView(
                   padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildHeader(),
                       _buildDivider(),
-                      Expanded(child: _buildContent(vm)),
+                      _buildContent(vm),
                       _buildSubmitButton(vm),
+                      SizedBox(height: 16.h),
                     ],
                   ),
                 ),
@@ -62,7 +77,7 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: EdgeInsets.only(top: 32.h, bottom: 16.h),
+      padding: EdgeInsets.only(top: 16.h, bottom: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -70,13 +85,13 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
               .headline()
               .color(_textColor)
               .build()
-              .text('관심있는 키워드를\n골라주세요!'),
+              .text(context.l10n.keywordSelectionTitle),
           SizedBox(height: 8.h),
           ArtTripText.pretendard()
               .body01Regular()
               .color(_textColor)
               .build()
-              .text('한 가지 이상 선택이 가능해요.'),
+              .text(context.l10n.keywordSelectionHint),
         ],
       ),
     );
@@ -87,18 +102,22 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
   }
 
   Widget _buildContent(KeywordModelsViewModel vm) {
-    return SingleChildScrollView(
+    return Padding(
       padding: EdgeInsets.symmetric(vertical: 24.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildSection(
-            title: '좋아하는 전시 장르는 무엇인가요?',
+            title: context.l10n.keywordGenreQuestion,
             keywords: vm.genres,
             vm: vm,
           ),
           SizedBox(height: 32.h),
-          _buildSection(title: '전시 스타일을 골라 주세요', keywords: vm.styles, vm: vm),
+          _buildSection(
+            title: context.l10n.keywordStyleQuestion,
+            keywords: vm.styles,
+            vm: vm,
+          ),
         ],
       ),
     );
@@ -182,7 +201,9 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
                     ),
                   )
                   : Text(
-                    '완료',
+                    widget.isEditMode
+                        ? context.l10n.save
+                        : context.l10n.complete,
                     style: TextStyle(
                       fontFamily: 'Pretendard',
                       fontSize: 16.sp,
@@ -201,11 +222,18 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
 
     if (success) {
       if (mounted) {
-        Routes.go(context, '/');
+        if (widget.isEditMode) {
+          Navigator.pop(context);
+        } else {
+          Routes.go(context, '/');
+        }
       }
     } else {
       if (mounted) {
-        SnackBarUtils.showError(context, message: '키워드 저장에 실패했습니다');
+        SnackBarUtils.showError(
+          context,
+          message: context.l10n.keywordSaveError,
+        );
       }
     }
   }

@@ -122,6 +122,18 @@ final appRouter = GoRouter(
       },
     ),
 
+    // 나의 취향 분석 페이지
+    GoRoute(
+      path: '/my/taste-analysis',
+      pageBuilder: (context, state) {
+        return buildPage(
+          context,
+          state,
+          child: const KeywordModelsPage(isEditMode: true),
+        );
+      },
+    ),
+
     // WebView 페이지 (개인정보 처리방침, 서비스 이용약관 등)
     GoRoute(
       path: '/webview',
