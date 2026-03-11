@@ -22,7 +22,7 @@ class KeywordModelsViewModel with ChangeNotifier {
   String? get errorMessage => _errorMessage;
   bool get canSubmit => _selectedKeywordModelIds.isNotEmpty;
 
-  Future<void> fetchKeywordModels() async {
+  Future<void> fetchKeywordModels({bool loadUserSelection = false}) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -32,6 +32,16 @@ class KeywordModelsViewModel with ChangeNotifier {
     if (keywords != null) {
       _genres = keywords.where((k) => k.isGenre).toList();
       _styles = keywords.where((k) => k.isStyle).toList();
+
+      // 수정 모드일 경우 기존 선택된 키워드 불러오기
+      if (loadUserSelection) {
+        var userKeywords = await repository.fetchUserKeywords();
+        if (userKeywords != null) {
+          for (var keyword in userKeywords) {
+            _selectedKeywordModelIds.add(keyword.keywordId);
+          }
+        }
+      }
     } else {
       _errorMessage = '키워드를 불러오는데 실패했습니다';
     }
@@ -67,5 +77,14 @@ class KeywordModelsViewModel with ChangeNotifier {
     notifyListeners();
 
     return success;
+  }
+
+  void reset() {
+    _selectedKeywordModelIds.clear();
+    _genres = [];
+    _styles = [];
+    _isLoading = true;
+    _isSaving = false;
+    _errorMessage = null;
   }
 }

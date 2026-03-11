@@ -25,6 +25,17 @@ class KeywordModelsRepositoryMockImpl implements KeywordModelsRepository {
   }
 
   @override
+  Future<List<KeywordModel>?> fetchUserKeywords() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    // 테스트용: 일부 키워드가 이미 선택된 상태로 반환
+    return [
+      KeywordModel(keywordId: 2, name: '근대미술', type: 'GENRE'),
+      KeywordModel(keywordId: 5, name: '조각', type: 'GENRE'),
+      KeywordModel(keywordId: 8, name: '역동적인', type: 'STYLE'),
+    ];
+  }
+
+  @override
   Future<bool> saveKeywordModels(List<int> keywordIds) async {
     await Future.delayed(const Duration(milliseconds: 100));
     return true;

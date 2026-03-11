@@ -5,6 +5,7 @@ import 'package:arttrip/shared/models/base_result_model.dart';
 
 abstract class KeywordModelsRepository {
   Future<List<KeywordModel>?> fetchAllKeywordModels();
+  Future<List<KeywordModel>?> fetchUserKeywords();
   Future<bool> saveKeywordModels(List<int> keywordIds);
 }
 
@@ -22,6 +23,21 @@ class KeywordModelsRepositoryImpl implements KeywordModelsRepository {
           .toList();
     } catch (e) {
       AppUtil.debugLog('fetchAllKeywordModels: $e');
+    }
+    return null;
+  }
+
+  @override
+  Future<List<KeywordModel>?> fetchUserKeywords() async {
+    try {
+      var response = await _dio.get('/auth/keywords');
+      var model = BaseResultModel.fromJson(response.dataOrNull);
+      if (model.result == null) return [];
+      return (model.result as List)
+          .map<KeywordModel>((e) => KeywordModel.fromJson(e))
+          .toList();
+    } catch (e) {
+      AppUtil.debugLog('fetchUserKeywords: $e');
     }
     return null;
   }

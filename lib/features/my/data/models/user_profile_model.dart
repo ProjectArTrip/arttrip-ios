@@ -7,8 +7,11 @@ part 'user_profile_model.g.dart';
 abstract class UserProfileModel with _$UserProfileModel {
   const UserProfileModel._();
 
-  const factory UserProfileModel({String? nickName, String? profileImage}) =
-      _UserProfileModel;
+  const factory UserProfileModel({
+    String? nickName,
+    String? profileImage,
+    String? email,
+  }) = _UserProfileModel;
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) =>
       _$UserProfileModelFromJson(json);

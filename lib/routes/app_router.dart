@@ -5,6 +5,7 @@ import 'package:arttrip/features/home/regional_exhibits_page.dart';
 import 'package:arttrip/features/login/login_page.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:arttrip/features/my/views/edit_profile_page.dart';
+import 'package:arttrip/features/my/views/my_reviews_page.dart';
 import 'package:arttrip/features/my/views/settings_page.dart';
 import 'package:arttrip/features/onboarding/views/keywords_page.dart';
 import 'package:arttrip/features/splash/views/splash_view.dart';
@@ -119,6 +120,26 @@ final appRouter = GoRouter(
       path: '/my/settings',
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const SettingsPage());
+      },
+    ),
+
+    // 나의 취향 분석 페이지
+    GoRoute(
+      path: '/my/taste-analysis',
+      pageBuilder: (context, state) {
+        return buildPage(
+          context,
+          state,
+          child: const KeywordModelsPage(isEditMode: true),
+        );
+      },
+    ),
+
+    // 나의 리뷰 페이지
+    GoRoute(
+      path: '/my/reviews',
+      pageBuilder: (context, state) {
+        return buildPage(context, state, child: const MyReviewsPage());
       },
     ),
 

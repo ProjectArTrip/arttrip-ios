@@ -73,5 +73,20 @@
   "deleteAccountTitle": "Delete Account",
   "deleteAccountContent": "When you leave ArtTrip, your data\n(favorites, reviews, stamps, etc.)\nwill be permanently deleted.",
   "deleteAccountQuestion": "Do you want to proceed?",
-  "deleteAccountButton": "Delete"
+  "deleteAccountButton": "Delete",
+  "save": "Save",
+  "complete": "Complete",
+  "keywordSelectionTitle": "Choose your\nfavorite keywords!",
+  "keywordSelectionHint": "You can select one or more.",
+  "keywordGenreQuestion": "What exhibition genres do you like?",
+  "keywordStyleQuestion": "Choose your exhibition style",
+  "keywordSaveError": "Failed to save keywords",
+  "myReviewsTitle": "My Reviews",
+  "visitDateFormat": "Visited {date}",
+  "deleteButton": "Delete",
+  "editButton": "Edit",
+  "noReviewsYet": "No reviews yet.",
+  "totalCount": "{count} total",
+  "deleteReviewTitle": "Delete this review?",
+  "deleteReviewContent": "Deleted reviews cannot be restored,\nand stamps will also be deleted."
 }
