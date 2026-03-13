@@ -1,4 +1,3 @@
-import 'package:arttrip/shared/widgets/app_toast.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/onboarding/data/models/keyword_model.dart';
 import 'package:arttrip/features/onboarding/viewmodels/keywords_viewmodel.dart';
@@ -6,6 +5,7 @@ import 'package:arttrip/features/onboarding/widgets/keyword_chip.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/snackbar_utils.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/app_toast.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

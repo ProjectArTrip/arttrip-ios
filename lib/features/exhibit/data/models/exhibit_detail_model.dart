@@ -24,6 +24,7 @@ abstract class ExhibitDetailModel with _$ExhibitDetailModel {
     String? hallPhone,
     double? hallLatitude,
     double? hallLongitude,
+    @Default(false) bool isFavorite,
   }) = _ExhibitDetailModel;
 
   factory ExhibitDetailModel.fromJson(Map<String, dynamic> json) =>

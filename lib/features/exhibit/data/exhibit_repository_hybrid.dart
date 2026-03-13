@@ -2,7 +2,6 @@ import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
-import 'package:arttrip/features/exhibit/data/models/favorite_check_result.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -23,7 +22,7 @@ class ExhibitRepositoryHybrid implements ExhibitRepository {
   @override
   Future<ExhibitReviewListResponseModel?> fetchExhibitReviewModels(
     int exhibitId, {
-    String? cursor,
+    int? cursor,
     int size = 10,
   }) {
     if (AppConsts.useMock) {
@@ -60,11 +59,37 @@ class ExhibitRepositoryHybrid implements ExhibitRepository {
   }
 
   @override
-  Future<FavoriteCheckResult?> checkFavorite(int exhibitId) {
+  Future<ReviewCreateResult?> fetchReviewDetail(int reviewId) {
     if (AppConsts.useMock) {
-      return mock.checkFavorite(exhibitId);
+      return mock.fetchReviewDetail(reviewId);
     }
-    return api.checkFavorite(exhibitId);
+    return api.fetchReviewDetail(reviewId);
+  }
+
+  @override
+  Future<bool> updateReview({
+    required int reviewId,
+    required List<XFile> newImages,
+    required String date,
+    required String content,
+    required List<int> deleteImageIds,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.updateReview(
+        reviewId: reviewId,
+        newImages: newImages,
+        date: date,
+        content: content,
+        deleteImageIds: deleteImageIds,
+      );
+    }
+    return api.updateReview(
+      reviewId: reviewId,
+      newImages: newImages,
+      date: date,
+      content: content,
+      deleteImageIds: deleteImageIds,
+    );
   }
 
   @override

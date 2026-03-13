@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/api_result.dart';
 import 'package:arttrip/core/network/dio_client.dart';
-import 'package:arttrip/core/network/models/api_response.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
-import 'package:arttrip/features/exhibit/data/models/favorite_check_result.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
 import 'package:arttrip/shared/models/base_result_model.dart';
 import 'package:dio/dio.dart';
@@ -16,7 +14,7 @@ abstract class ExhibitRepository {
   Future<ExhibitDetailModel?> fetchExhibitDetailModel(int exhibitId);
   Future<ExhibitReviewListResponseModel?> fetchExhibitReviewModels(
     int exhibitId, {
-    String? cursor,
+    int? cursor,
     int size = 10,
   });
   Future<ReviewCreateResult?> createReview({
@@ -25,7 +23,14 @@ abstract class ExhibitRepository {
     required String date,
     required String content,
   });
-  Future<FavoriteCheckResult?> checkFavorite(int exhibitId);
+  Future<ReviewCreateResult?> fetchReviewDetail(int reviewId);
+  Future<bool> updateReview({
+    required int reviewId,
+    required List<XFile> newImages,
+    required String date,
+    required String content,
+    required List<int> deleteImageIds,
+  });
   Future<bool> addFavorite(int exhibitId);
   Future<bool> removeFavorite(int exhibitId);
   Future<void> updateFavoriteExhibit(int exhibitId, bool isFavorite);
@@ -38,14 +43,10 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   @override
   Future<ExhibitDetailModel?> fetchExhibitDetailModel(int exhibitId) async {
     try {
-      var response = await _dio.get('/exhibit/$exhibitId');
+      var response = await _dio.get('/exhibits/$exhibitId');
       var data = response.dataOrNull;
       if (data == null) return null;
-      var apiResponse = ApiResponse<ExhibitDetailModel>.fromJson(
-        data,
-        (obj) => ExhibitDetailModel.fromJson(obj as Map<String, dynamic>),
-      );
-      return apiResponse.result;
+      return ExhibitDetailModel.fromJson(data as Map<String, dynamic>);
     } catch (e) {
       AppUtil.debugLog('fetchExhibitDetailModel: $e');
     }
@@ -55,7 +56,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   @override
   Future<ExhibitReviewListResponseModel?> fetchExhibitReviewModels(
     int exhibitId, {
-    String? cursor,
+    int? cursor,
     int size = 10,
   }) async {
     try {
@@ -65,18 +66,14 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
       }
 
       var response = await _dio.get(
-        '/reviews/$exhibitId/detail',
+        '/reviews/exhibit/$exhibitId',
         queryParameters: queryParams,
       );
       var data = response.dataOrNull;
       if (data == null) return null;
-      var apiResponse = ApiResponse<ExhibitReviewListResponseModel>.fromJson(
-        data,
-        (obj) => ExhibitReviewListResponseModel.fromJson(
-          obj as Map<String, dynamic>,
-        ),
+      return ExhibitReviewListResponseModel.fromJson(
+        data as Map<String, dynamic>,
       );
-      return apiResponse.result;
     } catch (e) {
       AppUtil.debugLog('fetchExhibitReviewModels: $e');
     }
@@ -108,14 +105,14 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
         );
       }
 
-      var response = await _dio.post('/reviews/$exhibitId', data: formData);
+      var response = await _dio.post(
+        '/reviews/$exhibitId',
+        data: formData,
+        options: Options(extra: {'requestJson': requestJson}),
+      );
       var data = response.dataOrNull;
       if (data == null) return null;
-      var apiResponse = ApiResponse<ReviewCreateResult>.fromJson(
-        data,
-        (obj) => ReviewCreateResult.fromJson(obj as Map<String, dynamic>),
-      );
-      return apiResponse.result;
+      return ReviewCreateResult.fromJson(data as Map<String, dynamic>);
     } catch (e) {
       AppUtil.debugLog('createReview: $e');
     }
@@ -123,20 +120,58 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   }
 
   @override
-  Future<FavoriteCheckResult?> checkFavorite(int exhibitId) async {
+  Future<ReviewCreateResult?> fetchReviewDetail(int reviewId) async {
     try {
-      var response = await _dio.get('/favorites/check/$exhibitId');
+      var response = await _dio.get('/reviews/$reviewId');
       var data = response.dataOrNull;
       if (data == null) return null;
-      var apiResponse = ApiResponse<FavoriteCheckResult>.fromJson(
-        data,
-        (obj) => FavoriteCheckResult.fromJson(obj as Map<String, dynamic>),
-      );
-      return apiResponse.result;
+      return ReviewCreateResult.fromJson(data as Map<String, dynamic>);
     } catch (e) {
-      AppUtil.debugLog('checkFavorite: $e');
+      AppUtil.debugLog('fetchReviewDetail: $e');
     }
     return null;
+  }
+
+  @override
+  Future<bool> updateReview({
+    required int reviewId,
+    required List<XFile> newImages,
+    required String date,
+    required String content,
+    required List<int> deleteImageIds,
+  }) async {
+    try {
+      var requestJson = jsonEncode({
+        'date': date,
+        'content': content,
+        'deleteImageIds': deleteImageIds,
+      });
+      var formData = FormData.fromMap({
+        'request': MultipartFile.fromString(
+          requestJson,
+          contentType: DioMediaType.parse('application/json'),
+        ),
+      });
+
+      for (var file in newImages) {
+        formData.files.add(
+          MapEntry(
+            'images',
+            await MultipartFile.fromFile(file.path, filename: file.name),
+          ),
+        );
+      }
+
+      var response = await _dio.patch(
+        '/reviews/$reviewId',
+        data: formData,
+        options: Options(extra: {'requestJson': requestJson}),
+      );
+      return response.isSuccess;
+    } catch (e) {
+      AppUtil.debugLog('updateReview: $e');
+    }
+    return false;
   }
 
   @override

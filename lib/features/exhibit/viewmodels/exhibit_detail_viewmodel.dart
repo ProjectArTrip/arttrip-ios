@@ -18,7 +18,7 @@ class ExhibitDetailModelViewModel with ChangeNotifier {
   AsyncState<List<ExhibitReviewModel>> get reviewsState => _reviewsState;
 
   // 리뷰 페이지네이션 상태
-  String? _nextCursor;
+  int? _nextCursor;
   bool _hasNextReview = true;
   int _reviewTotalCount = 0;
   bool _isLoadingMore = false;
@@ -45,6 +45,7 @@ class ExhibitDetailModelViewModel with ChangeNotifier {
     var exhibit = await _repository.fetchExhibitDetailModel(exhibitId);
     if (exhibit != null) {
       _exhibitState = AsyncState.success(exhibit);
+      _isFavorite = exhibit.isFavorite;
     } else {
       _exhibitState = const AsyncState.error(error: '전시 정보를 불러올 수 없습니다.');
     }
@@ -95,13 +96,6 @@ class ExhibitDetailModelViewModel with ChangeNotifier {
     }
 
     _isLoadingMore = false;
-    notifyListeners();
-  }
-
-  /// 즐겨찾기 상태 확인
-  Future<void> checkFavorite(int exhibitId) async {
-    var result = await _repository.checkFavorite(exhibitId);
-    _isFavorite = result?.isFavorite ?? false;
     notifyListeners();
   }
 

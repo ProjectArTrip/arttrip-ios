@@ -92,7 +92,7 @@ class MyReviewItem extends StatelessWidget {
   }
 
   Widget _buildThumbnail() {
-    if (review.thumbnailUrl == null || review.thumbnailUrl!.isEmpty) {
+    if (review.posterUrl == null || review.posterUrl!.isEmpty) {
       return Container(
         width: 72.w,
         height: 72.h,
@@ -104,7 +104,7 @@ class MyReviewItem extends StatelessWidget {
     }
 
     return AppCachedImage(
-      imageUrl: review.thumbnailUrl!,
+      imageUrl: review.posterUrl!,
       width: 72.w,
       height: 72.h,
       borderRadius: BorderRadius.circular(4.r),

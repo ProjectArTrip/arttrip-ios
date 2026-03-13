@@ -19,7 +19,7 @@ class ReviewListItem extends StatelessWidget {
         _buildHeader(),
         SizedBox(height: 12.h),
         _buildContent(),
-        if (review.thumbnailUrl?.isNotEmpty ?? false) ...[
+        if (review.photoUrls.isNotEmpty) ...[
           SizedBox(height: 20.h),
           _buildThumbnail(),
         ],
@@ -38,7 +38,7 @@ class ReviewListItem extends StatelessWidget {
               .body02Bold()
               .color(const Color(0xFFA5A5AF))
               .build()
-              .text(review.nickname ?? '익명'),
+              .text(review.reviewer ?? '익명'),
         ),
         SizedBox(width: 10.w),
         ArtTripText.pretendard()
@@ -59,11 +59,24 @@ class ReviewListItem extends StatelessWidget {
   }
 
   Widget _buildThumbnail() {
-    return AppCachedImage(
-      imageUrl: review.thumbnailUrl!,
-      width: 100.w,
-      height: 100.w,
-      borderRadius: BorderRadius.circular(8.r),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children:
+            review.photoUrls
+                .map(
+                  (url) => Padding(
+                    padding: EdgeInsets.only(right: 8.w),
+                    child: AppCachedImage(
+                      imageUrl: url,
+                      width: 100.w,
+                      height: 100.w,
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                  ),
+                )
+                .toList(),
+      ),
     );
   }
 }

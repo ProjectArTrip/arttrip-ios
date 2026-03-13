@@ -10,9 +10,11 @@ abstract class MyReviewModel with _$MyReviewModel {
   const factory MyReviewModel({
     required int reviewId,
     required String reviewTitle,
-    required String visitDate,
     required String content,
-    String? thumbnailUrl,
+    @Default([]) List<String> photoUrls,
+    String? posterUrl,
+    String? hallName,
+    required String visitDate,
     required String createdAt,
   }) = _MyReviewModel;
 
@@ -26,9 +28,9 @@ abstract class MyReviewListResponseModel with _$MyReviewListResponseModel {
 
   const factory MyReviewListResponseModel({
     required List<MyReviewModel> reviews,
-    String? nextCursor,
+    int? nextCursor,
     required bool hasNext,
-    @Default(0) int totalCount,
+    @Default(0) int reviewTotalCount,
   }) = _MyReviewListResponseModel;
 
   factory MyReviewListResponseModel.fromJson(Map<String, dynamic> json) =>

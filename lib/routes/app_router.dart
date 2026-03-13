@@ -6,6 +6,7 @@ import 'package:arttrip/features/login/login_page.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:arttrip/features/my/views/edit_profile_page.dart';
 import 'package:arttrip/features/my/views/my_reviews_page.dart';
+import 'package:arttrip/features/my/views/recent_exhibits_page.dart';
 import 'package:arttrip/features/my/views/settings_page.dart';
 import 'package:arttrip/features/onboarding/views/keywords_page.dart';
 import 'package:arttrip/features/splash/views/splash_view.dart';
@@ -64,6 +65,19 @@ final appRouter = GoRouter(
           context,
           state,
           child: WriteReviewPage(exhibitId: id, params: params),
+        );
+      },
+    ),
+
+    // 리뷰 수정 페이지 (모달)
+    GoRoute(
+      path: '/review/edit/:reviewId',
+      pageBuilder: (context, state) {
+        var params = state.extra as WriteReviewParams;
+        return buildPage(
+          context,
+          state,
+          child: WriteReviewPage(params: params),
         );
       },
     ),
@@ -132,6 +146,14 @@ final appRouter = GoRouter(
           state,
           child: const KeywordModelsPage(isEditMode: true),
         );
+      },
+    ),
+
+    // 최근 본 전시 페이지
+    GoRoute(
+      path: '/my/recent-exhibits',
+      pageBuilder: (context, state) {
+        return buildPage(context, state, child: const RecentExhibitsPage());
       },
     ),
 

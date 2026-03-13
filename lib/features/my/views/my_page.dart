@@ -90,9 +90,7 @@ class MyPage extends StatelessWidget {
       children: [
         MyMenuItem(
           title: context.l10n.myRecentExhibits,
-          onTap: () {
-            // 최근 본 전시 (추후 구현)
-          },
+          onTap: () => Routes.push(context, '/my/recent-exhibits'),
         ),
         SizedBox(height: 24.h),
         MyMenuItem(

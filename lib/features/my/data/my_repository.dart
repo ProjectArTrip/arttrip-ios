@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/features/my/data/models/my_review_model.dart';
+import 'package:arttrip/features/my/data/models/recent_exhibit_model.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,7 +19,7 @@ abstract class MyRepository {
 
   /// 나의 리뷰 목록 조회
   Future<MyReviewListResponseModel?> fetchMyReviews({
-    String? cursor,
+    int? cursor,
     int size = 10,
     int width = 72,
     int height = 72,
@@ -26,6 +27,9 @@ abstract class MyRepository {
 
   /// 리뷰 삭제
   Future<bool> deleteReview(int reviewId);
+
+  /// 최근 본 전시 목록 조회
+  Future<RecentExhibitListResponseModel?> fetchRecentExhibits();
 }
 
 class MyRepositoryImpl implements MyRepository {
@@ -98,7 +102,7 @@ class MyRepositoryImpl implements MyRepository {
 
   @override
   Future<MyReviewListResponseModel?> fetchMyReviews({
-    String? cursor,
+    int? cursor,
     int size = 10,
     int width = 72,
     int height = 72,
@@ -134,5 +138,20 @@ class MyRepositoryImpl implements MyRepository {
       AppUtil.debugLog('deleteReview: $e');
     }
     return false;
+  }
+
+  @override
+  Future<RecentExhibitListResponseModel?> fetchRecentExhibits() async {
+    try {
+      var response = await _dio.get('/me/recent-exhibits');
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      return RecentExhibitListResponseModel.fromJson(
+        data as Map<String, dynamic>,
+      );
+    } catch (e) {
+      AppUtil.debugLog('fetchRecentExhibits: $e');
+    }
+    return null;
   }
 }

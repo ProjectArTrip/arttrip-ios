@@ -7,13 +7,33 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 /// 리뷰 작성 페이지 - 리뷰 작성 섹션
-class ReviewContentSection extends StatelessWidget {
+class ReviewContentSection extends StatefulWidget {
   const ReviewContentSection({super.key});
+
+  @override
+  State<ReviewContentSection> createState() => _ReviewContentSectionState();
+}
+
+class _ReviewContentSectionState extends State<ReviewContentSection> {
+  final TextEditingController _controller = TextEditingController();
+  bool _initialized = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<WriteReviewViewModel>(
       builder: (context, vm, _) {
+        // 수정 모드에서 기존 내용 pre-fill (최초 1회)
+        if (!_initialized && vm.content.isNotEmpty) {
+          _controller.text = vm.content;
+          _initialized = true;
+        }
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -32,6 +52,7 @@ class ReviewContentSection extends StatelessWidget {
               child: Stack(
                 children: [
                   TextField(
+                    controller: _controller,
                     maxLines: 9,
                     maxLength: WriteReviewViewModel.maxContentLength,
                     decoration: InputDecoration(
@@ -61,20 +82,38 @@ class ReviewContentSection extends StatelessWidget {
                   ),
                   Positioned(
                     bottom: 12.h,
+                    left: 16.w,
                     right: 16.w,
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ArtTripText.pretendard()
-                            .body02Bold()
-                            .color(AppColors.textSecondary)
-                            .build()
-                            .text('${vm.contentLength}'),
-                        ArtTripText.pretendard()
-                            .body02Regular()
-                            .color(AppColors.textTertiary)
-                            .build()
-                            .text('/${WriteReviewViewModel.maxContentLength}'),
+                        if (vm.contentLength > 0 &&
+                            vm.contentLength <
+                                WriteReviewViewModel.minContentLength)
+                          ArtTripText.pretendard()
+                              .body03Regular()
+                              .color(AppColors.subRed)
+                              .build()
+                              .text(context.l10n.reviewMinLengthHint)
+                        else
+                          const SizedBox.shrink(),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ArtTripText.pretendard()
+                                .body02Bold()
+                                .color(AppColors.textSecondary)
+                                .build()
+                                .text('${vm.contentLength}'),
+                            ArtTripText.pretendard()
+                                .body02Regular()
+                                .color(AppColors.textTertiary)
+                                .build()
+                                .text(
+                                  '/${WriteReviewViewModel.maxContentLength}',
+                                ),
+                          ],
+                        ),
                       ],
                     ),
                   ),

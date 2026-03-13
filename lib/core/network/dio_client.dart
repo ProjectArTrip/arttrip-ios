@@ -103,7 +103,7 @@ class DioClient {
 
     // 로깅 인터셉터 (디버그 모드에서만)
     if (options.enableLogging && kDebugMode) {
-      _dio.interceptors.add(LoggingInterceptor());
+      _dio.interceptors.add(LoggingInterceptor(enableRequestBody: true));
     }
 
     // 재시도 인터셉터

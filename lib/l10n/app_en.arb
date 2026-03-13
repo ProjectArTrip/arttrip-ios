@@ -90,5 +90,10 @@
   "totalCount": "{count} total",
   "deleteReviewTitle": "Delete this review?",
   "deleteReviewContent": "Deleted reviews cannot be restored,\nand stamps will also be deleted.",
-  "confirm": "OK"
+  "confirm": "OK",
+  "reviewMinLengthHint": "Please enter at least 20 characters.",
+  "editReviewTitle": "Edit Review",
+  "updateReview": "Update",
+  "reviewUpdateError": "Failed to update review",
+  "noRecentExhibits": "No recently viewed exhibitions."
 }
