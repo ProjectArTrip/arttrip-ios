@@ -81,6 +81,7 @@
   "keywordGenreQuestion": "What exhibition genres do you like?",
   "keywordStyleQuestion": "Choose your exhibition style",
   "keywordSaveError": "Failed to save keywords",
+  "keywordSaveSuccess": "Genre and style have been saved.",
   "myReviewsTitle": "My Reviews",
   "visitDateFormat": "Visited {date}",
   "deleteButton": "Delete",
@@ -88,5 +89,6 @@
   "noReviewsYet": "No reviews yet.",
   "totalCount": "{count} total",
   "deleteReviewTitle": "Delete this review?",
-  "deleteReviewContent": "Deleted reviews cannot be restored,\nand stamps will also be deleted."
+  "deleteReviewContent": "Deleted reviews cannot be restored,\nand stamps will also be deleted.",
+  "confirm": "OK"
 }

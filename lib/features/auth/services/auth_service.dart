@@ -11,7 +11,7 @@ class AuthResult {
     this.errorMessage,
   });
 
-  factory AuthResult.success({required bool firstLogin}) =>
+  factory AuthResult.success({bool? firstLogin}) =>
       AuthResult(isSuccess: true, firstLogin: firstLogin);
 
   factory AuthResult.failure(String message) =>
@@ -58,15 +58,7 @@ class AuthService {
       );
 
       return serverResult.when(
-        success: (apiResponse) async {
-          // isSuccess 체크
-          if (!apiResponse.isSuccess || apiResponse.result == null) {
-            debugPrint('서버 응답 실패: ${apiResponse.message}');
-            return AuthResult.failure(apiResponse.message);
-          }
-
-          var tokenResult = apiResponse.result!;
-
+        success: (tokenResult) async {
           // 3. 토큰 저장
           await _tokenStorage.saveTokens(
             accessToken: tokenResult.accessToken,
@@ -129,13 +121,7 @@ class AuthService {
     var result = await _authApi.refreshToken(refreshToken: refreshToken);
 
     return result.when(
-      success: (apiResponse) async {
-        if (!apiResponse.isSuccess || apiResponse.result == null) {
-          debugPrint('토큰 갱신 실패: ${apiResponse.message}');
-          return null;
-        }
-
-        var tokenResult = apiResponse.result!;
+      success: (tokenResult) async {
         await _tokenStorage.saveTokens(
           accessToken: tokenResult.accessToken,
           refreshToken: tokenResult.refreshToken,

@@ -60,3 +60,6 @@ ios/Flutter/GoogleMaps.xcconfig
 
 # Docs
 /docs/devtools_options.yaml
+
+# FVM Version Cache
+.fvm/

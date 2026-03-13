@@ -39,8 +39,10 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   Future<ExhibitDetailModel?> fetchExhibitDetailModel(int exhibitId) async {
     try {
       var response = await _dio.get('/exhibit/$exhibitId');
+      var data = response.dataOrNull;
+      if (data == null) return null;
       var apiResponse = ApiResponse<ExhibitDetailModel>.fromJson(
-        response.dataOrNull,
+        data,
         (obj) => ExhibitDetailModel.fromJson(obj as Map<String, dynamic>),
       );
       return apiResponse.result;
@@ -66,8 +68,10 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
         '/reviews/$exhibitId/detail',
         queryParameters: queryParams,
       );
+      var data = response.dataOrNull;
+      if (data == null) return null;
       var apiResponse = ApiResponse<ExhibitReviewListResponseModel>.fromJson(
-        response.dataOrNull,
+        data,
         (obj) => ExhibitReviewListResponseModel.fromJson(
           obj as Map<String, dynamic>,
         ),
@@ -105,8 +109,10 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
       }
 
       var response = await _dio.post('/reviews/$exhibitId', data: formData);
+      var data = response.dataOrNull;
+      if (data == null) return null;
       var apiResponse = ApiResponse<ReviewCreateResult>.fromJson(
-        response.dataOrNull,
+        data,
         (obj) => ReviewCreateResult.fromJson(obj as Map<String, dynamic>),
       );
       return apiResponse.result;
@@ -120,8 +126,10 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   Future<FavoriteCheckResult?> checkFavorite(int exhibitId) async {
     try {
       var response = await _dio.get('/favorites/check/$exhibitId');
+      var data = response.dataOrNull;
+      if (data == null) return null;
       var apiResponse = ApiResponse<FavoriteCheckResult>.fromJson(
-        response.dataOrNull,
+        data,
         (obj) => FavoriteCheckResult.fromJson(obj as Map<String, dynamic>),
       );
       return apiResponse.result;
@@ -162,7 +170,9 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
       } else {
         response = await _dio.delete('/favorites/$exhibitId');
       }
-      var model = BaseResultModel.fromJson(response.dataOrNull);
+      var data = response.dataOrNull;
+      if (data == null) return;
+      var model = BaseResultModel.fromJson(data);
       AppUtil.debugLog('updateFavoriteExhibit get message: ${model.message}');
     } catch (e) {
       AppUtil.debugLog('updateFavoriteExhibit: $e');

@@ -36,7 +36,7 @@ class KeywordModelsRepositoryMockImpl implements KeywordModelsRepository {
   }
 
   @override
-  Future<bool> saveKeywordModels(List<int> keywordIds) async {
+  Future<bool> saveKeywordModels(List<String> keywords) async {
     await Future.delayed(const Duration(milliseconds: 100));
     return true;
   }

@@ -1,3 +1,4 @@
+import 'package:arttrip/shared/widgets/app_toast.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/onboarding/data/models/keyword_model.dart';
 import 'package:arttrip/features/onboarding/viewmodels/keywords_viewmodel.dart';
@@ -223,7 +224,7 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
     if (success) {
       if (mounted) {
         if (widget.isEditMode) {
-          Navigator.pop(context);
+          AppToast.show(context, message: context.l10n.keywordSaveSuccess);
         } else {
           Routes.go(context, '/');
         }

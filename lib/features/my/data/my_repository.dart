@@ -1,6 +1,5 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
-import 'package:arttrip/core/network/models/api_response.dart';
 import 'package:arttrip/features/my/data/models/my_review_model.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:dio/dio.dart';
@@ -40,14 +39,12 @@ class MyRepositoryImpl implements MyRepository {
   }) async {
     try {
       var response = await _dio.get(
-        '/my/mypage',
+        '/me',
         queryParameters: {'w': width, 'h': height},
       );
-      var apiResponse = ApiResponse<UserProfileModel>.fromJson(
-        response.dataOrNull,
-        (obj) => UserProfileModel.fromJson(obj as Map<String, dynamic>),
-      );
-      return apiResponse.result;
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      return UserProfileModel.fromJson(data as Map<String, dynamic>);
     } catch (e) {
       AppUtil.debugLog('fetchUserProfile: $e');
     }
@@ -60,12 +57,8 @@ class MyRepositoryImpl implements MyRepository {
       var formData = FormData.fromMap({
         'image': await MultipartFile.fromFile(image.path, filename: image.name),
       });
-      var response = await _dio.post('/my/profile', data: formData);
-      var apiResponse = ApiResponse<String>.fromJson(
-        response.dataOrNull,
-        (obj) => obj as String,
-      );
-      return apiResponse.isSuccess;
+      var response = await _dio.patch('/me/image', data: formData);
+      return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('uploadProfileImage: $e');
     }
@@ -75,9 +68,8 @@ class MyRepositoryImpl implements MyRepository {
   @override
   Future<bool> deleteProfileImage() async {
     try {
-      var response = await _dio.delete('/my/profile');
-      var apiResponse = ApiResponse<void>.fromJson(response.dataOrNull, (_) {});
-      return apiResponse.isSuccess;
+      var response = await _dio.delete('/me/image');
+      return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('deleteProfileImage: $e');
     }
@@ -87,15 +79,11 @@ class MyRepositoryImpl implements MyRepository {
   @override
   Future<String?> updateNickname(String nickname) async {
     try {
-      var response = await _dio.patch(
-        '/my/nickname',
-        data: {'nickName': nickname},
-      );
-      var apiResponse = ApiResponse<void>.fromJson(response.dataOrNull, (_) {});
-      if (apiResponse.isSuccess) {
+      var response = await _dio.patch('/me', data: {'nickName': nickname});
+      if (response.isSuccess) {
         return null; // 성공
       }
-      return apiResponse.message;
+      return '닉네임 변경에 실패했습니다.';
     } on DioException catch (e) {
       var data = e.response?.data;
       if (data is Map<String, dynamic>) {
@@ -128,12 +116,9 @@ class MyRepositoryImpl implements MyRepository {
         '/reviews/all',
         queryParameters: queryParams,
       );
-      var apiResponse = ApiResponse<MyReviewListResponseModel>.fromJson(
-        response.dataOrNull,
-        (obj) =>
-            MyReviewListResponseModel.fromJson(obj as Map<String, dynamic>),
-      );
-      return apiResponse.result;
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      return MyReviewListResponseModel.fromJson(data as Map<String, dynamic>);
     } catch (e) {
       AppUtil.debugLog('fetchMyReviews: $e');
     }
@@ -144,8 +129,7 @@ class MyRepositoryImpl implements MyRepository {
   Future<bool> deleteReview(int reviewId) async {
     try {
       var response = await _dio.delete('/reviews/$reviewId');
-      var apiResponse = ApiResponse<void>.fromJson(response.dataOrNull, (_) {});
-      return apiResponse.isSuccess;
+      return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('deleteReview: $e');
     }

@@ -40,7 +40,9 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<List<String>?> fetchOverseasCountries() async {
     try {
       var response = await _dio.get('/exhibit/overseas');
-      var model = BaseResultModel.fromJson(response.dataOrNull);
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var model = BaseResultModel.fromJson(data);
       if (model.result is! List) {
         AppUtil.debugLog(
           'fetchOverseasCountries type inconsistency: ${model.result.runtimeType}',
@@ -59,7 +61,9 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<List<RegionModel>?> fetchDomesticRegions() async {
     try {
       var response = await _dio.get('/exhibit/domestic');
-      var model = BaseResultModel.fromJson(response.dataOrNull);
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var model = BaseResultModel.fromJson(data);
 
       if (model.result is! List) {
         AppUtil.debugLog(
@@ -90,7 +94,9 @@ class HomeRepositoryImpl implements HomeRepository {
         if (isDomestic) 'region': region,
       };
       var response = await _dio.post('/home/recommend/today', data: body);
-      var model = BaseResultModel.fromJson(response.dataOrNull);
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var model = BaseResultModel.fromJson(data);
       if (model.result is! List) {
         AppUtil.debugLog(
           'fetchTodayExhibitRecommendations type inconsistency: ${model.result.runtimeType}',
@@ -110,7 +116,9 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<List<String>?> fetchGenres() async {
     try {
       var response = await _dio.get('/exhibit/genre');
-      var model = BaseResultModel.fromJson(response.dataOrNull);
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var model = BaseResultModel.fromJson(data);
       if (model.result is! List) {
         AppUtil.debugLog(
           'fetchGenres type inconsistency: ${model.result.runtimeType}',
@@ -139,7 +147,9 @@ class HomeRepositoryImpl implements HomeRepository {
         'singleGenre': genre,
       };
       var response = await _dio.post('/home/genre/random', data: body);
-      var model = BaseResultModel.fromJson(response.dataOrNull);
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var model = BaseResultModel.fromJson(data);
       if (model.result is! List) {
         AppUtil.debugLog(
           'fetchExhibitsByGenre type inconsistency: ${model.result.runtimeType}',
@@ -168,7 +178,9 @@ class HomeRepositoryImpl implements HomeRepository {
         if (isDomestic) 'region': region,
       };
       var response = await _dio.post('/home/personalized/random', data: body);
-      var model = BaseResultModel.fromJson(response.dataOrNull);
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var model = BaseResultModel.fromJson(data);
       if (model.result is! List) {
         AppUtil.debugLog(
           'fetchPersonalizedExhibits type inconsistency: ${model.result.runtimeType}',
@@ -199,7 +211,9 @@ class HomeRepositoryImpl implements HomeRepository {
         'date': date,
       };
       var response = await _dio.post('/home/personalized/random', data: body);
-      var model = BaseResultModel.fromJson(response.dataOrNull);
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var model = BaseResultModel.fromJson(data);
       if (model.result is! List) {
         AppUtil.debugLog(
           'fetchWeeklyExhibitsBySelectedDate type inconsistency: ${model.result.runtimeType}',

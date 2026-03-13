@@ -1,12 +1,10 @@
-// https://medium.com/@pomis172/vscode-customizations-for-flutter-developers-055281264481
 {
-  // Dart UI Guides.
   "dart.previewFlutterUiGuides": true,
   "dart.lineLength": 80,
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always",
     "quickfix.add.required": "always",
-    "quickfix.create.constructorForFinalFields": "always",
+    "quickfix.create.constructorForFinalFields": "always"
   },
   "editor.formatOnSave": true,
   "explorer.fileNesting.enabled": true,
@@ -20,9 +18,8 @@
     "*.dart": "$(capture).g.dart, $(capture).freezed.dart, $(capture).gr.dart",
     "mason.yaml": "mason-lock.json",
     "goglobal.sh": "goglobal.json",
-    "make_tr.sh": "make_built.sh",
+    "make_tr.sh": "make_built.sh"
   },
-  // 파일 숨기기.
   "files.exclude": {
     "**/*.freezed.dart": true,
     "**/*.g.dart": true,
@@ -31,9 +28,8 @@
     "**/.dart_tool": true,
     "**/.goglobal": true,
     "**/.cursor": true,
-    "**/.idea": true,
+    "**/.idea": true
   },
-  // Toolbar location
   "window.commandCenter": true,
   "debug.toolBarLocation": "commandCenter",
   // ARB 파일 메타데이터 경고 숨기기
@@ -41,4 +37,5 @@
     "missing_metadata_for_key",
     "placeholder_without_metadata"
   ],
+  "dart.flutterSdkPath": ".fvm/versions/3.32.7"
 }
