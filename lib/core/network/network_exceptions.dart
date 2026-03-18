@@ -54,7 +54,7 @@ sealed class NetworkException implements Exception {
 
   /// HTTP 상태 코드에 따른 예외 생성
   factory NetworkException.fromStatusCode({int? statusCode, Object? data}) {
-    var serverMessage = _extractServerMessage(data);
+    final serverMessage = _extractServerMessage(data);
 
     switch (statusCode) {
       case 400:

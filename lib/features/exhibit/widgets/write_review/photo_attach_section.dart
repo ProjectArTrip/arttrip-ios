@@ -80,8 +80,8 @@ class PhotoAttachSection extends StatelessWidget {
     BuildContext context,
     WriteReviewViewModel vm,
   ) async {
-    var picker = ImagePicker();
-    var images = await picker.pickMultiImage();
+    final picker = ImagePicker();
+    final images = await picker.pickMultiImage();
     if (images.isNotEmpty) {
       vm.addImages(images);
     }

@@ -22,10 +22,10 @@ class LoggingInterceptor extends Interceptor {
     _requestTimes[options.hashCode] = DateTime.now();
     if (enableRequestBody && options.data != null) {
       if (options.data is FormData) {
-        var formData = options.data as FormData;
+        final formData = options.data as FormData;
         debugPrint('[API] Request FormData:');
         // extra에 저장된 JSON body 출력
-        var requestJson = options.extra['requestJson'];
+        final requestJson = options.extra['requestJson'];
         if (requestJson != null) {
           debugPrint('[API]   request: $requestJson');
         }
@@ -34,7 +34,7 @@ class LoggingInterceptor extends Interceptor {
         }
         // 파일 목록 출력 (JSON 파트 제외)
         for (var file in formData.files) {
-          var contentType = file.value.contentType?.toString() ?? '';
+          final contentType = file.value.contentType?.toString() ?? '';
           if (!contentType.contains('json')) {
             debugPrint('[API]   ${file.key}: ${file.value.filename}');
           }
@@ -62,16 +62,16 @@ class LoggingInterceptor extends Interceptor {
   }
 
   void _log(RequestOptions options, int? statusCode, {required bool isError}) {
-    var startTime = _requestTimes.remove(options.hashCode);
-    var duration =
+    final startTime = _requestTimes.remove(options.hashCode);
+    final duration =
         startTime != null
             ? DateTime.now().difference(startTime).inMilliseconds
             : 0;
 
-    var method = options.method.padRight(6);
-    var path = options.path;
-    var status = statusCode?.toString() ?? 'ERR';
-    var icon = isError ? '✗' : '✓';
+    final method = options.method.padRight(6);
+    final path = options.path;
+    final status = statusCode?.toString() ?? 'ERR';
+    final icon = isError ? '✗' : '✓';
 
     debugPrint('[API] $icon $method $path → $status (${duration}ms)');
   }

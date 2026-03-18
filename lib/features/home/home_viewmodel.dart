@@ -164,7 +164,7 @@ class HomeViewModel with ChangeNotifier {
     domesticRegions = const AsyncState.loading();
     notifyListeners();
 
-    var result = await homeRepository.fetchDomesticRegions();
+    final result = await homeRepository.fetchDomesticRegions();
     if (result == null) {
       domesticRegions = const AsyncState.error();
     } else {
@@ -175,7 +175,7 @@ class HomeViewModel with ChangeNotifier {
   }
 
   Future<void> fetchTodayExhibitRecommendations() async {
-    var key = _isDomestic ? LocationType.domestic.name : _selectedLocation;
+    final key = _isDomestic ? LocationType.domestic.name : _selectedLocation;
     if (_todayExhibitRecommendationsCache[key] != null) {
       todayExhibitRecommendations = AsyncState.success(
         _todayExhibitRecommendationsCache[key]!,
@@ -187,7 +187,7 @@ class HomeViewModel with ChangeNotifier {
     todayExhibitRecommendations = const AsyncState.loading();
     notifyListeners();
 
-    var result = await homeRepository.fetchTodayExhibitRecommendations(
+    final result = await homeRepository.fetchTodayExhibitRecommendations(
       isDomestic: _isDomestic,
       country: _isDomestic ? null : _selectedLocation,
       region: _isDomestic ? '전체' : null,
@@ -212,7 +212,7 @@ class HomeViewModel with ChangeNotifier {
     genres[locationType] = const AsyncState.loading();
     notifyListeners();
 
-    var result = await homeRepository.fetchGenres();
+    final result = await homeRepository.fetchGenres();
     if (result == null) {
       genres[locationType] = const AsyncState.error();
       notifyListeners();
@@ -236,7 +236,7 @@ class HomeViewModel with ChangeNotifier {
     exhibitsByGenre[locationType] = const AsyncState.loading();
     notifyListeners();
 
-    var result = await homeRepository.fetchExhibitsByGenre(
+    final result = await homeRepository.fetchExhibitsByGenre(
       isDomestic: _isDomestic,
       country: _isDomestic ? null : _selectedLocation,
       region: _isDomestic ? _selectedLocation : null,
@@ -253,8 +253,9 @@ class HomeViewModel with ChangeNotifier {
   }
 
   Future<void> fetchPersonalizedExhibits() async {
-    var location = _isDomestic ? LocationType.domestic : LocationType.overseas;
-    var cached = _personalizedExhibitsCache[location.name];
+    final location =
+        _isDomestic ? LocationType.domestic : LocationType.overseas;
+    final cached = _personalizedExhibitsCache[location.name];
     if (cached != null) {
       personalizedExhibits[location.name] = AsyncState.success(cached);
       notifyListeners();
@@ -264,7 +265,7 @@ class HomeViewModel with ChangeNotifier {
     personalizedExhibits[location.name] = const AsyncState.loading();
     notifyListeners();
 
-    var result = await homeRepository.fetchPersonalizedExhibits(
+    final result = await homeRepository.fetchPersonalizedExhibits(
       isDomestic: _isDomestic,
       country: _isDomestic ? null : _selectedLocation,
       region: _isDomestic ? _selectedLocation : null,
@@ -284,7 +285,7 @@ class HomeViewModel with ChangeNotifier {
     bool isInitialLoad = false,
   }) async {
     if (isInitialLoad) _selectedDateInWeek = _today;
-    var selectedDateDay = _selectedDateInWeek.day.toString();
+    final selectedDateDay = _selectedDateInWeek.day.toString();
 
     if (_weeklyExhibitsBySelectedDateCache[locationType]?[selectedDateDay] !=
         null) {
@@ -300,7 +301,7 @@ class HomeViewModel with ChangeNotifier {
         const AsyncState.loading();
     notifyListeners();
 
-    var result = await homeRepository.fetchWeeklyExhibitsBySelectedDate(
+    final result = await homeRepository.fetchWeeklyExhibitsBySelectedDate(
       isDomestic: _isDomestic,
       country: _isDomestic ? null : _selectedLocation,
       region: _isDomestic ? _selectedLocation : null,
@@ -330,7 +331,7 @@ class HomeViewModel with ChangeNotifier {
     notifyListeners();
 
     await Future.delayed(const Duration(milliseconds: 500));
-    var result = AppUtil.getCurrentWeek(_today);
+    final result = AppUtil.getCurrentWeek(_today);
 
     weeklyCalendar = AsyncState.success(result);
     _weeklyCalendarCache = result;

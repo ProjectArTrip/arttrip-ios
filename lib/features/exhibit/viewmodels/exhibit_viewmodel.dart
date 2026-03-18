@@ -17,7 +17,7 @@ class ExhibitViewModel with ChangeNotifier {
   /// (이미 존재하는 값은 덮어쓰지 않음)
   void initializeFromExhibits(List<ExhibitModel> exhibits) {
     for (var exhibit in exhibits) {
-      var id = exhibit.exhibitId;
+      final id = exhibit.exhibitId;
       if (id == null) continue;
 
       _favoriteMap.putIfAbsent(id, () => exhibit.favorite);

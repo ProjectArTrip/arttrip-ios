@@ -25,7 +25,7 @@ class WriteReviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return InitWidget(
       init: () {
-        var vm = context.read<WriteReviewViewModel>();
+        final vm = context.read<WriteReviewViewModel>();
         if (params.isEditMode) {
           vm.initForEdit(reviewId: params.reviewId!);
         } else {

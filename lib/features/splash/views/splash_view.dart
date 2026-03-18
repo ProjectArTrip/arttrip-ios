@@ -29,7 +29,7 @@ class _SplashViewState extends State<SplashView> {
     // 네이티브 스플래시 제거
     FlutterNativeSplash.remove();
 
-    var authService = AuthService.instance;
+    final authService = AuthService.instance;
 
     // 토큰 존재 여부만 확인 (만료 여부는 API 호출 시 서버에서 판단)
     if (authService.isLoggedIn()) {

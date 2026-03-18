@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+      final homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
       homeViewModel.selectedLocation = context.l10n.allItems;
       homeViewModel.load(context);
     });
@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           Tab(text: context.l10n.domesticExhibition),
         ],
         onTap: (index) async {
-          var homeViewModel = Provider.of<HomeViewModel>(
+          final homeViewModel = Provider.of<HomeViewModel>(
             context,
             listen: false,
           );

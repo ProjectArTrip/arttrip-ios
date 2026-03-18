@@ -42,11 +42,11 @@ class MyRepositoryImpl implements MyRepository {
     int height = 100,
   }) async {
     try {
-      var response = await _dio.get(
+      final response = await _dio.get(
         '/me',
         queryParameters: {'w': width, 'h': height},
       );
-      var data = response.dataOrNull;
+      final data = response.dataOrNull;
       if (data == null) return null;
       return UserProfileModel.fromJson(data as Map<String, dynamic>);
     } catch (e) {
@@ -58,10 +58,10 @@ class MyRepositoryImpl implements MyRepository {
   @override
   Future<bool> uploadProfileImage(XFile image) async {
     try {
-      var formData = FormData.fromMap({
+      final formData = FormData.fromMap({
         'image': await MultipartFile.fromFile(image.path, filename: image.name),
       });
-      var response = await _dio.patch('/me/image', data: formData);
+      final response = await _dio.patch('/me/image', data: formData);
       return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('uploadProfileImage: $e');
@@ -72,7 +72,7 @@ class MyRepositoryImpl implements MyRepository {
   @override
   Future<bool> deleteProfileImage() async {
     try {
-      var response = await _dio.delete('/me/image');
+      final response = await _dio.delete('/me/image');
       return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('deleteProfileImage: $e');
@@ -83,13 +83,13 @@ class MyRepositoryImpl implements MyRepository {
   @override
   Future<String?> updateNickname(String nickname) async {
     try {
-      var response = await _dio.patch('/me', data: {'nickName': nickname});
+      final response = await _dio.patch('/me', data: {'nickName': nickname});
       if (response.isSuccess) {
         return null; // 성공
       }
       return '닉네임 변경에 실패했습니다.';
     } on DioException catch (e) {
-      var data = e.response?.data;
+      final data = e.response?.data;
       if (data is Map<String, dynamic>) {
         return data['message'] as String? ?? '닉네임 변경에 실패했습니다.';
       }
@@ -108,7 +108,7 @@ class MyRepositoryImpl implements MyRepository {
     int height = 72,
   }) async {
     try {
-      var queryParams = <String, dynamic>{
+      final queryParams = <String, dynamic>{
         'size': size,
         'w': width,
         'h': height,
@@ -116,11 +116,11 @@ class MyRepositoryImpl implements MyRepository {
       if (cursor != null) {
         queryParams['cursor'] = cursor;
       }
-      var response = await _dio.get(
+      final response = await _dio.get(
         '/reviews/all',
         queryParameters: queryParams,
       );
-      var data = response.dataOrNull;
+      final data = response.dataOrNull;
       if (data == null) return null;
       return MyReviewListResponseModel.fromJson(data as Map<String, dynamic>);
     } catch (e) {
@@ -132,7 +132,7 @@ class MyRepositoryImpl implements MyRepository {
   @override
   Future<bool> deleteReview(int reviewId) async {
     try {
-      var response = await _dio.delete('/reviews/$reviewId');
+      final response = await _dio.delete('/reviews/$reviewId');
       return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('deleteReview: $e');
@@ -143,8 +143,8 @@ class MyRepositoryImpl implements MyRepository {
   @override
   Future<RecentExhibitListResponseModel?> fetchRecentExhibits() async {
     try {
-      var response = await _dio.get('/me/recent-exhibits');
-      var data = response.dataOrNull;
+      final response = await _dio.get('/me/recent-exhibits');
+      final data = response.dataOrNull;
       if (data == null) return null;
       return RecentExhibitListResponseModel.fromJson(
         data as Map<String, dynamic>,

@@ -65,8 +65,8 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
                       separatorBuilder:
                           (context, index) => SizedBox(width: 8.w),
                       itemBuilder: (_, index) {
-                        var item = data[index];
-                        var location = item.countryName ?? item.regionName;
+                        final item = data[index];
+                        final location = item.countryName ?? item.regionName;
                         return GestureDetector(
                           onTap:
                               () => Routes.push(
@@ -125,7 +125,7 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
                                             right: 8.w,
                                             child: GestureDetector(
                                               onTap: () {
-                                                var exhibitViewModel =
+                                                final exhibitViewModel =
                                                     Provider.of<
                                                       ExhibitViewModel
                                                     >(context, listen: false);

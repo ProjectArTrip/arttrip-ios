@@ -62,7 +62,7 @@ class _WeeklyExhibitsScheduleViewState
                           return Column(
                             spacing: 8.h,
                             children: List.generate(data.length, (index) {
-                              var item = data[index];
+                              final item = data[index];
                               return ExhibitListItem(item: item);
                             }),
                           );
@@ -121,7 +121,7 @@ class _WeeklyExhibitsScheduleViewState
   }
 
   Padding _buildWeeklyCalendar(List<DateTime> currentWeek) {
-    var locale = Localizations.localeOf(context);
+    final locale = Localizations.localeOf(context);
 
     return Padding(
       padding: EdgeInsetsGeometry.only(top: 8.h, bottom: 20.h),
@@ -133,12 +133,15 @@ class _WeeklyExhibitsScheduleViewState
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(currentWeek.length, (index) {
-                var date = currentWeek[index];
-                var isToday = DateUtils.isSameDay(date, selectedDateInWeek);
-                var weekDay = AppUtil.weekdayLabel(date: date, locale: locale);
+                final date = currentWeek[index];
+                final isToday = DateUtils.isSameDay(date, selectedDateInWeek);
+                final weekDay = AppUtil.weekdayLabel(
+                  date: date,
+                  locale: locale,
+                );
                 return GestureDetector(
                   onTap: () {
-                    var homeViewModel = Provider.of<HomeViewModel>(
+                    final homeViewModel = Provider.of<HomeViewModel>(
                       context,
                       listen: false,
                     );
@@ -227,9 +230,9 @@ class _WeeklyExhibitsScheduleViewState
                 children: List.generate(7, (index) {
                   return Column(
                     spacing: 4.h,
-                    children: [
-                      const ShimmerSkeletonItem(width: 28, height: 28),
-                      const ShimmerSkeletonItem(width: 16, height: 16),
+                    children: const [
+                      ShimmerSkeletonItem(width: 28, height: 28),
+                      ShimmerSkeletonItem(width: 16, height: 16),
                     ],
                   );
                 }),

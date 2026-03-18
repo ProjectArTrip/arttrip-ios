@@ -121,7 +121,7 @@ class SnackBarUtils {
     required Duration duration,
     SnackBarAction? action,
   }) {
-    var config = _getConfig(type);
+    final config = _getConfig(type);
 
     _showCustom(
       context,
@@ -150,7 +150,7 @@ class SnackBarUtils {
   }) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
-    var snackBar = SnackBar(
+    final snackBar = SnackBar(
       content: Row(
         children: [
           if (icon != null) ...[

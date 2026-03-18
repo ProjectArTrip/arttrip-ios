@@ -288,7 +288,7 @@ class DioClient {
       );
       return ApiResult.success(savePath);
     } on DioException catch (e) {
-      var exception = _extractNetworkException(e);
+      final exception = _extractNetworkException(e);
       return ApiResult.failure(exception);
     } catch (e) {
       return ApiResult.failure(
@@ -309,8 +309,8 @@ class DioClient {
     _checkInitialized();
 
     try {
-      var response = await call();
-      var data = response.data;
+      final response = await call();
+      final data = response.data;
 
       // fromJson이 제공된 경우 변환
       if (fromJson != null) {
@@ -320,7 +320,7 @@ class DioClient {
       // T가 dynamic이거나 변환이 필요 없는 경우
       return ApiResult.success(data as T);
     } on DioException catch (e) {
-      var exception = _extractNetworkException(e);
+      final exception = _extractNetworkException(e);
       return ApiResult.failure(exception);
     } catch (e) {
       return ApiResult.failure(

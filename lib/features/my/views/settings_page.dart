@@ -27,7 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _loadAppVersion() async {
-    var packageInfo = await PackageInfo.fromPlatform();
+    final packageInfo = await PackageInfo.fromPlatform();
     setState(() => _appVersion = packageInfo.version);
   }
 
@@ -128,7 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _onDeleteAccountTap() async {
-    var result = await AppConfirmDialog.show(
+    final result = await AppConfirmDialog.show(
       context: context,
       title: context.l10n.deleteAccountTitle,
       content: Column(

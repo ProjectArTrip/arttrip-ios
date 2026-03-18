@@ -27,7 +27,7 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
   List<GlobalKey>? _itemKeys;
 
   void _updateSelectedGenre(int index, String genre) {
-    var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+    final homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
     homeViewModel.selectedGenre = genre;
     homeViewModel.fetchExhibitsByGenre();
     if (_itemKeys![index].currentContext != null) {
@@ -54,7 +54,7 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
             onData: (genres) {
               if (genres.isEmpty) return const SizedBox.shrink();
 
-              var itemCount = genres.length;
+              final itemCount = genres.length;
               _itemKeys = List.generate(itemCount, (_) => GlobalKey());
 
               return Padding(
@@ -98,7 +98,7 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
                           state: state,
                           onData: (data) {
                             if (data.isEmpty) {
-                              var selectedGenre =
+                              final selectedGenre =
                                   Provider.of<HomeViewModel>(
                                     context,
                                     listen: false,
@@ -113,7 +113,7 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
                               separatorBuilder:
                                   (context, index) => SizedBox(height: 8.h),
                               itemBuilder: (context, index) {
-                                var item = data[index];
+                                final item = data[index];
                                 return ExhibitListItem(item: item);
                               },
                             );
@@ -242,7 +242,10 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
   GestureDetector _buildGenreItem(GlobalKey key, int index, String genre) {
     return GestureDetector(
       onTap: () {
-        var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+        final homeViewModel = Provider.of<HomeViewModel>(
+          context,
+          listen: false,
+        );
         if (homeViewModel.selectedGenre != genre) {
           _updateSelectedGenre(index, genre);
         }
@@ -250,7 +253,7 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
       child: Selector<HomeViewModel, String>(
         selector: (_, vm) => vm.selectedGenre,
         builder: (context, selectedGenreIndex, _) {
-          var isSelected = genre == selectedGenreIndex;
+          final isSelected = genre == selectedGenreIndex;
           return Container(
             key: key,
             padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 20.w),

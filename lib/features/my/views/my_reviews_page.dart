@@ -47,7 +47,7 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
   }
 
   Future<void> _handleDelete(int reviewId) async {
-    var confirmed = await AppConfirmDialog.show(
+    final confirmed = await AppConfirmDialog.show(
       context: context,
       title: context.l10n.deleteReviewTitle,
       content: Text(
@@ -70,7 +70,7 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
   }
 
   Future<void> _handleEdit(MyReviewModel review) async {
-    var result = await Routes.modal<bool>(
+    final result = await Routes.modal<bool>(
       context,
       '/review/edit/${review.reviewId}',
       extra: WriteReviewParams(
@@ -90,7 +90,7 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
   Widget build(BuildContext context) {
     return InitWidget(
       init: () {
-        var vm = context.read<MyViewModel>();
+        final vm = context.read<MyViewModel>();
         vm.resetReviews();
         vm.fetchMyReviews();
       },
@@ -144,10 +144,10 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
   Widget _buildReviewItems(List<MyReviewModel> reviews) {
     return Consumer<MyViewModel>(
       builder: (context, vm, _) {
-        var isLoadingMore = vm.isLoadingMoreReviews;
-        var totalCount = vm.reviewTotalCount;
+        final isLoadingMore = vm.isLoadingMoreReviews;
+        final totalCount = vm.reviewTotalCount;
         // +1 for header, +1 for loading indicator if loading
-        var itemCount = reviews.length + 1 + (isLoadingMore ? 1 : 0);
+        final itemCount = reviews.length + 1 + (isLoadingMore ? 1 : 0);
 
         return ListView.builder(
           controller: _scrollController,
@@ -179,7 +179,7 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
             }
 
             // 리뷰 아이템 (index - 1 because of header)
-            var reviewIndex = index - 1;
+            final reviewIndex = index - 1;
             return Padding(
               padding: EdgeInsets.fromLTRB(24.w, 0, 24.w, 24.h),
               child: MyReviewItem(

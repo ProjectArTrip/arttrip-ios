@@ -39,7 +39,7 @@ class AuthInterceptor extends Interceptor {
       return handler.next(options);
     }
 
-    var token = await tokenProvider();
+    final token = await tokenProvider();
 
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
@@ -65,7 +65,7 @@ class AuthInterceptor extends Interceptor {
     }
 
     // 응답 body에서 code 확인
-    var errorCode = _extractErrorCode(err.response);
+    final errorCode = _extractErrorCode(err.response);
 
     // JWT401-EXPIRED_ACCESS만 토큰 갱신 시도, 나머지는 바로 로그아웃
     if (errorCode != 'JWT401-EXPIRED_ACCESS') {
@@ -82,12 +82,12 @@ class AuthInterceptor extends Interceptor {
     _isRefreshing = true;
 
     try {
-      var newToken = await onTokenRefresh();
+      final newToken = await onTokenRefresh();
 
       if (newToken != null) {
         // 토큰 갱신 성공 - 현재 요청 재시도
         err.requestOptions.headers['Authorization'] = 'Bearer $newToken';
-        var response = await _retry(err.requestOptions);
+        final response = await _retry(err.requestOptions);
         handler.resolve(response);
 
         // 대기 중인 요청들도 재시도
@@ -113,7 +113,7 @@ class AuthInterceptor extends Interceptor {
     if (response?.data == null) return null;
 
     try {
-      var data = response!.data;
+      final data = response!.data;
       if (data is Map<String, dynamic>) {
         return data['code'] as String?;
       }
@@ -148,13 +148,13 @@ class AuthInterceptor extends Interceptor {
 
   /// 대기 중인 요청들을 새 토큰으로 재시도
   Future<void> _processPendingRequests(String newToken) async {
-    var requests = List<_PendingRequest>.from(_pendingRequests);
+    final requests = List<_PendingRequest>.from(_pendingRequests);
     _pendingRequests.clear();
 
     for (var request in requests) {
       try {
         request.options.headers['Authorization'] = 'Bearer $newToken';
-        var response = await _retry(request.options);
+        final response = await _retry(request.options);
         request.handler.resolve(response);
       } catch (e) {
         request.handler.reject(
@@ -166,7 +166,7 @@ class AuthInterceptor extends Interceptor {
 
   /// 대기 중인 요청들을 에러로 거부
   void _rejectPendingRequests(DioException error) {
-    var requests = List<_PendingRequest>.from(_pendingRequests);
+    final requests = List<_PendingRequest>.from(_pendingRequests);
     _pendingRequests.clear();
 
     for (var request in requests) {
@@ -183,7 +183,7 @@ class AuthInterceptor extends Interceptor {
 
   /// 요청 재시도
   Future<Response<Object?>> _retry(RequestOptions options) async {
-    var dio = Dio();
+    final dio = Dio();
     return dio.fetch(options);
   }
 }

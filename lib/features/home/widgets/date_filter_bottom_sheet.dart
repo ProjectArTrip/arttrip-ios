@@ -40,9 +40,9 @@ class _DateFilterBottomSheetState extends State<DateFilterBottomSheet> {
 
   String formatSelectedStartDate(DateTime? date) {
     if (date == null) return '';
-    var language = AppUtil.getLanguage(context);
-    var monthDay = DateFormat('M.dd', language).format(date);
-    var weekday = DateFormat('E', language).format(date);
+    final language = AppUtil.getLanguage(context);
+    final monthDay = DateFormat('M.dd', language).format(date);
+    final weekday = DateFormat('E', language).format(date);
 
     return '$monthDay ($weekday)';
   }
@@ -257,8 +257,8 @@ class _DateFilterBottomSheetState extends State<DateFilterBottomSheet> {
                 children: List.generate(widget.overseasCountries.length, (
                   index,
                 ) {
-                  var item = widget.overseasCountries[index];
-                  var isSelected = selectedCountry == item;
+                  final item = widget.overseasCountries[index];
+                  final isSelected = selectedCountry == item;
                   return GestureDetector(
                     onTap: () {
                       _selectedCountry.value = item;
@@ -303,7 +303,7 @@ class _DateFilterBottomSheetState extends State<DateFilterBottomSheet> {
   }
 
   SizedBox _buildCalendarCard() {
-    var weekdays = AppUtil.getLocalizedWeekdays(
+    final weekdays = AppUtil.getLocalizedWeekdays(
       Localizations.localeOf(context),
     );
     return SizedBox(
@@ -316,7 +316,7 @@ class _DateFilterBottomSheetState extends State<DateFilterBottomSheet> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(weekdays.length, (index) {
-                var item = weekdays[index];
+                final item = weekdays[index];
                 return Padding(
                   padding: EdgeInsets.only(top: 4.h, bottom: 8.h),
                   child: ArtTripText.pretendard()

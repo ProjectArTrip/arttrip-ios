@@ -57,7 +57,7 @@ class ExhibitListItem extends StatelessWidget {
                       builder: (context, isFavorite, _) {
                         return GestureDetector(
                           onTap: () {
-                            var exhibitViewModel =
+                            final exhibitViewModel =
                                 Provider.of<ExhibitViewModel>(
                                   context,
                                   listen: false,

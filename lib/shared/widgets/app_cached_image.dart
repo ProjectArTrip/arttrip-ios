@@ -27,7 +27,7 @@ class AppCachedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget image = CachedNetworkImage(
+    final Widget image = CachedNetworkImage(
       imageUrl: imageUrl,
       width: width,
       height: height,
@@ -54,7 +54,7 @@ class AppCachedImage extends StatelessWidget {
   }
 
   Widget _buildPlaceholder() {
-    Widget placeholder = Shimmer(
+    final Widget placeholder = Shimmer(
       duration: const Duration(milliseconds: AppConsts.shimmerDurationMs),
       interval: const Duration(milliseconds: AppConsts.shimmerIntervalMs),
       child: ShimmerSkeletonItem(width: width, height: height, radius: 0),

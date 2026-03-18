@@ -31,7 +31,7 @@ class _AlertsPageState extends State<AlertsPage> {
               itemCount: 10,
               separatorBuilder: (context, index) => SizedBox(height: 4.h),
               itemBuilder: (context, index) {
-                var isUnread = true;
+                final isUnread = index % 2 == 0 ? true : false;
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 8.w,
@@ -53,7 +53,6 @@ class _AlertsPageState extends State<AlertsPage> {
                                   .color(
                                     isUnread
                                         ? AppColors.textPrimary
-                                        // ignore: dead_code
                                         : AppColors.textSecondary,
                                   )
                                   .build()

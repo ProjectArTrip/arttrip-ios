@@ -114,11 +114,11 @@ class _ExhibitReviewModelTabContentState
 
   Future<void> _onWriteReviewPressed(BuildContext context) async {
     // 다이얼로그로 리뷰 작성 확인
-    var confirmed = await _showReviewPromptDialog(context);
+    final confirmed = await _showReviewPromptDialog(context);
     if (confirmed != true || !context.mounted) return;
 
     // 리뷰 작성 페이지로 이동
-    var result = await Routes.modal<bool>(
+    final result = await Routes.modal<bool>(
       context,
       '/exhibit/write-review/${widget.exhibitId}',
       extra: WriteReviewParams(

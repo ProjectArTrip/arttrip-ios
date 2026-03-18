@@ -35,7 +35,7 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      var vm = context.read<KeywordModelsViewModel>();
+      final vm = context.read<KeywordModelsViewModel>();
       vm.reset();
       vm.fetchKeywordModels(loadUserSelection: widget.isEditMode);
     });
@@ -43,7 +43,7 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
 
   @override
   Widget build(BuildContext context) {
-    var vm = context.watch<KeywordModelsViewModel>();
+    final vm = context.watch<KeywordModelsViewModel>();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -219,7 +219,7 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
   // ===== Methods =====
 
   Future<void> _handleSubmit(KeywordModelsViewModel vm) async {
-    var success = await vm.saveKeywordModels();
+    final success = await vm.saveKeywordModels();
 
     if (success) {
       if (mounted) {

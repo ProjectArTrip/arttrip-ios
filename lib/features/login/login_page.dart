@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _isLoading = true);
 
     try {
-      var result = await AuthService.instance.loginWithKakao();
+      final result = await AuthService.instance.loginWithKakao();
 
       if (!mounted) return;
 

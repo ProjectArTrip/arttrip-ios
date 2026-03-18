@@ -43,8 +43,8 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   @override
   Future<ExhibitDetailModel?> fetchExhibitDetailModel(int exhibitId) async {
     try {
-      var response = await _dio.get('/exhibits/$exhibitId');
-      var data = response.dataOrNull;
+      final response = await _dio.get('/exhibits/$exhibitId');
+      final data = response.dataOrNull;
       if (data == null) return null;
       return ExhibitDetailModel.fromJson(data as Map<String, dynamic>);
     } catch (e) {
@@ -60,16 +60,16 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
     int size = 10,
   }) async {
     try {
-      var queryParams = <String, dynamic>{'size': size};
+      final queryParams = <String, dynamic>{'size': size};
       if (cursor != null) {
         queryParams['cursor'] = cursor;
       }
 
-      var response = await _dio.get(
+      final response = await _dio.get(
         '/reviews/exhibit/$exhibitId',
         queryParameters: queryParams,
       );
-      var data = response.dataOrNull;
+      final data = response.dataOrNull;
       if (data == null) return null;
       return ExhibitReviewListResponseModel.fromJson(
         data as Map<String, dynamic>,
@@ -88,8 +88,8 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
     required String content,
   }) async {
     try {
-      var requestJson = jsonEncode({'date': date, 'content': content});
-      var formData = FormData.fromMap({
+      final requestJson = jsonEncode({'date': date, 'content': content});
+      final formData = FormData.fromMap({
         'request': MultipartFile.fromString(
           requestJson,
           contentType: DioMediaType.parse('application/json'),
@@ -105,12 +105,12 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
         );
       }
 
-      var response = await _dio.post(
+      final response = await _dio.post(
         '/reviews/$exhibitId',
         data: formData,
         options: Options(extra: {'requestJson': requestJson}),
       );
-      var data = response.dataOrNull;
+      final data = response.dataOrNull;
       if (data == null) return null;
       return ReviewCreateResult.fromJson(data as Map<String, dynamic>);
     } catch (e) {
@@ -122,8 +122,8 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   @override
   Future<ReviewCreateResult?> fetchReviewDetail(int reviewId) async {
     try {
-      var response = await _dio.get('/reviews/$reviewId');
-      var data = response.dataOrNull;
+      final response = await _dio.get('/reviews/$reviewId');
+      final data = response.dataOrNull;
       if (data == null) return null;
       return ReviewCreateResult.fromJson(data as Map<String, dynamic>);
     } catch (e) {
@@ -141,12 +141,12 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
     required List<int> deleteImageIds,
   }) async {
     try {
-      var requestJson = jsonEncode({
+      final requestJson = jsonEncode({
         'date': date,
         'content': content,
         'deleteImageIds': deleteImageIds,
       });
-      var formData = FormData.fromMap({
+      final formData = FormData.fromMap({
         'request': MultipartFile.fromString(
           requestJson,
           contentType: DioMediaType.parse('application/json'),
@@ -162,7 +162,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
         );
       }
 
-      var response = await _dio.patch(
+      final response = await _dio.patch(
         '/reviews/$reviewId',
         data: formData,
         options: Options(extra: {'requestJson': requestJson}),
@@ -177,7 +177,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   @override
   Future<bool> addFavorite(int exhibitId) async {
     try {
-      var response = await _dio.post('/favorites/$exhibitId');
+      final response = await _dio.post('/favorites/$exhibitId');
       return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('addFavorite: $e');
@@ -188,7 +188,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   @override
   Future<bool> removeFavorite(int exhibitId) async {
     try {
-      var response = await _dio.delete('/favorites/$exhibitId');
+      final response = await _dio.delete('/favorites/$exhibitId');
       return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('removeFavorite: $e');
@@ -205,9 +205,9 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
       } else {
         response = await _dio.delete('/favorites/$exhibitId');
       }
-      var data = response.dataOrNull;
+      final data = response.dataOrNull;
       if (data == null) return;
-      var model = BaseResultModel.fromJson(data);
+      final model = BaseResultModel.fromJson(data);
       AppUtil.debugLog('updateFavoriteExhibit get message: ${model.message}');
     } catch (e) {
       AppUtil.debugLog('updateFavoriteExhibit: $e');

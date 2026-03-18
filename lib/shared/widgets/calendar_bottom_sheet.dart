@@ -34,7 +34,7 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
   void initState() {
     super.initState();
 
-    var now = DateTime.now();
+    final now = DateTime.now();
     _firstDay = widget.firstDate ?? DateTime(2000);
     _lastDay = widget.lastDate ?? now;
 
@@ -166,8 +166,8 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
         },
         calendarBuilders: CalendarBuilders(
           dowBuilder: (context, day) {
-            var l10n = context.l10n;
-            var weekdays = [
+            final l10n = context.l10n;
+            final weekdays = [
               l10n.weekdaySun,
               l10n.weekdayMon,
               l10n.weekdayTue,
@@ -176,7 +176,7 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
               l10n.weekdayFri,
               l10n.weekdaySat,
             ];
-            var weekdayIndex = day.weekday % 7;
+            final weekdayIndex = day.weekday % 7;
 
             return Align(
               alignment: Alignment.topCenter,

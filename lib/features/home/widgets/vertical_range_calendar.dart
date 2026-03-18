@@ -70,10 +70,10 @@ class _VerticalRangeCalendarState extends State<VerticalRangeCalendar> {
   }
 
   List<DateTime?> _daysInMonth(DateTime date) {
-    var firstDay = DateTime(date.year, date.month, 1);
-    var lastDay = DateTime(date.year, date.month + 1, 0);
+    final firstDay = DateTime(date.year, date.month, 1);
+    final lastDay = DateTime(date.year, date.month + 1, 0);
 
-    var leadingEmptyCount = firstDay.weekday % 7;
+    final leadingEmptyCount = firstDay.weekday % 7;
 
     return [
       // 1일 전 빈칸
@@ -94,8 +94,8 @@ class _VerticalRangeCalendarState extends State<VerticalRangeCalendar> {
   }
 
   bool _isTodaySelected() {
-    var start = _rangeStart;
-    var end = _rangeEnd;
+    final start = _rangeStart;
+    final end = _rangeEnd;
 
     if (start != null && _isToday(start)) return true;
     if (end != null && _isToday(end)) return true;
@@ -120,9 +120,9 @@ class _VerticalRangeCalendarState extends State<VerticalRangeCalendar> {
 
   bool _isSpecialCalendar(int year, int month) {
     // 해당 달 1일
-    var firstDay = DateTime(year, month, 1);
+    final firstDay = DateTime(year, month, 1);
     // 해당 달 마지막 날
-    var lastDay = DateTime(year, month + 1, 0).day;
+    final lastDay = DateTime(year, month + 1, 0).day;
 
     if (firstDay.weekday == DateTime.friday && lastDay == 31) {
       return true;
@@ -145,12 +145,12 @@ class _VerticalRangeCalendarState extends State<VerticalRangeCalendar> {
           scrollDirection: Axis.vertical,
           itemCount: _totalMonths,
           itemBuilder: (context, index) {
-            var date = _dateFromIndex(index);
-            var days = _daysInMonth(date);
+            final date = _dateFromIndex(index);
+            final days = _daysInMonth(date);
 
             return ValueListenableBuilder(
               valueListenable: _focusedDay,
-              builder: (_, __, ___) {
+              builder: (_, _, _) {
                 return Column(
                   children: [
                     // header
@@ -181,16 +181,16 @@ class _VerticalRangeCalendarState extends State<VerticalRangeCalendar> {
                             if (day == null) {
                               return const SizedBox.shrink();
                             }
-                            var isStart =
+                            final isStart =
                                 _rangeStart != null &&
                                 _isSameDay(day, _rangeStart!);
-                            var isEnd =
+                            final isEnd =
                                 _rangeEnd != null &&
                                 _isSameDay(day, _rangeEnd!);
-                            var isMiddle = _isWithinRange(day);
-                            var isRangeSelected =
+                            final isMiddle = _isWithinRange(day);
+                            final isRangeSelected =
                                 _rangeStart != null && _rangeEnd != null;
-                            var isPastDate = day.isBefore(
+                            final isPastDate = day.isBefore(
                               DateTime(_today.year, _today.month, _today.day),
                             );
 

@@ -49,7 +49,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Selector<MyViewModel, AsyncState<UserProfileModel>>(
                 selector: (_, vm) => vm.profileState,
                 builder: (context, state, _) {
-                  var nickname =
+                  final nickname =
                       state.data?.nickName ?? widget.profile.nickName ?? '';
                   return EditProfileField(
                     onTap: () => _onNicknameTap(nickname),
@@ -63,7 +63,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Selector<MyViewModel, AsyncState<UserProfileModel>>(
                 selector: (_, vm) => vm.profileState,
                 builder: (context, state, _) {
-                  var email = state.data?.email ?? widget.profile.email ?? '';
+                  final email = state.data?.email ?? widget.profile.email ?? '';
                   return EditProfileField(
                     label: context.l10n.emailLabel,
                     valueColor: AppColors.textTertiary,
@@ -103,7 +103,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       case AsyncStatus.loading:
         return _buildImageSkeleton(size);
       case AsyncStatus.success:
-        var profile = state.data!;
+        final profile = state.data!;
         if (profile.profileImage != null && profile.profileImage!.isNotEmpty) {
           return ClipOval(
             child: AppCachedImage(
@@ -169,7 +169,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _onProfileImageTap() async {
-    var action = await showProfileImageBottomSheet(context);
+    final action = await showProfileImageBottomSheet(context);
     if (action == null) return;
 
     switch (action) {
@@ -186,14 +186,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _pickImageFromGallery() async {
-    var image = await _picker.pickImage(source: ImageSource.gallery);
+    final image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       await _uploadImage(image);
     }
   }
 
   Future<void> _pickImageFromCamera() async {
-    var image = await _picker.pickImage(source: ImageSource.camera);
+    final image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
       await _uploadImage(image);
     }

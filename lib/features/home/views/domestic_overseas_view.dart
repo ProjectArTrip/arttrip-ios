@@ -20,7 +20,7 @@ class _DomesticOverseasViewState extends State<DomesticOverseasView> {
   List<GlobalKey>? _itemKeys;
 
   void _updateSelectedLocation(int index, String location) {
-    var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+    final homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
     homeViewModel.updateSelectedLocation(location);
     if (_itemKeys![index].currentContext != null) {
       Scrollable.ensureVisible(
@@ -44,7 +44,7 @@ class _DomesticOverseasViewState extends State<DomesticOverseasView> {
               onData: (data) {
                 if (data.isEmpty) return const SizedBox.shrink();
 
-                var itemCount = data.length;
+                final itemCount = data.length;
                 _itemKeys = List.generate(itemCount, (_) => GlobalKey());
 
                 return ListView.separated(
@@ -109,7 +109,10 @@ class _DomesticOverseasViewState extends State<DomesticOverseasView> {
   ) {
     return GestureDetector(
       onTap: () {
-        var homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+        final homeViewModel = Provider.of<HomeViewModel>(
+          context,
+          listen: false,
+        );
         if (homeViewModel.selectedLocation != location) {
           _updateSelectedLocation(index, location);
         }
@@ -117,7 +120,7 @@ class _DomesticOverseasViewState extends State<DomesticOverseasView> {
       child: Selector<HomeViewModel, String>(
         selector: (_, vm) => vm.selectedLocation,
         builder: (context, selectedLocationIndex, _) {
-          var isSelected = location == selectedLocationIndex;
+          final isSelected = location == selectedLocationIndex;
           return Container(
             key: key,
             padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 20.w),

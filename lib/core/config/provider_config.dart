@@ -39,7 +39,7 @@ final getProviders = [
             api: HomeRepositoryImpl(DioClient.instance),
           ),
         ),
-    update: (_, __, homeVM) => homeVM!,
+    update: (_, _, homeVM) => homeVM!,
   ),
   ChangeNotifierProvider<KeywordModelsViewModel>(
     create:

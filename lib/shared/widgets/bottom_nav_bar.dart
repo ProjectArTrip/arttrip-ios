@@ -65,8 +65,8 @@ class BottomNavBarState extends State<BottomNavBar> {
     String iconPath,
     String label,
   ) {
-    var isSelected = widget.currentIndex == index;
-    var color = isSelected ? AppColors.primary300 : AppColors.gray900;
+    final isSelected = widget.currentIndex == index;
+    final color = isSelected ? AppColors.primary300 : AppColors.gray900;
 
     return GestureDetector(
       onTap: () => widget.onTap(index),
@@ -98,7 +98,7 @@ class BottomNavBarState extends State<BottomNavBar> {
   }
 
   Widget _buildStampNavItem(BuildContext context, String label) {
-    var isSelected = widget.currentIndex == 2;
+    final isSelected = widget.currentIndex == 2;
 
     return GestureDetector(
       onTap: () => widget.onTap(2),

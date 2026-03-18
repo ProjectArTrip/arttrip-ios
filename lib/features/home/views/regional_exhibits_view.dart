@@ -55,7 +55,7 @@ class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
                         separatorBuilder:
                             (context, index) => SizedBox(width: 8.w),
                         itemBuilder: (context, index) {
-                          var item = data[index];
+                          final item = data[index];
                           return GestureDetector(
                             onTap:
                                 () => Routes.push(
@@ -128,12 +128,9 @@ class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
                           itemBuilder: (context, index) {
                             return Column(
                               spacing: 12.h,
-                              children: [
-                                const ShimmerSkeletonItem(
-                                  width: 64,
-                                  height: 64,
-                                ),
-                                const ShimmerSkeletonItem(
+                              children: const [
+                                ShimmerSkeletonItem(width: 64, height: 64),
+                                ShimmerSkeletonItem(
                                   width: 21,
                                   height: 14,
                                   radius: 8,

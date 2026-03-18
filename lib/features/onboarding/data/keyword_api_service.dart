@@ -11,10 +11,10 @@ class KeywordModelApiService extends BaseApiService {
     return get<ApiResponse<List<KeywordModel>>>(
       '/auth/allkeywords',
       fromJson: (data) {
-        var json = data as Map<String, dynamic>;
+        final json = data as Map<String, dynamic>;
         return ApiResponse.fromJson(json, (obj) {
           if (obj == null) return <KeywordModel>[];
-          var list = obj as List<dynamic>;
+          final list = obj as List<dynamic>;
           return list
               .map((e) => KeywordModel.fromJson(e as Map<String, dynamic>))
               .toList();
@@ -31,7 +31,7 @@ class KeywordModelApiService extends BaseApiService {
       '/auth/keywords',
       data: {'keywordIds': keywordIds},
       fromJson: (data) {
-        var json = data as Map<String, dynamic>;
+        final json = data as Map<String, dynamic>;
         return ApiResponse.fromJson(json, (obj) => obj as String? ?? '');
       },
     );

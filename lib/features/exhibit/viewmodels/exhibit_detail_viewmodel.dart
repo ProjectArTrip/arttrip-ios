@@ -42,7 +42,7 @@ class ExhibitDetailModelViewModel with ChangeNotifier {
     _reviewTotalCount = 0;
     notifyListeners();
 
-    var exhibit = await _repository.fetchExhibitDetailModel(exhibitId);
+    final exhibit = await _repository.fetchExhibitDetailModel(exhibitId);
     if (exhibit != null) {
       _exhibitState = AsyncState.success(exhibit);
       _isFavorite = exhibit.isFavorite;
@@ -60,7 +60,7 @@ class ExhibitDetailModelViewModel with ChangeNotifier {
     _hasNextReview = true;
     notifyListeners();
 
-    var response = await _repository.fetchExhibitReviewModels(exhibitId);
+    final response = await _repository.fetchExhibitReviewModels(exhibitId);
     if (response != null) {
       _reviewsState = AsyncState.success(response.reviews);
       _nextCursor = response.nextCursor;
@@ -80,13 +80,13 @@ class ExhibitDetailModelViewModel with ChangeNotifier {
     _isLoadingMore = true;
     notifyListeners();
 
-    var response = await _repository.fetchExhibitReviewModels(
+    final response = await _repository.fetchExhibitReviewModels(
       exhibitId,
       cursor: _nextCursor,
     );
 
     if (response != null) {
-      var currentReviews = _reviewsState.data ?? [];
+      final currentReviews = _reviewsState.data ?? [];
       _reviewsState = AsyncState.success([
         ...currentReviews,
         ...response.reviews,

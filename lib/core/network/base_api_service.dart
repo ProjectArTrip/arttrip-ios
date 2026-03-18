@@ -169,7 +169,7 @@ abstract class BaseApiService {
     String pageKey = 'page',
     String limitKey = 'limit',
   }) {
-    var items = parseList<T>(data[itemsKey], fromJson);
+    final items = parseList<T>(data[itemsKey], fromJson);
     return PaginatedResponse<T>(
       items: items,
       total: data[totalKey] as int? ?? 0,

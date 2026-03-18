@@ -43,9 +43,9 @@ class ExhibitMapTabContent extends StatelessWidget {
   }
 
   Widget _buildMapContainer(BuildContext context) {
-    var lat = exhibit.hallLatitude!;
-    var lng = exhibit.hallLongitude!;
-    var position = LatLng(lat, lng);
+    final lat = exhibit.hallLatitude!;
+    final lng = exhibit.hallLongitude!;
+    final position = LatLng(lat, lng);
 
     return GestureDetector(
       onTap: () => _openGoogleMaps(lat, lng),
@@ -83,7 +83,7 @@ class ExhibitMapTabContent extends StatelessWidget {
 
   Future<void> _openGoogleMaps(double lat, double lng) async {
     // Google Maps 앱 URL 스킴 (iOS)
-    var appUrl = Uri.parse(
+    final appUrl = Uri.parse(
       'comgooglemaps://?daddr=$lat,$lng&directionsmode=transit',
     );
 
@@ -91,7 +91,7 @@ class ExhibitMapTabContent extends StatelessWidget {
     if (await canLaunchUrl(appUrl)) {
       await launchUrl(appUrl);
     } else {
-      var webUrl = Uri.parse(
+      final webUrl = Uri.parse(
         'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng',
       );
       await launchUrl(webUrl, mode: LaunchMode.externalApplication);

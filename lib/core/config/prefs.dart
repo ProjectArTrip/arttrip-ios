@@ -22,6 +22,9 @@ class Prefs {
   String? get accessToken => prefs.getString(_accessTokenKey);
   String? get refreshToken => prefs.getString(_refreshTokenKey);
 
+  /// 첫 로그인 여부 조회
+  bool get isFirstLogin => prefs.getBool('is_first_login') ?? false;
+
   Future<void> setAccessToken(String? value) async {
     if (value == null) {
       await prefs.remove(_accessTokenKey);
@@ -44,5 +47,10 @@ class Prefs {
       prefs.remove(_accessTokenKey),
       prefs.remove(_refreshTokenKey),
     ]);
+  }
+
+  /// 첫 로그인 여부 저장
+  Future<void> setIsFirstLogin(bool value) async {
+    await prefs.setBool('is_first_login', value);
   }
 }

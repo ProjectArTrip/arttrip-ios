@@ -45,8 +45,8 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 500));
 
-    var startIndex = cursor ?? 0;
-    var mockReviews = List.generate(
+    final startIndex = cursor ?? 0;
+    final mockReviews = List.generate(
       size,
       (index) => ExhibitReviewModel(
         reviewId: startIndex + index + 1,
@@ -60,8 +60,8 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
       ),
     );
 
-    var nextIndex = startIndex + size;
-    var hasNext = nextIndex < 30;
+    final nextIndex = startIndex + size;
+    final hasNext = nextIndex < 30;
 
     return ExhibitReviewListResponseModel(
       reviews: mockReviews,
