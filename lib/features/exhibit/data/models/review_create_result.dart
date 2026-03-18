@@ -5,16 +5,14 @@ part 'review_create_result.g.dart';
 
 /// 리뷰 등록 응답 모델
 ///
-/// POST /reviews/{exhibitId} 응답의 result 필드
+/// POST /reviews/{exhibitId} 응답
 @freezed
 abstract class ReviewCreateResult with _$ReviewCreateResult {
   const factory ReviewCreateResult({
     required int reviewId,
-    int? exhibitId,
-    required String visitDate,
     required String content,
-    required List<ReviewImage> images,
-    required String createdAt,
+    @JsonKey(name: 'date') required String visitDate,
+    @Default([]) List<ReviewImage> images,
   }) = _ReviewCreateResult;
 
   factory ReviewCreateResult.fromJson(Map<String, dynamic> json) =>
@@ -24,8 +22,10 @@ abstract class ReviewCreateResult with _$ReviewCreateResult {
 /// 리뷰 이미지 모델
 @freezed
 abstract class ReviewImage with _$ReviewImage {
-  const factory ReviewImage({required int id, required String url}) =
-      _ReviewImage;
+  const factory ReviewImage({
+    required int reviewImageId,
+    required String imageUrl,
+  }) = _ReviewImage;
 
   factory ReviewImage.fromJson(Map<String, dynamic> json) =>
       _$ReviewImageFromJson(json);

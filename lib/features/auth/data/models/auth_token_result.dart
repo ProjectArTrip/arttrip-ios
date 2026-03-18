@@ -10,7 +10,7 @@ class AuthTokenResult {
   const AuthTokenResult({
     required this.accessToken,
     required this.refreshToken,
-    required this.firstLogin,
+    this.firstLogin,
   });
 
   factory AuthTokenResult.fromJson(Map<String, dynamic> json) =>
@@ -18,7 +18,8 @@ class AuthTokenResult {
 
   final String accessToken;
   final String refreshToken;
-  final bool firstLogin;
+  @JsonKey(name: 'isFirstLogin')
+  final bool? firstLogin;
 
   Map<String, dynamic> toJson() => _$AuthTokenResultToJson(this);
 }

@@ -8,7 +8,7 @@ abstract class ExhibitModel with _$ExhibitModel {
   const ExhibitModel._();
 
   factory ExhibitModel({
-    @JsonKey(name: 'exhibit_id') int? exhibitId,
+    int? exhibitId,
     String? title,
     String? posterUrl,
     String? status,
@@ -16,7 +16,7 @@ abstract class ExhibitModel with _$ExhibitModel {
     String? hallName,
     String? countryName,
     String? regionName,
-    @Default(false) bool favorite,
+    @JsonKey(name: 'isFavorite') @Default(false) bool favorite,
   }) = _ExhibitModel;
 
   factory ExhibitModel.fromJson(Map<String, dynamic> json) =>

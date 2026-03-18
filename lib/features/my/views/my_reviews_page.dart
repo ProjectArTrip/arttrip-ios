@@ -1,8 +1,11 @@
+import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
 import 'package:arttrip/features/my/data/models/my_review_model.dart';
 import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
 import 'package:arttrip/features/my/widgets/my_review_item.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_confirm_dialog.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
@@ -10,6 +13,7 @@ import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:arttrip/shared/widgets/init_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class MyReviewsPage extends StatefulWidget {
@@ -65,6 +69,23 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
     }
   }
 
+  Future<void> _handleEdit(MyReviewModel review) async {
+    var result = await Routes.modal<bool>(
+      context,
+      '/review/edit/${review.reviewId}',
+      extra: WriteReviewParams(
+        posterUrl: review.posterUrl ?? '',
+        title: review.reviewTitle,
+        hallName: review.hallName ?? '',
+        reviewId: review.reviewId,
+      ),
+    );
+
+    if (result == true && mounted) {
+      await context.read<MyViewModel>().fetchMyReviews();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return InitWidget(
@@ -102,12 +123,21 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
   }
 
   Widget _buildEmptyState() {
-    return Center(
-      child: ArtTripText.pretendard()
-          .body01Regular()
-          .color(AppColors.textTertiary)
-          .build()
-          .text(context.l10n.noReviewsYet),
+    return Padding(
+      padding: const EdgeInsets.only(top: 57),
+      child: Center(
+        child: Column(
+          children: [
+            SvgPicture.asset(AppAssets.icReview),
+            const SizedBox(height: 8),
+            ArtTripText.pretendard()
+                .body01Regular()
+                .color(AppColors.textTertiary)
+                .build()
+                .text(context.l10n.noReviewsYet),
+          ],
+        ),
+      ),
     );
   }
 
@@ -155,9 +185,7 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
               child: MyReviewItem(
                 review: reviews[reviewIndex],
                 onDelete: () => _handleDelete(reviews[reviewIndex].reviewId),
-                onEdit: () {
-                  // TODO: 수정 기능 구현
-                },
+                onEdit: () => _handleEdit(reviews[reviewIndex]),
               ),
             );
           },

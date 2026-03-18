@@ -1,4 +1,5 @@
 import 'package:arttrip/features/my/data/models/my_review_model.dart';
+import 'package:arttrip/features/my/data/models/recent_exhibit_model.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:arttrip/features/my/data/my_repository.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
@@ -13,9 +14,15 @@ class MyViewModel with ChangeNotifier {
   AsyncState<UserProfileModel> _profileState = const AsyncState.loading();
   AsyncState<UserProfileModel> get profileState => _profileState;
 
+  // 최근 본 전시 상태
+  AsyncState<List<RecentExhibitModel>> _recentExhibitsState =
+      const AsyncState.loading();
+  AsyncState<List<RecentExhibitModel>> get recentExhibitsState =>
+      _recentExhibitsState;
+
   // 리뷰 상태
   AsyncState<List<MyReviewModel>> _reviewsState = const AsyncState.loading();
-  String? _reviewNextCursor;
+  int? _reviewNextCursor;
   bool _hasNextReview = true;
   bool _isLoadingMoreReviews = false;
   int _reviewTotalCount = 0;
@@ -82,7 +89,7 @@ class MyViewModel with ChangeNotifier {
       _reviewsState = AsyncState.success(response.reviews);
       _reviewNextCursor = response.nextCursor;
       _hasNextReview = response.hasNext;
-      _reviewTotalCount = response.totalCount;
+      _reviewTotalCount = response.reviewTotalCount;
     } else {
       _reviewsState = const AsyncState.error(error: '리뷰를 불러올 수 없습니다.');
     }
@@ -116,6 +123,23 @@ class MyViewModel with ChangeNotifier {
     _hasNextReview = true;
     _isLoadingMoreReviews = false;
     _reviewTotalCount = 0;
+  }
+
+  // ===== 최근 본 전시 관련 메서드 =====
+
+  Future<void> fetchRecentExhibits() async {
+    _recentExhibitsState = const AsyncState.loading();
+    notifyListeners();
+
+    var response = await _repository.fetchRecentExhibits();
+    if (response != null) {
+      _recentExhibitsState = AsyncState.success(response.exhibits);
+    } else {
+      _recentExhibitsState = const AsyncState.error(
+        error: '최근 본 전시를 불러올 수 없습니다.',
+      );
+    }
+    notifyListeners();
   }
 
   Future<bool> deleteReview(int reviewId) async {

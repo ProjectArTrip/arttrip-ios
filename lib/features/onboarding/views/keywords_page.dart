@@ -5,6 +5,7 @@ import 'package:arttrip/features/onboarding/widgets/keyword_chip.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/snackbar_utils.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/app_toast.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -223,7 +224,7 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
     if (success) {
       if (mounted) {
         if (widget.isEditMode) {
-          Navigator.pop(context);
+          AppToast.show(context, message: context.l10n.keywordSaveSuccess);
         } else {
           Routes.go(context, '/');
         }

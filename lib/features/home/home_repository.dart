@@ -1,7 +1,6 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
-import 'package:arttrip/shared/models/base_result_model.dart';
 import 'package:arttrip/shared/models/region_model.dart';
 
 abstract class HomeRepository {
@@ -39,16 +38,16 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<List<String>?> fetchOverseasCountries() async {
     try {
-      var response = await _dio.get('/exhibit/overseas');
-      var model = BaseResultModel.fromJson(response.dataOrNull);
-      if (model.result is! List) {
-        AppUtil.debugLog(
-          'fetchOverseasCountries type inconsistency: ${model.result.runtimeType}',
-        );
-        return null;
-      }
-
-      return model.result.map<String>((e) => e.toString()).toList();
+      var response = await _dio.get('/exhibits/overseas');
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var map = data as Map<String, dynamic>;
+      var result = map['result'] as Map<String, dynamic>?;
+      var countries = result?['countries'] as List?;
+      if (countries == null) return null;
+      return countries
+          .map<String>((e) => (e as Map<String, dynamic>)['label'].toString())
+          .toList();
     } catch (e) {
       AppUtil.debugLog('fetchOverseasCountries: $e');
     }
@@ -58,18 +57,17 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<List<RegionModel>?> fetchDomesticRegions() async {
     try {
-      var response = await _dio.get('/exhibit/domestic');
-      var model = BaseResultModel.fromJson(response.dataOrNull);
-
-      if (model.result is! List) {
-        AppUtil.debugLog(
-          'fetchDomesticRegions type inconsistency: ${model.result.runtimeType}',
-        );
-        return null;
-      }
-
-      return model.result
-          .map<RegionModel>((e) => RegionModel.fromJson(e))
+      var response = await _dio.get('/exhibits/domestic');
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var map = data as Map<String, dynamic>;
+      var result = map['result'] as Map<String, dynamic>?;
+      var regions = result?['regions'] as List?;
+      if (regions == null) return null;
+      return regions
+          .map<RegionModel>(
+            (e) => RegionModel.fromJson(e as Map<String, dynamic>),
+          )
           .toList();
     } catch (e) {
       AppUtil.debugLog('fetchDomesticRegions: $e');
@@ -84,21 +82,24 @@ class HomeRepositoryImpl implements HomeRepository {
     String? region,
   }) async {
     try {
-      var body = {
+      var queryParams = {
         'isDomestic': isDomestic,
         if (!isDomestic) 'country': country,
         if (isDomestic) 'region': region,
       };
-      var response = await _dio.post('/home/recommend/today', data: body);
-      var model = BaseResultModel.fromJson(response.dataOrNull);
-      if (model.result is! List) {
-        AppUtil.debugLog(
-          'fetchTodayExhibitRecommendations type inconsistency: ${model.result.runtimeType}',
-        );
-        return null;
-      }
-      return model.result
-          .map<ExhibitModel>((e) => ExhibitModel.fromJson(e))
+      var response = await _dio.get(
+        '/home/exhibits/today',
+        queryParameters: queryParams,
+      );
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var map = data as Map<String, dynamic>;
+      var exhibits = map['exhibits'] as List?;
+      if (exhibits == null) return null;
+      return exhibits
+          .map<ExhibitModel>(
+            (e) => ExhibitModel.fromJson(e as Map<String, dynamic>),
+          )
           .toList();
     } catch (e) {
       AppUtil.debugLog('fetchTodayExhibitRecommendations: $e');
@@ -109,15 +110,16 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<List<String>?> fetchGenres() async {
     try {
-      var response = await _dio.get('/exhibit/genre');
-      var model = BaseResultModel.fromJson(response.dataOrNull);
-      if (model.result is! List) {
-        AppUtil.debugLog(
-          'fetchGenres type inconsistency: ${model.result.runtimeType}',
-        );
-        return null;
-      }
-      return model.result.map<String>((e) => e.toString()).toList();
+      var response = await _dio.get('/exhibits/genre');
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var map = data as Map<String, dynamic>;
+      var result = map['result'] as Map<String, dynamic>?;
+      var genres = result?['genres'] as List?;
+      if (genres == null) return null;
+      return genres
+          .map<String>((e) => (e as Map<String, dynamic>)['name'].toString())
+          .toList();
     } catch (e) {
       AppUtil.debugLog('fetchGenres: $e');
     }
@@ -132,22 +134,25 @@ class HomeRepositoryImpl implements HomeRepository {
     required String genre,
   }) async {
     try {
-      var body = {
+      var queryParams = {
         'isDomestic': isDomestic,
         if (!isDomestic) 'country': country,
         if (isDomestic) 'region': region,
         'singleGenre': genre,
       };
-      var response = await _dio.post('/home/genre/random', data: body);
-      var model = BaseResultModel.fromJson(response.dataOrNull);
-      if (model.result is! List) {
-        AppUtil.debugLog(
-          'fetchExhibitsByGenre type inconsistency: ${model.result.runtimeType}',
-        );
-        return null;
-      }
-      return model.result
-          .map<ExhibitModel>((e) => ExhibitModel.fromJson(e))
+      var response = await _dio.get(
+        '/home/exhibits/genres',
+        queryParameters: queryParams,
+      );
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var map = data as Map<String, dynamic>;
+      var exhibits = map['exhibits'] as List?;
+      if (exhibits == null) return null;
+      return exhibits
+          .map<ExhibitModel>(
+            (e) => ExhibitModel.fromJson(e as Map<String, dynamic>),
+          )
           .toList();
     } catch (e) {
       AppUtil.debugLog('fetchExhibitsByGenre: $e');
@@ -162,21 +167,24 @@ class HomeRepositoryImpl implements HomeRepository {
     String? region,
   }) async {
     try {
-      var body = {
+      var queryParams = {
         'isDomestic': isDomestic,
         if (!isDomestic) 'country': country,
         if (isDomestic) 'region': region,
       };
-      var response = await _dio.post('/home/personalized/random', data: body);
-      var model = BaseResultModel.fromJson(response.dataOrNull);
-      if (model.result is! List) {
-        AppUtil.debugLog(
-          'fetchPersonalizedExhibits type inconsistency: ${model.result.runtimeType}',
-        );
-        return null;
-      }
-      return model.result
-          .map<ExhibitModel>((e) => ExhibitModel.fromJson(e))
+      var response = await _dio.get(
+        '/home/exhibits/personalized',
+        queryParameters: queryParams,
+      );
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var map = data as Map<String, dynamic>;
+      var exhibits = map['exhibits'] as List?;
+      if (exhibits == null) return null;
+      return exhibits
+          .map<ExhibitModel>(
+            (e) => ExhibitModel.fromJson(e as Map<String, dynamic>),
+          )
           .toList();
     } catch (e) {
       AppUtil.debugLog('fetchPersonalizedExhibits: $e');
@@ -192,22 +200,25 @@ class HomeRepositoryImpl implements HomeRepository {
     required String date,
   }) async {
     try {
-      var body = {
+      var queryParams = {
         'isDomestic': isDomestic,
         if (!isDomestic) 'country': country,
         if (isDomestic) 'region': region,
         'date': date,
       };
-      var response = await _dio.post('/home/personalized/random', data: body);
-      var model = BaseResultModel.fromJson(response.dataOrNull);
-      if (model.result is! List) {
-        AppUtil.debugLog(
-          'fetchWeeklyExhibitsBySelectedDate type inconsistency: ${model.result.runtimeType}',
-        );
-        return null;
-      }
-      return model.result
-          .map<ExhibitModel>((e) => ExhibitModel.fromJson(e))
+      var response = await _dio.get(
+        '/home/exhibits/schedule',
+        queryParameters: queryParams,
+      );
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var map = data as Map<String, dynamic>;
+      var exhibits = map['exhibits'] as List?;
+      if (exhibits == null) return null;
+      return exhibits
+          .map<ExhibitModel>(
+            (e) => ExhibitModel.fromJson(e as Map<String, dynamic>),
+          )
           .toList();
     } catch (e) {
       AppUtil.debugLog('fetchWeeklyExhibitsBySelectedDate: $e');

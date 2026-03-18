@@ -13,14 +13,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-/// 리뷰 작성 페이지
+/// 리뷰 작성/수정 페이지
 class WriteReviewPage extends StatelessWidget {
-  const WriteReviewPage({
-    super.key,
-    required this.exhibitId,
-    required this.params,
-  });
+  const WriteReviewPage({super.key, this.exhibitId = 0, required this.params});
 
+  /// 신규 작성 시 필수, 수정 모드에서는 사용하지 않음
   final int exhibitId;
   final WriteReviewParams params;
 
@@ -28,7 +25,12 @@ class WriteReviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return InitWidget(
       init: () {
-        context.read<WriteReviewViewModel>().reset();
+        var vm = context.read<WriteReviewViewModel>();
+        if (params.isEditMode) {
+          vm.initForEdit(reviewId: params.reviewId!);
+        } else {
+          vm.reset();
+        }
       },
       child: Scaffold(
         backgroundColor: AppColors.gray0,
@@ -40,7 +42,11 @@ class WriteReviewPage extends StatelessWidget {
               .headline()
               .color(AppColors.textPrimary)
               .build()
-              .text(context.l10n.writeReviewTitle),
+              .text(
+                params.isEditMode
+                    ? context.l10n.editReviewTitle
+                    : context.l10n.writeReviewTitle,
+              ),
         ),
         body: Column(
           children: [

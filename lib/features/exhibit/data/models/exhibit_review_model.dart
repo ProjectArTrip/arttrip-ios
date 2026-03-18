@@ -10,10 +10,12 @@ abstract class ExhibitReviewModel with _$ExhibitReviewModel {
 
   factory ExhibitReviewModel({
     required int reviewId,
-    required String visitDate,
+    String? reviewTitle,
     required String content,
-    String? thumbnailUrl,
-    String? nickname,
+    String? reviewer,
+    @Default([]) List<String> photoUrls,
+    required String visitDate,
+    String? createdAt,
   }) = _ExhibitReviewModel;
 
   factory ExhibitReviewModel.fromJson(Map<String, dynamic> json) =>
@@ -22,7 +24,7 @@ abstract class ExhibitReviewModel with _$ExhibitReviewModel {
 
 /// 전시 리뷰 목록 응답 모델
 ///
-/// /reviews/{exhibitId}/detail 응답의 result 필드
+/// /reviews/exhibit/{exhibitId} 응답
 @freezed
 abstract class ExhibitReviewListResponseModel
     with _$ExhibitReviewListResponseModel {
@@ -30,7 +32,7 @@ abstract class ExhibitReviewListResponseModel
 
   factory ExhibitReviewListResponseModel({
     required List<ExhibitReviewModel> reviews,
-    String? nextCursor,
+    int? nextCursor,
     required bool hasNext,
     required int reviewTotalCount,
   }) = _ExhibitReviewListResponseModel;

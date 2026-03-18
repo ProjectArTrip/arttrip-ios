@@ -2,7 +2,6 @@ import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
-import 'package:arttrip/features/exhibit/data/models/favorite_check_result.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -41,23 +40,23 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
   @override
   Future<ExhibitReviewListResponseModel?> fetchExhibitReviewModels(
     int exhibitId, {
-    String? cursor,
+    int? cursor,
     int size = 10,
   }) async {
     await Future.delayed(const Duration(milliseconds: 500));
 
-    var startIndex = cursor != null ? int.parse(cursor) : 0;
+    var startIndex = cursor ?? 0;
     var mockReviews = List.generate(
       size,
       (index) => ExhibitReviewModel(
         reviewId: startIndex + index + 1,
         visitDate: '2025-08-30',
         content: '감성적인거 좋아하는 사람들 추천합니다 :)',
-        thumbnailUrl:
+        photoUrls:
             index % 3 == 0
-                ? 'https://picsum.photos/200/200?random=${startIndex + index}'
-                : '',
-        nickname: '전시조아${startIndex + index + 1}',
+                ? ['https://picsum.photos/200/200?random=${startIndex + index}']
+                : [],
+        reviewer: '전시조아${startIndex + index + 1}',
       ),
     );
 
@@ -66,7 +65,7 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
 
     return ExhibitReviewListResponseModel(
       reviews: mockReviews,
-      nextCursor: hasNext ? nextIndex.toString() : null,
+      nextCursor: hasNext ? nextIndex : null,
       hasNext: hasNext,
       reviewTotalCount: 30,
     );
@@ -83,7 +82,6 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
 
     return ReviewCreateResult(
       reviewId: DateTime.now().millisecondsSinceEpoch,
-      exhibitId: exhibitId,
       visitDate: date,
       content: content,
       images:
@@ -92,19 +90,44 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
               .entries
               .map(
                 (e) => ReviewImage(
-                  id: e.key,
-                  url: 'https://picsum.photos/200/200?random=${e.key}',
+                  reviewImageId: e.key,
+                  imageUrl: 'https://picsum.photos/200/200?random=${e.key}',
                 ),
               )
               .toList(),
-      createdAt: DateTime.now().toIso8601String(),
     );
   }
 
   @override
-  Future<FavoriteCheckResult?> checkFavorite(int exhibitId) async {
-    await Future.delayed(const Duration(milliseconds: 200));
-    return FavoriteCheckResult(isFavorite: _favorites.contains(exhibitId));
+  Future<ReviewCreateResult?> fetchReviewDetail(int reviewId) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return ReviewCreateResult(
+      reviewId: reviewId,
+      visitDate: '2025-08-30',
+      content: '감성적인거 좋아하는 사람들 추천합니다 :)',
+      images: [
+        const ReviewImage(
+          reviewImageId: 1,
+          imageUrl: 'https://picsum.photos/200/200?random=1',
+        ),
+        const ReviewImage(
+          reviewImageId: 2,
+          imageUrl: 'https://picsum.photos/200/200?random=2',
+        ),
+      ],
+    );
+  }
+
+  @override
+  Future<bool> updateReview({
+    required int reviewId,
+    required List<XFile> newImages,
+    required String date,
+    required String content,
+    required List<int> deleteImageIds,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return true;
   }
 
   @override

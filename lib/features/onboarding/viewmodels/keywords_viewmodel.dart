@@ -69,9 +69,13 @@ class KeywordModelsViewModel with ChangeNotifier {
     _isSaving = true;
     notifyListeners();
 
-    var success = await repository.saveKeywordModels(
-      _selectedKeywordModelIds.toList(),
-    );
+    var allKeywords = [..._genres, ..._styles];
+    var selectedNames =
+        allKeywords
+            .where((k) => _selectedKeywordModelIds.contains(k.keywordId))
+            .map((k) => k.name)
+            .toList();
+    var success = await repository.saveKeywordModels(selectedNames);
 
     _isSaving = false;
     notifyListeners();

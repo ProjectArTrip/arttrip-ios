@@ -1,5 +1,4 @@
 import 'package:arttrip/core/env.dart';
-import 'package:arttrip/core/network/models/api_response.dart';
 import 'package:arttrip/core/network/network.dart';
 import 'package:arttrip/features/auth/data/models/auth_token_result.dart';
 import 'package:arttrip/features/auth/services/token_storage_service.dart';
@@ -13,39 +12,29 @@ class AuthApiService extends BaseApiService {
   ///
   /// [provider] - 소셜 로그인 제공자 (KAKAO, GOOGLE, APPLE)
   /// [idToken] - 소셜 로그인에서 받은 토큰
-  Future<ApiResult<ApiResponse<AuthTokenResult>>> socialLogin({
+  Future<ApiResult<AuthTokenResult>> socialLogin({
     required String provider,
     required String idToken,
   }) {
-    return post<ApiResponse<AuthTokenResult>>(
+    return post<AuthTokenResult>(
       '/auth/social',
       data: {'provider': provider, 'idToken': idToken},
-      fromJson: (data) {
-        var json = data as Map<String, dynamic>;
-        return ApiResponse.fromJson(
-          json,
-          (obj) => AuthTokenResult.fromJson(obj as Map<String, dynamic>),
-        );
-      },
+      fromJson:
+          (data) => AuthTokenResult.fromJson(data as Map<String, dynamic>),
     );
   }
 
   /// 토큰 갱신 (재발행)
   ///
   /// [refreshToken] - 갱신에 사용할 리프레시 토큰
-  Future<ApiResult<ApiResponse<AuthTokenResult>>> refreshToken({
+  Future<ApiResult<AuthTokenResult>> refreshToken({
     required String refreshToken,
   }) {
-    return post<ApiResponse<AuthTokenResult>>(
+    return post<AuthTokenResult>(
       '/auth/app/reissue',
       data: {'refreshToken': refreshToken},
-      fromJson: (data) {
-        var json = data as Map<String, dynamic>;
-        return ApiResponse.fromJson(
-          json,
-          (obj) => AuthTokenResult.fromJson(obj as Map<String, dynamic>),
-        );
-      },
+      fromJson:
+          (data) => AuthTokenResult.fromJson(data as Map<String, dynamic>),
     );
   }
 

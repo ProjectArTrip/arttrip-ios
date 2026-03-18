@@ -4,6 +4,7 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/viewmodels/write_review_viewmodel.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/app_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,6 +41,21 @@ class PhotoAttachSection extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
+                  // 기존 네트워크 이미지 (수정 모드)
+                  ...vm.existingPhotoUrls
+                      .asMap()
+                      .entries
+                      .where((e) => !vm.isExistingImageDeleted(e.key))
+                      .map(
+                        (entry) => Padding(
+                          padding: EdgeInsets.only(right: 8.w),
+                          child: _NetworkImageThumbnail(
+                            imageUrl: entry.value,
+                            onRemove: () => vm.removeExistingImage(entry.key),
+                          ),
+                        ),
+                      ),
+                  // 새로 추가한 로컬 이미지
                   ...vm.selectedImages.asMap().entries.map(
                     (entry) => Padding(
                       padding: EdgeInsets.only(right: 8.w),
@@ -69,6 +85,47 @@ class PhotoAttachSection extends StatelessWidget {
     if (images.isNotEmpty) {
       vm.addImages(images);
     }
+  }
+}
+
+/// 네트워크 이미지 썸네일 (수정 모드 - 기존 이미지)
+class _NetworkImageThumbnail extends StatelessWidget {
+  const _NetworkImageThumbnail({
+    required this.imageUrl,
+    required this.onRemove,
+  });
+
+  final String imageUrl;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        AppCachedImage(
+          imageUrl: imageUrl,
+          width: 72.w,
+          height: 72.w,
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        Positioned(
+          top: 4.w,
+          right: 4.w,
+          child: GestureDetector(
+            onTap: onRemove,
+            child: Container(
+              width: 24.w,
+              height: 24.w,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.black87,
+              ),
+              child: Icon(Icons.close, size: 16.w, color: Colors.white),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 

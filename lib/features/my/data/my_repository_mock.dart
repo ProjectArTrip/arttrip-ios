@@ -1,4 +1,5 @@
 import 'package:arttrip/features/my/data/models/my_review_model.dart';
+import 'package:arttrip/features/my/data/models/recent_exhibit_model.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:arttrip/features/my/data/my_repository.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,7 +38,7 @@ class MyRepositoryMockImpl implements MyRepository {
 
   @override
   Future<MyReviewListResponseModel?> fetchMyReviews({
-    String? cursor,
+    int? cursor,
     int size = 10,
     int width = 72,
     int height = 72,
@@ -48,31 +49,35 @@ class MyRepositoryMockImpl implements MyRepository {
         MyReviewModel(
           reviewId: 1,
           reviewTitle: 'Imagination in Bloom',
-          visitDate: '2025-12-05',
           content: '가볍게 보기 좋아요!',
-          thumbnailUrl: null,
+          photoUrls: ['https://picsum.photos/200/200?random=1'],
+          posterUrl: 'https://picsum.photos/400/600',
+          hallName: '다케히사 유메지 미술관',
+          visitDate: '2025-12-05',
           createdAt: '2025-12-05T10:00:00',
         ),
         MyReviewModel(
           reviewId: 2,
           reviewTitle: 'Imagination in Bloom',
-          visitDate: '2025-07-29',
           content: '리뷰 내용입니다.',
-          thumbnailUrl: null,
+          posterUrl: 'https://picsum.photos/400/600',
+          hallName: '다케히사 유메지 미술관',
+          visitDate: '2025-07-29',
           createdAt: '2025-07-29T10:00:00',
         ),
         MyReviewModel(
           reviewId: 3,
           reviewTitle: 'Imagination in Bloom',
-          visitDate: '2025-07-29',
           content: '리뷰 내용입니다.',
-          thumbnailUrl: null,
+          posterUrl: 'https://picsum.photos/400/600',
+          hallName: '다케히사 유메지 미술관',
+          visitDate: '2025-07-29',
           createdAt: '2025-07-29T10:00:00',
         ),
       ],
       nextCursor: null,
       hasNext: false,
-      totalCount: 25,
+      reviewTotalCount: 25,
     );
   }
 
@@ -80,5 +85,24 @@ class MyRepositoryMockImpl implements MyRepository {
   Future<bool> deleteReview(int reviewId) async {
     await Future.delayed(const Duration(milliseconds: 500));
     return true;
+  }
+
+  @override
+  Future<RecentExhibitListResponseModel?> fetchRecentExhibits() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return RecentExhibitListResponseModel(
+      exhibits: List.generate(
+        5,
+        (i) => RecentExhibitModel(
+          exhibitId: i + 1,
+          title:
+              i == 0
+                  ? '전시 제목은 최대2줄전시 제목은 최대2줄전시 제목은 최대2줄 전시 제목은 최대2줄 전시 제목은...'
+                  : '전시 제목',
+          exhibitHallName: '전시관 이름',
+          exhibitImage: 'https://picsum.photos/200/200?random=$i',
+        ),
+      ),
+    );
   }
 }

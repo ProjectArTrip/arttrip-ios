@@ -21,7 +21,27 @@ class LoggingInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     _requestTimes[options.hashCode] = DateTime.now();
     if (enableRequestBody && options.data != null) {
-      debugPrint('[API] Request Body: ${options.data}');
+      if (options.data is FormData) {
+        var formData = options.data as FormData;
+        debugPrint('[API] Request FormData:');
+        // extra에 저장된 JSON body 출력
+        var requestJson = options.extra['requestJson'];
+        if (requestJson != null) {
+          debugPrint('[API]   request: $requestJson');
+        }
+        for (var field in formData.fields) {
+          debugPrint('[API]   ${field.key}: ${field.value}');
+        }
+        // 파일 목록 출력 (JSON 파트 제외)
+        for (var file in formData.files) {
+          var contentType = file.value.contentType?.toString() ?? '';
+          if (!contentType.contains('json')) {
+            debugPrint('[API]   ${file.key}: ${file.value.filename}');
+          }
+        }
+      } else {
+        debugPrint('[API] Request Body: ${options.data}');
+      }
     }
     handler.next(options);
   }

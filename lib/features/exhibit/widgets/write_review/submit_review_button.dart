@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-/// 리뷰 작성 페이지 - 등록하기 버튼
+/// 리뷰 작성/수정 페이지 - 등록/수정 버튼
 class SubmitReviewButton extends StatelessWidget {
-  const SubmitReviewButton({super.key, required this.exhibitId});
+  const SubmitReviewButton({super.key, this.exhibitId = 0});
 
+  /// 신규 작성 시 필수, 수정 모드에서는 사용하지 않음
   final int exhibitId;
 
   @override
@@ -51,7 +52,11 @@ class SubmitReviewButton extends StatelessWidget {
                                 : AppColors.textTertiary,
                           )
                           .build()
-                          .text(context.l10n.submitReview),
+                          .text(
+                            vm.isEditMode
+                                ? context.l10n.updateReview
+                                : context.l10n.submitReview,
+                          ),
             ),
           ),
         );
@@ -60,7 +65,12 @@ class SubmitReviewButton extends StatelessWidget {
   }
 
   Future<void> _onSubmit(BuildContext context, WriteReviewViewModel vm) async {
-    var success = await vm.submitReview(exhibitId);
+    bool success;
+    if (vm.isEditMode) {
+      success = await vm.updateReview();
+    } else {
+      success = await vm.submitReview(exhibitId);
+    }
 
     if (!context.mounted) return;
 
@@ -69,7 +79,11 @@ class SubmitReviewButton extends StatelessWidget {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.l10n.reviewSubmitError),
+          content: Text(
+            vm.isEditMode
+                ? context.l10n.reviewUpdateError
+                : context.l10n.reviewSubmitError,
+          ),
           duration: const Duration(seconds: 2),
         ),
       );

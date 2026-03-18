@@ -1,12 +1,12 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
+import 'package:arttrip/features/onboarding/data/models/keyword_list_response_model.dart';
 import 'package:arttrip/features/onboarding/data/models/keyword_model.dart';
-import 'package:arttrip/shared/models/base_result_model.dart';
 
 abstract class KeywordModelsRepository {
   Future<List<KeywordModel>?> fetchAllKeywordModels();
   Future<List<KeywordModel>?> fetchUserKeywords();
-  Future<bool> saveKeywordModels(List<int> keywordIds);
+  Future<bool> saveKeywordModels(List<String> keywords);
 }
 
 class KeywordModelsRepositoryImpl implements KeywordModelsRepository {
@@ -16,11 +16,13 @@ class KeywordModelsRepositoryImpl implements KeywordModelsRepository {
   @override
   Future<List<KeywordModel>?> fetchAllKeywordModels() async {
     try {
-      var response = await _dio.get('/auth/allkeywords');
-      var model = BaseResultModel.fromJson(response.dataOrNull);
-      return model.result
-          .map<KeywordModel>((e) => KeywordModel.fromJson(e))
-          .toList();
+      var response = await _dio.get('/keyword/all');
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var result = KeywordListResponseModel.fromJson(
+        data as Map<String, dynamic>,
+      );
+      return result.keywords;
     } catch (e) {
       AppUtil.debugLog('fetchAllKeywordModels: $e');
     }
@@ -30,12 +32,13 @@ class KeywordModelsRepositoryImpl implements KeywordModelsRepository {
   @override
   Future<List<KeywordModel>?> fetchUserKeywords() async {
     try {
-      var response = await _dio.get('/auth/keywords');
-      var model = BaseResultModel.fromJson(response.dataOrNull);
-      if (model.result == null) return [];
-      return (model.result as List)
-          .map<KeywordModel>((e) => KeywordModel.fromJson(e))
-          .toList();
+      var response = await _dio.get('/keyword');
+      var data = response.dataOrNull;
+      if (data == null) return null;
+      var result = KeywordListResponseModel.fromJson(
+        data as Map<String, dynamic>,
+      );
+      return result.keywords;
     } catch (e) {
       AppUtil.debugLog('fetchUserKeywords: $e');
     }
@@ -43,14 +46,10 @@ class KeywordModelsRepositoryImpl implements KeywordModelsRepository {
   }
 
   @override
-  Future<bool> saveKeywordModels(List<int> keywordIds) async {
+  Future<bool> saveKeywordModels(List<String> keywords) async {
     try {
-      var response = await _dio.post(
-        '/auth/keywords',
-        data: {'keywordIds': keywordIds},
-      );
-      var model = BaseResultModel.fromJson(response.dataOrNull);
-      return model.isSuccess;
+      var response = await _dio.post('/keyword', data: {'keywords': keywords});
+      return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('saveKeywordModels: $e');
     }

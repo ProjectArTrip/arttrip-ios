@@ -49,7 +49,6 @@ class _ExhibitDetailModelPageState extends State<ExhibitDetailModelPage>
       init: () {
         var vm = context.read<ExhibitDetailModelViewModel>();
         vm.fetchExhibitDetailModel(widget.exhibitId);
-        vm.checkFavorite(widget.exhibitId);
         vm.fetchExhibitReviewModels(widget.exhibitId);
       },
       child: Scaffold(
