@@ -1,7 +1,6 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
-import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
@@ -28,8 +27,8 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
 
   void _updateSelectedGenre(int index, String genre) {
     final homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-    homeViewModel.selectedGenre = genre;
-    homeViewModel.fetchExhibitsByGenre();
+    homeViewModel.setSelectedGenre = genre;
+    homeViewModel.getExhibitsByGenre();
     if (_itemKeys![index].currentContext != null) {
       Scrollable.ensureVisible(
         _itemKeys![index].currentContext!,
@@ -43,11 +42,7 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Selector<HomeViewModel, AsyncState<List<String>>>(
-        selector:
-            (_, vm) =>
-                vm.genres[vm.isDomestic
-                    ? LocationType.domestic.name
-                    : LocationType.overseas.name]!,
+        selector: (_, vm) => vm.genres,
         builder: (context, state, _) {
           return AsyncView(
             state: state,
@@ -90,9 +85,9 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
                     Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
                       selector:
                           (_, vm) =>
-                              vm.exhibitsByGenre[vm.isDomestic
-                                  ? LocationType.domestic.name
-                                  : LocationType.overseas.name]!,
+                              vm.exhibitsByGenre[vm.locationType]?[vm.area!]?[vm
+                                  .selectedGenre] ??
+                              const AsyncState.error(),
                       builder: (context, state, _) {
                         return AsyncView(
                           state: state,

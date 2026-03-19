@@ -1,5 +1,8 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/app_utils.dart';
+import 'package:arttrip/core/config/prefs.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/home/views/domestic_overseas_view.dart';
@@ -11,6 +14,7 @@ import 'package:arttrip/features/home/views/weekly_exhibits_schedule_view.dart';
 import 'package:arttrip/features/home/widgets/date_filter_bottom_sheet.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/alert_badge.dart';
+import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,10 +34,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    AppUtil.debugLog('jwt: ${Prefs().accessToken}');
+
     _tabController = TabController(length: 2, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
-      homeViewModel.selectedLocation = context.l10n.allItems;
       homeViewModel.load(context);
     });
   }
@@ -165,7 +170,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           );
           if (index == (homeViewModel.isDomestic ? 1 : 0)) return;
 
-          homeViewModel.isDomestic = index == 0 ? false : true;
+          homeViewModel.setLocationType =
+              index == 0 ? LocationType.overseas : LocationType.domestic;
           await homeViewModel.load(context);
         },
       ),
@@ -185,19 +191,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       backgroundColor: AppColors.subLightGray,
       isScrollControlled: true,
       builder:
-          (_) => Selector<HomeViewModel, List<String>?>(
-            selector: (_, vm) => vm.overseasCountriesCache,
+          (_) => Selector<HomeViewModel, AsyncState<List<String>>>(
+            selector: (_, vm) => vm.overseasCountries,
             builder: (context, overseasCountries, _) {
-              if (overseasCountries == null) {
-                return Container(
-                  height: MediaQuery.of(context).size.height / 2,
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(
-                    color: AppColors.primary300,
-                  ),
-                );
-              }
-              return DateFilterBottomSheet(overseasCountries);
+              return AsyncView(
+                state: overseasCountries,
+                onData: (data) {
+                  return DateFilterBottomSheet(data);
+                },
+              );
             },
           ),
     );

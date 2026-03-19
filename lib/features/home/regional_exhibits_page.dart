@@ -4,6 +4,7 @@ import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/shared/models/region_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -134,48 +135,53 @@ class _RegionalExhibitsPageState extends State<RegionalExhibitsPage> {
                     ArtTripText.pretendard().body01Bold().build().text(
                       context.l10n.domestic,
                     ),
-                    Selector<HomeViewModel, List<RegionModel>>(
-                      selector: (_, vm) => vm.domesticRegionsCache!,
-                      builder: (context, domesticRegionsCache, _) {
-                        return Wrap(
-                          spacing: 12.w,
-                          runSpacing: 12.h,
-                          children: List.generate(domesticRegionsCache.length, (
-                            index,
-                          ) {
-                            final item = domesticRegionsCache[index];
-                            final isSelected = selectedRegion == item.region;
-                            return GestureDetector(
-                              onTap: () {
-                                _regionName.value = item.region;
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 8.h,
-                                  horizontal: 20.w,
-                                ),
-                                decoration: BoxDecoration(
-                                  color:
-                                      isSelected
-                                          ? AppColors.primary300
-                                          : AppColors.gray0,
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                child:
-                                    isSelected
-                                        ? ArtTripText.pretendard()
-                                            .body01Bold()
-                                            .color(AppColors.textWhite)
-                                            .build()
-                                            .text(item.region)
-                                        : ArtTripText.pretendard()
-                                            .body01Light()
-                                            .build()
-                                            .text(item.region),
-                              ),
+                    Selector<HomeViewModel, AsyncState<List<RegionModel>>>(
+                      selector: (_, vm) => vm.domesticRegions,
+                      builder: (context, domesticRegions, _) {
+                        return AsyncView(
+                          state: domesticRegions,
+                          onData: (data) {
+                            return Wrap(
+                              spacing: 12.w,
+                              runSpacing: 12.h,
+                              children: List.generate(data.length, (index) {
+                                final item = data[index];
+                                final isSelected =
+                                    selectedRegion == item.region;
+                                return GestureDetector(
+                                  onTap: () {
+                                    _regionName.value = item.region;
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 8.h,
+                                      horizontal: 20.w,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          isSelected
+                                              ? AppColors.primary300
+                                              : AppColors.gray0,
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child:
+                                        isSelected
+                                            ? ArtTripText.pretendard()
+                                                .body01Bold()
+                                                .color(AppColors.textWhite)
+                                                .build()
+                                                .text(item.region)
+                                            : ArtTripText.pretendard()
+                                                .body01Light()
+                                                .build()
+                                                .text(item.region),
+                                  ),
+                                );
+                              }),
                             );
-                          }),
+                          },
+                          onError: ({error}) => const SizedBox.shrink(),
                         );
                       },
                     ),

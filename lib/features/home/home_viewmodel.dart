@@ -15,326 +15,334 @@ class HomeViewModel with ChangeNotifier {
   final ExhibitViewModel exhibitVM;
   final HomeRepository homeRepository;
 
-  AsyncState<List<String>> overseasCountries = const AsyncState.loading();
-  AsyncState<List<RegionModel>> domesticRegions = const AsyncState.loading();
-  AsyncState<List<ExhibitModel>> todayExhibitRecommendations =
-      const AsyncState.loading();
-  Map<String, AsyncState<List<String>>> genres = {
-    LocationType.overseas.name: const AsyncState.loading(),
-    LocationType.domestic.name: const AsyncState.loading(),
-  };
-  Map<String, AsyncState<List<ExhibitModel>>> exhibitsByGenre = {
-    LocationType.overseas.name: const AsyncState.loading(),
-    LocationType.domestic.name: const AsyncState.loading(),
-  };
-  Map<String, AsyncState<List<ExhibitModel>>> personalizedExhibits = {
-    LocationType.overseas.name: const AsyncState.loading(),
-    LocationType.domestic.name: const AsyncState.loading(),
-  };
-  Map<String, Map<String, AsyncState<List<ExhibitModel>>>>
-  weeklyExhibitsBySelectedDate = {
-    LocationType.overseas.name: {
-      DateTime.now().day.toString(): const AsyncState.loading(),
-    },
-    LocationType.domestic.name: {
-      DateTime.now().day.toString(): const AsyncState.loading(),
-    },
-  };
-  AsyncState<List<DateTime>> weeklyCalendar = const AsyncState.loading();
-
-  List<String>? _overseasCountriesCache;
-  List<RegionModel>? _domesticRegionsCache;
-  final Map<String, List<ExhibitModel>> _todayExhibitRecommendationsCache = {};
-  final Map<String, List<ExhibitModel>> _personalizedExhibitsCache = {};
-  List<DateTime>? _weeklyCalendarCache;
-  final Map<String, Map<String, List<ExhibitModel>>>
-  _weeklyExhibitsBySelectedDateCache = {};
-  final Map<String, List<String>> _genresCache = {};
-  final Map<String, Map<String, List<ExhibitModel>>> _exhibitsByGenreCache = {};
-
   final DateTime _today = DateTime.now();
-  bool _isDomestic = false;
-  late String _selectedLocation;
   late String _selectedGenre;
   DateTime _selectedDateInWeek = DateTime.now();
+  LocationType _locationType = LocationType.overseas;
+  String? _area;
+  AsyncState<List<String>> _overseasCountries = const AsyncState.loading();
+  AsyncState<List<RegionModel>> _domesticRegions = const AsyncState.loading();
+  AsyncState<List<DateTime>> _weeklyCalendar = const AsyncState.loading();
 
-  bool get isDomestic => _isDomestic;
-  String get selectedLocation => _selectedLocation;
+  final Map<LocationType, Map<String, AsyncState<List<ExhibitModel>>>>
+  _todayExhibitRecommendations = {};
+
+  /// 해외/국내별, 국가/지역의 일자별로 저장
+  final Map<
+    LocationType,
+    Map<String, Map<String, AsyncState<List<ExhibitModel>>>>
+  >
+  _weeklyExhibitsBySelectedDate = {};
+
+  final Map<LocationType, AsyncState<List<ExhibitModel>>>
+  _personalizedExhibits = {};
+  final Map<
+    LocationType,
+    Map<String, Map<String, AsyncState<List<ExhibitModel>>>>
+  >
+  _exhibitsByGenre = {};
+  AsyncState<List<String>> _genres = const AsyncState.loading();
+
   String get selectedGenre => _selectedGenre;
   DateTime get selectedDateInWeek => _selectedDateInWeek;
-  String get locationType =>
-      _isDomestic ? LocationType.domestic.name : LocationType.overseas.name;
+  LocationType get locationType => _locationType;
+  String? get area => _area;
+  bool get isDomestic => _locationType == LocationType.domestic;
+  AsyncState<List<DateTime>> get weeklyCalendar => _weeklyCalendar;
+  AsyncState<List<String>> get overseasCountries => _overseasCountries;
+  AsyncState<List<RegionModel>> get domesticRegions => _domesticRegions;
 
-  List<String>? get overseasCountriesCache => _overseasCountriesCache;
-  List<RegionModel>? get domesticRegionsCache => _domesticRegionsCache;
+  Map<LocationType, Map<String, AsyncState<List<ExhibitModel>>>>
+  get todayExhibitRecommendations => _todayExhibitRecommendations;
 
-  set isDomestic(bool value) {
-    _isDomestic = value;
+  Map<LocationType, AsyncState<List<ExhibitModel>>> get personalizedExhibits =>
+      _personalizedExhibits;
+  Map<LocationType, Map<String, Map<String, AsyncState<List<ExhibitModel>>>>>
+  get weeklyExhibitsBySelectedDate => _weeklyExhibitsBySelectedDate;
+  AsyncState<List<String>> get genres => _genres;
+  Map<LocationType, Map<String, Map<String, AsyncState<List<ExhibitModel>>>>>
+  get exhibitsByGenre => _exhibitsByGenre;
+
+  set setLocationType(LocationType locationType) {
+    _locationType = locationType;
     notifyListeners();
   }
 
-  set selectedLocation(String region) {
-    _selectedLocation = region;
+  set setArea(String area) {
+    _area = area;
     notifyListeners();
   }
 
-  set selectedGenre(String genre) {
+  set setSelectedGenre(String genre) {
     _selectedGenre = genre;
     notifyListeners();
   }
 
-  set selectedDateInWeek(DateTime date) {
+  set setSelectedDateInWeek(DateTime date) {
     _selectedDateInWeek = date;
     notifyListeners();
   }
 
-  void _resetToLoading({bool resetLocations = true}) {
-    if (resetLocations) overseasCountries = const AsyncState.loading();
-    todayExhibitRecommendations = const AsyncState.loading();
-    genres[locationType] = const AsyncState.loading();
-    exhibitsByGenre[locationType] = const AsyncState.loading();
-    personalizedExhibits = {
-      LocationType.overseas.name: const AsyncState.loading(),
-      LocationType.domestic.name: const AsyncState.loading(),
-    };
-    weeklyExhibitsBySelectedDate[locationType]![_today.day.toString()] =
-        const AsyncState.loading();
-    weeklyCalendar = const AsyncState.loading();
-    notifyListeners();
-  }
+  Future<void> load(BuildContext context) async {
+    await (isDomestic ? getDomesticRegions() : getOverseasCountries(context));
 
-  Future<void> load(BuildContext context, {bool refresh = false}) async {
-    if (refresh) _resetToLoading();
-    await (_isDomestic
-        ? fetchDomesticRegions()
-        : fetchOverseasCountries(context));
-
-    unawaited(fetchTodayExhibitRecommendations());
-    unawaited(fetchGenres());
-    unawaited(fetchPersonalizedExhibits());
-    unawaited(fetchWeeklyExhibitsBySelectedDate(_today, isInitialLoad: true));
+    unawaited(getTodayExhibitRecommendations());
+    unawaited(getGenres());
+    unawaited(getPersonalizedExhibits());
+    unawaited(getWeeklyExhibitsBySelectedDate(_today));
     unawaited(getWeeklyCalendar());
   }
 
-  void updateSelectedLocation(String location) {
-    _selectedLocation = location;
-    // _resetToLoading(resetLocations: false);
-    fetchTodayExhibitRecommendations();
-    fetchGenres();
-    fetchPersonalizedExhibits();
-    fetchWeeklyExhibitsBySelectedDate(_today, isInitialLoad: true);
+  /// 해외/국내별 국가/지역 업데이트
+  void updateSelectedLocation(String area) {
+    _area = area;
+    getTodayExhibitRecommendations();
+    getGenres();
+    getPersonalizedExhibits();
+    getWeeklyExhibitsBySelectedDate(_today);
     getWeeklyCalendar();
   }
 
+  /// 이번주 선택한 날짜 업데이트
   void updateSelectedDateInWeek(DateTime date) {
-    selectedDateInWeek = date;
-    fetchWeeklyExhibitsBySelectedDate(date);
+    setSelectedDateInWeek = date;
+    getWeeklyExhibitsBySelectedDate(date);
   }
 
-  Future<void> fetchOverseasCountries(BuildContext context) async {
-    if (_overseasCountriesCache != null) {
-      _selectedLocation = context.l10n.allItems;
-      overseasCountries = AsyncState.success(_overseasCountriesCache!);
-      notifyListeners();
+  /// 해외 국가 리스트 조회
+  Future<void> getOverseasCountries(BuildContext context) async {
+    if (_overseasCountries.status == AsyncStatus.success) {
+      return;
+    }
+    _overseasCountries = const AsyncState.loading();
+    notifyListeners();
+
+    try {
+      var result = await homeRepository.fetchOverseasCountries();
+      if (!context.mounted) {
+        /// context가 보장되지 않으면 '전체' 항목은 보여주지 않음
+        _overseasCountries = AsyncState.success(result);
+        _area = result.first;
+      } else {
+        result = [context.l10n.allItems, ...result];
+        _area = context.l10n.allItems;
+        _overseasCountries = AsyncState.success(result);
+      }
+    } catch (e) {
+      AppUtil.debugLog('getOverseasCountries error: $e');
+      _overseasCountries = const AsyncState.error();
+      _area = '';
+    }
+
+    notifyListeners();
+  }
+
+  /// 국내 지역 리스트 조회
+  Future<void> getDomesticRegions() async {
+    if (_domesticRegions.status == AsyncStatus.success) {
       return;
     }
 
-    overseasCountries = const AsyncState.loading();
+    _domesticRegions = const AsyncState.loading();
     notifyListeners();
-
-    var result = await homeRepository.fetchOverseasCountries();
-    if (result == null || context.mounted == false) {
-      overseasCountries = const AsyncState.error();
-    } else {
-      result = [context.l10n.allItems, ...result];
-      _selectedLocation = context.l10n.allItems;
-      overseasCountries = AsyncState.success(result);
-      _overseasCountriesCache = result;
+    try {
+      final result = await homeRepository.fetchDomesticRegions();
+      _domesticRegions = AsyncState.success(result);
+      _area = result.first.region;
+    } catch (e) {
+      AppUtil.debugLog('getDomesticRegions error: $e');
+      _domesticRegions = const AsyncState.error();
+      _area = '';
     }
     notifyListeners();
   }
 
-  Future<void> fetchDomesticRegions() async {
-    if (_domesticRegionsCache != null) {
-      domesticRegions = AsyncState.success(_domesticRegionsCache!);
-      notifyListeners();
-      return;
-    }
+  /// 오늘의 랜덤 전시 추천
+  Future<void> getTodayExhibitRecommendations() async {
+    /// 캐싱 처리 (기존 데이터가 있으면 로딩 상태로 변경하지 않고 그대로 보여줌)
+    if (_todayExhibitRecommendations[_locationType]?[_area]?.status ==
+        AsyncStatus.success) {
+      final oldState = _todayExhibitRecommendations[_locationType]![_area!]!;
 
-    domesticRegions = const AsyncState.loading();
-    notifyListeners();
-
-    final result = await homeRepository.fetchDomesticRegions();
-    if (result == null) {
-      domesticRegions = const AsyncState.error();
-    } else {
-      domesticRegions = AsyncState.success(result);
-      _domesticRegionsCache = result;
-    }
-    notifyListeners();
-  }
-
-  Future<void> fetchTodayExhibitRecommendations() async {
-    final key = _isDomestic ? LocationType.domestic.name : _selectedLocation;
-    if (_todayExhibitRecommendationsCache[key] != null) {
-      todayExhibitRecommendations = AsyncState.success(
-        _todayExhibitRecommendationsCache[key]!,
+      _todayExhibitRecommendations[_locationType]![_area!] = AsyncState.success(
+        List.from(oldState.data!),
       );
+
       notifyListeners();
       return;
     }
-
-    todayExhibitRecommendations = const AsyncState.loading();
-    notifyListeners();
-
-    final result = await homeRepository.fetchTodayExhibitRecommendations(
-      isDomestic: _isDomestic,
-      country: _isDomestic ? null : _selectedLocation,
-      region: _isDomestic ? '전체' : null,
-    );
-    if (result == null) {
-      todayExhibitRecommendations = const AsyncState.error();
-    } else {
-      exhibitVM.initializeFromExhibits(result);
-      todayExhibitRecommendations = AsyncState.success(result);
-      _todayExhibitRecommendationsCache[key] = result;
-    }
-    notifyListeners();
-  }
-
-  Future<void> fetchGenres() async {
-    if (_genresCache[locationType] != null) {
-      _selectedGenre = _genresCache[locationType]!.first;
-      genres[locationType] = AsyncState.success(_genresCache[locationType]!);
-      notifyListeners();
-      return;
-    }
-    genres[locationType] = const AsyncState.loading();
-    notifyListeners();
-
-    final result = await homeRepository.fetchGenres();
-    if (result == null) {
-      genres[locationType] = const AsyncState.error();
-      notifyListeners();
-      return;
-    }
-    genres[locationType] = AsyncState.success(result);
-    _selectedGenre = result.first;
-    _genresCache[locationType] = result;
-    notifyListeners();
-    await fetchExhibitsByGenre();
-  }
-
-  Future<void> fetchExhibitsByGenre() async {
-    if (_exhibitsByGenreCache[locationType]?[_selectedGenre] != null) {
-      exhibitsByGenre[locationType] = AsyncState.success(
-        _exhibitsByGenreCache[locationType]![_selectedGenre]!,
-      );
-      notifyListeners();
-      return;
-    }
-    exhibitsByGenre[locationType] = const AsyncState.loading();
-    notifyListeners();
-
-    final result = await homeRepository.fetchExhibitsByGenre(
-      isDomestic: _isDomestic,
-      country: _isDomestic ? null : _selectedLocation,
-      region: _isDomestic ? _selectedLocation : null,
-      genre: _selectedGenre,
-    );
-    if (result == null) {
-      exhibitsByGenre[locationType] = const AsyncState.error();
-    } else {
-      exhibitsByGenre[locationType] = AsyncState.success(result);
-      exhibitVM.initializeFromExhibits(result);
-      (_exhibitsByGenreCache[locationType] ??= {})[_selectedGenre] = result;
-    }
-    notifyListeners();
-  }
-
-  Future<void> fetchPersonalizedExhibits() async {
-    final location =
-        _isDomestic ? LocationType.domestic : LocationType.overseas;
-    final cached = _personalizedExhibitsCache[location.name];
-    if (cached != null) {
-      personalizedExhibits[location.name] = AsyncState.success(cached);
-      notifyListeners();
-      return;
-    }
-
-    personalizedExhibits[location.name] = const AsyncState.loading();
-    notifyListeners();
-
-    final result = await homeRepository.fetchPersonalizedExhibits(
-      isDomestic: _isDomestic,
-      country: _isDomestic ? null : _selectedLocation,
-      region: _isDomestic ? _selectedLocation : null,
-    );
-    if (result == null) {
-      personalizedExhibits[location.name] = const AsyncState.error();
-    } else {
-      personalizedExhibits[location.name] = AsyncState.success(result);
-      exhibitVM.initializeFromExhibits(result);
-      _personalizedExhibitsCache[location.name] = result;
-    }
-    notifyListeners();
-  }
-
-  Future<void> fetchWeeklyExhibitsBySelectedDate(
-    DateTime date, {
-    bool isInitialLoad = false,
-  }) async {
-    if (isInitialLoad) _selectedDateInWeek = _today;
-    final selectedDateDay = _selectedDateInWeek.day.toString();
-
-    if (_weeklyExhibitsBySelectedDateCache[locationType]?[selectedDateDay] !=
-        null) {
-      weeklyExhibitsBySelectedDate[locationType]![selectedDateDay] =
-          AsyncState.success(
-            _weeklyExhibitsBySelectedDateCache[locationType]![selectedDateDay]!,
-          );
-      notifyListeners();
-      return;
-    }
-
-    (weeklyExhibitsBySelectedDate[locationType] ??= {})[selectedDateDay] =
+    _todayExhibitRecommendations[_locationType] ??= {};
+    _todayExhibitRecommendations[_locationType]![_area!] =
         const AsyncState.loading();
     notifyListeners();
 
-    final result = await homeRepository.fetchWeeklyExhibitsBySelectedDate(
-      isDomestic: _isDomestic,
-      country: _isDomestic ? null : _selectedLocation,
-      region: _isDomestic ? _selectedLocation : null,
-      date: AppUtil.formatDateYMD(date),
-    );
-    if (result == null) {
-      (weeklyExhibitsBySelectedDate[locationType] ??= {})[selectedDateDay] =
-          const AsyncState.error();
-    } else {
-      (weeklyExhibitsBySelectedDate[locationType] ??=
-          {})[selectedDateDay] = AsyncState.success(result);
+    try {
+      final result = await homeRepository.fetchTodayExhibitRecommendations(
+        isDomestic: isDomestic,
+        country: isDomestic ? null : _area,
+        region: isDomestic ? _area : null,
+      );
+
       exhibitVM.initializeFromExhibits(result);
-      (_weeklyExhibitsBySelectedDateCache[locationType] ??=
-              {})[selectedDateDay] =
-          result;
+      _todayExhibitRecommendations[_locationType]![_area!] = AsyncState.success(
+        result,
+      );
+    } catch (e) {
+      AppUtil.debugLog('getTodayExhibitRecommendations error: $e');
+      _todayExhibitRecommendations[_locationType]![_area!] =
+          const AsyncState.error();
     }
     notifyListeners();
   }
 
-  Future<void> getWeeklyCalendar() async {
-    if (_weeklyCalendarCache != null) {
-      weeklyCalendar = AsyncState.success(_weeklyCalendarCache!);
+  /// 장르 리스트 조회
+  Future<void> getGenres() async {
+    if (_genres.status == AsyncStatus.success) {
+      return;
+    }
+
+    _genres = const AsyncState.loading();
+    notifyListeners();
+
+    try {
+      final result = await homeRepository.fetchGenres();
+
+      _genres = AsyncState.success(result);
+      _selectedGenre = result.first;
+      notifyListeners();
+
+      await getExhibitsByGenre();
+    } catch (e) {
+      AppUtil.debugLog('getGenres error: $e');
+      _genres = const AsyncState.error();
+      notifyListeners();
+    }
+  }
+
+  /// 장르별 전시 리스트 조회
+  Future<void> getExhibitsByGenre() async {
+    if (_exhibitsByGenre[_locationType]?[_area!]?[_selectedGenre]?.status ==
+        AsyncStatus.success) {
+      return;
+    }
+
+    _exhibitsByGenre[_locationType] ??= {};
+    _exhibitsByGenre[_locationType]![_area!] ??= {};
+    _exhibitsByGenre[_locationType]![_area]![_selectedGenre] =
+        const AsyncState.loading();
+    notifyListeners();
+
+    try {
+      final result = await homeRepository.fetchExhibitsByGenre(
+        isDomestic: isDomestic,
+        country: isDomestic ? null : _area,
+        region: isDomestic ? _area : null,
+        genre: _selectedGenre,
+      );
+
+      _exhibitsByGenre[_locationType]![_area]![_selectedGenre] =
+          AsyncState.success(result);
+      exhibitVM.initializeFromExhibits(result);
+    } catch (e) {
+      AppUtil.debugLog('getExhibitsByGenre error: $e');
+      _exhibitsByGenre[_locationType]![_area]![_selectedGenre] =
+          const AsyncState.error();
+    }
+    notifyListeners();
+  }
+
+  /// 사용자 맞춤 전시 리스트 조회
+  Future<void> getPersonalizedExhibits() async {
+    /// 캐싱 처리
+    if (_personalizedExhibits[_locationType]?.status == AsyncStatus.success) {
+      final oldState = _personalizedExhibits[_locationType]!;
+      _personalizedExhibits[_locationType] = AsyncState.success(
+        List.from(oldState.data!),
+      );
       notifyListeners();
       return;
     }
-    weeklyCalendar = const AsyncState.loading();
+
+    _personalizedExhibits[_locationType] = const AsyncState.loading();
     notifyListeners();
 
-    await Future.delayed(const Duration(milliseconds: 500));
-    final result = AppUtil.getCurrentWeek(_today);
+    try {
+      final result = await homeRepository.fetchPersonalizedExhibits(
+        isDomestic: isDomestic,
+        country: isDomestic ? null : _area,
+        region: isDomestic ? _area : null,
+      );
 
-    weeklyCalendar = AsyncState.success(result);
-    _weeklyCalendarCache = result;
+      _personalizedExhibits[_locationType] = AsyncState.success(result);
+      exhibitVM.initializeFromExhibits(result);
+    } catch (e) {
+      AppUtil.debugLog('getPersonalizedExhibits error: $e');
+      _personalizedExhibits[_locationType] = const AsyncState.error();
+    }
+    notifyListeners();
+  }
+
+  /// 이번주 선택한 날짜 기준 전시 리스트 조회
+  Future<void> getWeeklyExhibitsBySelectedDate(DateTime date) async {
+    final selectedDateDay = _selectedDateInWeek.day.toString();
+    if (_weeklyExhibitsBySelectedDate[_locationType]?[_area]?[selectedDateDay]
+            ?.status ==
+        AsyncStatus.success) {
+      final oldState =
+          _weeklyExhibitsBySelectedDate[_locationType]![_area]![selectedDateDay]!;
+
+      _weeklyExhibitsBySelectedDate[_locationType]![_area]![selectedDateDay] =
+          AsyncState.success(List.from(oldState.data!));
+
+      notifyListeners();
+      return;
+    }
+    _weeklyExhibitsBySelectedDate[_locationType] ??= {};
+    _weeklyExhibitsBySelectedDate[_locationType]![_area!] ??= {};
+    _weeklyExhibitsBySelectedDate[_locationType]![_area]![selectedDateDay] =
+        const AsyncState.loading();
+    notifyListeners();
+
+    try {
+      final result = await homeRepository.fetchWeeklyExhibitsBySelectedDate(
+        isDomestic: isDomestic,
+        country: isDomestic ? null : _area,
+        region: isDomestic ? _area : null,
+        date: AppUtil.formatDateYMD(date),
+      );
+
+      _weeklyExhibitsBySelectedDate[_locationType]![_area]![selectedDateDay] =
+          AsyncState.success(result);
+      exhibitVM.initializeFromExhibits(result);
+    } catch (e) {
+      AppUtil.debugLog('getWeeklyExhibitsBySelectedDate error: $e');
+      _weeklyExhibitsBySelectedDate[_locationType]![_area]![selectedDateDay] =
+          const AsyncState.error();
+    }
+
+    notifyListeners();
+  }
+
+  /// 이번주 캘린더 조회
+  Future<void> getWeeklyCalendar() async {
+    if (_weeklyCalendar.status == AsyncStatus.success) {
+      _weeklyCalendar = AsyncState.success(_weeklyCalendar.data!);
+      notifyListeners();
+      return;
+    }
+
+    _weeklyCalendar = const AsyncState.loading();
+    notifyListeners();
+
+    try {
+      await Future.delayed(const Duration(milliseconds: 500));
+      final result = AppUtil.getCurrentWeek(_today);
+
+      _weeklyCalendar = AsyncState.success(result);
+    } catch (e) {
+      AppUtil.debugLog('getWeeklyCalendar error: $e');
+      _weeklyCalendar = const AsyncState.error();
+    }
     notifyListeners();
   }
 }

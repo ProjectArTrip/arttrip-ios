@@ -6,7 +6,7 @@ import 'package:arttrip/shared/models/region_model.dart';
 
 class HomeRepositoryMockImpl implements HomeRepository {
   @override
-  Future<List<String>?> fetchOverseasCountries() async {
+  Future<List<String>> fetchOverseasCountries() async {
     await Future.delayed(
       const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
     ); // 실제 딜레이 흉내
@@ -14,7 +14,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   }
 
   @override
-  Future<List<RegionModel>?> fetchDomesticRegions() async {
+  Future<List<RegionModel>> fetchDomesticRegions() async {
     await Future.delayed(
       const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
     );
@@ -29,7 +29,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchTodayExhibitRecommendations({
+  Future<List<ExhibitModel>> fetchTodayExhibitRecommendations({
     required bool isDomestic,
     String? country,
     String? region,
@@ -60,7 +60,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   }
 
   @override
-  Future<List<String>?> fetchGenres() async {
+  Future<List<String>> fetchGenres() async {
     await Future.delayed(
       const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
     );
@@ -80,7 +80,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchExhibitsByGenre({
+  Future<List<ExhibitModel>> fetchExhibitsByGenre({
     required bool isDomestic,
     String? country,
     String? region,
@@ -110,7 +110,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchPersonalizedExhibits({
+  Future<List<ExhibitModel>> fetchPersonalizedExhibits({
     required bool isDomestic,
     String? country,
     String? region,
@@ -141,7 +141,7 @@ class HomeRepositoryMockImpl implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchWeeklyExhibitsBySelectedDate({
+  Future<List<ExhibitModel>> fetchWeeklyExhibitsBySelectedDate({
     required bool isDomestic,
     String? country,
     String? region,
