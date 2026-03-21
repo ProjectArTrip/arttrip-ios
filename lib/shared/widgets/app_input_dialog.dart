@@ -104,11 +104,11 @@ class _AppInputDialogState extends State<AppInputDialog> {
       !_isChecking;
 
   Future<void> _onConfirmPressed() async {
-    var value = _controller.text.trim();
+    final value = _controller.text.trim();
 
     // 동기 검증
     if (widget.validator != null) {
-      var error = widget.validator!(value, widget.initialValue);
+      final error = widget.validator!(value, widget.initialValue);
       if (error != null) {
         setState(() => _errorMessage = error);
         return;
@@ -118,7 +118,7 @@ class _AppInputDialogState extends State<AppInputDialog> {
     // 비동기 검증
     if (widget.asyncValidator != null) {
       setState(() => _isChecking = true);
-      var error = await widget.asyncValidator!(value);
+      final error = await widget.asyncValidator!(value);
       setState(() {
         _isChecking = false;
         _errorMessage = error;

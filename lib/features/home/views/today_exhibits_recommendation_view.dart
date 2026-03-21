@@ -48,7 +48,7 @@ class _TodayExhibitsRecommendationViewState
                       separatorBuilder:
                           (context, index) => SizedBox(width: 8.w),
                       itemBuilder: (context, index) {
-                        var item = data[index];
+                        final item = data[index];
                         return Selector<ExhibitViewModel, bool>(
                           selector: (_, vm) => vm.isFavorite(item.exhibitId),
                           builder: (context, isFavorite, _) {
@@ -68,7 +68,7 @@ class _TodayExhibitsRecommendationViewState
                                     '/exhibit/${item.exhibitId}',
                                   ),
                               favoriteOnTap: () {
-                                var exhibitViewModel =
+                                final exhibitViewModel =
                                     Provider.of<ExhibitViewModel>(
                                       context,
                                       listen: false,

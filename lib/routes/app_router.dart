@@ -59,8 +59,8 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/exhibit/write-review/:id',
       pageBuilder: (context, state) {
-        var id = int.parse(state.pathParameters['id']!);
-        var params = state.extra as WriteReviewParams;
+        final id = int.parse(state.pathParameters['id']!);
+        final params = state.extra as WriteReviewParams;
         return buildPage(
           context,
           state,
@@ -73,7 +73,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/review/edit/:reviewId',
       pageBuilder: (context, state) {
-        var params = state.extra as WriteReviewParams;
+        final params = state.extra as WriteReviewParams;
         return buildPage(
           context,
           state,
@@ -86,7 +86,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/exhibit/:id',
       pageBuilder: (context, state) {
-        var id = int.parse(state.pathParameters['id']!);
+        final id = int.parse(state.pathParameters['id']!);
         return buildPage(
           context,
           state,
@@ -99,7 +99,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/home/:regionName',
       pageBuilder: (context, state) {
-        var regionName = state.pathParameters['regionName']!;
+        final regionName = state.pathParameters['regionName']!;
         return buildPage(
           context,
           state,
@@ -120,7 +120,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/my/edit-profile',
       pageBuilder: (context, state) {
-        var profile = state.extra as UserProfileModel;
+        final profile = state.extra as UserProfileModel;
         return buildPage(
           context,
           state,
@@ -169,7 +169,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/webview',
       pageBuilder: (context, state) {
-        var params = state.extra as WebViewParams;
+        final params = state.extra as WebViewParams;
         return buildPage(
           context,
           state,

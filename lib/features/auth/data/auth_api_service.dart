@@ -44,8 +44,8 @@ class AuthApiService extends BaseApiService {
   /// 인터셉터를 거치지 않도록 별도 Dio 인스턴스 사용 (무한 루프 방지)
   Future<ApiResult<void>> logout({required String refreshToken}) async {
     try {
-      var accessToken = TokenStorageService.instance.getAccessToken();
-      var dio = Dio(
+      final accessToken = TokenStorageService.instance.getAccessToken();
+      final dio = Dio(
         BaseOptions(
           baseUrl: Env.apiBaseUrl,
           headers: {

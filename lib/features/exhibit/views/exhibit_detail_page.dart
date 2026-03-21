@@ -47,7 +47,7 @@ class _ExhibitDetailModelPageState extends State<ExhibitDetailModelPage>
   Widget build(BuildContext context) {
     return InitWidget(
       init: () {
-        var vm = context.read<ExhibitDetailModelViewModel>();
+        final vm = context.read<ExhibitDetailModelViewModel>();
         vm.fetchExhibitDetailModel(widget.exhibitId);
         vm.fetchExhibitReviewModels(widget.exhibitId);
       },

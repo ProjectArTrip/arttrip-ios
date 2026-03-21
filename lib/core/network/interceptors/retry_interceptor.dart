@@ -46,10 +46,10 @@ class RetryInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    var requestOptions = err.requestOptions;
+    final requestOptions = err.requestOptions;
 
     // 현재 재시도 횟수 확인
-    var retryCount = _getRetryCount(requestOptions);
+    final retryCount = _getRetryCount(requestOptions);
 
     // 재시도 가능 여부 확인
     if (!_shouldRetry(err, retryCount)) {
@@ -57,7 +57,7 @@ class RetryInterceptor extends Interceptor {
     }
 
     // 재시도 전 대기
-    var delay = _getDelay(retryCount);
+    final delay = _getDelay(retryCount);
     await Future.delayed(delay);
 
     // 재시도 횟수 증가
@@ -65,7 +65,7 @@ class RetryInterceptor extends Interceptor {
 
     try {
       // 요청 재시도
-      var response = await dio.fetch(requestOptions);
+      final response = await dio.fetch(requestOptions);
       return handler.resolve(response);
     } on DioException catch (e) {
       // 재시도도 실패하면 다시 onError로 전달
@@ -101,7 +101,7 @@ class RetryInterceptor extends Interceptor {
     }
 
     // 재시도 가능한 상태 코드인지 확인
-    var statusCode = err.response?.statusCode;
+    final statusCode = err.response?.statusCode;
     if (statusCode != null && retryableStatusCodes.contains(statusCode)) {
       return true;
     }
@@ -126,12 +126,12 @@ class RetryInterceptor extends Interceptor {
   Duration _getDelay(int retryCount) {
     if (useExponentialBackoff) {
       // 지수 백오프: baseDelay * 2^retryCount + 랜덤 지터
-      var baseDelay =
+      final baseDelay =
           retryDelays.isNotEmpty
               ? retryDelays.first
               : const Duration(seconds: 1);
-      var exponentialDelay = baseDelay * pow(2, retryCount);
-      var jitter = Duration(milliseconds: Random().nextInt(1000));
+      final exponentialDelay = baseDelay * pow(2, retryCount);
+      final jitter = Duration(milliseconds: Random().nextInt(1000));
       return exponentialDelay + jitter;
     }
 
@@ -147,7 +147,7 @@ class RetryInterceptor extends Interceptor {
 
   /// 현재 재시도 횟수 조회
   int _getRetryCount(RequestOptions options) {
-    var retryCount = options.headers[_retryCountHeader];
+    final retryCount = options.headers[_retryCountHeader];
     if (retryCount is int) return retryCount;
     return 0;
   }

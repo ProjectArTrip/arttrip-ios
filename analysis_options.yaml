@@ -22,30 +22,39 @@ include:
   # producing the lint.
 linter:
   rules:
+    # const 최적화
     - prefer_const_constructors
-    - always_declare_return_types
-    - avoid_types_on_closure_parameters
-    - avoid_annotating_with_dynamic
-    - avoid_escaping_inner_quotes
-    - avoid_function_literals_in_foreach_calls
-    - avoid_private_typedef_functions
-    - combinators_ordering
+    - prefer_const_literals_to_create_immutables
+    - prefer_const_declarations
+
+    # 변수 안정성
+    - prefer_final_fields
+    - prefer_final_locals
+
+    # 코드 가독성
     - curly_braces_in_flow_control_structures
-    - omit_local_variable_types
+    - prefer_single_quotes
+    - unnecessary_this
+
+    # 비동기 안전
+    - unawaited_futures
+    - await_only_futures
+
+    # Flutter 위젯
+    - use_key_in_widget_constructors
+
+    # import 관리
+    - directives_ordering
+    - combinators_ordering
+    - always_use_package_imports
+
+    # 코드 정리
+    - avoid_empty_else
+    - unnecessary_parenthesis
+
+    - avoid_escaping_inner_quotes
     - annotate_overrides
     - sort_constructors_first
-    - unawaited_futures
-    - directives_ordering
-    - unnecessary_final
-    - unnecessary_parenthesis
-    - conditional_uri_does_not_exist
-    - prefer_single_quotes
-    - await_only_futures
-    - always_use_package_imports
-    - avoid_empty_else
-    - comment_references
-    - prefer_void_to_null
-    - use_key_in_widget_constructors
 
 analyzer:
   exclude:

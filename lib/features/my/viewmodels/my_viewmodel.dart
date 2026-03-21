@@ -36,7 +36,7 @@ class MyViewModel with ChangeNotifier {
     _profileState = const AsyncState.loading();
     notifyListeners();
 
-    var profile = await _repository.fetchUserProfile();
+    final profile = await _repository.fetchUserProfile();
     if (profile != null) {
       _profileState = AsyncState.success(profile);
     } else {
@@ -52,7 +52,7 @@ class MyViewModel with ChangeNotifier {
   }
 
   Future<bool> uploadProfileImage(XFile image) async {
-    var result = await _repository.uploadProfileImage(image);
+    final result = await _repository.uploadProfileImage(image);
     if (result) {
       await fetchUserProfile();
     }
@@ -60,7 +60,7 @@ class MyViewModel with ChangeNotifier {
   }
 
   Future<bool> deleteProfileImage() async {
-    var result = await _repository.deleteProfileImage();
+    final result = await _repository.deleteProfileImage();
     if (result) {
       await fetchUserProfile();
     }
@@ -69,7 +69,7 @@ class MyViewModel with ChangeNotifier {
 
   /// 닉네임 변경 - 성공 시 null, 실패 시 에러 메시지 반환
   Future<String?> updateNickname(String nickname) async {
-    var error = await _repository.updateNickname(nickname);
+    final error = await _repository.updateNickname(nickname);
     if (error == null) {
       await fetchUserProfile();
     }
@@ -84,7 +84,7 @@ class MyViewModel with ChangeNotifier {
     _hasNextReview = true;
     notifyListeners();
 
-    var response = await _repository.fetchMyReviews();
+    final response = await _repository.fetchMyReviews();
     if (response != null) {
       _reviewsState = AsyncState.success(response.reviews);
       _reviewNextCursor = response.nextCursor;
@@ -102,9 +102,11 @@ class MyViewModel with ChangeNotifier {
     _isLoadingMoreReviews = true;
     notifyListeners();
 
-    var response = await _repository.fetchMyReviews(cursor: _reviewNextCursor);
+    final response = await _repository.fetchMyReviews(
+      cursor: _reviewNextCursor,
+    );
     if (response != null) {
-      var currentReviews = _reviewsState.data ?? [];
+      final currentReviews = _reviewsState.data ?? [];
       _reviewsState = AsyncState.success([
         ...currentReviews,
         ...response.reviews,
@@ -131,7 +133,7 @@ class MyViewModel with ChangeNotifier {
     _recentExhibitsState = const AsyncState.loading();
     notifyListeners();
 
-    var response = await _repository.fetchRecentExhibits();
+    final response = await _repository.fetchRecentExhibits();
     if (response != null) {
       _recentExhibitsState = AsyncState.success(response.exhibits);
     } else {
@@ -143,10 +145,10 @@ class MyViewModel with ChangeNotifier {
   }
 
   Future<bool> deleteReview(int reviewId) async {
-    var success = await _repository.deleteReview(reviewId);
+    final success = await _repository.deleteReview(reviewId);
     if (success) {
       // 삭제 성공 시 리스트에서 제거
-      var currentReviews = _reviewsState.data ?? [];
+      final currentReviews = _reviewsState.data ?? [];
       _reviewsState = AsyncState.success(
         currentReviews.where((r) => r.reviewId != reviewId).toList(),
       );

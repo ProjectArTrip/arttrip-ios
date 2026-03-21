@@ -19,9 +19,11 @@ class TokenStorageService {
   Future<void> saveTokens({
     required String accessToken,
     required String refreshToken,
+    bool? isFirstLogin,
   }) async {
     await _prefs.setAccessToken(accessToken);
     await _prefs.setRefreshToken(refreshToken);
+    await _prefs.setIsFirstLogin(isFirstLogin ?? false);
     debugPrint('토큰 저장 완료');
   }
 
@@ -37,7 +39,7 @@ class TokenStorageService {
 
   /// 토큰 존재 여부 확인
   bool hasToken() {
-    var accessToken = _prefs.accessToken;
+    final accessToken = _prefs.accessToken;
     return accessToken != null && accessToken.isNotEmpty;
   }
 

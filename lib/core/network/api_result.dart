@@ -23,7 +23,7 @@ sealed class ApiResult<T> with _$ApiResult<T> {
 
   /// 성공 시 데이터 반환, 실패 시 null
   T? get dataOrNull => switch (this) {
-    ApiSuccess<T>(:var data) => data,
+    ApiSuccess<T>(:final data) => data,
     ApiFailure<T>() => null,
   };
 
@@ -33,8 +33,8 @@ sealed class ApiResult<T> with _$ApiResult<T> {
     required R Function(NetworkException exception) failure,
   }) {
     return switch (this) {
-      ApiSuccess<T>(:var data) => success(data),
-      ApiFailure<T>(:var exception) => failure(exception),
+      ApiSuccess<T>(:final data) => success(data),
+      ApiFailure<T>(:final exception) => failure(exception),
     };
   }
 }

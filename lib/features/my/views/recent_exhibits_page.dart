@@ -71,7 +71,7 @@ class RecentExhibitsPage extends StatelessWidget {
     return ListView.separated(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       itemCount: exhibits.length,
-      separatorBuilder: (_, __) => SizedBox(height: 16.h),
+      separatorBuilder: (_, _) => SizedBox(height: 16.h),
       itemBuilder: (context, index) {
         return RecentExhibitItem(exhibit: exhibits[index]);
       },

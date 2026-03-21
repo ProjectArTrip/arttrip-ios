@@ -41,7 +41,7 @@ class ConnectivityService {
   /// 서비스 초기화
   Future<void> initialize() async {
     // 현재 상태 확인
-    var results = await _connectivity.checkConnectivity();
+    final results = await _connectivity.checkConnectivity();
     _updateStatus(results);
 
     // 상태 변경 구독
@@ -59,13 +59,13 @@ class ConnectivityService {
 
   /// 현재 연결 상태 확인 (일회성)
   Future<ConnectivityStatus> checkConnectivity() async {
-    var results = await _connectivity.checkConnectivity();
+    final results = await _connectivity.checkConnectivity();
     return _mapToStatus(results);
   }
 
   /// 연결 상태 업데이트
   void _updateStatus(List<ConnectivityResult> results) {
-    var newStatus = _mapToStatus(results);
+    final newStatus = _mapToStatus(results);
 
     if (newStatus != _currentStatus) {
       _currentStatus = newStatus;

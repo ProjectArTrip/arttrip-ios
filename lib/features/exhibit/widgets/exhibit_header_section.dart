@@ -58,7 +58,7 @@ class ExhibitHeaderSection extends StatelessWidget {
       height: 52.h,
       child: ElevatedButton(
         onPressed: () async {
-          var uri = Uri.parse(ticketUrl);
+          final uri = Uri.parse(ticketUrl);
           if (await canLaunchUrl(uri)) {
             await launchUrl(uri, mode: LaunchMode.externalApplication);
           }

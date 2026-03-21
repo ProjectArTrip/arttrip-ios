@@ -25,14 +25,14 @@ class Routes {
     bool replace = false,
     TransitionType transition = TransitionType.none,
   }) {
-    var uri = Uri.parse(path);
-    var allParams = <String, String>{...uri.queryParameters, ...?params};
+    final uri = Uri.parse(path);
+    final allParams = <String, String>{...uri.queryParameters, ...?params};
 
     if (transition != TransitionType.none) {
       allParams['trans'] = transition.name;
     }
 
-    var fullPath =
+    final fullPath =
         allParams.isEmpty
             ? uri.path
             : uri.replace(queryParameters: allParams).toString();
@@ -57,14 +57,14 @@ class Routes {
     Object? extra,
     bool replace = false,
   }) {
-    var uri = Uri.parse(path);
-    var allParams = <String, String>{
+    final uri = Uri.parse(path);
+    final allParams = <String, String>{
       ...uri.queryParameters,
       ...?params,
       'modal': 'true',
     };
 
-    var fullPath = uri.replace(queryParameters: allParams).toString();
+    final fullPath = uri.replace(queryParameters: allParams).toString();
 
     if (replace) {
       context.pushReplacement(fullPath, extra: extra);
@@ -81,15 +81,15 @@ class Routes {
     Object? extra,
     bool isModal = false,
   }) {
-    var uri = Uri.parse(path);
-    var allParams = <String, String>{
+    final uri = Uri.parse(path);
+    final allParams = <String, String>{
       ...uri.queryParameters,
       ...?params,
       'trans': TransitionType.fade.name,
       if (isModal) 'modal': 'true',
     };
 
-    var fullPath = uri.replace(queryParameters: allParams).toString();
+    final fullPath = uri.replace(queryParameters: allParams).toString();
     context.pushReplacement(fullPath, extra: extra);
     return Future.value();
   }
@@ -104,9 +104,9 @@ class Routes {
     Map<String, String>? params,
     Object? extra,
   }) {
-    var uri = Uri.parse(path);
-    var allParams = <String, String>{...uri.queryParameters, ...?params};
-    var fullPath =
+    final uri = Uri.parse(path);
+    final allParams = <String, String>{...uri.queryParameters, ...?params};
+    final fullPath =
         allParams.isEmpty
             ? uri.path
             : uri.replace(queryParameters: allParams).toString();

@@ -70,7 +70,7 @@ class VisitDateSection extends StatelessWidget {
     BuildContext context,
     WriteReviewViewModel vm,
   ) async {
-    var picked = await showCalendarBottomSheet(
+    final picked = await showCalendarBottomSheet(
       context: context,
       initialDate: vm.visitDate,
       firstDate: DateTime(2000),

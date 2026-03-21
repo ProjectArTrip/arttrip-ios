@@ -10,8 +10,8 @@ Page<dynamic> buildPage(
   GoRouterState state, {
   required Widget child,
 }) {
-  var isModal = state.uri.queryParameters['modal'] == 'true';
-  var transition = state.uri.queryParameters['trans'];
+  final isModal = state.uri.queryParameters['modal'] == 'true';
+  final transition = state.uri.queryParameters['trans'];
 
   // 트랜지션 처리
   if (transition != null) {

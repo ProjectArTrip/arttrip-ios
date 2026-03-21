@@ -30,7 +30,7 @@ class ExhibitDetailModelTabContent extends StatelessWidget {
   }
 
   Widget _buildInfoBox(BuildContext context) {
-    var infoItems = <Widget>[];
+    final infoItems = <Widget>[];
 
     if (exhibit.hallAddress.isNotEmpty) {
       infoItems.add(

@@ -27,7 +27,7 @@ class KeywordModelsViewModel with ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    var keywords = await repository.fetchAllKeywordModels();
+    final keywords = await repository.fetchAllKeywordModels();
 
     if (keywords != null) {
       _genres = keywords.where((k) => k.isGenre).toList();
@@ -35,7 +35,7 @@ class KeywordModelsViewModel with ChangeNotifier {
 
       // 수정 모드일 경우 기존 선택된 키워드 불러오기
       if (loadUserSelection) {
-        var userKeywords = await repository.fetchUserKeywords();
+        final userKeywords = await repository.fetchUserKeywords();
         if (userKeywords != null) {
           for (var keyword in userKeywords) {
             _selectedKeywordModelIds.add(keyword.keywordId);
@@ -69,13 +69,13 @@ class KeywordModelsViewModel with ChangeNotifier {
     _isSaving = true;
     notifyListeners();
 
-    var allKeywords = [..._genres, ..._styles];
-    var selectedNames =
+    final allKeywords = [..._genres, ..._styles];
+    final selectedNames =
         allKeywords
             .where((k) => _selectedKeywordModelIds.contains(k.keywordId))
             .map((k) => k.name)
             .toList();
-    var success = await repository.saveKeywordModels(selectedNames);
+    final success = await repository.saveKeywordModels(selectedNames);
 
     _isSaving = false;
     notifyListeners();

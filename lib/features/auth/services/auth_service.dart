@@ -41,7 +41,7 @@ class AuthService {
   Future<AuthResult> loginWithKakao() async {
     try {
       // 1. 카카오 로그인으로 idToken 획득
-      var kakaoResult = await _kakaoLogin.login();
+      final kakaoResult = await _kakaoLogin.login();
 
       if (!kakaoResult.isSuccess || kakaoResult.idToken == null) {
         return AuthResult.failure(
@@ -52,7 +52,7 @@ class AuthService {
       debugPrint('카카오 idToken 획득 성공');
 
       // 2. 서버에 소셜 로그인 요청
-      var serverResult = await _authApi.socialLogin(
+      final serverResult = await _authApi.socialLogin(
         provider: SocialProvider.kakao.value,
         idToken: kakaoResult.idToken!,
       );
@@ -63,6 +63,7 @@ class AuthService {
           await _tokenStorage.saveTokens(
             accessToken: tokenResult.accessToken,
             refreshToken: tokenResult.refreshToken,
+            isFirstLogin: tokenResult.firstLogin,
           );
 
           debugPrint('서버 토큰 발급 및 저장 완료, firstLogin: ${tokenResult.firstLogin}');
@@ -93,11 +94,11 @@ class AuthService {
 
   /// 로그아웃
   Future<void> logout() async {
-    var refreshToken = _tokenStorage.getRefreshToken();
+    final refreshToken = _tokenStorage.getRefreshToken();
 
     // 서버 로그아웃 (실패해도 로컬 로그아웃은 진행)
     if (refreshToken != null) {
-      var result = await _authApi.logout(refreshToken: refreshToken);
+      final result = await _authApi.logout(refreshToken: refreshToken);
       result.when(
         success: (_) => debugPrint('서버 로그아웃 성공'),
         failure: (e) => debugPrint('서버 로그아웃 실패: ${e.message}'),
@@ -115,16 +116,17 @@ class AuthService {
 
   /// 토큰 갱신
   Future<String?> refreshToken() async {
-    var refreshToken = _tokenStorage.getRefreshToken();
+    final refreshToken = _tokenStorage.getRefreshToken();
     if (refreshToken == null) return null;
 
-    var result = await _authApi.refreshToken(refreshToken: refreshToken);
+    final result = await _authApi.refreshToken(refreshToken: refreshToken);
 
     return result.when(
       success: (tokenResult) async {
         await _tokenStorage.saveTokens(
           accessToken: tokenResult.accessToken,
           refreshToken: tokenResult.refreshToken,
+          isFirstLogin: tokenResult.firstLogin,
         );
         return tokenResult.accessToken;
       },

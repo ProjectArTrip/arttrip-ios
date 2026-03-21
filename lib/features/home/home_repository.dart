@@ -38,12 +38,12 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<List<String>?> fetchOverseasCountries() async {
     try {
-      var response = await _dio.get('/exhibits/overseas');
-      var data = response.dataOrNull;
+      final response = await _dio.get('/exhibits/overseas');
+      final data = response.dataOrNull;
       if (data == null) return null;
-      var map = data as Map<String, dynamic>;
-      var result = map['result'] as Map<String, dynamic>?;
-      var countries = result?['countries'] as List?;
+      final map = data as Map<String, dynamic>;
+      final result = map['result'] as Map<String, dynamic>?;
+      final countries = result?['countries'] as List?;
       if (countries == null) return null;
       return countries
           .map<String>((e) => (e as Map<String, dynamic>)['label'].toString())
@@ -57,12 +57,12 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<List<RegionModel>?> fetchDomesticRegions() async {
     try {
-      var response = await _dio.get('/exhibits/domestic');
-      var data = response.dataOrNull;
+      final response = await _dio.get('/exhibits/domestic');
+      final data = response.dataOrNull;
       if (data == null) return null;
-      var map = data as Map<String, dynamic>;
-      var result = map['result'] as Map<String, dynamic>?;
-      var regions = result?['regions'] as List?;
+      final map = data as Map<String, dynamic>;
+      final result = map['result'] as Map<String, dynamic>?;
+      final regions = result?['regions'] as List?;
       if (regions == null) return null;
       return regions
           .map<RegionModel>(
@@ -82,19 +82,19 @@ class HomeRepositoryImpl implements HomeRepository {
     String? region,
   }) async {
     try {
-      var queryParams = {
+      final queryParams = {
         'isDomestic': isDomestic,
         if (!isDomestic) 'country': country,
         if (isDomestic) 'region': region,
       };
-      var response = await _dio.get(
+      final response = await _dio.get(
         '/home/exhibits/today',
         queryParameters: queryParams,
       );
-      var data = response.dataOrNull;
+      final data = response.dataOrNull;
       if (data == null) return null;
-      var map = data as Map<String, dynamic>;
-      var exhibits = map['exhibits'] as List?;
+      final map = data as Map<String, dynamic>;
+      final exhibits = map['exhibits'] as List?;
       if (exhibits == null) return null;
       return exhibits
           .map<ExhibitModel>(
@@ -110,12 +110,12 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<List<String>?> fetchGenres() async {
     try {
-      var response = await _dio.get('/exhibits/genre');
-      var data = response.dataOrNull;
+      final response = await _dio.get('/exhibits/genre');
+      final data = response.dataOrNull;
       if (data == null) return null;
-      var map = data as Map<String, dynamic>;
-      var result = map['result'] as Map<String, dynamic>?;
-      var genres = result?['genres'] as List?;
+      final map = data as Map<String, dynamic>;
+      final result = map['result'] as Map<String, dynamic>?;
+      final genres = result?['genres'] as List?;
       if (genres == null) return null;
       return genres
           .map<String>((e) => (e as Map<String, dynamic>)['name'].toString())
@@ -134,20 +134,20 @@ class HomeRepositoryImpl implements HomeRepository {
     required String genre,
   }) async {
     try {
-      var queryParams = {
+      final queryParams = {
         'isDomestic': isDomestic,
         if (!isDomestic) 'country': country,
         if (isDomestic) 'region': region,
         'singleGenre': genre,
       };
-      var response = await _dio.get(
+      final response = await _dio.get(
         '/home/exhibits/genres',
         queryParameters: queryParams,
       );
-      var data = response.dataOrNull;
+      final data = response.dataOrNull;
       if (data == null) return null;
-      var map = data as Map<String, dynamic>;
-      var exhibits = map['exhibits'] as List?;
+      final map = data as Map<String, dynamic>;
+      final exhibits = map['exhibits'] as List?;
       if (exhibits == null) return null;
       return exhibits
           .map<ExhibitModel>(
@@ -167,19 +167,19 @@ class HomeRepositoryImpl implements HomeRepository {
     String? region,
   }) async {
     try {
-      var queryParams = {
+      final queryParams = {
         'isDomestic': isDomestic,
         if (!isDomestic) 'country': country,
         if (isDomestic) 'region': region,
       };
-      var response = await _dio.get(
+      final response = await _dio.get(
         '/home/exhibits/personalized',
         queryParameters: queryParams,
       );
-      var data = response.dataOrNull;
+      final data = response.dataOrNull;
       if (data == null) return null;
-      var map = data as Map<String, dynamic>;
-      var exhibits = map['exhibits'] as List?;
+      final map = data as Map<String, dynamic>;
+      final exhibits = map['exhibits'] as List?;
       if (exhibits == null) return null;
       return exhibits
           .map<ExhibitModel>(
@@ -200,20 +200,20 @@ class HomeRepositoryImpl implements HomeRepository {
     required String date,
   }) async {
     try {
-      var queryParams = {
+      final queryParams = {
         'isDomestic': isDomestic,
         if (!isDomestic) 'country': country,
         if (isDomestic) 'region': region,
         'date': date,
       };
-      var response = await _dio.get(
+      final response = await _dio.get(
         '/home/exhibits/schedule',
         queryParameters: queryParams,
       );
-      var data = response.dataOrNull;
+      final data = response.dataOrNull;
       if (data == null) return null;
-      var map = data as Map<String, dynamic>;
-      var exhibits = map['exhibits'] as List?;
+      final map = data as Map<String, dynamic>;
+      final exhibits = map['exhibits'] as List?;
       if (exhibits == null) return null;
       return exhibits
           .map<ExhibitModel>(

@@ -16,13 +16,13 @@ class AppToast {
     Duration duration = const Duration(seconds: 2),
     double bottomMargin = 108,
   }) {
-    var safeBottom = MediaQuery.of(context).padding.bottom;
-    var adjustedBottom = (bottomMargin - safeBottom).clamp(
+    final safeBottom = MediaQuery.of(context).padding.bottom;
+    final adjustedBottom = (bottomMargin - safeBottom).clamp(
       0.0,
       double.infinity,
     );
 
-    var messenger = ScaffoldMessenger.of(context);
+    final messenger = ScaffoldMessenger.of(context);
     messenger.hideCurrentSnackBar();
     messenger.showSnackBar(
       SnackBar(

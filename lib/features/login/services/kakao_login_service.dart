@@ -70,7 +70,7 @@ class KakaoLoginService {
   Future<KakaoLoginResult> login() async {
     try {
       OAuthToken token;
-      var nonce = _generateNonce();
+      final nonce = _generateNonce();
 
       // 카카오톡 설치 여부 확인
       if (await isKakaoTalkInstalled()) {
@@ -89,7 +89,7 @@ class KakaoLoginService {
       }
 
       // 사용자 정보 조회
-      var user = await _getUserInfo();
+      final user = await _getUserInfo();
 
       return KakaoLoginResult.success(idToken: token.idToken!, user: user);
     } catch (e) {
@@ -116,7 +116,7 @@ class KakaoLoginService {
 
   /// 사용자 정보 조회
   Future<KakaoUserInfo> _getUserInfo() async {
-    var user = await UserApi.instance.me();
+    final user = await UserApi.instance.me();
 
     return KakaoUserInfo(
       id: user.id,
@@ -162,7 +162,7 @@ class KakaoLoginService {
   /// 토큰 유효성 검사
   Future<bool> isTokenValid() async {
     try {
-      var token = await TokenManagerProvider.instance.manager.getToken();
+      final token = await TokenManagerProvider.instance.manager.getToken();
       if (token == null) return false;
 
       // 토큰 정보 조회로 유효성 검사

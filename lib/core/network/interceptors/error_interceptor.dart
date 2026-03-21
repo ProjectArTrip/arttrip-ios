@@ -18,7 +18,7 @@ class ErrorInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    var networkException = NetworkException.fromDioException(err);
+    final networkException = NetworkException.fromDioException(err);
 
     if (enableLogging) {
       _logError(err, networkException);
@@ -39,7 +39,7 @@ class ErrorInterceptor extends Interceptor {
   }
 
   void _logError(DioException err, NetworkException networkException) {
-    var buffer = StringBuffer();
+    final buffer = StringBuffer();
     buffer.writeln(
       '╔══════════════════════════════════════════════════════════',
     );

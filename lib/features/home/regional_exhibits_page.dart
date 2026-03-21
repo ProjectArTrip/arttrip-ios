@@ -143,8 +143,8 @@ class _RegionalExhibitsPageState extends State<RegionalExhibitsPage> {
                           children: List.generate(domesticRegionsCache.length, (
                             index,
                           ) {
-                            var item = domesticRegionsCache[index];
-                            var isSelected = selectedRegion == item.region;
+                            final item = domesticRegionsCache[index];
+                            final isSelected = selectedRegion == item.region;
                             return GestureDetector(
                               onTap: () {
                                 _regionName.value = item.region;

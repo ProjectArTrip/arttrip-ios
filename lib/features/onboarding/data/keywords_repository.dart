@@ -16,10 +16,10 @@ class KeywordModelsRepositoryImpl implements KeywordModelsRepository {
   @override
   Future<List<KeywordModel>?> fetchAllKeywordModels() async {
     try {
-      var response = await _dio.get('/keyword/all');
-      var data = response.dataOrNull;
+      final response = await _dio.get('/keyword/all');
+      final data = response.dataOrNull;
       if (data == null) return null;
-      var result = KeywordListResponseModel.fromJson(
+      final result = KeywordListResponseModel.fromJson(
         data as Map<String, dynamic>,
       );
       return result.keywords;
@@ -32,10 +32,10 @@ class KeywordModelsRepositoryImpl implements KeywordModelsRepository {
   @override
   Future<List<KeywordModel>?> fetchUserKeywords() async {
     try {
-      var response = await _dio.get('/keyword');
-      var data = response.dataOrNull;
+      final response = await _dio.get('/keyword');
+      final data = response.dataOrNull;
       if (data == null) return null;
-      var result = KeywordListResponseModel.fromJson(
+      final result = KeywordListResponseModel.fromJson(
         data as Map<String, dynamic>,
       );
       return result.keywords;
@@ -48,7 +48,10 @@ class KeywordModelsRepositoryImpl implements KeywordModelsRepository {
   @override
   Future<bool> saveKeywordModels(List<String> keywords) async {
     try {
-      var response = await _dio.post('/keyword', data: {'keywords': keywords});
+      final response = await _dio.post(
+        '/keyword',
+        data: {'keywords': keywords},
+      );
       return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('saveKeywordModels: $e');

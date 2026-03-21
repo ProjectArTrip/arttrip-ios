@@ -82,9 +82,9 @@ class WriteReviewViewModel with ChangeNotifier {
 
   /// 이미지 추가
   void addImages(List<XFile> images) {
-    var remainingSlots =
+    final remainingSlots =
         maxImageCount - _activeExistingImageCount - _selectedImages.length;
-    var imagesToAdd = images.take(remainingSlots).toList();
+    final imagesToAdd = images.take(remainingSlots).toList();
     _selectedImages.addAll(imagesToAdd);
     notifyListeners();
   }
@@ -127,7 +127,7 @@ class WriteReviewViewModel with ChangeNotifier {
     _isLoadingDetail = true;
     notifyListeners();
 
-    var detail = await _repository.fetchReviewDetail(reviewId);
+    final detail = await _repository.fetchReviewDetail(reviewId);
     if (detail != null) {
       _content = detail.content;
       _existingImages.addAll(detail.images);
@@ -149,8 +149,8 @@ class WriteReviewViewModel with ChangeNotifier {
     notifyListeners();
 
     try {
-      var dateStr = DateFormat('yyyy-MM-dd').format(_visitDate!);
-      var result = await _repository.createReview(
+      final dateStr = DateFormat('yyyy-MM-dd').format(_visitDate!);
+      final result = await _repository.createReview(
         exhibitId: exhibitId,
         images: _selectedImages,
         date: dateStr,
@@ -176,8 +176,8 @@ class WriteReviewViewModel with ChangeNotifier {
     notifyListeners();
 
     try {
-      var dateStr = DateFormat('yyyy-MM-dd').format(_visitDate!);
-      var success = await _repository.updateReview(
+      final dateStr = DateFormat('yyyy-MM-dd').format(_visitDate!);
+      final success = await _repository.updateReview(
         reviewId: _reviewId!,
         newImages: _selectedImages,
         date: dateStr,
