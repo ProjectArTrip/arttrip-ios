@@ -8,9 +8,9 @@ import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/app_cached_image.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -85,13 +85,23 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
                                   child: Stack(
                                     children: [
                                       item.posterUrl?.isNotEmpty == true
-                                          ? CachedNetworkImage(
+                                          ? AppCachedImage(
                                             imageUrl: item.posterUrl!,
                                             width: 120.w,
                                             height: 150.h,
                                             fit: BoxFit.cover,
                                           )
-                                          : const SizedBox.shrink(),
+                                          : Container(
+                                            width: 120.w,
+                                            height: 150.h,
+                                            color: AppColors.gray100,
+                                            child: const Center(
+                                              child: Icon(
+                                                Icons.image_not_supported,
+                                                color: AppColors.textTertiary,
+                                              ),
+                                            ),
+                                          ),
                                       location?.isNotEmpty == true
                                           ? Container(
                                             padding: EdgeInsets.symmetric(
