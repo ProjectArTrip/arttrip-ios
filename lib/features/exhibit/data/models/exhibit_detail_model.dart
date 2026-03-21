@@ -14,8 +14,8 @@ abstract class ExhibitDetailModel with _$ExhibitDetailModel {
     required int exhibitId,
     required String title,
     required String description,
-    required String posterUrl,
-    required String ticketUrl,
+    String? posterUrl,
+    String? ticketUrl,
     required String exhibitPeriod,
     required String status, // "ONGOING", "CLOSED", "UPCOMING"
     required String hallName,

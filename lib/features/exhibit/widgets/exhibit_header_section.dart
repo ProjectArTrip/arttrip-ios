@@ -12,13 +12,13 @@ class ExhibitHeaderSection extends StatelessWidget {
     required this.title,
     required this.hallName,
     required this.exhibitPeriod,
-    required this.ticketUrl,
+    this.ticketUrl,
   });
 
   final String title;
   final String hallName;
   final String exhibitPeriod;
-  final String ticketUrl;
+  final String? ticketUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,10 @@ class ExhibitHeaderSection extends StatelessWidget {
         _buildSubInfo(hallName),
         SizedBox(height: 4.h),
         _buildSubInfo(exhibitPeriod),
-        SizedBox(height: 16.h),
-        _buildTicketButton(context),
+        if (ticketUrl != null && ticketUrl!.isNotEmpty) ...[
+          SizedBox(height: 16.h),
+          _buildTicketButton(context),
+        ],
       ],
     );
   }
@@ -58,7 +60,7 @@ class ExhibitHeaderSection extends StatelessWidget {
       height: 52.h,
       child: ElevatedButton(
         onPressed: () async {
-          final uri = Uri.parse(ticketUrl);
+          final uri = Uri.parse(ticketUrl!);
           if (await canLaunchUrl(uri)) {
             await launchUrl(uri, mode: LaunchMode.externalApplication);
           }
