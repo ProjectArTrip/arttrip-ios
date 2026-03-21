@@ -32,6 +32,7 @@ class AppAssets {
   static const String icTablerWorld = 'assets/svg/ic_tabler_world.svg';
   static const String icReview = 'assets/svg/ic_review.svg';
   static const String icRecent = 'assets/svg/ic_recent.svg';
+  static const String icDelete = 'assets/svg/ic_delete.svg';
 
   // Logo
   static const String icLogoWhite = 'assets/svg/ic_logo_white.svg';

@@ -95,5 +95,11 @@
   "editReviewTitle": "Edit Review",
   "updateReview": "Update",
   "reviewUpdateError": "Failed to update review",
-  "noRecentExhibits": "No recently viewed exhibitions."
+  "noRecentExhibits": "No recently viewed exhibitions.",
+  "searchTitle": "Search",
+  "searchPlaceholder": "Enter search keyword",
+  "noSearchResults": "No search results.",
+  "recentSearches": "Recent Searches",
+  "clearAll": "Clear All",
+  "recommendedSearches": "Recommended"
 }
