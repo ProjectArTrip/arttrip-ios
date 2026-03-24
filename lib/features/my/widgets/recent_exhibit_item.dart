@@ -1,5 +1,6 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/features/my/data/models/recent_exhibit_model.dart';
+import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
@@ -15,7 +16,8 @@ class RecentExhibitItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Routes.push(context, '/exhibit/${exhibit.exhibitId}'),
+      onTap:
+          () => Routes.push(context, AppRoutes.exhibitPath(exhibit.exhibitId)),
       behavior: HitTestBehavior.opaque,
       child: Row(
         children: [

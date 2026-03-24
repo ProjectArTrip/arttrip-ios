@@ -4,6 +4,7 @@ import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/home/widgets/today_exhibit_widget.dart';
+import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
@@ -68,7 +69,7 @@ class _TodayExhibitsRecommendationViewState
                               onTap:
                                   () => Routes.push(
                                     context,
-                                    '/exhibit/${item.exhibitId}',
+                                    AppRoutes.exhibitPath(item.exhibitId),
                                   ),
                               favoriteOnTap: () {
                                 final exhibitViewModel =

@@ -11,6 +11,7 @@ import 'package:arttrip/features/my/views/settings_page.dart';
 import 'package:arttrip/features/onboarding/views/keywords_page.dart';
 import 'package:arttrip/features/search/views/search_page.dart';
 import 'package:arttrip/features/splash/views/splash_view.dart';
+import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/main_shell_route.dart';
 import 'package:arttrip/routes/route_builder.dart';
 import 'package:arttrip/routes/route_params.dart';
@@ -25,7 +26,7 @@ import 'package:go_router/go_router.dart';
 /// 모든 라우트를 조합하여 GoRouter 인스턴스 생성
 
 final appRouter = GoRouter(
-  initialLocation: '/splash',
+  initialLocation: AppRoutes.splash,
   debugLogDiagnostics: kDebugMode,
   extraCodec: const ExtraCodec(),
   routes: [
@@ -34,7 +35,7 @@ final appRouter = GoRouter(
 
     // 스플래시 화면 (인증 상태 체크)
     GoRoute(
-      path: '/splash',
+      path: AppRoutes.splash,
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const SplashView());
       },
@@ -42,7 +43,7 @@ final appRouter = GoRouter(
 
     // 로그인 화면
     GoRoute(
-      path: '/login',
+      path: AppRoutes.login,
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const LoginPage());
       },
@@ -50,7 +51,7 @@ final appRouter = GoRouter(
 
     // 온보딩 - 관심 키워드 선택
     GoRoute(
-      path: '/onboarding/keywords',
+      path: AppRoutes.onboardingKeywords,
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const KeywordModelsPage());
       },
@@ -58,7 +59,7 @@ final appRouter = GoRouter(
 
     // 리뷰 작성 페이지 (모달)
     GoRoute(
-      path: '/exhibit/write-review/:id',
+      path: AppRoutes.exhibitWriteReview,
       pageBuilder: (context, state) {
         final id = int.parse(state.pathParameters['id']!);
         final params = state.extra as WriteReviewParams;
@@ -72,7 +73,7 @@ final appRouter = GoRouter(
 
     // 리뷰 수정 페이지 (모달)
     GoRoute(
-      path: '/review/edit/:reviewId',
+      path: AppRoutes.reviewEdit,
       pageBuilder: (context, state) {
         final params = state.extra as WriteReviewParams;
         return buildPage(
@@ -85,7 +86,7 @@ final appRouter = GoRouter(
 
     // 전시 상세 페이지
     GoRoute(
-      path: '/exhibit/:id',
+      path: AppRoutes.exhibit,
       pageBuilder: (context, state) {
         final id = int.parse(state.pathParameters['id']!);
         return buildPage(
@@ -98,7 +99,7 @@ final appRouter = GoRouter(
 
     // 홈 > 국내전시 > 지역별 전체 화면
     GoRoute(
-      path: '/home/:regionName',
+      path: AppRoutes.homeRegion,
       pageBuilder: (context, state) {
         final regionName = state.pathParameters['regionName']!;
         return buildPage(
@@ -111,7 +112,7 @@ final appRouter = GoRouter(
 
     // 검색 페이지
     GoRoute(
-      path: '/search',
+      path: AppRoutes.search,
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const SearchPage());
       },
@@ -119,7 +120,7 @@ final appRouter = GoRouter(
 
     // 알림 리스트 화면
     GoRoute(
-      path: '/alerts',
+      path: AppRoutes.alerts,
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const AlertsPage());
       },
@@ -127,7 +128,7 @@ final appRouter = GoRouter(
 
     // 내 정보 수정 페이지
     GoRoute(
-      path: '/my/edit-profile',
+      path: AppRoutes.myEditProfile,
       pageBuilder: (context, state) {
         final profile = state.extra as UserProfileModel;
         return buildPage(
@@ -140,7 +141,7 @@ final appRouter = GoRouter(
 
     // 설정 페이지
     GoRoute(
-      path: '/my/settings',
+      path: AppRoutes.mySettings,
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const SettingsPage());
       },
@@ -148,7 +149,7 @@ final appRouter = GoRouter(
 
     // 나의 취향 분석 페이지
     GoRoute(
-      path: '/my/taste-analysis',
+      path: AppRoutes.myTasteAnalysis,
       pageBuilder: (context, state) {
         return buildPage(
           context,
@@ -160,7 +161,7 @@ final appRouter = GoRouter(
 
     // 최근 본 전시 페이지
     GoRoute(
-      path: '/my/recent-exhibits',
+      path: AppRoutes.myRecentExhibits,
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const RecentExhibitsPage());
       },
@@ -168,7 +169,7 @@ final appRouter = GoRouter(
 
     // 나의 리뷰 페이지
     GoRoute(
-      path: '/my/reviews',
+      path: AppRoutes.myReviews,
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const MyReviewsPage());
       },
@@ -176,7 +177,7 @@ final appRouter = GoRouter(
 
     // WebView 페이지 (개인정보 처리방침, 서비스 이용약관 등)
     GoRoute(
-      path: '/webview',
+      path: AppRoutes.webview,
       pageBuilder: (context, state) {
         final params = state.extra as WebViewParams;
         return buildPage(

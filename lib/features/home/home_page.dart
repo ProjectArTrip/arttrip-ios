@@ -12,6 +12,7 @@ import 'package:arttrip/features/home/views/regional_exhibits_view.dart';
 import 'package:arttrip/features/home/views/today_exhibits_recommendation_view.dart';
 import 'package:arttrip/features/home/views/weekly_exhibits_schedule_view.dart';
 import 'package:arttrip/features/home/widgets/date_filter_bottom_sheet.dart';
+import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/alert_badge.dart';
@@ -96,7 +97,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 return Row(
                   spacing: 20.w,
                   children: [
-                    const AlertBadge(path: '/alerts'),
+                    const AlertBadge(path: AppRoutes.alerts),
                     if (!isDomestic)
                       GestureDetector(
                         onTap: () => _showDateFilterBottomSheet(),
@@ -107,7 +108,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ),
                       ),
                     GestureDetector(
-                      onTap: () => Routes.push(context, '/search'),
+                      onTap: () => Routes.push(context, AppRoutes.search),
                       child: SvgPicture.asset(
                         AppAssets.icSearch,
                         width: 24.w,

@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/models/region_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
@@ -60,7 +61,7 @@ class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
                             onTap:
                                 () => Routes.push(
                                   context,
-                                  '/home/${item.region}',
+                                  AppRoutes.homeRegionPath(item.region),
                                 ),
                             child: ColoredBox(
                               color: Colors.transparent,

@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/my/widgets/my_menu_item.dart';
+import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/route_params.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
@@ -71,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
               onTap:
                   () => Routes.push(
                     context,
-                    '/webview',
+                    AppRoutes.webview,
                     extra: WebViewParams(
                       title: context.l10n.privacyPolicy,
                       url:
@@ -86,7 +87,7 @@ class _SettingsPageState extends State<SettingsPage> {
               onTap:
                   () => Routes.push(
                     context,
-                    '/webview',
+                    AppRoutes.webview,
                     extra: WebViewParams(
                       title: context.l10n.termsOfService,
                       url:
