@@ -17,12 +17,26 @@ class WriteReviewHeader extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
       child: Row(
         children: [
-          AppCachedImage(
-            imageUrl: params.posterUrl,
-            width: 50.w,
-            height: 50.w,
-            borderRadius: BorderRadius.circular(4.r),
-          ),
+          params.posterUrl != null
+              ? AppCachedImage(
+                imageUrl: params.posterUrl!,
+                width: 50.w,
+                height: 50.w,
+                borderRadius: BorderRadius.circular(4.r),
+              )
+              : Container(
+                width: 50.w,
+                height: 50.w,
+                decoration: BoxDecoration(
+                  color: AppColors.gray100,
+                  borderRadius: BorderRadius.circular(4.r),
+                ),
+                child: Icon(
+                  Icons.image_not_supported,
+                  size: 20.w,
+                  color: AppColors.textTertiary,
+                ),
+              ),
           SizedBox(width: 16.w),
           Expanded(
             child: Column(

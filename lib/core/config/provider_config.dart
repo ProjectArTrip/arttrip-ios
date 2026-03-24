@@ -16,6 +16,9 @@ import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
 import 'package:arttrip/features/onboarding/data/keywords_repository.dart';
 import 'package:arttrip/features/onboarding/data/keywords_repository_mock.dart';
 import 'package:arttrip/features/onboarding/viewmodels/keywords_viewmodel.dart';
+import 'package:arttrip/features/search/data/search_repository.dart';
+import 'package:arttrip/features/search/data/search_repository_mock.dart';
+import 'package:arttrip/features/search/viewmodels/search_viewmodel.dart';
 import 'package:arttrip/shared/viewmodels/alert_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -71,6 +74,14 @@ final getProviders = [
           AppConsts.useMock
               ? MyRepositoryMockImpl()
               : MyRepositoryImpl(DioClient.instance),
+        ),
+  ),
+  ChangeNotifierProvider<SearchViewModel>(
+    create:
+        (_) => SearchViewModel(
+          AppConsts.useMock
+              ? SearchRepositoryMockImpl()
+              : SearchRepositoryImpl(DioClient.instance),
         ),
   ),
 ];

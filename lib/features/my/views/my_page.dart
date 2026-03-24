@@ -1,4 +1,3 @@
-import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/auth/services/auth_service.dart';
@@ -15,7 +14,6 @@ import 'package:arttrip/shared/widgets/init_widget.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -31,11 +29,7 @@ class MyPage extends StatelessWidget {
         appBar: CommonAppBar(
           title: context.l10n.myPageTitle,
           showBackButton: false,
-          actions: [
-            const AlertBadge(path: '/alerts'),
-            SizedBox(width: 20.w),
-            SvgPicture.asset(AppAssets.icSearch, width: 24.w, height: 24.w),
-          ],
+          actions: const [AlertBadge(path: '/alerts')],
         ),
         body: SingleChildScrollView(
           child: Column(

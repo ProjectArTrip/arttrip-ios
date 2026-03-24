@@ -9,6 +9,7 @@ import 'package:arttrip/features/my/views/my_reviews_page.dart';
 import 'package:arttrip/features/my/views/recent_exhibits_page.dart';
 import 'package:arttrip/features/my/views/settings_page.dart';
 import 'package:arttrip/features/onboarding/views/keywords_page.dart';
+import 'package:arttrip/features/search/views/search_page.dart';
 import 'package:arttrip/features/splash/views/splash_view.dart';
 import 'package:arttrip/routes/main_shell_route.dart';
 import 'package:arttrip/routes/route_builder.dart';
@@ -105,6 +106,14 @@ final appRouter = GoRouter(
           state,
           child: RegionalExhibitsPage(regionName),
         );
+      },
+    ),
+
+    // 검색 페이지
+    GoRoute(
+      path: '/search',
+      pageBuilder: (context, state) {
+        return buildPage(context, state, child: const SearchPage());
       },
     ),
 

@@ -8,13 +8,12 @@ import 'package:arttrip/features/exhibit/widgets/write_review/submit_review_butt
 import 'package:arttrip/features/exhibit/widgets/write_review/visit_date_section.dart';
 import 'package:arttrip/features/exhibit/widgets/write_review/write_review_header.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
-import 'package:arttrip/shared/widgets/init_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 /// 리뷰 작성/수정 페이지
-class WriteReviewPage extends StatelessWidget {
+class WriteReviewPage extends StatefulWidget {
   const WriteReviewPage({super.key, this.exhibitId = 0, required this.params});
 
   /// 신규 작성 시 필수, 수정 모드에서는 사용하지 않음
@@ -22,64 +21,71 @@ class WriteReviewPage extends StatelessWidget {
   final WriteReviewParams params;
 
   @override
+  State<WriteReviewPage> createState() => _WriteReviewPageState();
+}
+
+class _WriteReviewPageState extends State<WriteReviewPage> {
+  @override
+  void initState() {
+    super.initState();
+    final vm = context.read<WriteReviewViewModel>();
+    vm.reset(notify: false);
+    if (widget.params.isEditMode) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        vm.initForEdit(reviewId: widget.params.reviewId!);
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return InitWidget(
-      init: () {
-        final vm = context.read<WriteReviewViewModel>();
-        if (params.isEditMode) {
-          vm.initForEdit(reviewId: params.reviewId!);
-        } else {
-          vm.reset();
-        }
-      },
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: AppColors.gray0,
+      appBar: AppBar(
         backgroundColor: AppColors.gray0,
-        appBar: AppBar(
-          backgroundColor: AppColors.gray0,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          title: ArtTripText.pretendard()
-              .headline()
-              .color(AppColors.textPrimary)
-              .build()
-              .text(
-                params.isEditMode
-                    ? context.l10n.editReviewTitle
-                    : context.l10n.writeReviewTitle,
-              ),
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    WriteReviewHeader(params: params),
-                    const Divider(height: 1, color: AppColors.gray50),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24.w,
-                        vertical: 16.h,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const VisitDateSection(),
-                          SizedBox(height: 12.h),
-                          const PhotoAttachSection(),
-                          SizedBox(height: 12.h),
-                          const ReviewContentSection(),
-                        ],
-                      ),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: ArtTripText.pretendard()
+            .headline()
+            .color(AppColors.textPrimary)
+            .build()
+            .text(
+              widget.params.isEditMode
+                  ? context.l10n.editReviewTitle
+                  : context.l10n.writeReviewTitle,
+            ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  WriteReviewHeader(params: widget.params),
+                  const Divider(height: 1, color: AppColors.gray50),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 24.w,
+                      vertical: 16.h,
                     ),
-                    SubmitReviewButton(exhibitId: exhibitId),
-                  ],
-                ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const VisitDateSection(),
+                        SizedBox(height: 12.h),
+                        const PhotoAttachSection(),
+                        SizedBox(height: 12.h),
+                        const ReviewContentSection(),
+                      ],
+                    ),
+                  ),
+                  SubmitReviewButton(exhibitId: widget.exhibitId),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
