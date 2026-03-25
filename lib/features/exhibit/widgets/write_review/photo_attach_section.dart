@@ -81,7 +81,11 @@ class PhotoAttachSection extends StatelessWidget {
     WriteReviewViewModel vm,
   ) async {
     final picker = ImagePicker();
-    final images = await picker.pickMultiImage();
+    final images = await picker.pickMultiImage(
+      maxWidth: 1024,
+      maxHeight: 1024,
+      imageQuality: 80,
+    );
     if (images.isNotEmpty) {
       vm.addImages(images);
     }

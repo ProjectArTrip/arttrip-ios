@@ -186,14 +186,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _pickImageFromGallery() async {
-    final image = await _picker.pickImage(source: ImageSource.gallery);
+    final image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1024,
+      maxHeight: 1024,
+      imageQuality: 80,
+    );
     if (image != null) {
       await _uploadImage(image);
     }
   }
 
   Future<void> _pickImageFromCamera() async {
-    final image = await _picker.pickImage(source: ImageSource.camera);
+    final image = await _picker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 1024,
+      maxHeight: 1024,
+      imageQuality: 80,
+    );
     if (image != null) {
       await _uploadImage(image);
     }

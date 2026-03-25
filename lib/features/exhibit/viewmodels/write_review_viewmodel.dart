@@ -106,7 +106,7 @@ class WriteReviewViewModel with ChangeNotifier {
   }
 
   /// 상태 초기화 (신규 작성 모드)
-  void reset() {
+  void reset({bool notify = true}) {
     _visitDate = null;
     _content = '';
     _selectedImages.clear();
@@ -116,12 +116,12 @@ class WriteReviewViewModel with ChangeNotifier {
     _existingImages.clear();
     _deleteImageIds.clear();
     _isLoadingDetail = false;
-    notifyListeners();
+    if (notify) notifyListeners();
   }
 
   /// 수정 모드 초기화 - API로 리뷰 상세 조회
   Future<void> initForEdit({required int reviewId}) async {
-    reset();
+    reset(notify: false);
     _isEditMode = true;
     _reviewId = reviewId;
     _isLoadingDetail = true;

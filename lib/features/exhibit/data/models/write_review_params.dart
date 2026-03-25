@@ -4,13 +4,13 @@
 /// exhibitId는 path parameter로 전달
 class WriteReviewParams {
   const WriteReviewParams({
-    required this.posterUrl,
+    this.posterUrl,
     required this.title,
     required this.hallName,
     this.reviewId,
   });
 
-  final String posterUrl;
+  final String? posterUrl;
   final String title;
   final String hallName;
 

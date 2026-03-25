@@ -9,6 +9,7 @@ import 'package:arttrip/features/home/views/regional_exhibits_view.dart';
 import 'package:arttrip/features/home/views/today_exhibits_recommendation_view.dart';
 import 'package:arttrip/features/home/views/weekly_exhibits_schedule_view.dart';
 import 'package:arttrip/features/home/widgets/date_filter_bottom_sheet.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +102,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ),
                       ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () => Routes.push(context, '/search'),
                       child: SvgPicture.asset(
                         AppAssets.icSearch,
                         width: 24.w,

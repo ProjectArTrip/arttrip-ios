@@ -2,7 +2,7 @@ import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:arttrip/shared/widgets/app_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -33,13 +33,23 @@ class TodayExhibitWidget extends StatelessWidget {
           children: [
             /// 백그라운드 이미지
             item.posterUrl?.isNotEmpty == true
-                ? CachedNetworkImage(
+                ? AppCachedImage(
                   imageUrl: item.posterUrl!,
                   width: 180.w,
                   height: 240.h,
                   fit: BoxFit.cover,
                 )
-                : const SizedBox.shrink(),
+                : Container(
+                  width: 180.w,
+                  height: 240.h,
+                  color: AppColors.gray100,
+                  child: const Center(
+                    child: Icon(
+                      Icons.image_not_supported,
+                      color: AppColors.textTertiary,
+                    ),
+                  ),
+                ),
 
             /// 테두리
             Container(
