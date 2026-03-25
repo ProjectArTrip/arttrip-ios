@@ -30,7 +30,7 @@ class ExhibitHeaderSection extends StatelessWidget {
         _buildSubInfo(hallName),
         SizedBox(height: 4.h),
         _buildSubInfo(exhibitPeriod),
-        if (ticketUrl != null && ticketUrl!.isNotEmpty) ...[
+        if (ticketUrl?.isNotEmpty == true) ...[
           SizedBox(height: 16.h),
           _buildTicketButton(context),
         ],
