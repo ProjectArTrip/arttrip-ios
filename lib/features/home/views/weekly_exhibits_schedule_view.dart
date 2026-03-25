@@ -46,7 +46,7 @@ class _WeeklyExhibitsScheduleViewState
                         (_, vm) =>
                             vm.weeklyExhibitsBySelectedDate[vm.locationType]?[vm
                                 .area]?[vm.selectedDateInWeek.day.toString()] ??
-                            const AsyncState.error(),
+                            const AsyncState.loading(),
                     builder: (context, state, _) {
                       return AsyncView(
                         state: state,

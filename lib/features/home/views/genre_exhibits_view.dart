@@ -69,8 +69,8 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
                           vertical: 16.h,
                           horizontal: 24.w,
                         ),
-                        separatorBuilder:
-                            (context, index) => SizedBox(width: 8.w),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(width: 8.w),
                         itemBuilder: (context, index) {
                           return _buildGenreItem(
                             _itemKeys![index],
@@ -83,21 +83,19 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
 
                     /// 장르별 랜덤 전시
                     Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
-                      selector:
-                          (_, vm) =>
-                              vm.exhibitsByGenre[vm.locationType]?[vm.area!]?[vm
-                                  .selectedGenre] ??
-                              const AsyncState.error(),
+                      selector: (_, vm) =>
+                          vm.exhibitsByGenre[vm.locationType]?[vm.area!]?[vm
+                              .selectedGenre] ??
+                          const AsyncState.loading(),
                       builder: (context, state, _) {
                         return AsyncView(
                           state: state,
                           onData: (data) {
                             if (data.isEmpty) {
-                              final selectedGenre =
-                                  Provider.of<HomeViewModel>(
-                                    context,
-                                    listen: false,
-                                  ).selectedGenre;
+                              final selectedGenre = Provider.of<HomeViewModel>(
+                                context,
+                                listen: false,
+                              ).selectedGenre;
                               return _buildNoExhibitions(selectedGenre);
                             }
                             return ListView.separated(
@@ -105,36 +103,33 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
                               shrinkWrap: true,
                               itemCount: data.length,
                               padding: EdgeInsets.symmetric(horizontal: 24.w),
-                              separatorBuilder:
-                                  (context, index) => SizedBox(height: 8.h),
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 8.h),
                               itemBuilder: (context, index) {
                                 final item = data[index];
                                 return ExhibitListItem(item: item);
                               },
                             );
                           },
-                          onLoading:
-                              () => Shimmer(
-                                duration: const Duration(
-                                  milliseconds: AppConsts.shimmerDurationMs,
-                                ),
-                                interval: const Duration(
-                                  milliseconds: AppConsts.shimmerIntervalMs,
-                                ),
-                                child: ListView.separated(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 24.w,
-                                  ),
-                                  itemCount: 2,
-                                  separatorBuilder:
-                                      (context, index) => SizedBox(height: 8.h),
-                                  itemBuilder: (context, index) {
-                                    return const ExhibitListItemSkeleton();
-                                  },
-                                ),
-                              ),
+                          onLoading: () => Shimmer(
+                            duration: const Duration(
+                              milliseconds: AppConsts.shimmerDurationMs,
+                            ),
+                            interval: const Duration(
+                              milliseconds: AppConsts.shimmerIntervalMs,
+                            ),
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.symmetric(horizontal: 24.w),
+                              itemCount: 2,
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 8.h),
+                              itemBuilder: (context, index) {
+                                return const ExhibitListItemSkeleton();
+                              },
+                            ),
+                          ),
                         );
                       },
                     ),
@@ -179,8 +174,8 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
                             vertical: 16.h,
                           ),
                           itemCount: 5,
-                          separatorBuilder:
-                              (context, index) => SizedBox(width: 8.w),
+                          separatorBuilder: (context, index) =>
+                              SizedBox(width: 8.w),
                           itemBuilder: (context, index) {
                             return const ShimmerSkeletonItem(
                               width: 76,
@@ -194,8 +189,8 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
                         physics: const NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.symmetric(horizontal: 24.w),
                         itemCount: 2,
-                        separatorBuilder:
-                            (context, index) => SizedBox(height: 8.h),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 8.h),
                         itemBuilder: (context, index) {
                           return const ExhibitListItemSkeleton();
                         },

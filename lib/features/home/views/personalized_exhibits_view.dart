@@ -33,7 +33,7 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
         selector:
             (_, vm) =>
                 vm.personalizedExhibits[vm.locationType] ??
-                const AsyncState.error(),
+                const AsyncState.loading(),
         builder: (context, state, _) {
           return AsyncView(
             state: state,

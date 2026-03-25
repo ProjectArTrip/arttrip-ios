@@ -84,7 +84,9 @@ class HomeViewModel with ChangeNotifier {
   }
 
   Future<void> load(BuildContext context) async {
-    await (isDomestic ? getDomesticRegions() : getOverseasCountries(context));
+    await (isDomestic
+        ? getDomesticRegions(context)
+        : getOverseasCountries(context));
 
     unawaited(getTodayExhibitRecommendations());
     unawaited(getGenres());
@@ -112,6 +114,8 @@ class HomeViewModel with ChangeNotifier {
   /// 해외 국가 리스트 조회
   Future<void> getOverseasCountries(BuildContext context) async {
     if (_overseasCountries.status == AsyncStatus.success) {
+      _locationType = LocationType.overseas;
+      notifyListeners();
       return;
     }
     _overseasCountries = const AsyncState.loading();
@@ -131,15 +135,17 @@ class HomeViewModel with ChangeNotifier {
     } catch (e) {
       AppUtil.debugLog('getOverseasCountries error: $e');
       _overseasCountries = const AsyncState.error();
-      _area = '';
+      _area = context.mounted ? context.l10n.allItems : '';
     }
 
     notifyListeners();
   }
 
   /// 국내 지역 리스트 조회
-  Future<void> getDomesticRegions() async {
+  Future<void> getDomesticRegions(BuildContext context) async {
     if (_domesticRegions.status == AsyncStatus.success) {
+      _locationType = LocationType.domestic;
+      notifyListeners();
       return;
     }
 
@@ -148,11 +154,16 @@ class HomeViewModel with ChangeNotifier {
     try {
       final result = await homeRepository.fetchDomesticRegions();
       _domesticRegions = AsyncState.success(result);
-      _area = result.first.region;
+      _area =
+          result.isNotEmpty
+              ? result.first.region
+              : context.mounted
+              ? context.l10n.allItems
+              : '';
     } catch (e) {
       AppUtil.debugLog('getDomesticRegions error: $e');
       _domesticRegions = const AsyncState.error();
-      _area = '';
+      _area = context.mounted ? context.l10n.allItems : '';
     }
     notifyListeners();
   }
@@ -171,6 +182,7 @@ class HomeViewModel with ChangeNotifier {
       notifyListeners();
       return;
     }
+    _area ??= '전체';
     _todayExhibitRecommendations[_locationType] ??= {};
     _todayExhibitRecommendations[_locationType]![_area!] =
         const AsyncState.loading();
@@ -198,6 +210,8 @@ class HomeViewModel with ChangeNotifier {
   /// 장르 리스트 조회
   Future<void> getGenres() async {
     if (_genres.status == AsyncStatus.success) {
+      /// 장르는 해외/국내 공통이므로 locationType 구분 없이 캐싱 처리
+      await getExhibitsByGenre();
       return;
     }
 
@@ -223,6 +237,12 @@ class HomeViewModel with ChangeNotifier {
   Future<void> getExhibitsByGenre() async {
     if (_exhibitsByGenre[_locationType]?[_area!]?[_selectedGenre]?.status ==
         AsyncStatus.success) {
+      final oldState =
+          _exhibitsByGenre[_locationType]![_area!]?[_selectedGenre];
+      _exhibitsByGenre[_locationType]![_area!]?[_selectedGenre] =
+          AsyncState.success(List.from(oldState!.data!));
+
+      notifyListeners();
       return;
     }
 

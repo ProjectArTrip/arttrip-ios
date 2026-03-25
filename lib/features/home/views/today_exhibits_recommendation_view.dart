@@ -35,7 +35,7 @@ class _TodayExhibitsRecommendationViewState
             selector:
                 (_, vm) =>
                     vm.todayExhibitRecommendations[vm.locationType]?[area] ??
-                    const AsyncState.error(),
+                    const AsyncState.loading(),
             builder: (context, state, _) {
               return AsyncView(
                 state: state,

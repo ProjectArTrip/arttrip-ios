@@ -32,6 +32,8 @@ class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
             return AsyncView(
               state: state,
               onData: (data) {
+                if (data.isEmpty) return const SizedBox.shrink();
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
