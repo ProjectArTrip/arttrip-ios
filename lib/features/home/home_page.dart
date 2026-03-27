@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 return Row(
                   spacing: 20.w,
                   children: [
-                    const AlertBadge(path: AppRoutes.alerts),
+                    const AlertBadge(),
                     if (!isDomestic)
                       GestureDetector(
                         onTap: () => _showDateFilterBottomSheet(),
@@ -145,18 +145,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         ),
         indicatorWeight: 2.h,
-        labelStyle:
-            ArtTripText.pretendard()
-                .title01Bold()
-                .color(AppColors.textPoint)
-                .build()
-                .style(),
-        unselectedLabelStyle:
-            ArtTripText.pretendard()
-                .title01Bold()
-                .color(AppColors.textTertiary)
-                .build()
-                .style(),
+        labelStyle: ArtTripText.pretendard()
+            .title01Bold()
+            .color(AppColors.textPoint)
+            .build()
+            .style(),
+        unselectedLabelStyle: ArtTripText.pretendard()
+            .title01Bold()
+            .color(AppColors.textTertiary)
+            .build()
+            .style(),
         labelPadding: EdgeInsets.symmetric(horizontal: 12.w),
         indicatorSize: TabBarIndicatorSize.label,
         tabAlignment: TabAlignment.start,
@@ -172,8 +170,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           );
           if (index == (homeViewModel.isDomestic ? 1 : 0)) return;
 
-          homeViewModel.setLocationType =
-              index == 0 ? LocationType.overseas : LocationType.domestic;
+          homeViewModel.setLocationType = index == 0
+              ? LocationType.overseas
+              : LocationType.domestic;
           await homeViewModel.load(context);
         },
       ),
@@ -192,18 +191,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
       backgroundColor: AppColors.subLightGray,
       isScrollControlled: true,
-      builder:
-          (_) => Selector<HomeViewModel, AsyncState<List<String>>>(
-            selector: (_, vm) => vm.overseasCountries,
-            builder: (context, overseasCountries, _) {
-              return AsyncView(
-                state: overseasCountries,
-                onData: (data) {
-                  return DateFilterBottomSheet(data);
-                },
-              );
+      builder: (_) => Selector<HomeViewModel, AsyncState<List<String>>>(
+        selector: (_, vm) => vm.overseasCountries,
+        builder: (context, overseasCountries, _) {
+          return AsyncView(
+            state: overseasCountries,
+            onData: (data) {
+              return DateFilterBottomSheet(data);
             },
-          ),
+          );
+        },
+      ),
     );
   }
 }

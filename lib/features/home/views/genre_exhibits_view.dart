@@ -4,6 +4,8 @@ import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/routes/app_routes.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
@@ -208,7 +210,13 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
 
   GestureDetector _buildHeader() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        final homeViewModel = context.read<HomeViewModel>();
+        Routes.push(
+          context,
+          AppRoutes.homeGenrePath(homeViewModel.selectedGenre),
+        );
+      },
       child: Container(
         padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 2.h),
         color: Colors.transparent,
@@ -267,6 +275,7 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
     );
   }
 
+  /// 전시가 없는 경우 보여주는 위젯
   Container _buildNoExhibitions(String genre) {
     return Container(
       width: double.infinity,

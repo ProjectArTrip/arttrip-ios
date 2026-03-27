@@ -1,6 +1,5 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
-import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
@@ -39,10 +38,7 @@ class _AlertsPageState extends State<AlertsPage> {
                   children: [
                     Padding(
                       padding: EdgeInsetsGeometry.all(12.w),
-                      child: AlertBadge(
-                        isUnread: isUnread,
-                        path: AppRoutes.alerts,
-                      ),
+                      child: const AlertBadge(iconType: true),
                     ),
                     Expanded(
                       child: Column(

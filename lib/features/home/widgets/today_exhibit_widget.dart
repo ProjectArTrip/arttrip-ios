@@ -34,22 +34,22 @@ class TodayExhibitWidget extends StatelessWidget {
             /// 백그라운드 이미지
             item.posterUrl?.isNotEmpty == true
                 ? AppCachedImage(
-                  imageUrl: item.posterUrl!,
-                  width: 180.w,
-                  height: 240.h,
-                  fit: BoxFit.cover,
-                )
+                    imageUrl: item.posterUrl!,
+                    width: 180.w,
+                    height: 240.h,
+                    fit: BoxFit.cover,
+                  )
                 : Container(
-                  width: 180.w,
-                  height: 240.h,
-                  color: AppColors.gray100,
-                  child: const Center(
-                    child: Icon(
-                      Icons.image_not_supported,
-                      color: AppColors.textTertiary,
+                    width: 180.w,
+                    height: 240.h,
+                    color: AppColors.gray100,
+                    child: const Center(
+                      child: Icon(
+                        Icons.image_not_supported,
+                        color: AppColors.textTertiary,
+                      ),
                     ),
                   ),
-                ),
 
             /// 테두리
             Container(
@@ -84,18 +84,21 @@ class TodayExhibitWidget extends StatelessWidget {
             /// 국가
             location?.isNotEmpty == true
                 ? Container(
-                  padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-                  margin: EdgeInsets.only(left: 10.w, top: 16.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.textPrimary.withValues(alpha: 0.6),
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: ArtTripText.pretendard()
-                      .body02Bold()
-                      .color(AppColors.textWhite)
-                      .build()
-                      .text(location!),
-                )
+                    padding: EdgeInsets.symmetric(
+                      vertical: 4.h,
+                      horizontal: 8.w,
+                    ),
+                    margin: EdgeInsets.only(left: 10.w, top: 16.h),
+                    decoration: BoxDecoration(
+                      color: AppColors.textPrimary.withValues(alpha: 0.6),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: ArtTripText.pretendard()
+                        .body02Bold()
+                        .color(AppColors.textWhite)
+                        .build()
+                        .text(location!),
+                  )
                 : const SizedBox.shrink(),
 
             /// 즐겨찾기
@@ -113,29 +116,37 @@ class TodayExhibitWidget extends StatelessWidget {
             ),
 
             /// 전시 정보
-            Container(
-              width: 180.w,
-              padding: EdgeInsets.all(10.w),
-              alignment: Alignment.bottomLeft,
-              child: Wrap(
-                runSpacing: 4.h,
-                children: [
-                  ArtTripText.pretendard()
-                      .title02Bold()
-                      .color(AppColors.textWhite)
-                      .build()
-                      .text(item.title ?? ''),
-                  ArtTripText.pretendard()
-                      .body02Regular()
-                      .color(AppColors.textWhite)
-                      .build()
-                      .text(item.hallName ?? ''),
-                  ArtTripText.pretendard()
-                      .body02Regular()
-                      .color(AppColors.textWhite)
-                      .build()
-                      .text(item.exhibitPeriod ?? ''),
-                ],
+            Positioned(
+              left: 0,
+              bottom: 0,
+              child: Container(
+                width: 180.w,
+                padding: EdgeInsets.all(10.w),
+                alignment: Alignment.bottomLeft,
+                child: Column(
+                  spacing: 4.h,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (item.title != null)
+                      ArtTripText.pretendard()
+                          .title02Bold()
+                          .color(AppColors.textWhite)
+                          .build()
+                          .text(item.title!),
+                    if (item.hallName != null)
+                      ArtTripText.pretendard()
+                          .body02Regular()
+                          .color(AppColors.textWhite)
+                          .build()
+                          .text(item.hallName!),
+                    if (item.exhibitPeriod != null)
+                      ArtTripText.pretendard()
+                          .body02Regular()
+                          .color(AppColors.textWhite)
+                          .build()
+                          .text(item.exhibitPeriod!),
+                  ],
+                ),
               ),
             ),
           ],
