@@ -18,3 +18,12 @@ enum ExhibitionStatus {
 }
 
 enum LocationType { overseas, domestic }
+
+enum SortType {
+  latest('LATEST'), // 최신순
+  oldest('DEADLINE'), // 마감순
+  none('NONE');
+
+  const SortType(this.type);
+  final String type;
+}

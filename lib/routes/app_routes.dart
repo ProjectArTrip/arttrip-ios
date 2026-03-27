@@ -29,7 +29,10 @@ class AppRoutes {
 
   /// 홈 > 장르별 전시 추천 전체 화면
   static const homeGenre = '/home/genre/:genreName';
-  static String homeGenrePath(String genreName) => '/home/genre/$genreName';
+  static String homeGenrePath({
+    required String genreName,
+    required String isDomestic,
+  }) => '/home/genre/$genreName';
 
   /// 검색 페이지
   static const search = '/search';

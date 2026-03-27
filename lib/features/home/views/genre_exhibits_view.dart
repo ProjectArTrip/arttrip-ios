@@ -86,18 +86,20 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
                     /// 장르별 랜덤 전시
                     Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
                       selector: (_, vm) =>
-                          vm.exhibitsByGenre[vm.locationType]?[vm.area!]?[vm
-                              .selectedGenre] ??
+                          vm.exhibitsByGenre[vm.locationType]?[vm.area[vm
+                              .locationType]]?[vm.selectedGenre[vm
+                              .locationType]![vm.area[vm.locationType]]] ??
                           const AsyncState.loading(),
                       builder: (context, state, _) {
                         return AsyncView(
                           state: state,
                           onData: (data) {
                             if (data.isEmpty) {
-                              final selectedGenre = Provider.of<HomeViewModel>(
-                                context,
-                                listen: false,
-                              ).selectedGenre;
+                              final homeVM = context.read<HomeViewModel>();
+                              final selectedGenre =
+                                  homeVM.selectedGenre[homeVM
+                                      .locationType]![homeVM.area[homeVM
+                                      .locationType]];
                               return _buildNoExhibitions(selectedGenre);
                             }
                             return ListView.separated(
@@ -214,7 +216,13 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
         final homeViewModel = context.read<HomeViewModel>();
         Routes.push(
           context,
-          AppRoutes.homeGenrePath(homeViewModel.selectedGenre),
+          AppRoutes.homeGenrePath(
+            genreName:
+                homeViewModel.selectedGenre[homeViewModel
+                    .locationType]![homeViewModel.area[homeViewModel
+                    .locationType]],
+            isDomestic: 'true',
+          ),
         );
       },
       child: Container(
@@ -244,12 +252,18 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
           context,
           listen: false,
         );
-        if (homeViewModel.selectedGenre != genre) {
+        if (homeViewModel.selectedGenre[homeViewModel
+                .locationType]![homeViewModel.area[homeViewModel
+                .locationType]] !=
+            genre) {
           _updateSelectedGenre(index, genre);
         }
       },
       child: Selector<HomeViewModel, String>(
-        selector: (_, vm) => vm.selectedGenre,
+        selector: (_, vm) =>
+            vm.selectedGenre[vm.locationType]?[vm.area[vm.locationType]] ??
+            vm.genres.data?.first ??
+            '',
         builder: (context, selectedGenreIndex, _) {
           final isSelected = genre == selectedGenreIndex;
           return Container(

@@ -42,11 +42,14 @@ class _WeeklyExhibitsScheduleViewState
                   _buildHeader(),
                   _buildWeeklyCalendar(currentWeek),
                   Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
-                    selector:
-                        (_, vm) =>
-                            vm.weeklyExhibitsBySelectedDate[vm.locationType]?[vm
-                                .area]?[vm.selectedDateInWeek.day.toString()] ??
-                            const AsyncState.loading(),
+                    selector: (_, vm) =>
+                        vm.weeklyExhibitsBySelectedDate[vm.locationType]?[vm
+                            .area[vm.locationType]]?[vm
+                            .selectedDateInWeek[vm.locationType]?[vm.area[vm
+                                .locationType]]
+                            .day
+                            .toString()] ??
+                        const AsyncState.loading(),
                     builder: (context, state, _) {
                       return AsyncView(
                         state: state,
@@ -124,7 +127,10 @@ class _WeeklyExhibitsScheduleViewState
       child: SizedBox(
         height: 50.h,
         child: Selector<HomeViewModel, DateTime>(
-          selector: (_, vm) => vm.selectedDateInWeek,
+          selector: (_, vm) =>
+              vm.selectedDateInWeek[vm.locationType]?[vm.area[vm
+                  .locationType]] ??
+              DateTime.now(),
           builder: (context, selectedDateInWeek, _) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,38 +162,36 @@ class _WeeklyExhibitsScheduleViewState
                           width: 28.w,
                           height: 28.w,
                           alignment: Alignment.center,
-                          decoration:
-                              isToday
-                                  ? const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColors.textPoint,
-                                  )
-                                  : null,
-                          child:
-                              isToday
-                                  ? ArtTripText.pretendard()
-                                      .body01Bold()
-                                      .color(AppColors.textWhite)
-                                      .build()
-                                      .text(date.day.toString())
-                                  : ArtTripText.pretendard()
-                                      .body01Regular()
-                                      .textAlign(TextAlign.center)
-                                      .build()
-                                      .text(date.day.toString()),
+                          decoration: isToday
+                              ? const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.textPoint,
+                                )
+                              : null,
+                          child: isToday
+                              ? ArtTripText.pretendard()
+                                    .body01Bold()
+                                    .color(AppColors.textWhite)
+                                    .build()
+                                    .text(date.day.toString())
+                              : ArtTripText.pretendard()
+                                    .body01Regular()
+                                    .textAlign(TextAlign.center)
+                                    .build()
+                                    .text(date.day.toString()),
                         ),
                         isToday
                             ? ArtTripText.pretendard()
-                                .body01Bold()
-                                .color(AppColors.textPoint)
-                                .textAlign(TextAlign.center)
-                                .build()
-                                .text(weekDay)
+                                  .body01Bold()
+                                  .color(AppColors.textPoint)
+                                  .textAlign(TextAlign.center)
+                                  .build()
+                                  .text(weekDay)
                             : ArtTripText.pretendard()
-                                .body01Light()
-                                .textAlign(TextAlign.center)
-                                .build()
-                                .text(weekDay),
+                                  .body01Light()
+                                  .textAlign(TextAlign.center)
+                                  .build()
+                                  .text(weekDay),
                       ],
                     ),
                   ),

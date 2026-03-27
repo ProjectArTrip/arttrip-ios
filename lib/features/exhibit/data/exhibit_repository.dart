@@ -4,6 +4,7 @@ import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/api_result.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
 import 'package:arttrip/shared/models/base_result_model.dart';
@@ -34,6 +35,20 @@ abstract class ExhibitRepository {
   Future<bool> addFavorite(int exhibitId);
   Future<bool> removeFavorite(int exhibitId);
   Future<void> updateFavoriteExhibit(int exhibitId, bool isFavorite);
+
+  /// 전시 조건 필터 전체 조회
+  Future<ExhibitFilterModel> fetchExhibitFilters({
+    required bool isDomestic,
+    int? cursor,
+    int? size,
+    String? country,
+    String? region,
+    String? startDate,
+    String? endDate,
+    String? genres,
+    String? styles,
+    String? sortType,
+  });
 }
 
 class ExhibitRepositoryImpl implements ExhibitRepository {
@@ -211,6 +226,49 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
       AppUtil.debugLog('updateFavoriteExhibit get message: ${model.message}');
     } catch (e) {
       AppUtil.debugLog('updateFavoriteExhibit: $e');
+    }
+  }
+
+  @override
+  Future<ExhibitFilterModel> fetchExhibitFilters({
+    required bool isDomestic,
+    int? cursor,
+    int? size,
+    String? country,
+    String? region,
+    String? startDate,
+    String? endDate,
+    String? genres,
+    String? styles,
+    String? sortType,
+  }) async {
+    try {
+      final queryParams = {
+        'query': 'string',
+        if (!isDomestic) 'country': country,
+        if (isDomestic) 'region': region,
+        'startDate': ?startDate,
+        'endDate': ?endDate,
+        'isDomestic': isDomestic,
+        'genres': ?genres,
+        'styles': ?styles,
+        'sortType': ?sortType,
+        'cursor': ?cursor,
+        'size': ?size,
+      };
+
+      final response = await _dio.get(
+        '/exhibits',
+        queryParameters: queryParams,
+      );
+
+      final data = response.dataOrNull;
+      if (data == null) throw Exception('No data in response');
+
+      return ExhibitFilterModel.fromJson(data as Map<String, dynamic>);
+    } catch (e) {
+      AppUtil.debugLog('fetchExhibitFilters: $e');
+      rethrow;
     }
   }
 }

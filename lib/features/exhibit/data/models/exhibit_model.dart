@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'exhibit_model.freezed.dart';
 part 'exhibit_model.g.dart';
 
+/// 홈에서 쓰이는 전시 모델
 @freezed
 abstract class ExhibitModel with _$ExhibitModel {
   const ExhibitModel._();

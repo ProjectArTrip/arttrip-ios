@@ -116,10 +116,14 @@ final appRouter = GoRouter(
       path: AppRoutes.homeGenre,
       pageBuilder: (context, state) {
         final genreName = state.pathParameters['genreName']!;
+        final isDomestic = state.pathParameters['isDomestic'] == 'true';
         return buildPage(
           context,
           state,
-          child: GenreDetailPage(genreName: genreName),
+          child: GenreDetailPage(
+            genreName: genreName,
+            isDomestic: isDomestic,
+          ),
         );
       },
     ),

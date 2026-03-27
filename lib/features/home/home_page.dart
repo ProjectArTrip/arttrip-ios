@@ -169,11 +169,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             listen: false,
           );
           if (index == (homeViewModel.isDomestic ? 1 : 0)) return;
+          homeViewModel.setScrollOffset = _scrollController.offset;
 
           homeViewModel.setLocationType = index == 0
               ? LocationType.overseas
               : LocationType.domestic;
           await homeViewModel.load(context);
+          _scrollController.jumpTo(
+            homeViewModel.scrollOffset[homeViewModel.locationType] ?? 0.0,
+          );
         },
       ),
     );

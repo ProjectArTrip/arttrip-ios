@@ -1,6 +1,8 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
 import 'package:image_picker/image_picker.dart';
@@ -52,10 +54,9 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
         reviewId: startIndex + index + 1,
         visitDate: '2025-08-30',
         content: '감성적인거 좋아하는 사람들 추천합니다 :)',
-        photoUrls:
-            index % 3 == 0
-                ? ['https://picsum.photos/200/200?random=${startIndex + index}']
-                : [],
+        photoUrls: index % 3 == 0
+            ? ['https://picsum.photos/200/200?random=${startIndex + index}']
+            : [],
         reviewer: '전시조아${startIndex + index + 1}',
       ),
     );
@@ -84,17 +85,16 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
       reviewId: DateTime.now().millisecondsSinceEpoch,
       visitDate: date,
       content: content,
-      images:
-          images
-              .asMap()
-              .entries
-              .map(
-                (e) => ReviewImage(
-                  reviewImageId: e.key,
-                  imageUrl: 'https://picsum.photos/200/200?random=${e.key}',
-                ),
-              )
-              .toList(),
+      images: images
+          .asMap()
+          .entries
+          .map(
+            (e) => ReviewImage(
+              reviewImageId: e.key,
+              imageUrl: 'https://picsum.photos/200/200?random=${e.key}',
+            ),
+          )
+          .toList(),
     );
   }
 
@@ -154,5 +154,37 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
     } else {
       _favorites.remove(exhibitId);
     }
+  }
+
+  @override
+  Future<ExhibitFilterModel> fetchExhibitFilters({
+    required bool isDomestic,
+    int? cursor,
+    int? size,
+    String? country,
+    String? region,
+    String? startDate,
+    String? endDate,
+    String? genres,
+    String? styles,
+    String? sortType,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return ExhibitFilterModel(
+      exhibits: List.generate(
+        size ?? 10,
+        (index) => ExhibitModel(
+          exhibitId: cursor != null ? cursor + index + 1 : index + 1,
+          title: '전시 제목 ${cursor != null ? cursor + index + 1 : index + 1}',
+          posterUrl:
+              'https://picsum.photos/400/600?random=${cursor != null ? cursor + index + 1 : index + 1}',
+          exhibitPeriod: '2025.06.07 - 2025.09.14',
+          status: 'ONGOING',
+        ),
+      ),
+      hasNext: (cursor ?? 0) + (size ?? 10) < 30,
+      nextCursor: (cursor ?? 0) + (size ?? 10),
+      exhibitTotalCount: 30,
+    );
   }
 }
