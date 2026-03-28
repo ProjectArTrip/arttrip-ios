@@ -1,11 +1,11 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
-import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
@@ -32,9 +32,8 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
       child: Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
         selector:
             (_, vm) =>
-                vm.personalizedExhibits[vm.isDomestic
-                    ? LocationType.domestic.name
-                    : LocationType.overseas.name]!,
+                vm.personalizedExhibits[vm.locationType] ??
+                const AsyncState.loading(),
         builder: (context, state, _) {
           return AsyncView(
             state: state,
@@ -71,7 +70,7 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
                           onTap:
                               () => Routes.push(
                                 context,
-                                '/exhibit/${item.exhibitId}',
+                                AppRoutes.exhibitPath(item.exhibitId),
                               ),
                           child: SizedBox(
                             width: 120.w,

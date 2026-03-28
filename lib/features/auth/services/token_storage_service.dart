@@ -17,7 +17,7 @@ class TokenStorageService {
 
   /// 토큰 일괄 저장
   Future<void> saveTokens({
-    required String accessToken,
+    String? accessToken,
     required String refreshToken,
     bool? isFirstLogin,
   }) async {

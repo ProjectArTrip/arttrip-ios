@@ -10,7 +10,7 @@ class HomeRepositoryHybrid implements HomeRepository {
   final HomeRepositoryImpl api;
 
   @override
-  Future<List<String>?> fetchOverseasCountries() {
+  Future<List<String>> fetchOverseasCountries() {
     if (AppConsts.useMock) {
       return mock.fetchOverseasCountries();
     }
@@ -18,7 +18,7 @@ class HomeRepositoryHybrid implements HomeRepository {
   }
 
   @override
-  Future<List<RegionModel>?> fetchDomesticRegions() {
+  Future<List<RegionModel>> fetchDomesticRegions() {
     if (AppConsts.useMock) {
       return mock.fetchDomesticRegions();
     }
@@ -26,7 +26,7 @@ class HomeRepositoryHybrid implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchTodayExhibitRecommendations({
+  Future<List<ExhibitModel>> fetchTodayExhibitRecommendations({
     required bool isDomestic,
     String? country,
     String? region,
@@ -42,7 +42,7 @@ class HomeRepositoryHybrid implements HomeRepository {
   }
 
   @override
-  Future<List<String>?> fetchGenres() {
+  Future<List<String>> fetchGenres() {
     if (AppConsts.useMock) {
       return mock.fetchGenres();
     }
@@ -50,7 +50,7 @@ class HomeRepositoryHybrid implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchExhibitsByGenre({
+  Future<List<ExhibitModel>> fetchExhibitsByGenre({
     required bool isDomestic,
     String? country,
     String? region,
@@ -73,7 +73,7 @@ class HomeRepositoryHybrid implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchPersonalizedExhibits({
+  Future<List<ExhibitModel>> fetchPersonalizedExhibits({
     required bool isDomestic,
     String? country,
     String? region,
@@ -93,7 +93,7 @@ class HomeRepositoryHybrid implements HomeRepository {
   }
 
   @override
-  Future<List<ExhibitModel>?> fetchWeeklyExhibitsBySelectedDate({
+  Future<List<ExhibitModel>> fetchWeeklyExhibitsBySelectedDate({
     required bool isDomestic,
     String? country,
     String? region,

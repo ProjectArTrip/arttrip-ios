@@ -1,5 +1,6 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
+import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
@@ -113,14 +114,14 @@ class _DomesticOverseasViewState extends State<DomesticOverseasView> {
           context,
           listen: false,
         );
-        if (homeViewModel.selectedLocation != location) {
+        if (homeViewModel.area != location) {
           _updateSelectedLocation(index, location);
         }
       },
       child: Selector<HomeViewModel, String>(
-        selector: (_, vm) => vm.selectedLocation,
-        builder: (context, selectedLocationIndex, _) {
-          final isSelected = location == selectedLocationIndex;
+        selector: (_, vm) => vm.area ?? context.l10n.allItems,
+        builder: (context, selectedArea, _) {
+          final isSelected = location == selectedArea;
           return Container(
             key: key,
             padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 20.w),

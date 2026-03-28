@@ -5,6 +5,7 @@ import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
 import 'package:arttrip/features/my/widgets/my_menu_item.dart';
 import 'package:arttrip/features/my/widgets/my_profile_section.dart';
+import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:arttrip/shared/widgets/app_divider.dart';
@@ -29,7 +30,7 @@ class MyPage extends StatelessWidget {
         appBar: CommonAppBar(
           title: context.l10n.myPageTitle,
           showBackButton: false,
-          actions: const [AlertBadge(path: '/alerts')],
+          actions: const [AlertBadge(path: AppRoutes.alerts)],
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -56,7 +57,7 @@ class MyPage extends StatelessWidget {
               (profile) => MyProfileSection(
                 profile: profile,
                 onTap: () {
-                  Routes.push(context, '/my/edit-profile', extra: profile);
+                  Routes.push(context, AppRoutes.myEditProfile, extra: profile);
                 },
               ),
         );
@@ -84,22 +85,22 @@ class MyPage extends StatelessWidget {
       children: [
         MyMenuItem(
           title: context.l10n.myRecentExhibits,
-          onTap: () => Routes.push(context, '/my/recent-exhibits'),
+          onTap: () => Routes.push(context, AppRoutes.myRecentExhibits),
         ),
         SizedBox(height: 24.h),
         MyMenuItem(
           title: context.l10n.myReviews,
-          onTap: () => Routes.push(context, '/my/reviews'),
+          onTap: () => Routes.push(context, AppRoutes.myReviews),
         ),
         SizedBox(height: 24.h),
         MyMenuItem(
           title: context.l10n.myTasteAnalysis,
-          onTap: () => Routes.push(context, '/my/taste-analysis'),
+          onTap: () => Routes.push(context, AppRoutes.myTasteAnalysis),
         ),
         SizedBox(height: 24.h),
         MyMenuItem(
           title: context.l10n.settings,
-          onTap: () => Routes.push(context, '/my/settings'),
+          onTap: () => Routes.push(context, AppRoutes.mySettings),
         ),
         SizedBox(height: 24.h),
         MyMenuItem(

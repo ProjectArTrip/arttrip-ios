@@ -8,15 +8,20 @@ part 'auth_token_result.g.dart';
 @JsonSerializable()
 class AuthTokenResult {
   const AuthTokenResult({
-    required this.accessToken,
+    this.accessToken,
     required this.refreshToken,
     this.firstLogin,
   });
 
-  factory AuthTokenResult.fromJson(Map<String, dynamic> json) =>
-      _$AuthTokenResultFromJson(json);
+  factory AuthTokenResult.fromJson(Map<String, dynamic> json) {
+    final normalized = {
+      ...json,
+      'accessToken': json['accessToken'] ?? json['newAccessToken'],
+    };
+    return _$AuthTokenResultFromJson(normalized);
+  }
 
-  final String accessToken;
+  final String? accessToken;
   final String refreshToken;
   @JsonKey(name: 'isFirstLogin')
   final bool? firstLogin;

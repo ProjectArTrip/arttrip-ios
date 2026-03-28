@@ -1,3 +1,4 @@
+import 'package:arttrip/core/app_utils.dart';
 import 'package:dio/dio.dart';
 
 /// 인증 토큰을 자동으로 헤더에 추가하는 인터셉터
@@ -66,45 +67,51 @@ class AuthInterceptor extends Interceptor {
 
     // 응답 body에서 code 확인
     final errorCode = _extractErrorCode(err.response);
-
-    // JWT401-EXPIRED_ACCESS만 토큰 갱신 시도, 나머지는 바로 로그아웃
-    if (errorCode != 'JWT401-EXPIRED_ACCESS') {
+    AppUtil.debugLog(
+      'AuthInterceptor - onError: ${err.requestOptions.path}, errorCode: $errorCode',
+    );
+    // JWT401-EXPIRED_REFRESH일때만 로그아웃, JWT401-EXPIRED_ACCESS는 토큰 갱신 시도
+    if (errorCode == 'JWT401-EXPIRED_REFRESH') {
       await onTokenExpired();
       return handler.next(err);
-    }
+    } else if (errorCode == 'JWT401-EXPIRED_ACCESS' ||
+        errorCode == 'JWT401-EMPTY_TOKEN') {
+      // 이미 토큰 갱신 중이면 대기열에 추가
+      if (_isRefreshing) {
+        return _queueRequest(err.requestOptions, handler);
+      }
 
-    // 이미 토큰 갱신 중이면 대기열에 추가
-    if (_isRefreshing) {
-      return _queueRequest(err.requestOptions, handler);
-    }
+      // 토큰 갱신 시작
+      _isRefreshing = true;
 
-    // 토큰 갱신 시작
-    _isRefreshing = true;
+      try {
+        final newToken = await onTokenRefresh();
 
-    try {
-      final newToken = await onTokenRefresh();
+        if (newToken != null) {
+          // 토큰 갱신 성공 - 현재 요청 재시도
+          err.requestOptions.headers['Authorization'] = 'Bearer $newToken';
+          final response = await _retry(err.requestOptions);
+          handler.resolve(response);
 
-      if (newToken != null) {
-        // 토큰 갱신 성공 - 현재 요청 재시도
-        err.requestOptions.headers['Authorization'] = 'Bearer $newToken';
-        final response = await _retry(err.requestOptions);
-        handler.resolve(response);
-
-        // 대기 중인 요청들도 재시도
-        await _processPendingRequests(newToken);
-      } else {
-        // 토큰 갱신 실패 - 만료 처리
+          // 대기 중인 요청들도 재시도
+          await _processPendingRequests(newToken);
+        } else {
+          AppUtil.debugLog('Token refresh failed: no new token received');
+          // 토큰 갱신 실패 - 만료 처리
+          await onTokenExpired();
+          _rejectPendingRequests(err);
+          handler.next(err);
+        }
+      } catch (e) {
+        // 토큰 갱신 중 에러 발생
         await onTokenExpired();
         _rejectPendingRequests(err);
         handler.next(err);
+      } finally {
+        _isRefreshing = false;
       }
-    } catch (e) {
-      // 토큰 갱신 중 에러 발생
-      await onTokenExpired();
-      _rejectPendingRequests(err);
-      handler.next(err);
-    } finally {
-      _isRefreshing = false;
+    } else {
+      return handler.next(err);
     }
   }
 
