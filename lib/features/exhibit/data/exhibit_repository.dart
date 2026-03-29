@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:arttrip/core/api_endpoints.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/api_result.dart';
 import 'package:arttrip/core/network/dio_client.dart';
@@ -58,7 +59,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   @override
   Future<ExhibitDetailModel?> fetchExhibitDetailModel(int exhibitId) async {
     try {
-      final response = await _dio.get('/exhibits/$exhibitId');
+      final response = await _dio.get(ApiEndpoints.exhibitsDetail(exhibitId));
       final data = response.dataOrNull;
       if (data == null) return null;
       return ExhibitDetailModel.fromJson(data as Map<String, dynamic>);
@@ -81,7 +82,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
       }
 
       final response = await _dio.get(
-        '/reviews/exhibit/$exhibitId',
+        ApiEndpoints.reviewsByExhibit(exhibitId),
         queryParameters: queryParams,
       );
       final data = response.dataOrNull;
@@ -121,7 +122,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
       }
 
       final response = await _dio.post(
-        '/reviews/$exhibitId',
+        ApiEndpoints.reviewsCreate(exhibitId),
         data: formData,
         options: Options(extra: {'requestJson': requestJson}),
       );
@@ -137,7 +138,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   @override
   Future<ReviewCreateResult?> fetchReviewDetail(int reviewId) async {
     try {
-      final response = await _dio.get('/reviews/$reviewId');
+      final response = await _dio.get(ApiEndpoints.reviewsById(reviewId));
       final data = response.dataOrNull;
       if (data == null) return null;
       return ReviewCreateResult.fromJson(data as Map<String, dynamic>);
@@ -178,7 +179,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
       }
 
       final response = await _dio.patch(
-        '/reviews/$reviewId',
+        ApiEndpoints.reviewsById(reviewId),
         data: formData,
         options: Options(extra: {'requestJson': requestJson}),
       );
@@ -192,7 +193,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   @override
   Future<bool> addFavorite(int exhibitId) async {
     try {
-      final response = await _dio.post('/favorites/$exhibitId');
+      final response = await _dio.post(ApiEndpoints.favorites(exhibitId));
       return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('addFavorite: $e');
@@ -203,7 +204,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   @override
   Future<bool> removeFavorite(int exhibitId) async {
     try {
-      final response = await _dio.delete('/favorites/$exhibitId');
+      final response = await _dio.delete(ApiEndpoints.favorites(exhibitId));
       return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('removeFavorite: $e');
@@ -216,9 +217,9 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
     try {
       late ApiResult<dynamic> response;
       if (isFavorite) {
-        response = await _dio.post('/favorites/$exhibitId');
+        response = await _dio.post(ApiEndpoints.favorites(exhibitId));
       } else {
-        response = await _dio.delete('/favorites/$exhibitId');
+        response = await _dio.delete(ApiEndpoints.favorites(exhibitId));
       }
       final data = response.dataOrNull;
       if (data == null) return;
@@ -258,7 +259,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
       };
 
       final response = await _dio.get(
-        '/exhibits',
+        ApiEndpoints.exhibits,
         queryParameters: queryParams,
       );
 

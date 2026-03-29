@@ -1,3 +1,4 @@
+import 'package:arttrip/core/api_endpoints.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/features/onboarding/data/models/keyword_list_response_model.dart';
@@ -16,7 +17,7 @@ class KeywordModelsRepositoryImpl implements KeywordModelsRepository {
   @override
   Future<List<KeywordModel>?> fetchAllKeywordModels() async {
     try {
-      final response = await _dio.get('/keyword/all');
+      final response = await _dio.get(ApiEndpoints.keywordAll);
       final data = response.dataOrNull;
       if (data == null) return null;
       final result = KeywordListResponseModel.fromJson(
@@ -32,7 +33,7 @@ class KeywordModelsRepositoryImpl implements KeywordModelsRepository {
   @override
   Future<List<KeywordModel>?> fetchUserKeywords() async {
     try {
-      final response = await _dio.get('/keyword');
+      final response = await _dio.get(ApiEndpoints.keyword);
       final data = response.dataOrNull;
       if (data == null) return null;
       final result = KeywordListResponseModel.fromJson(
@@ -49,7 +50,7 @@ class KeywordModelsRepositoryImpl implements KeywordModelsRepository {
   Future<bool> saveKeywordModels(List<String> keywords) async {
     try {
       final response = await _dio.post(
-        '/keyword',
+        ApiEndpoints.keyword,
         data: {'keywords': keywords},
       );
       return response.isSuccess;
