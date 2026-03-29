@@ -34,7 +34,7 @@ class ExhibitViewModel with ChangeNotifier {
     }
   }
 
-  /// 즐겨찾기 상태 업데이트
+  /// 즐겨찾기 상태 업데이트 (API 호출 + 로컬 상태 갱신)
   void updateFavoriteExhibit(int? exhibitId, bool isFavorite) {
     if (exhibitId == null) return;
 
