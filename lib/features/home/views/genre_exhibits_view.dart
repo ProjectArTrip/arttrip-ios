@@ -4,6 +4,8 @@ import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/routes/app_routes.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
@@ -84,18 +86,20 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
                     /// 장르별 랜덤 전시
                     Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
                       selector: (_, vm) =>
-                          vm.exhibitsByGenre[vm.locationType]?[vm.area!]?[vm
-                              .selectedGenre] ??
+                          vm.exhibitsByGenre[vm.locationType]?[vm.area[vm
+                              .locationType]]?[vm.selectedGenre[vm
+                              .locationType]![vm.area[vm.locationType]]] ??
                           const AsyncState.loading(),
                       builder: (context, state, _) {
                         return AsyncView(
                           state: state,
                           onData: (data) {
                             if (data.isEmpty) {
-                              final selectedGenre = Provider.of<HomeViewModel>(
-                                context,
-                                listen: false,
-                              ).selectedGenre;
+                              final homeVM = context.read<HomeViewModel>();
+                              final selectedGenre =
+                                  homeVM.selectedGenre[homeVM
+                                      .locationType]![homeVM.area[homeVM
+                                      .locationType]];
                               return _buildNoExhibitions(selectedGenre);
                             }
                             return ListView.separated(
@@ -208,7 +212,19 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
 
   GestureDetector _buildHeader() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        final homeViewModel = context.read<HomeViewModel>();
+        Routes.push(
+          context,
+          AppRoutes.homeGenrePath(
+            genreName:
+                homeViewModel.selectedGenre[homeViewModel
+                    .locationType]![homeViewModel.area[homeViewModel
+                    .locationType]],
+            isDomestic: 'true',
+          ),
+        );
+      },
       child: Container(
         padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 2.h),
         color: Colors.transparent,
@@ -236,12 +252,18 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
           context,
           listen: false,
         );
-        if (homeViewModel.selectedGenre != genre) {
+        if (homeViewModel.selectedGenre[homeViewModel
+                .locationType]![homeViewModel.area[homeViewModel
+                .locationType]] !=
+            genre) {
           _updateSelectedGenre(index, genre);
         }
       },
       child: Selector<HomeViewModel, String>(
-        selector: (_, vm) => vm.selectedGenre,
+        selector: (_, vm) =>
+            vm.selectedGenre[vm.locationType]?[vm.area[vm.locationType]] ??
+            vm.genres.data?.first ??
+            '',
         builder: (context, selectedGenreIndex, _) {
           final isSelected = genre == selectedGenreIndex;
           return Container(
@@ -267,6 +289,7 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
     );
   }
 
+  /// 전시가 없는 경우 보여주는 위젯
   Container _buildNoExhibitions(String genre) {
     return Container(
       width: double.infinity,

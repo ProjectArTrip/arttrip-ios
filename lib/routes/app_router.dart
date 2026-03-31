@@ -1,6 +1,7 @@
 import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
 import 'package:arttrip/features/exhibit/views/exhibit_detail_page.dart';
 import 'package:arttrip/features/exhibit/views/write_review_page.dart';
+import 'package:arttrip/features/home/genre_detail_page.dart';
 import 'package:arttrip/features/home/regional_exhibits_page.dart';
 import 'package:arttrip/features/login/login_page.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
@@ -106,6 +107,23 @@ final appRouter = GoRouter(
           context,
           state,
           child: RegionalExhibitsPage(regionName),
+        );
+      },
+    ),
+
+    /// 홈 > 장르별 전체 화면
+    GoRoute(
+      path: AppRoutes.homeGenre,
+      pageBuilder: (context, state) {
+        final genreName = state.pathParameters['genreName']!;
+        final isDomestic = state.pathParameters['isDomestic'] == 'true';
+        return buildPage(
+          context,
+          state,
+          child: GenreDetailPage(
+            genreName: genreName,
+            isDomestic: isDomestic,
+          ),
         );
       },
     ),

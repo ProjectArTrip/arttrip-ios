@@ -28,23 +28,25 @@ class AppCachedImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget image = CachedNetworkImage(
+      cacheKey: imageUrl,
       imageUrl: imageUrl,
+      fadeInDuration: Duration.zero,
+      fadeOutDuration: Duration.zero,
       width: width,
       height: height,
       fit: fit,
       placeholder: (context, url) => _buildPlaceholder(),
-      errorWidget:
-          (context, url, error) => Container(
-            width: width,
-            height: height,
-            color: AppColors.gray100,
-            child: const Center(
-              child: Icon(
-                Icons.image_not_supported,
-                color: AppColors.textTertiary,
-              ),
-            ),
+      errorWidget: (context, url, error) => Container(
+        width: width,
+        height: height,
+        color: AppColors.gray100,
+        child: const Center(
+          child: Icon(
+            Icons.image_not_supported,
+            color: AppColors.textTertiary,
           ),
+        ),
+      ),
     );
 
     if (borderRadius != null) {

@@ -87,8 +87,8 @@ class _DomesticOverseasViewState extends State<DomesticOverseasView> {
                         vertical: 16.h,
                       ),
                       itemCount: 5,
-                      separatorBuilder:
-                          (context, index) => SizedBox(width: 8.w),
+                      separatorBuilder: (context, index) =>
+                          SizedBox(width: 8.w),
                       itemBuilder: (context, index) {
                         return const ShimmerSkeletonItem(width: 76, height: 32);
                       },
@@ -114,12 +114,12 @@ class _DomesticOverseasViewState extends State<DomesticOverseasView> {
           context,
           listen: false,
         );
-        if (homeViewModel.area != location) {
+        if (homeViewModel.area[homeViewModel.locationType] != location) {
           _updateSelectedLocation(index, location);
         }
       },
       child: Selector<HomeViewModel, String>(
-        selector: (_, vm) => vm.area ?? context.l10n.allItems,
+        selector: (_, vm) => vm.area[vm.locationType] ?? context.l10n.allItems,
         builder: (context, selectedArea, _) {
           final isSelected = location == selectedArea;
           return Container(

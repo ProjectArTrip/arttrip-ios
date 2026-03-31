@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
 import 'package:image_picker/image_picker.dart';
@@ -114,5 +115,46 @@ class ExhibitRepositoryHybrid implements ExhibitRepository {
       return mock.updateFavoriteExhibit(exhibitId, isFavorite);
     }
     return api.updateFavoriteExhibit(exhibitId, isFavorite);
+  }
+
+  @override
+  Future<ExhibitFilterModel> fetchExhibitFilters({
+    required bool isDomestic,
+    int? cursor,
+    int? size,
+    String? country,
+    String? region,
+    String? startDate,
+    String? endDate,
+    String? genres,
+    String? styles,
+    String? sortType,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchExhibitFilters(
+        isDomestic: isDomestic,
+        cursor: cursor,
+        size: size,
+        country: country,
+        region: region,
+        startDate: startDate,
+        endDate: endDate,
+        genres: genres,
+        styles: styles,
+        sortType: sortType,
+      );
+    }
+    return api.fetchExhibitFilters(
+      isDomestic: isDomestic,
+      cursor: cursor,
+      size: size,
+      country: country,
+      region: region,
+      startDate: startDate,
+      endDate: endDate,
+      genres: genres,
+      styles: styles,
+      sortType: sortType,
+    );
   }
 }

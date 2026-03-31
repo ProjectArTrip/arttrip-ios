@@ -1,4 +1,5 @@
 import 'package:arttrip/core/app_assets.dart';
+import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/viewmodels/alert_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -7,23 +8,25 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class AlertBadge extends StatelessWidget {
-  const AlertBadge({super.key, this.isUnread, required this.path});
+  const AlertBadge({super.key, this.iconType = false});
 
-  final bool? isUnread;
-  final String path;
+  final bool iconType;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap:
-          isUnread == null
-              ? () => Routes.push(context, path).then((_) {
+      onTap: !iconType
+          ? () {
+              Routes.push(context, AppRoutes.alerts).then((_) {
                 if (context.mounted) {
-                  Provider.of<AlertViewModel>(context, listen: false)
-                      .unreadCount = 0;
+                  Provider.of<AlertViewModel>(
+                    context,
+                    listen: false,
+                  ).unreadCount = 0;
                 }
-              })
-              : null,
+              });
+            }
+          : null,
       child: SizedBox(
         width: 24.w,
         height: 24.w,
@@ -34,19 +37,14 @@ class AlertBadge extends StatelessWidget {
               width: 24.w,
               height: 24.w,
             ),
+            Selector<AlertViewModel, bool>(
+              selector: (_, vm) => vm.hasUnread,
+              builder: (context, hasUnread, _) {
+                if (!hasUnread) return const SizedBox.shrink();
 
-            isUnread != null
-                ? isUnread == true
-                    ? _buildUnreadMark()
-                    : const SizedBox.shrink()
-                : Selector<AlertViewModel, bool>(
-                  selector: (_, vm) => vm.hasUnread,
-                  builder: (context, hasUnread, _) {
-                    if (!hasUnread) return const SizedBox.shrink();
-
-                    return _buildUnreadMark();
-                  },
-                ),
+                return _buildUnreadMark();
+              },
+            ),
           ],
         ),
       ),

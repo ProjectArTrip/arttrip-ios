@@ -30,7 +30,7 @@ class MyPage extends StatelessWidget {
         appBar: CommonAppBar(
           title: context.l10n.myPageTitle,
           showBackButton: false,
-          actions: const [AlertBadge(path: AppRoutes.alerts)],
+          actions: const [AlertBadge()],
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -53,13 +53,12 @@ class MyPage extends StatelessWidget {
         return AsyncView<UserProfileModel>(
           state: state,
           onLoading: () => _buildProfileSkeleton(),
-          onData:
-              (profile) => MyProfileSection(
-                profile: profile,
-                onTap: () {
-                  Routes.push(context, AppRoutes.myEditProfile, extra: profile);
-                },
-              ),
+          onData: (profile) => MyProfileSection(
+            profile: profile,
+            onTap: () {
+              Routes.push(context, AppRoutes.myEditProfile, extra: profile);
+            },
+          ),
         );
       },
     );

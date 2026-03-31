@@ -15,6 +15,7 @@
   "allItems": "전체",
   "regionalExhibition": "지역별 전시",
   "recommendedGenreExhibition": "장르별 전시 추천",
+  "genreDetailExhibition": "{genreName} 전시 추천",
   "onGoing": "진행중",
   "endingSoon": "마감임박",
   "upcoming": "전시예정",

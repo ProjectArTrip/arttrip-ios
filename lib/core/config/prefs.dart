@@ -1,3 +1,4 @@
+import 'package:arttrip/core/app_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// SharedPreferences 공용 클래스
@@ -30,6 +31,7 @@ class Prefs {
       await prefs.remove(_accessTokenKey);
     } else {
       await prefs.setString(_accessTokenKey, value);
+      AppUtil.debugLog('jwt: $value');
     }
   }
 

@@ -23,8 +23,16 @@ class AppRoutes {
   static String exhibitPath(int? id) => '/exhibit/$id';
 
   /// 홈 > 국내전시 > 지역별 전체 화면
-  static const homeRegion = '/home/:regionName';
-  static String homeRegionPath(String regionName) => '/home/$regionName';
+  static const homeRegion = '/home/domestic/:regionName';
+  static String homeRegionPath(String regionName) =>
+      '/home/domestic/$regionName';
+
+  /// 홈 > 장르별 전시 추천 전체 화면
+  static const homeGenre = '/home/genre/:genreName';
+  static String homeGenrePath({
+    required String genreName,
+    required String isDomestic,
+  }) => '/home/genre/$genreName';
 
   /// 검색 페이지
   static const search = '/search';

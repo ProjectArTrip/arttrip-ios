@@ -23,18 +23,18 @@ class RegionalExhibitsView extends StatefulWidget {
 class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: EdgeInsetsGeometry.only(top: 32.h),
-      sliver: SliverToBoxAdapter(
-        child: Selector<HomeViewModel, AsyncState<List<RegionModel>>>(
-          selector: (_, vm) => vm.domesticRegions,
-          builder: (context, state, _) {
-            return AsyncView(
-              state: state,
-              onData: (data) {
-                if (data.isEmpty) return const SizedBox.shrink();
+    return SliverToBoxAdapter(
+      child: Selector<HomeViewModel, AsyncState<List<RegionModel>>>(
+        selector: (_, vm) => vm.domesticRegions,
+        builder: (context, state, _) {
+          return AsyncView(
+            state: state,
+            onData: (data) {
+              if (data.isEmpty) return const SizedBox.shrink();
 
-                return Column(
+              return Padding(
+                padding: EdgeInsets.only(top: 32.h),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
@@ -55,16 +55,15 @@ class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
                         scrollDirection: Axis.horizontal,
                         itemCount: data.length,
                         padding: EdgeInsets.symmetric(horizontal: 24.w),
-                        separatorBuilder:
-                            (context, index) => SizedBox(width: 8.w),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(width: 8.w),
                         itemBuilder: (context, index) {
                           final item = data[index];
                           return GestureDetector(
-                            onTap:
-                                () => Routes.push(
-                                  context,
-                                  AppRoutes.homeRegionPath(item.region),
-                                ),
+                            onTap: () => Routes.push(
+                              context,
+                              AppRoutes.homeRegionPath(item.region),
+                            ),
                             child: ColoredBox(
                               color: Colors.transparent,
                               child: Column(
@@ -75,14 +74,13 @@ class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
                                     borderRadius: BorderRadiusGeometry.circular(
                                       100,
                                     ),
-                                    child:
-                                        item.imageUrl.isNotEmpty
-                                            ? AppCachedImage(
-                                              imageUrl: item.imageUrl,
-                                              width: 64.w,
-                                              height: 64.w,
-                                            )
-                                            : const SizedBox.shrink(),
+                                    child: item.imageUrl.isNotEmpty
+                                        ? AppCachedImage(
+                                            imageUrl: item.imageUrl,
+                                            width: 64.w,
+                                            height: 64.w,
+                                          )
+                                        : const SizedBox.shrink(),
                                   ),
                                   ArtTripText.pretendard()
                                       .body02Bold()
@@ -97,59 +95,56 @@ class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
                       ),
                     ),
                   ],
-                );
-              },
-              onLoading: () {
-                return Shimmer(
-                  duration: const Duration(
-                    milliseconds: AppConsts.shimmerDurationMs,
-                  ),
-                  interval: const Duration(
-                    milliseconds: AppConsts.shimmerIntervalMs,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 12.h,
-                    children: [
-                      Padding(
+                ),
+              );
+            },
+            onLoading: () {
+              return Shimmer(
+                duration: const Duration(
+                  milliseconds: AppConsts.shimmerDurationMs,
+                ),
+                interval: const Duration(
+                  milliseconds: AppConsts.shimmerIntervalMs,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 12.h,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      child: const ShimmerSkeletonItem(width: 160, height: 20),
+                    ),
+                    SizedBox(
+                      height: 90.h,
+                      child: ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 6,
                         padding: EdgeInsets.symmetric(horizontal: 24.w),
-                        child: const ShimmerSkeletonItem(
-                          width: 160,
-                          height: 20,
-                        ),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(width: 8.w),
+                        itemBuilder: (context, index) {
+                          return Column(
+                            spacing: 12.h,
+                            children: const [
+                              ShimmerSkeletonItem(width: 64, height: 64),
+                              ShimmerSkeletonItem(
+                                width: 21,
+                                height: 14,
+                                radius: 8,
+                              ),
+                            ],
+                          );
+                        },
                       ),
-                      SizedBox(
-                        height: 90.h,
-                        child: ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 6,
-                          padding: EdgeInsets.symmetric(horizontal: 24.w),
-                          separatorBuilder:
-                              (context, index) => SizedBox(width: 8.w),
-                          itemBuilder: (context, index) {
-                            return Column(
-                              spacing: 12.h,
-                              children: const [
-                                ShimmerSkeletonItem(width: 64, height: 64),
-                                ShimmerSkeletonItem(
-                                  width: 21,
-                                  height: 14,
-                                  radius: 8,
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
-        ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
