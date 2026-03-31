@@ -15,7 +15,7 @@ class HomeViewModel with ChangeNotifier {
   final ExhibitViewModel exhibitVM;
   final HomeRepository homeRepository;
 
-  Map<LocationType, double> _scrollOffset = {};
+  final Map<LocationType, double> _scrollOffset = {};
   final DateTime _today = DateTime.now();
   // locationType -> area -> genre
   final Map<LocationType, Map<String, String>> _selectedGenre = {};
