@@ -124,5 +124,10 @@
   "noSearchResults": "검색결과가 없습니다.",
   "recentSearches": "최근 검색어",
   "clearAll": "전체삭제",
-  "recommendedSearches": "추천 검색어"
+  "recommendedSearches": "추천 검색어",
+  "sort": "정렬",
+  "sortByLatest": "최신순",
+  "sortByDeadline": "마감순",
+  "sortByPopular": "인기순",
+  "exhibitGenre": "전시 장르"
 }

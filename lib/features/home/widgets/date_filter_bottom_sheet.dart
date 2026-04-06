@@ -194,6 +194,7 @@ class _DateFilterBottomSheetState extends State<DateFilterBottomSheet> {
                         elevation: 0,
                         shadowColor: Colors.transparent,
                         disabledBackgroundColor: AppColors.gray100,
+                        overlayColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadiusGeometry.circular(12.r),
                         ),
@@ -270,27 +271,25 @@ class _DateFilterBottomSheetState extends State<DateFilterBottomSheet> {
                         horizontal: 20.w,
                       ),
                       decoration: BoxDecoration(
-                        color:
-                            isSelected ? AppColors.primary300 : AppColors.gray0,
+                        color: isSelected
+                            ? AppColors.primary300
+                            : AppColors.gray0,
                         border: Border.all(
-                          color:
-                              isSelected
-                                  ? Colors.transparent
-                                  : AppColors.gray100,
+                          color: isSelected
+                              ? Colors.transparent
+                              : AppColors.gray100,
                         ),
                         borderRadius: BorderRadius.circular(100),
                       ),
-                      child:
-                          isSelected
-                              ? ArtTripText.pretendard()
-                                  .body01Bold()
-                                  .color(AppColors.textWhite)
-                                  .build()
-                                  .text(item)
-                              : ArtTripText.pretendard()
-                                  .body01Light()
-                                  .build()
-                                  .text(item),
+                      child: isSelected
+                          ? ArtTripText.pretendard()
+                                .body01Bold()
+                                .color(AppColors.textWhite)
+                                .build()
+                                .text(item)
+                          : ArtTripText.pretendard().body01Light().build().text(
+                              item,
+                            ),
                     ),
                   );
                 }),

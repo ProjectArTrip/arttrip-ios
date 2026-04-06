@@ -32,7 +32,22 @@ class AppRoutes {
   static String homeGenrePath({
     required String genreName,
     required String isDomestic,
-  }) => '/home/genre/$genreName';
+    String? country,
+    String? region,
+  }) {
+    final queryParams = {
+      'isDomestic': isDomestic,
+      'country': ?country,
+      'region': ?region,
+    };
+
+    final uri = Uri(
+      path: '/home/genre/$genreName',
+      queryParameters: queryParams,
+    );
+
+    return uri.toString();
+  }
 
   /// 검색 페이지
   static const search = '/search';
