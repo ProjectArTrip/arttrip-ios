@@ -43,9 +43,9 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
   late ValueNotifier<String> _selectedGenre;
   final ValueNotifier<List<ExhibitModel>?> _exhibits = ValueNotifier([]);
   final ScrollController _scrollController = ScrollController();
-  final ValueNotifier<bool> _isLoading = ValueNotifier(true);
-  final ValueNotifier<bool> _hasNext = ValueNotifier(true);
-  final ValueNotifier<bool> _loadingMore = ValueNotifier(false);
+  final ValueNotifier<bool> _isLoading = ValueNotifier(true); // 전체 로딩 상태
+  final ValueNotifier<bool> _hasNext = ValueNotifier(true); // 다음 페이지 존재 여부
+  final ValueNotifier<bool> _loadingMore = ValueNotifier(false); // 추가 로딩 상태
 
   final int _size = 10;
   int _cursor = 0;
