@@ -10,6 +10,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CommonAppBar({
     super.key,
     this.title,
+    this.titleWidget,
     this.showBackButton = true,
     this.actions,
     this.backgroundColor = AppColors.gray0,
@@ -17,6 +18,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.elevation = 0.0,
   });
   final String? title;
+  final Widget? titleWidget;
   final bool showBackButton;
   final List<Widget>? actions;
   final Color backgroundColor;
@@ -30,23 +32,24 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       surfaceTintColor: surfaceTintColor,
       elevation: elevation,
       centerTitle: true,
-      title: ArtTripText.pretendard().headline().build().text(title ?? ''),
+      title:
+          titleWidget ??
+          ArtTripText.pretendard().headline().build().text(title ?? ''),
       toolbarHeight: 52.h,
       leadingWidth: 24.w + 24.w,
-      leading:
-          showBackButton
-              ? Padding(
-                padding: EdgeInsets.only(left: 24.w),
-                child: GestureDetector(
-                  onTap: () => GoRouter.of(context).pop(),
-                  child: SvgPicture.asset(
-                    AppAssets.icNoArrowLeft,
-                    width: 24.w,
-                    height: 24.w,
-                  ),
+      leading: showBackButton
+          ? Padding(
+              padding: EdgeInsets.only(left: 24.w),
+              child: GestureDetector(
+                onTap: () => GoRouter.of(context).pop(),
+                child: SvgPicture.asset(
+                  AppAssets.icNoArrowLeft,
+                  width: 24.w,
+                  height: 24.w,
                 ),
-              )
-              : null,
+              ),
+            )
+          : null,
       actionsPadding: EdgeInsets.only(right: 24.w),
       actions: actions,
     );

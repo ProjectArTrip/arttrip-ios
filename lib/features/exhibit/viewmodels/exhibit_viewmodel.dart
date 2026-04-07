@@ -1,7 +1,6 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
-import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:flutter/material.dart';
 
 class ExhibitViewModel with ChangeNotifier {
@@ -9,18 +8,10 @@ class ExhibitViewModel with ChangeNotifier {
   final ExhibitRepository _exhibitRepository;
 
   final Map<int, bool> _favoriteMap = {};
-  AsyncState<List<ExhibitModel>> _exhibitFilters = const AsyncState.loading();
-
-  AsyncState<List<ExhibitModel>> get exhibitFilters => _exhibitFilters;
 
   /// 즐겨찾기 여부 조회
   bool isFavorite(int? exhibitId) {
     return _favoriteMap[exhibitId] ?? false;
-  }
-
-  /// 필터링된 전시 리스트 초기화
-  void initExhibitFilters() {
-    _exhibitFilters = const AsyncState.loading();
   }
 
   /// ExhibitModel 리스트로 즐겨찾기 상태 초기화
@@ -44,7 +35,11 @@ class ExhibitViewModel with ChangeNotifier {
   }
 
   /// 전시 조건 필터 전체 조회
-  Future<void> getExhibitFilters({
+  ///
+  /// 로딩 처리는 각 화면에서 로딩 변수로 처리합니다.
+  ///
+  /// null: API 호출 실패
+  Future<List<ExhibitModel>?> getExhibitFilters({
     required bool isDomestic,
     int? cursor,
     int? size,
@@ -57,9 +52,6 @@ class ExhibitViewModel with ChangeNotifier {
     String? sortType,
   }) async {
     try {
-      _exhibitFilters = const AsyncState.loading();
-      notifyListeners();
-
       final response = await _exhibitRepository.fetchExhibitFilters(
         isDomestic: isDomestic,
         cursor: cursor,
@@ -72,11 +64,10 @@ class ExhibitViewModel with ChangeNotifier {
         styles: styles,
         sortType: sortType,
       );
-      _exhibitFilters = AsyncState.success(response.exhibits);
+      return response.exhibits;
     } catch (e) {
       AppUtil.debugLog('getExhibitFilters error: $e');
-      _exhibitFilters = const AsyncState.error();
+      return null;
     }
-    notifyListeners();
   }
 }

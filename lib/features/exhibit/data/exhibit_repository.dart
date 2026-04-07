@@ -244,7 +244,6 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   }) async {
     try {
       final queryParams = {
-        'query': 'string',
         if (!isDomestic) 'country': country,
         if (isDomestic) 'region': region,
         'startDate': ?startDate,

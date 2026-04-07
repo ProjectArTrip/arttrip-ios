@@ -1,12 +1,15 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
+import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -33,48 +36,120 @@ class GenreDetailPage extends StatefulWidget {
 }
 
 class _GenreDetailPageState extends State<GenreDetailPage> {
-  int size = 10;
-  int cursor = 0;
+  final double threshold = 50.0;
   final ValueNotifier<SortType> _selectedSortType = ValueNotifier(
     SortType.latest,
   );
   late ValueNotifier<String> _selectedGenre;
+  final ValueNotifier<List<ExhibitModel>?> _exhibits = ValueNotifier([]);
+  final ScrollController _scrollController = ScrollController();
+  final ValueNotifier<bool> _isLoading = ValueNotifier(true);
+  final ValueNotifier<bool> _hasNext = ValueNotifier(true);
+  final ValueNotifier<bool> _loadingMore = ValueNotifier(false);
+
+  final int _size = 10;
+  int _cursor = 0;
 
   @override
   void initState() {
     super.initState();
     _selectedGenre = ValueNotifier(widget.genreName);
     final exhibitVM = context.read<ExhibitViewModel>();
-    Future.delayed(Duration.zero, () {
-      exhibitVM.getExhibitFilters(
+    Future.delayed(Duration.zero, () async {
+      final result = await exhibitVM.getExhibitFilters(
         isDomestic: widget.isDomestic,
-        cursor: cursor,
-        size: size,
+        cursor: _cursor,
+        size: _size,
         country: widget.country,
         region: widget.region,
         genres: widget.genreName,
         sortType: SortType.latest.type,
       );
+      _exhibits.value = result;
+      _isLoading.value = false;
+
+      if ((result?.isEmpty ?? true) || (result?.length ?? _size) < _size) {
+        _hasNext.value = false;
+        AppUtil.debugLog('No more exhibits to load: ${_hasNext.value}');
+      }
     });
+
+    _scrollController.addListener(_scrollControllerListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollControllerListener() async {
+    if (_loadingMore.value) return;
+    AppUtil.debugLog('now loading more');
+    _loadingMore.value = true;
+
+    final position = _scrollController.position;
+
+    if (position.pixels >= position.maxScrollExtent - threshold) {
+      if (!_isLoading.value && _hasNext.value) {
+        await _loadMoreExhibits();
+      }
+    }
+    _loadingMore.value = false;
+  }
+
+  Future<void> _loadMoreExhibits() async {
+    if (!_hasNext.value) return;
+
+    ++_cursor;
+    final exhibitVM = context.read<ExhibitViewModel>();
+    final result = await exhibitVM.getExhibitFilters(
+      isDomestic: widget.isDomestic,
+      cursor: _cursor,
+      size: _size,
+      country: widget.country,
+      region: widget.region,
+      genres: _selectedGenre.value,
+      sortType: _selectedSortType.value.type,
+    );
+    _exhibits.value = [...?_exhibits.value, ...?result];
+    if ((result?.isEmpty ?? true) || (result?.length ?? _size) < _size) {
+      _hasNext.value = false;
+      AppUtil.debugLog('No more exhibits to load: ${_hasNext.value}');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonAppBar(
-        title: context.l10n.genreDetailExhibition(widget.genreName),
+        titleWidget: ValueListenableBuilder(
+          valueListenable: _selectedGenre,
+          builder: (context, selectedGenre, _) => ArtTripText.pretendard()
+              .headline()
+              .build()
+              .text(context.l10n.genreDetailExhibition(selectedGenre)),
+        ),
         actions: const [AlertBadge()],
       ),
       body: ListView(
+        controller: _scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 24.h),
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              /// 조회 결과 개수
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 11.h),
-                child: ArtTripText.pretendard().title02Bold().build().text(
-                  context.l10n.totalCount(size),
+                child: ValueListenableBuilder(
+                  valueListenable: _exhibits,
+                  builder: (context, exhibits, child) {
+                    return ArtTripText.pretendard().title02Bold().build().text(
+                      context.l10n.totalCount(exhibits?.length ?? 0),
+                    );
+                  },
                 ),
               ),
               Padding(
@@ -91,19 +166,52 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
             ],
           ),
 
-          // Builder(
-          //   builder: (context) {
-          //     return ListView.separated(
-          //       physics: const NeverScrollableScrollPhysics(),
-          //       shrinkWrap: true,
-          //       size: size,
-          //       separatorBuilder: (context, index) => SizedBox(height: 12.h),
-          //       itemBuilder: (context, index) {
-          //         return ExhibitListItem(item: ,);
-          //       },
-          //     );
-          //   }
-          // ),
+          /// 전시 리스트
+          ValueListenableBuilder(
+            valueListenable: _isLoading,
+            builder: (context, isLoading, child) {
+              if (isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              return ValueListenableBuilder(
+                valueListenable: _exhibits,
+                builder: (context, exhibits, _) {
+                  if (exhibits == null) {
+                    return const Center(
+                      child: Text(
+                        'Something went wrong',
+                        style: TextStyle(color: AppColors.textPrimary),
+                      ),
+                    );
+                  }
+                  return ValueListenableBuilder(
+                    valueListenable: _loadingMore,
+                    builder: (context, loadingMore, child) {
+                      final int length =
+                          exhibits.length + (loadingMore ? 1 : 0);
+                      return ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: length,
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 12.h),
+                        itemBuilder: (context, index) {
+                          if (loadingMore && index == exhibits.length) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          final ExhibitModel item = exhibits[index];
+                          return ExhibitListItem(item: item);
+                        },
+                      );
+                    },
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
     );
@@ -111,8 +219,12 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
 
   /// 필터 시트
   Future<void> _buildFilterSheet() {
-    _selectedSortType.value = SortType.latest;
-    _selectedGenre.value = widget.genreName;
+    final ValueNotifier<String> tempSelectedGenre = ValueNotifier(
+      _selectedGenre.value,
+    );
+    final ValueNotifier<SortType> tempSelectedSortType = ValueNotifier(
+      _selectedSortType.value,
+    );
 
     return showModalBottomSheet(
       context: context,
@@ -160,8 +272,8 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
                       context.l10n.sort,
                     ),
                     ValueListenableBuilder(
-                      valueListenable: _selectedSortType,
-                      builder: (context, selectedSortType, child) {
+                      valueListenable: tempSelectedSortType,
+                      builder: (context, tempSortType, child) {
                         return Wrap(
                           spacing: 12.w,
                           children: List.generate(3, (index) {
@@ -171,7 +283,7 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
                                 sortTypeName = context.l10n.sortByLatest;
                                 break;
                               case 1:
-                                sortTypeName = context.l10n.sortByDeadline;
+                                sortTypeName = context.l10n.sortByEndingSoon;
                                 break;
                               case 2:
                                 sortTypeName = context.l10n.sortByPopular;
@@ -179,11 +291,10 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
                             }
 
                             final isSelected =
-                                _selectedSortType.value ==
-                                SortType.values[index];
+                                tempSortType == SortType.values[index];
                             return _buildGenreFilterChips(
                               onTap: () {
-                                _selectedSortType.value =
+                                tempSelectedSortType.value =
                                     SortType.values[index];
                               },
                               isSelected: isSelected,
@@ -212,8 +323,8 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
                       selector: (_, vm) => vm.genres.data ?? [],
                       builder: (context, genres, child) {
                         return ValueListenableBuilder(
-                          valueListenable: _selectedGenre,
-                          builder: (context, selectedGenre, child) {
+                          valueListenable: tempSelectedGenre,
+                          builder: (context, tempGenre, child) {
                             return Wrap(
                               spacing: 12.w,
                               runSpacing: 12.h,
@@ -221,9 +332,9 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
                                 final String item = genres[index];
                                 return _buildGenreFilterChips(
                                   onTap: () {
-                                    _selectedGenre.value = item;
+                                    tempSelectedGenre.value = item;
                                   },
-                                  isSelected: selectedGenre == item,
+                                  isSelected: tempGenre == item,
                                   displayName: item,
                                 );
                               }),
@@ -243,20 +354,34 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
             child: Padding(
               padding: EdgeInsets.only(left: 24.w, right: 24.w),
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
                   context.pop();
+                  _isLoading.value = true;
+                  _cursor = 0;
+
                   final exhibitVM = context.read<ExhibitViewModel>();
-                  size = 10;
-                  cursor = 0;
-                  exhibitVM.getExhibitFilters(
+                  final result = await exhibitVM.getExhibitFilters(
                     isDomestic: widget.isDomestic,
-                    cursor: cursor,
-                    size: size,
+                    cursor: _cursor,
+                    size: _size,
                     country: widget.country,
                     region: widget.region,
-                    genres: _selectedGenre.value,
-                    sortType: _selectedSortType.value.type,
+                    genres: tempSelectedGenre.value,
+                    sortType: tempSelectedSortType.value.type,
                   );
+                  _exhibits.value = result;
+                  _selectedGenre.value = tempSelectedGenre.value;
+                  _selectedSortType.value = tempSelectedSortType.value;
+                  _isLoading.value = false;
+                  _hasNext.value = true;
+
+                  if ((result?.isEmpty ?? true) ||
+                      (result?.length ?? _size) < _size) {
+                    _hasNext.value = false;
+                    AppUtil.debugLog(
+                      'No more exhibits to load: ${_hasNext.value}',
+                    );
+                  }
                 },
                 child: Container(
                   width: double.infinity,

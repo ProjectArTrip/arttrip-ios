@@ -21,7 +21,7 @@ enum LocationType { overseas, domestic }
 
 enum SortType {
   latest('LATEST'), // 최신순
-  deadline('DEADLINE'), // 마감순
+  endingSoon('ENDING_SOON'), // 마감순
   popular('POPULAR'), // 인기순
   none('NONE');
 
