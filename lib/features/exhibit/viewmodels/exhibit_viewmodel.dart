@@ -1,5 +1,6 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class ExhibitViewModel with ChangeNotifier {
   /// 로딩 처리는 각 화면에서 로딩 변수로 처리합니다.
   ///
   /// null: API 호출 실패
-  Future<List<ExhibitModel>?> getExhibitFilters({
+  Future<ExhibitFilterModel?> getExhibitFilters({
     required bool isDomestic,
     int? cursor,
     int? size,
@@ -64,7 +65,7 @@ class ExhibitViewModel with ChangeNotifier {
         styles: styles,
         sortType: sortType,
       );
-      return response.exhibits;
+      return response;
     } catch (e) {
       AppUtil.debugLog('getExhibitFilters error: $e');
       return null;

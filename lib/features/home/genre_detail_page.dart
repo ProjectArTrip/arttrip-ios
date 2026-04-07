@@ -65,13 +65,10 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
         genres: widget.genreName,
         sortType: SortType.latest.type,
       );
-      _exhibits.value = result;
+      _exhibits.value = result?.exhibits;
       _isLoading.value = false;
-
-      if ((result?.isEmpty ?? true) || (result?.length ?? _size) < _size) {
-        _hasNext.value = false;
-        AppUtil.debugLog('No more exhibits to load: ${_hasNext.value}');
-      }
+      _hasNext.value = result?.hasNext ?? false;
+      _cursor = result?.nextCursor ?? 0;
     });
 
     _scrollController.addListener(_scrollControllerListener);
@@ -84,14 +81,15 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
   }
 
   void _scrollControllerListener() async {
-    if (_loadingMore.value) return;
-    AppUtil.debugLog('now loading more');
+    // 데이터 로딩중이거나 더 불러올 데이터가 없으면 추가 로딩 방지
+    if (_loadingMore.value || !_hasNext.value) return;
     _loadingMore.value = true;
 
     final position = _scrollController.position;
 
     if (position.pixels >= position.maxScrollExtent - threshold) {
       if (!_isLoading.value && _hasNext.value) {
+        AppUtil.debugLog('now loading more');
         await _loadMoreExhibits();
       }
     }
@@ -101,7 +99,6 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
   Future<void> _loadMoreExhibits() async {
     if (!_hasNext.value) return;
 
-    ++_cursor;
     final exhibitVM = context.read<ExhibitViewModel>();
     final result = await exhibitVM.getExhibitFilters(
       isDomestic: widget.isDomestic,
@@ -112,11 +109,9 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
       genres: _selectedGenre.value,
       sortType: _selectedSortType.value.type,
     );
-    _exhibits.value = [...?_exhibits.value, ...?result];
-    if ((result?.isEmpty ?? true) || (result?.length ?? _size) < _size) {
-      _hasNext.value = false;
-      AppUtil.debugLog('No more exhibits to load: ${_hasNext.value}');
-    }
+    _exhibits.value = [...?_exhibits.value, ...?result?.exhibits];
+    _hasNext.value = result?.hasNext ?? false;
+    _cursor = result?.nextCursor ?? 0;
   }
 
   @override
@@ -369,19 +364,12 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
                     genres: tempSelectedGenre.value,
                     sortType: tempSelectedSortType.value.type,
                   );
-                  _exhibits.value = result;
+                  _exhibits.value = result?.exhibits;
                   _selectedGenre.value = tempSelectedGenre.value;
                   _selectedSortType.value = tempSelectedSortType.value;
                   _isLoading.value = false;
-                  _hasNext.value = true;
-
-                  if ((result?.isEmpty ?? true) ||
-                      (result?.length ?? _size) < _size) {
-                    _hasNext.value = false;
-                    AppUtil.debugLog(
-                      'No more exhibits to load: ${_hasNext.value}',
-                    );
-                  }
+                  _hasNext.value = result?.hasNext ?? false;
+                  _cursor = result?.nextCursor ?? 0;
                 },
                 child: Container(
                   width: double.infinity,
