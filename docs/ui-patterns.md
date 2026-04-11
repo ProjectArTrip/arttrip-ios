@@ -257,6 +257,8 @@ Widget _buildTabContent() {
 
 ## Google Maps 패턴
 
+### 전시 상세 지도 (읽기 전용)
+
 ```dart
 if (exhibit.hallLatitude != null && exhibit.hallLongitude != null)
   GoogleMap(
@@ -274,3 +276,49 @@ else
 ```
 
 외부 앱: `comgooglemaps://` URI 스킴 → 실패 시 웹 URL 폴백
+
+### 지도 탭 (클러스터링)
+
+`google_maps_cluster_manager_2` 패키지 사용. `ClusterManager`와 `google_maps_flutter`의 `ClusterManager` 이름 충돌에 주의.
+
+```dart
+// import 시 hide 필수
+import 'package:google_maps_cluster_manager_2/google_maps_cluster_manager_2.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart'
+    hide Cluster, ClusterManager;
+```
+
+**클러스터 아이템**: Freezed 모델은 `ClusterItem`을 직접 구현 불가 → 래퍼 클래스 사용
+
+```dart
+class MapClusterItem with ClusterItem {
+  MapClusterItem(this.marker);
+  final MapMarkerModel marker;
+
+  @override
+  LatLng get location => LatLng(marker.lat, marker.lng);
+}
+```
+
+**클러스터 렌더링**: `Canvas` + `PictureRecorder` → `BitmapDescriptor.bytes(imagePixelRatio:)` 패턴
+
+```dart
+// 고해상도로 그리되 논리적 크기로 표시
+return BitmapDescriptor.bytes(
+  byteData!.buffer.asUint8List(),
+  imagePixelRatio: devicePixelRatio,  // 필수 - 없으면 마커가 거대하게 표시됨
+);
+```
+
+**StatefulShellRoute 주의사항**: `IndexedStack`이 탭 상태를 유지하므로 `GoogleMapController.dispose()` 직접 호출 금지 (플랫폼 뷰 ID 충돌 발생)
+
+**Stack 레이어 순서**: 바텀시트가 전체 화면을 덮으므로 카테고리 바는 바텀시트보다 **뒤에**(Stack에서 나중에) 배치해야 탭 이벤트가 가로채지지 않음
+
+```dart
+Stack(children: [
+  GoogleMap(...),           // 1. 지도
+  위치 버튼,                 // 2. 바텀시트에 가려짐
+  바텀시트(Positioned.fill), // 3. 전체 화면 덮음
+  카테고리 바,               // 4. 최상위 레이어 (탭 가능)
+])
+```

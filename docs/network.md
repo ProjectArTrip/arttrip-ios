@@ -88,6 +88,19 @@ apiResponse.message    // String
 apiResponse.result     // T?
 ```
 
+### result 래퍼 없는 API
+
+일부 API(`/map/exhibits/markers`, `/map/cluster`)는 `{isSuccess, result}` 래퍼 없이 바로 데이터를 반환함.
+Repository에서 `result` 키 존재 여부로 분기 처리:
+
+```dart
+final map = data as Map<String, dynamic>;
+final target = map.containsKey('result')
+    ? map['result'] as Map<String, dynamic>
+    : map;
+return Model.fromJson(target);
+```
+
 ## 인터셉터
 
 ### AuthInterceptor

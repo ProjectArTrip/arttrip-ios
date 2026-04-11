@@ -26,6 +26,8 @@
 - 페이지에서 `ChangeNotifierProvider` 직접 생성 → **`provider_config.dart`에 전역 등록 + `InitWidget` + `reset()`**
 - `.freezed.dart` / `.g.dart` 파일 직접 수정
 - AI 관련 언급 (커밋 메시지, PR, 문서에서 Claude, AI, 자동 생성 등 금지)
+- `GoogleMapController.dispose()` 직접 호출 → **StatefulShellRoute에서 플랫폼 뷰 ID 충돌 발생**
+- `google_maps_flutter` import 시 `ClusterManager`, `Cluster` hide 누락 → **`google_maps_cluster_manager_2`와 이름 충돌**
 
 ### 항상 할 것
 

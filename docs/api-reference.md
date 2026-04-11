@@ -73,6 +73,15 @@ Base URL: `Env.apiBaseUrl` (현재 `https://dev.08166.dev`)
 | GET | `/search-history` | - | 검색 히스토리 → `{items: [SearchHistoryModel]}` |
 | DELETE | `/search-history/{searchHistoryId}` | - | 검색 히스토리 삭제 |
 
+## 지도
+
+| Method | Path | Query/Header | 설명 |
+|--------|------|--------------|------|
+| GET | `/map/exhibits/markers` | `If-None-Match` (header, ETag) | 전체 마커 좌표 일괄 조회 → `{markers: [{id, lat, lng}]}` (result 래퍼 없음) |
+| GET | `/map/cluster` | `ids[]` (필수), `cursor`, `size` (최대 20) | 클러스터 전시 리스트 → `{exhibits, hasNext, nextCursor, exhibitTotalCount}` (result 래퍼 없음) |
+
+> **주의**: 지도 API는 표준 `{isSuccess, result}` 래퍼 없이 바로 응답 본문을 반환함. Repository에서 `result` 키 존재 여부로 분기 처리.
+
 ## 서버 응답 형식
 
 모든 API는 동일한 래퍼 구조:

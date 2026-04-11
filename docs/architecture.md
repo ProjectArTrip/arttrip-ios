@@ -22,6 +22,8 @@
 | `cached_network_image` | 3.4.1 | 이미지 캐싱 |
 | `kakao_flutter_sdk_user` | 1.9.7 | 카카오 로그인 |
 | `google_maps_flutter` | 2.14.0 | 구글 지도 |
+| `google_maps_cluster_manager_2` | 3.0.0 | 지도 마커 클러스터링 |
+| `geolocator` | 13.0.2 | GPS 위치 권한 + 현재 위치 |
 | `table_calendar` | 3.2.0 | 달력 위젯 |
 | `image_picker` | 1.2.1 | 이미지 선택/촬영 |
 | `webview_flutter` | 4.13.0 | 웹뷰 |
@@ -113,7 +115,7 @@ DioClient → Interceptor Chain → Server
 | exhibit | `features/exhibit/` | 완료 | 전시 상세 (3탭: 상세/지도/리뷰) + 리뷰 CRUD + 즐겨찾기 |
 | search | `features/search/` | 완료 | 전시 검색 + 검색 히스토리 + 추천 키워드 |
 | my | `features/my/` | 완료 | 프로필, 닉네임/이미지 수정, 내 리뷰, 최근 본 전시, 설정 |
-| map | `features/map/` | 스텁 | 지도 (미구현, 플레이스홀더) |
+| map | `features/map/` | 완료 | 지도 (클러스터링 기반 전시 탐색, 국가 드롭다운, 바텀시트) |
 | stamp | `features/stamp/` | 스텁 | 스탬프 (미구현, 플레이스홀더) |
 | storage | `features/storage/` | 스텁 | 보관함 (미구현, 플레이스홀더) |
 

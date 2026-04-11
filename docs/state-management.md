@@ -113,7 +113,7 @@ ChangeNotifierProxyProvider<ExhibitViewModel, HomeViewModel>(
 ),
 ```
 
-### 현재 등록된 Provider (8개)
+### 현재 등록된 Provider (9개)
 
 | Provider | 타입 | 의존성 |
 |----------|------|--------|
@@ -125,6 +125,7 @@ ChangeNotifierProxyProvider<ExhibitViewModel, HomeViewModel>(
 | `WriteReviewViewModel` | ChangeNotifier | ExhibitRepository |
 | `MyViewModel` | ChangeNotifier | MyRepository |
 | `SearchViewModel` | ChangeNotifier | SearchRepository |
+| `MapViewModel` | ProxyProvider | ExhibitViewModel + MapRepositoryHybrid |
 
 ### 페이지에서 직접 Provider 생성 금지
 
