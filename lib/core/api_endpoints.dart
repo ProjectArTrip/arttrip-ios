@@ -47,6 +47,10 @@ class ApiEndpoints {
   static const keyword = '/keyword';
   static const keywordRecommand = '/keyword/recommand';
 
+  // ─── Map ───
+  static const mapMarkers = '/map/exhibits/markers';
+  static const mapCluster = '/map/cluster';
+
   // ─── Search ───
   static const searchHistory = '/search-history';
   static String searchHistoryById(int id) => '/search-history/$id';

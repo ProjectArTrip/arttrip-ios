@@ -101,5 +101,12 @@
   "noSearchResults": "No search results.",
   "recentSearches": "Recent Searches",
   "clearAll": "Clear All",
-  "recommendedSearches": "Recommended"
+  "recommendedSearches": "Recommended",
+  "mapExhibitListButton": "View exhibit list",
+  "mapExhibitCount": "Exhibits",
+  "mapExhibitUnit": "",
+  "mapNoExhibits": "No exhibits in this area.\nTry searching a different location.",
+  "mapLocationPermissionMessage": "Location access is required to find your current position.",
+  "mapSelectCountry": "Select country",
+  "mapSelectRegion": "Select region"
 }
