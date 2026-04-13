@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AppUtil {
   const AppUtil._();
@@ -39,6 +40,19 @@ class AppUtil {
     final day = date.day.toString().padLeft(2, '0');
 
     return '$year-$month-$day';
+  }
+
+  /// 언어에 따라 '2025년 12월' 포맷 반환
+  static String formatDateLocaleYM(BuildContext context, DateTime date) {
+    final lang = getLanguage(context);
+
+    if (lang == 'ko') {
+      // 한국어: 2026년 10월
+      return DateFormat('yyyy년 MM월').format(date);
+    } else {
+      // 영어: October 2026 (또는 원하는 영어 형식)
+      return DateFormat('MMMM yyyy').format(date);
+    }
   }
 
   static String getLanguage(BuildContext context) {

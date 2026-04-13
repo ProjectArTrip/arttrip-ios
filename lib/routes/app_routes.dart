@@ -27,6 +27,9 @@ class AppRoutes {
   static String homeRegionPath(String regionName) =>
       '/home/domestic/$regionName';
 
+  /// 홈 > 주간 전시 전체 화면
+  static const homeWeekly = '/home/weekly';
+
   /// 홈 > 장르별 전시 추천 전체 화면
   static const homeGenre = '/home/genre/:genreName';
   static String homeGenrePath({

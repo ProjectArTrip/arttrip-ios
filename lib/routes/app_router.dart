@@ -3,6 +3,7 @@ import 'package:arttrip/features/exhibit/views/exhibit_detail_page.dart';
 import 'package:arttrip/features/exhibit/views/write_review_page.dart';
 import 'package:arttrip/features/home/pages/genre_detail_page.dart';
 import 'package:arttrip/features/home/pages/region_detail_page.dart';
+import 'package:arttrip/features/home/pages/weekly_detail_page.dart';
 import 'package:arttrip/features/login/login_page.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:arttrip/features/my/views/edit_profile_page.dart';
@@ -108,6 +109,14 @@ final appRouter = GoRouter(
           state,
           child: RegionDetailPage(regionName),
         );
+      },
+    ),
+
+    /// 홈 > 주간 전시 전체 화면
+    GoRoute(
+      path: AppRoutes.homeWeekly,
+      pageBuilder: (context, state) {
+        return buildPage(context, state, child: const WeeklyDetailPage());
       },
     ),
 

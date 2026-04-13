@@ -173,10 +173,12 @@ class _RegionDetailPageState extends State<RegionDetailPage> {
                   return ValueListenableBuilder(
                     valueListenable: _loadingMore,
                     builder: (context, loadingMore, child) {
+                      final int length =
+                          exhibits.length + (loadingMore ? 1 : 0);
                       return ListView.separated(
                         controller: _scrollController,
                         physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: exhibits.length,
+                        itemCount: length,
                         padding: EdgeInsets.symmetric(
                           horizontal: 24.w,
                           vertical: 12.h,
@@ -184,12 +186,13 @@ class _RegionDetailPageState extends State<RegionDetailPage> {
                         separatorBuilder: (context, index) =>
                             SizedBox(height: 12.h),
                         itemBuilder: (context, index) {
-                          final item = exhibits[index];
                           if (loadingMore && index == exhibits.length) {
                             return const Center(
                               child: CircularProgressIndicator(),
                             );
                           }
+
+                          final item = exhibits[index];
                           return ExhibitListItem(item: item);
                         },
                       );
