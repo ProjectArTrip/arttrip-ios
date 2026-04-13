@@ -1,8 +1,8 @@
 import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
 import 'package:arttrip/features/exhibit/views/exhibit_detail_page.dart';
 import 'package:arttrip/features/exhibit/views/write_review_page.dart';
-import 'package:arttrip/features/home/genre_detail_page.dart';
-import 'package:arttrip/features/home/regional_exhibits_page.dart';
+import 'package:arttrip/features/home/pages/genre_detail_page.dart';
+import 'package:arttrip/features/home/pages/region_detail_page.dart';
 import 'package:arttrip/features/login/login_page.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:arttrip/features/my/views/edit_profile_page.dart';
@@ -106,7 +106,7 @@ final appRouter = GoRouter(
         return buildPage(
           context,
           state,
-          child: RegionalExhibitsPage(regionName),
+          child: RegionDetailPage(regionName),
         );
       },
     ),

@@ -20,8 +20,10 @@ class AppAssets {
       isLiked
           ? 'assets/svg/ic_like_circle_selected.svg'
           : 'assets/svg/ic_like_circle_default.svg';
-  static const String icNoArrowRight = 'assets/svg/ic_no_arrow_right.svg';
   static const String icNoArrowLeft = 'assets/svg/ic_no_arrow_left.svg';
+  static const String icNoArrowRight = 'assets/svg/ic_no_arrow_right.svg';
+  static const String icNoArrowUp = 'assets/svg/ic_no_arrow_up.svg';
+  static const String icNoArrowDown = 'assets/svg/ic_no_arrow_down.svg';
   static const String icNotFound = 'assets/svg/ic_not_found.svg';
   static const String icFilter = 'assets/svg/ic_filter.svg';
   static const String icHeart = 'assets/svg/ic_heart.svg';
@@ -33,6 +35,7 @@ class AppAssets {
   static const String icReview = 'assets/svg/ic_review.svg';
   static const String icRecent = 'assets/svg/ic_recent.svg';
   static const String icDelete = 'assets/svg/ic_delete.svg';
+  static const String icException = 'assets/svg/ic_exception.svg';
 
   // Logo
   static const String icLogoWhite = 'assets/svg/ic_logo_white.svg';

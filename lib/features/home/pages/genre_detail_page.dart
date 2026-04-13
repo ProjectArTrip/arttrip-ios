@@ -9,6 +9,7 @@ import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
+import 'package:arttrip/shared/widgets/exception_view.dart';
 import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -173,12 +174,7 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
                 valueListenable: _exhibits,
                 builder: (context, exhibits, _) {
                   if (exhibits == null) {
-                    return const Center(
-                      child: Text(
-                        'Something went wrong',
-                        style: TextStyle(color: AppColors.textPrimary),
-                      ),
-                    );
+                    return const ExceptionView();
                   }
                   return ValueListenableBuilder(
                     valueListenable: _loadingMore,

@@ -1,6 +1,6 @@
-import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/enum.dart';
+import 'package:arttrip/shared/widgets/exception_view.dart';
 import 'package:flutter/material.dart';
 
 class AsyncView<T> extends StatelessWidget {
@@ -26,23 +26,13 @@ class AsyncView<T> extends StatelessWidget {
         return onLoading?.call() ??
             (isSliverWidget
                 ? const SliverToBoxAdapter(
-                  child: Center(child: CircularProgressIndicator()),
-                )
+                    child: Center(child: CircularProgressIndicator()),
+                  )
                 : const Center(child: CircularProgressIndicator()));
       case AsyncStatus.error:
         AppUtil.debugLog('AsyncView Error: ${state.error}');
         return onError?.call(error: state.error) ??
-            (isSliverWidget
-                ? const SliverToBoxAdapter(
-                  child: Text(
-                    'Something went wrong',
-                    style: TextStyle(color: AppColors.textPrimary),
-                  ),
-                )
-                : const Text(
-                  'Something went wrong',
-                  style: TextStyle(color: AppColors.textPrimary),
-                ));
+            const SliverToBoxAdapter(child: ExceptionView());
       case AsyncStatus.success:
         return onData(state.data as T);
     }

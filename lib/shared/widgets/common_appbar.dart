@@ -27,31 +27,41 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: backgroundColor,
-      surfaceTintColor: surfaceTintColor,
-      elevation: elevation,
-      centerTitle: true,
-      title:
-          titleWidget ??
-          ArtTripText.pretendard().headline().build().text(title ?? ''),
-      toolbarHeight: 52.h,
-      leadingWidth: 24.w + 24.w,
-      leading: showBackButton
-          ? Padding(
-              padding: EdgeInsets.only(left: 24.w),
-              child: GestureDetector(
-                onTap: () => GoRouter.of(context).pop(),
-                child: SvgPicture.asset(
-                  AppAssets.icNoArrowLeft,
-                  width: 24.w,
-                  height: 24.w,
+    return Container(
+      decoration: BoxDecoration(
+        border: elevation > 0
+            ? Border(
+                bottom: BorderSide(color: AppColors.gray100, width: elevation),
+              )
+            : null,
+      ),
+
+      child: AppBar(
+        backgroundColor: backgroundColor,
+        surfaceTintColor: surfaceTintColor,
+        elevation: elevation,
+        centerTitle: true,
+        title:
+            titleWidget ??
+            ArtTripText.pretendard().headline().build().text(title ?? ''),
+        toolbarHeight: 52.h,
+        leadingWidth: 24.w + 24.w,
+        leading: showBackButton
+            ? Padding(
+                padding: EdgeInsets.only(left: 24.w),
+                child: GestureDetector(
+                  onTap: () => GoRouter.of(context).pop(),
+                  child: SvgPicture.asset(
+                    AppAssets.icNoArrowLeft,
+                    width: 24.w,
+                    height: 24.w,
+                  ),
                 ),
-              ),
-            )
-          : null,
-      actionsPadding: EdgeInsets.only(right: 24.w),
-      actions: actions,
+              )
+            : null,
+        actionsPadding: EdgeInsets.only(right: 24.w),
+        actions: actions,
+      ),
     );
   }
 

@@ -1,4 +1,4 @@
-import 'package:arttrip/features/home/home_page.dart';
+import 'package:arttrip/features/home/pages/home_page.dart';
 import 'package:arttrip/features/map/views/map_view.dart';
 import 'package:arttrip/features/my/views/my_page.dart';
 import 'package:arttrip/features/stamp/views/stamp_view.dart';

@@ -129,5 +129,7 @@
   "sortByLatest": "최신순",
   "sortByEndingSoon": "마감순",
   "sortByPopular": "인기순",
-  "exhibitGenre": "전시 장르"
+  "exhibitGenre": "전시 장르",
+  "exceptionTitle": "일시적인 오류가 발생했어요.",
+  "exceptionDesc": "이용에 불편을 드려 죄송합니다\n잠시 후에 다시 시도해 주세요"
 }
