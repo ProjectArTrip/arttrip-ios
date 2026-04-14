@@ -46,10 +46,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
   void initState() {
     super.initState();
     final homeVM = context.read<HomeViewModel>();
-    Future.delayed(Duration.zero, () {
-      if (mounted) homeVM.getDomesticRegions(context);
-      if (mounted) homeVM.getOverseasCountries(context);
-      _getFavoriteExhibits();
+    Future.delayed(Duration.zero, () async {
+      if (mounted) await homeVM.getDomesticRegions(context);
+      if (homeVM.locationType == LocationType.overseas) {
+        if (mounted) await homeVM.getOverseasCountries(context);
+      }
+      await _getFavoriteExhibits();
     });
 
     _scrollController.addListener(() async {
