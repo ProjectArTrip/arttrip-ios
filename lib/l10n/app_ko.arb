@@ -4,11 +4,13 @@
   "navMap": "지도",
   "navMy": "My",
   "navStamp": "스탬프",
-  "navStorage": "보관함",
+  "navStorage": "즐겨찾기",
   "splashSlogan": "세상의 전시, 내 손 안에.",
   "loginKakao": "카카오로 로그인",
   "loginGoogle": "Google로 로그인",
   "loginApple": "Apple로 로그인",
+  "tempNickname": "임시닉네임",
+  "oversea": "해외",
   "domestic": "국내",
   "domesticExhibition": "국내전시",
   "internationalExhibition": "해외전시",
@@ -131,5 +133,7 @@
   "sortByPopular": "인기순",
   "exhibitGenre": "전시 장르",
   "exceptionTitle": "일시적인 오류가 발생했어요.",
-  "exceptionDesc": "이용에 불편을 드려 죄송합니다\n잠시 후에 다시 시도해 주세요"
+  "exceptionDesc": "이용에 불편을 드려 죄송합니다\n잠시 후에 다시 시도해 주세요",
+  "noFavorites": "즐겨찾기 항목이 없습니다.",
+  "resetAll": "전체 해제"
 }

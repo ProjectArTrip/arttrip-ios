@@ -2,6 +2,7 @@ import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
+import 'package:arttrip/features/exhibit/data/models/favorite_filter_model.dart';
 import 'package:flutter/material.dart';
 
 class ExhibitViewModel with ChangeNotifier {
@@ -68,6 +69,33 @@ class ExhibitViewModel with ChangeNotifier {
       return response;
     } catch (e) {
       AppUtil.debugLog('getExhibitFilters error: $e');
+      return null;
+    }
+  }
+
+  /// 즐겨찾기 전체 조회
+  ///
+  /// 로딩 처리는 각 화면에서 로딩 변수로 처리합니다.
+  ///
+  /// null: API 호출 실패
+  Future<FavoriteFilterModel?> getFavoriteFilters({
+    required int cursor,
+    required int size,
+    String? country,
+    String? region,
+    required String sortType,
+  }) async {
+    try {
+      final response = await _exhibitRepository.fetchFavoriteFilters(
+        cursor: cursor,
+        size: size,
+        country: country,
+        region: region,
+        sortType: sortType,
+      );
+      return response;
+    } catch (e) {
+      AppUtil.debugLog('getFavoriteFilters error: $e');
       return null;
     }
   }
