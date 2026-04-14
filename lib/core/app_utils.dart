@@ -60,4 +60,19 @@ class AppUtil {
     final language = locale.languageCode == 'ko' ? 'ko' : 'en';
     return language;
   }
+
+  /// 언어에 따라 12.17 (수) - 12.22 (월) 포멧 반환
+  static String getRangeDateString({
+    required BuildContext context,
+    required DateTime start,
+    required DateTime end,
+  }) {
+    final lang = getLanguage(context);
+    final DateFormat formatter = DateFormat('MM.dd (E)', lang);
+
+    final String startStr = formatter.format(start);
+    final String endStr = formatter.format(end);
+
+    return '$startStr - $endStr';
+  }
 }
