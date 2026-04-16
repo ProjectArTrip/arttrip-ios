@@ -5,6 +5,7 @@ import 'package:arttrip/core/config/prefs.dart';
 import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/features/home/views/curation_view.dart';
 import 'package:arttrip/features/home/views/domestic_overseas_view.dart';
 import 'package:arttrip/features/home/views/genre_exhibits_view.dart';
 import 'package:arttrip/features/home/views/personalized_exhibits_view.dart';
@@ -68,6 +69,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 isDomestic
                     ? const RegionalExhibitsView()
                     : const SliverToBoxAdapter(child: SizedBox.shrink()),
+                CurationView(isDomestic),
                 const GenreExhibitsView(),
                 SliverToBoxAdapter(child: SizedBox(height: 24.h)),
               ],

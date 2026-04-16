@@ -1,5 +1,6 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
+import 'package:arttrip/features/home/data/models/curation_model.dart';
 import 'package:arttrip/features/home/home_repository.dart';
 import 'package:arttrip/shared/models/region_model.dart';
 
@@ -112,6 +113,26 @@ class HomeRepositoryHybrid implements HomeRepository {
       country: country,
       region: region,
       date: date,
+    );
+  }
+
+  @override
+  Future<CurationModel> fetchCurations({
+    required bool isDomestic,
+    String? country,
+    String? region,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchCurations(
+        isDomestic: isDomestic,
+        country: country,
+        region: region,
+      );
+    }
+    return api.fetchCurations(
+      isDomestic: isDomestic,
+      country: country,
+      region: region,
     );
   }
 }

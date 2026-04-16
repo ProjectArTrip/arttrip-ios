@@ -65,6 +65,8 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
                                 ),
                               ),
                         ),
+                        onLoading: () => _buildProfileLoadingView(),
+                        onError: ({error}) => _buildProfileLoadingView(),
                       );
                     },
                   ),
@@ -190,68 +192,101 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
                 ],
               );
             },
-            onLoading: () {
-              return Shimmer(
-                duration: const Duration(
-                  milliseconds: AppConsts.shimmerDurationMs,
-                ),
-                interval: const Duration(
-                  milliseconds: AppConsts.shimmerIntervalMs,
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(top: 32.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 12.h,
-                    children: [
-                      ShimmerSkeletonItem(
-                        width: 160,
-                        height: 20,
-                        margin: EdgeInsets.symmetric(horizontal: 24.w),
-                      ),
-                      SizedBox(
-                        height: 190.h,
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.symmetric(horizontal: 24.w),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 3,
-                          separatorBuilder: (context, index) =>
-                              SizedBox(width: 8.w),
-                          itemBuilder: (context, index) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const ShimmerSkeletonItem(
-                                  width: 120,
-                                  height: 150,
-                                  radius: 8,
-                                ),
-                                SizedBox(height: 8.h),
-                                const ShimmerSkeletonItem(
-                                  width: 120,
-                                  height: 14,
-                                  radius: 8,
-                                ),
-                                SizedBox(height: 4.h),
-                                const ShimmerSkeletonItem(
-                                  width: 120,
-                                  height: 14,
-                                  radius: 8,
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+            onLoading: () => _buildLoadingView(),
+            onError: ({error}) => _buildLoadingView(),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildLoadingView() {
+    return Shimmer(
+      duration: const Duration(
+        milliseconds: AppConsts.shimmerDurationMs,
+      ),
+      interval: const Duration(
+        milliseconds: AppConsts.shimmerIntervalMs,
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(top: 32.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 12.h,
+          children: [
+            ShimmerSkeletonItem(
+              width: 160,
+              height: 20,
+              margin: EdgeInsets.symmetric(horizontal: 24.w),
+            ),
+            SizedBox(
+              height: 190.h,
+              child: ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                scrollDirection: Axis.horizontal,
+                itemCount: 3,
+                separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                itemBuilder: (context, index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const ShimmerSkeletonItem(
+                        width: 120,
+                        height: 150,
+                        radius: 8,
+                      ),
+                      SizedBox(height: 8.h),
+                      const ShimmerSkeletonItem(
+                        width: 120,
+                        height: 14,
+                        radius: 8,
+                      ),
+                      SizedBox(height: 4.h),
+                      const ShimmerSkeletonItem(
+                        width: 120,
+                        height: 14,
+                        radius: 8,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileLoadingView() {
+    return Padding(
+      padding: EdgeInsets.only(top: 32.h),
+      child: Shimmer(
+        duration: const Duration(
+          milliseconds: AppConsts.shimmerDurationMs,
+        ),
+        interval: const Duration(
+          milliseconds: AppConsts.shimmerIntervalMs,
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const ShimmerSkeletonItem(
+                width: 160,
+                height: 20,
+              ),
+              SvgPicture.asset(
+                AppAssets.icNoArrowRight,
+                width: 24.w,
+                height: 24.w,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

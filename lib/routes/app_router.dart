@@ -2,6 +2,7 @@ import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
 import 'package:arttrip/features/exhibit/views/exhibit_detail_page.dart';
 import 'package:arttrip/features/exhibit/views/write_review_page.dart';
 import 'package:arttrip/features/home/pages/calendar_result_page.dart';
+import 'package:arttrip/features/home/pages/curation_detail_page.dart';
 import 'package:arttrip/features/home/pages/genre_detail_page.dart';
 import 'package:arttrip/features/home/pages/region_detail_page.dart';
 import 'package:arttrip/features/home/pages/weekly_detail_page.dart';
@@ -118,6 +119,19 @@ final appRouter = GoRouter(
       path: AppRoutes.homeWeekly,
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const WeeklyDetailPage());
+      },
+    ),
+
+    /// 홈 > 큐레이션 전체 화면
+    GoRoute(
+      path: AppRoutes.homeCuration,
+      pageBuilder: (context, state) {
+        final curationTitle = state.pathParameters['curationTitle']!;
+        return buildPage(
+          context,
+          state,
+          child: CurationDetailPage(title: curationTitle),
+        );
       },
     ),
 

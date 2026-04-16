@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
+import 'package:arttrip/features/home/data/models/curation_model.dart';
 import 'package:arttrip/shared/models/region_model.dart';
 
 abstract class HomeRepository {
@@ -12,6 +13,13 @@ abstract class HomeRepository {
 
   /// 오늘의 전시 추천 조회
   Future<List<ExhibitModel>> fetchTodayExhibitRecommendations({
+    required bool isDomestic,
+    String? country,
+    String? region,
+  });
+
+  /// 큐레이션 조회
+  Future<CurationModel> fetchCurations({
     required bool isDomestic,
     String? country,
     String? region,
@@ -54,10 +62,13 @@ class HomeRepositoryImpl implements HomeRepository {
       final response = await _dio.get('/exhibits/overseas');
       final data = response.dataOrNull;
       if (data == null) throw Exception('No data in response');
+
       final map = data as Map<String, dynamic>;
       final result = map['result'] as Map<String, dynamic>?;
       final countries = result?['countries'] as List?;
+
       if (countries == null) throw Exception('No countries found');
+
       return countries
           .map<String>((e) => (e as Map<String, dynamic>)['label'].toString())
           .toList();
@@ -73,10 +84,12 @@ class HomeRepositoryImpl implements HomeRepository {
       final response = await _dio.get('/exhibits/domestic');
       final data = response.dataOrNull;
       if (data == null) throw Exception('No data in response');
+
       final map = data as Map<String, dynamic>;
       final result = map['result'] as Map<String, dynamic>?;
       final regions = result?['regions'] as List?;
       if (regions == null) throw Exception('No regions found');
+
       return regions
           .map<RegionModel>(
             (e) => RegionModel.fromJson(e as Map<String, dynamic>),
@@ -106,9 +119,11 @@ class HomeRepositoryImpl implements HomeRepository {
       );
       final data = response.dataOrNull;
       if (data == null) throw Exception('No data in response');
+
       final map = data as Map<String, dynamic>;
       final exhibits = map['exhibits'] as List?;
       if (exhibits == null) throw Exception('No exhibits found');
+
       return exhibits
           .map<ExhibitModel>(
             (e) => ExhibitModel.fromJson(e as Map<String, dynamic>),
@@ -235,6 +250,42 @@ class HomeRepositoryImpl implements HomeRepository {
           .toList();
     } catch (e) {
       AppUtil.debugLog('fetchWeeklyExhibitsBySelectedDate error: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<CurationModel> fetchCurations({
+    required bool isDomestic,
+    String? country,
+    String? region,
+  }) async {
+    try {
+      // final queryParams = {
+      //   'isDomestic': isDomestic,
+      //   if (!isDomestic) 'country': country,
+      //   if (isDomestic) 'region': region,
+      // };
+      final tempQueryParams = {
+        'country': 'ALL',
+        // 'country': 'USA',
+      };
+      // final response = await _dio.get(
+      //   '/curations',
+      //   queryParameters: queryParams,
+      // );
+      final response = await _dio.get(
+        '/curations',
+        queryParameters: tempQueryParams,
+      );
+      final data = response.dataOrNull;
+      if (data == null) throw Exception('No data in response');
+
+      final map = data as Map<String, dynamic>;
+
+      return CurationModel.fromJson(map);
+    } catch (e) {
+      AppUtil.debugLog('fetchCurations error: $e');
       rethrow;
     }
   }

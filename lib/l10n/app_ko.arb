@@ -136,5 +136,7 @@
   "exceptionDesc": "이용에 불편을 드려 죄송합니다\n잠시 후에 다시 시도해 주세요",
   "noFavorites": "즐겨찾기 항목이 없습니다.",
   "resetAll": "전체 해제",
-  "noExhibitsTitle": "진행중인 전시가 없습니다."
+  "noExhibitsTitle": "진행중인 전시가 없습니다.",
+  "noCurationExhibitsTitle": "진행중인 전시가 존재하지 않습니다.",
+  "curationTitle": "오늘의 큐레이션"
 }

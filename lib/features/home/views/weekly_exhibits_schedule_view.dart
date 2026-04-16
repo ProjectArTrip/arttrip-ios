@@ -5,6 +5,7 @@ import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/features/home/widgets/home_no_exhibits_view.dart';
 import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
@@ -252,31 +253,10 @@ class _WeeklyExhibitsScheduleViewState
     );
   }
 
-  Container _buildNoExhibitions() {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.only(
-        left: 28.w,
-        top: 24.h,
-        right: 27.w,
-        bottom: 28.h,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.subLightGray,
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-      child: Column(
-        spacing: 8.h,
-        children: [
-          SvgPicture.asset(AppAssets.icNotFound, width: 40.w, height: 40.w),
-          ArtTripText.pretendard()
-              .body01Regular()
-              .color(AppColors.textTertiary)
-              .textAlign(TextAlign.center)
-              .build()
-              .text(context.l10n.noOngoingExhibitionsOnDate),
-        ],
-      ),
+  Widget _buildNoExhibitions() {
+    return HomeNoExhibitsView(
+      title: context.l10n.noOngoingExhibitionsOnDate,
+      margin: EdgeInsets.zero,
     );
   }
 }

@@ -30,6 +30,28 @@ class AppRoutes {
   /// 홈 > 주간 전시 전체 화면
   static const homeWeekly = '/home/weekly';
 
+  /// 홈 > 큐레이션 전체 화면
+  static const homeCuration = '/home/curation/:curationTitle';
+  static String homeCurationPath({
+    required String curationTitle,
+    required String isDomestic,
+    String? country,
+    String? region,
+  }) {
+    final queryParams = {
+      'isDomestic': isDomestic,
+      'country': ?country,
+      'region': ?region,
+    };
+
+    final uri = Uri(
+      path: '/home/curation/$curationTitle',
+      queryParameters: queryParams,
+    );
+
+    return uri.toString();
+  }
+
   /// 홈 > 장르별 전시 추천 전체 화면
   static const homeGenre = '/home/genre/:genreName';
   static String homeGenrePath({
@@ -59,7 +81,7 @@ class AppRoutes {
   static const alerts = '/alerts';
 
   /// 캘린더 필터 결과 화면
-  static const calendarFilterResult = '/calendar-filter-result';
+  static const calendarFilterResult = '/home/calendar-filter-result';
   static String calendarFilterResultPath({
     required String country,
     required String rangeStart,
@@ -72,7 +94,7 @@ class AppRoutes {
     };
 
     final uri = Uri(
-      path: '/calendar-filter-result',
+      path: '/home/calendar-filter-result',
       queryParameters: queryParams,
     );
 

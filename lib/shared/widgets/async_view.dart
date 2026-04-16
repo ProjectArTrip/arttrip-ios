@@ -32,7 +32,9 @@ class AsyncView<T> extends StatelessWidget {
       case AsyncStatus.error:
         AppUtil.debugLog('AsyncView Error: ${state.error}');
         return onError?.call(error: state.error) ??
-            const SliverToBoxAdapter(child: ExceptionView());
+            (isSliverWidget
+                ? const SliverToBoxAdapter(child: ExceptionView())
+                : const ExceptionView());
       case AsyncStatus.success:
         return onData(state.data as T);
     }

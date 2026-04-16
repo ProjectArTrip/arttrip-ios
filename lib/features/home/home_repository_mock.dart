@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_urls.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
+import 'package:arttrip/features/home/data/models/curation_model.dart';
 import 'package:arttrip/features/home/home_repository.dart';
 import 'package:arttrip/shared/models/region_model.dart';
 
@@ -168,5 +169,39 @@ class HomeRepositoryMockImpl implements HomeRepository {
         hallName: '프리미엄 월넛홀',
       ),
     ];
+  }
+
+  @override
+  Future<CurationModel> fetchCurations({
+    required bool isDomestic,
+    String? country,
+    String? region,
+  }) async {
+    await Future.delayed(
+      const Duration(milliseconds: AppConsts.mockLoadingDelayMs),
+    );
+    return CurationModel(
+      title: '추천 전시',
+      curations: [
+        ExhibitModel(
+          exhibitId: 13,
+          title: '릴리킴 개인전 《 Ego Travla - between the Seen and the Unseen 》',
+          posterUrl: AppUrls.posterUrlMock,
+          status: 'ONGOING',
+          exhibitPeriod: '2025.12.14 - 2025.12.27',
+          hallName: '프리미엄 월넛홀',
+          countryName: '프랑스',
+        ),
+        ExhibitModel(
+          exhibitId: 12,
+          title: '눈이 타오르는 비탈',
+          posterUrl: AppUrls.posterUrlMock,
+          status: 'UPCOMING',
+          exhibitPeriod: '2025.12.14 - 2025.12.27',
+          hallName: '프리미엄 월넛홀',
+          countryName: '일본',
+        ),
+      ],
+    );
   }
 }
