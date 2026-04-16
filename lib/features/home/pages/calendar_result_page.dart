@@ -13,6 +13,7 @@ import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:arttrip/shared/widgets/exception_view.dart';
 import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
+import 'package:arttrip/shared/widgets/exhibits_loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -185,7 +186,13 @@ class _CalendarResultPageState extends State<CalendarResultPage> {
               valueListenable: _isLoading,
               builder: (context, isLoading, child) {
                 if (isLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 12.h,
+                      horizontal: 24.w,
+                    ),
+                    child: const ExhibitsLoadingView(),
+                  );
                 }
 
                 return ValueListenableBuilder(

@@ -10,6 +10,8 @@ import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:arttrip/shared/widgets/exception_view.dart';
 import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
+import 'package:arttrip/shared/widgets/exhibits_loading_view.dart';
+import 'package:arttrip/shared/widgets/no_exhibits_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -146,13 +148,17 @@ class _WeeklyDetailPageState extends State<WeeklyDetailPage> {
               valueListenable: _isLoading,
               builder: (context, isLoading, child) {
                 if (isLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const ExhibitsLoadingView();
                 }
 
                 return ValueListenableBuilder(
                   valueListenable: _exhibits,
                   builder: (context, exhibits, child) {
-                    if (exhibits == null) return const ExceptionView();
+                    if (exhibits == null) {
+                      return const ExceptionView();
+                    } else if (exhibits.isEmpty) {
+                      return const NoExhibitsView();
+                    }
 
                     return ValueListenableBuilder(
                       valueListenable: _loadingMore,

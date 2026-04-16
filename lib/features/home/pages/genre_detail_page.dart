@@ -11,6 +11,8 @@ import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:arttrip/shared/widgets/exception_view.dart';
 import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
+import 'package:arttrip/shared/widgets/exhibits_loading_view.dart';
+import 'package:arttrip/shared/widgets/no_exhibits_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -144,9 +146,7 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
                       return ArtTripText.pretendard()
                           .title02Bold()
                           .build()
-                          .text(
-                            context.l10n.totalCount(exhibits?.length ?? 0),
-                          );
+                          .text(context.l10n.totalCount(exhibits?.length ?? 0));
                     },
                   ),
                 ),
@@ -171,7 +171,13 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
               valueListenable: _isLoading,
               builder: (context, isLoading, child) {
                 if (isLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 12.h,
+                      horizontal: 24.w,
+                    ),
+                    child: const ExhibitsLoadingView(),
+                  );
                 }
 
                 return ValueListenableBuilder(
@@ -179,7 +185,10 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
                   builder: (context, exhibits, _) {
                     if (exhibits == null) {
                       return const ExceptionView();
+                    } else if (exhibits.isEmpty) {
+                      return const NoExhibitsView();
                     }
+
                     return ValueListenableBuilder(
                       valueListenable: _loadingMore,
                       builder: (context, loadingMore, child) {
