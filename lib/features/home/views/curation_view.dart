@@ -44,8 +44,12 @@ class _CurationViewState extends State<CurationView> {
                 return AsyncView(
                   state: state,
                   onData: (data) {
-                    if (data.curations.isEmpty) {
-                      return _buildEmptyView(data.title);
+                    if (data.exhibits.isEmpty) {
+                      return _buildEmptyView(
+                        data.title,
+                        data.subtitle,
+                        data.curationId.toString(),
+                      );
                     }
 
                     return Column(
@@ -53,7 +57,11 @@ class _CurationViewState extends State<CurationView> {
                       spacing: 12.h,
                       children: [
                         /// 제목
-                        _buildHeader(data.title),
+                        _buildHeader(
+                          data.title,
+                          data.subtitle,
+                          data.curationId.toString(),
+                        ),
 
                         /// 큐레이션
                         SizedBox(
@@ -61,12 +69,12 @@ class _CurationViewState extends State<CurationView> {
                           child: ListView.separated(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: data.curations.length,
+                            itemCount: data.exhibits.length,
                             padding: EdgeInsets.symmetric(horizontal: 24.w),
                             separatorBuilder: (context, index) =>
                                 SizedBox(width: 8.w),
                             itemBuilder: (context, index) {
-                              final item = data.curations[index];
+                              final item = data.exhibits[index];
                               return Selector<ExhibitViewModel, bool>(
                                 selector: (_, vm) =>
                                     vm.isFavorite(item.exhibitId),
@@ -103,7 +111,7 @@ class _CurationViewState extends State<CurationView> {
                     );
                   },
                   onLoading: () => _buildCurationLoadingView(),
-                  onError: ({error}) => _buildEmptyView(''),
+                  onError: ({error}) => _buildEmptyView('', '', '0'),
                 );
               },
             );
@@ -113,7 +121,7 @@ class _CurationViewState extends State<CurationView> {
     );
   }
 
-  Widget _buildHeader(String title) {
+  Widget _buildHeader(String title, String subtitle, String curationId) {
     return GestureDetector(
       onTap: () {
         final homeVM = context.read<HomeViewModel>();
@@ -127,6 +135,7 @@ class _CurationViewState extends State<CurationView> {
             curationTitle: title?.isNotEmpty == true
                 ? title!
                 : context.l10n.curationTitle,
+            curationId: curationId,
             isDomestic: homeVM.isDomestic ? 'true' : 'false',
             country: homeVM.isDomestic
                 ? null
@@ -153,7 +162,7 @@ class _CurationViewState extends State<CurationView> {
                 ),
               ],
             ),
-            ArtTripText.pretendard().body01Regular().build().text('서브 타이틀'),
+            ArtTripText.pretendard().body01Regular().build().text(subtitle),
           ],
         ),
       ),
@@ -211,13 +220,17 @@ class _CurationViewState extends State<CurationView> {
     );
   }
 
-  Widget _buildEmptyView(String title) {
+  Widget _buildEmptyView(String title, String subtitle, String curationId) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 12.h,
       children: [
         /// 제목
-        _buildHeader(title.isEmpty ? context.l10n.curationTitle : title),
+        _buildHeader(
+          title.isEmpty ? context.l10n.curationTitle : title,
+          subtitle,
+          curationId,
+        ),
         HomeNoExhibitsView(title: context.l10n.noCurationExhibitsTitle),
       ],
     );

@@ -31,9 +31,10 @@ class AppRoutes {
   static const homeWeekly = '/home/weekly';
 
   /// 홈 > 큐레이션 전체 화면
-  static const homeCuration = '/home/curation/:curationTitle';
+  static const homeCuration = '/home/curation/:curationTitle/:curationId';
   static String homeCurationPath({
     required String curationTitle,
+    required String curationId,
     required String isDomestic,
     String? country,
     String? region,
@@ -45,7 +46,7 @@ class AppRoutes {
     };
 
     final uri = Uri(
-      path: '/home/curation/$curationTitle',
+      path: '/home/curation/$curationTitle/$curationId',
       queryParameters: queryParams,
     );
 

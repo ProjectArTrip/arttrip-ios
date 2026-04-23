@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
 import 'package:arttrip/features/home/data/models/curation_model.dart';
@@ -429,5 +430,28 @@ class HomeViewModel with ChangeNotifier {
       _weeklyCalendar = const AsyncState.error();
     }
     notifyListeners();
+  }
+
+  /// 큐레이션 전체 조회
+  ///
+  /// 로딩 처리는 각 화면에서 로딩 변수로 처리합니다.
+  ///
+  /// null: API 호출 실패
+  Future<ExhibitFilterModel?> getCurationDetail({
+    required String curationId,
+    required int cursor,
+    required int size,
+  }) async {
+    try {
+      final response = await homeRepository.fetchCurationDetail(
+        curationId: curationId,
+        cursor: cursor,
+        size: size,
+      );
+      return response;
+    } catch (e) {
+      AppUtil.debugLog('getCurationDetail error: $e');
+      return null;
+    }
   }
 }

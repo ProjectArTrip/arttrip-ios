@@ -9,8 +9,10 @@ abstract class CurationModel with _$CurationModel {
   const CurationModel._();
 
   factory CurationModel({
-    @Default([]) List<ExhibitModel> curations,
+    @Default(0) int curationId,
     @Default('') String title,
+    @Default('') String subtitle,
+    @Default([]) List<ExhibitModel> exhibits,
   }) = _CurationModel;
 
   factory CurationModel.fromJson(Map<String, dynamic> json) =>

@@ -127,10 +127,14 @@ final appRouter = GoRouter(
       path: AppRoutes.homeCuration,
       pageBuilder: (context, state) {
         final curationTitle = state.pathParameters['curationTitle']!;
+        final curationId = state.pathParameters['curationId']!;
         return buildPage(
           context,
           state,
-          child: CurationDetailPage(title: curationTitle),
+          child: CurationDetailPage(
+            title: curationTitle,
+            curationId: curationId,
+          ),
         );
       },
     ),

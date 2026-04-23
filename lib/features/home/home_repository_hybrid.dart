@@ -1,4 +1,5 @@
 import 'package:arttrip/core/app_consts.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/data/models/curation_model.dart';
 import 'package:arttrip/features/home/home_repository.dart';
@@ -133,6 +134,26 @@ class HomeRepositoryHybrid implements HomeRepository {
       isDomestic: isDomestic,
       country: country,
       region: region,
+    );
+  }
+
+  @override
+  Future<ExhibitFilterModel> fetchCurationDetail({
+    required String curationId,
+    required int cursor,
+    required int size,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchCurationDetail(
+        curationId: curationId,
+        cursor: cursor,
+        size: size,
+      );
+    }
+    return api.fetchCurationDetail(
+      curationId: curationId,
+      cursor: cursor,
+      size: size,
     );
   }
 }

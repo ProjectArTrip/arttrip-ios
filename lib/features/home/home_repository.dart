@@ -1,5 +1,6 @@
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/data/models/curation_model.dart';
 import 'package:arttrip/shared/models/region_model.dart';
@@ -23,6 +24,13 @@ abstract class HomeRepository {
     required bool isDomestic,
     String? country,
     String? region,
+  });
+
+  /// 큐레이션 상세 조회
+  Future<ExhibitFilterModel> fetchCurationDetail({
+    required String curationId,
+    required int cursor,
+    required int size,
   });
 
   /// 장르 리스트 조회
@@ -261,15 +269,13 @@ class HomeRepositoryImpl implements HomeRepository {
     String? region,
   }) async {
     try {
+      // TODO: 수정 예정
       // final queryParams = {
       //   'isDomestic': isDomestic,
       //   if (!isDomestic) 'country': country,
       //   if (isDomestic) 'region': region,
       // };
-      final tempQueryParams = {
-        'country': 'ALL',
-        // 'country': 'USA',
-      };
+      final tempQueryParams = {'country': 'ALL'};
       // final response = await _dio.get(
       //   '/curations',
       //   queryParameters: queryParams,
@@ -282,10 +288,40 @@ class HomeRepositoryImpl implements HomeRepository {
       if (data == null) throw Exception('No data in response');
 
       final map = data as Map<String, dynamic>;
+      final curations = map['curations'] as List?;
 
-      return CurationModel.fromJson(map);
+      if (curations == null) throw Exception('No curations found');
+
+      return CurationModel.fromJson(curations[0] as Map<String, dynamic>);
     } catch (e) {
       AppUtil.debugLog('fetchCurations error: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ExhibitFilterModel> fetchCurationDetail({
+    required String curationId,
+    required int cursor,
+    required int size,
+  }) async {
+    try {
+      final queryParams = {
+        'cursor': cursor,
+        'size': size,
+      };
+
+      final response = await _dio.get(
+        '/curations/$curationId',
+        queryParameters: queryParams,
+      );
+
+      final data = response.dataOrNull;
+      if (data == null) throw Exception('No data in response');
+
+      return ExhibitFilterModel.fromJson(data as Map<String, dynamic>);
+    } catch (e) {
+      AppUtil.debugLog('fetchCurationDetail error: $e');
       rethrow;
     }
   }
