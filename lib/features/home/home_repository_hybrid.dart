@@ -121,19 +121,16 @@ class HomeRepositoryHybrid implements HomeRepository {
   Future<CurationModel> fetchCurations({
     required bool isDomestic,
     String? country,
-    String? region,
   }) {
     if (AppConsts.useMock) {
       return mock.fetchCurations(
         isDomestic: isDomestic,
         country: country,
-        region: region,
       );
     }
     return api.fetchCurations(
       isDomestic: isDomestic,
       country: country,
-      region: region,
     );
   }
 

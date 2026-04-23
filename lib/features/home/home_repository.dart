@@ -23,7 +23,6 @@ abstract class HomeRepository {
   Future<CurationModel> fetchCurations({
     required bool isDomestic,
     String? country,
-    String? region,
   });
 
   /// 큐레이션 상세 조회
@@ -266,33 +265,22 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<CurationModel> fetchCurations({
     required bool isDomestic,
     String? country,
-    String? region,
   }) async {
     try {
-      // TODO: 수정 예정
-      // final queryParams = {
-      //   'isDomestic': isDomestic,
-      //   if (!isDomestic) 'country': country,
-      //   if (isDomestic) 'region': region,
-      // };
-      final tempQueryParams = {'country': 'ALL'};
-      // final response = await _dio.get(
-      //   '/curations',
-      //   queryParameters: queryParams,
-      // );
+      final queryParams = {
+        'isDomestic': isDomestic,
+        'country': country,
+      };
       final response = await _dio.get(
         '/curations',
-        queryParameters: tempQueryParams,
+        queryParameters: queryParams,
       );
       final data = response.dataOrNull;
       if (data == null) throw Exception('No data in response');
 
       final map = data as Map<String, dynamic>;
-      final curations = map['curations'] as List?;
 
-      if (curations == null) throw Exception('No curations found');
-
-      return CurationModel.fromJson(curations[0] as Map<String, dynamic>);
+      return CurationModel.fromJson(map);
     } catch (e) {
       AppUtil.debugLog('fetchCurations error: $e');
       rethrow;

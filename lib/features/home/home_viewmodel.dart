@@ -399,8 +399,7 @@ class HomeViewModel with ChangeNotifier {
 
       final result = await homeRepository.fetchCurations(
         isDomestic: isDomestic,
-        country: isDomestic ? null : _area[_locationType],
-        region: isDomestic ? _area[_locationType] : null,
+        country: _area[_locationType],
       );
       _curations[_locationType]![_area[_locationType]!] = AsyncState.success(
         result,
