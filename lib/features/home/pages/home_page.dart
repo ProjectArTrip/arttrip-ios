@@ -47,6 +47,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.gray0,

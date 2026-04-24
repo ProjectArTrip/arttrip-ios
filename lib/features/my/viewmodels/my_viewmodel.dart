@@ -157,4 +157,8 @@ class MyViewModel with ChangeNotifier {
     }
     return success;
   }
+
+  Future<void> registerFcmToken(String token) async {
+    await _repository.registerFcmToken(token);
+  }
 }

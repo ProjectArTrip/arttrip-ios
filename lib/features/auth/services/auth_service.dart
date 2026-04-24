@@ -1,7 +1,12 @@
+import 'dart:async';
+
+import 'package:arttrip/core/config/prefs.dart';
 import 'package:arttrip/features/auth/data/auth_api_service.dart';
 import 'package:arttrip/features/auth/services/token_storage_service.dart';
 import 'package:arttrip/features/login/services/kakao_login_service.dart';
-import 'package:flutter/foundation.dart';
+import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// 인증 결과
 class AuthResult {
@@ -38,7 +43,7 @@ class AuthService {
   final _kakaoLogin = KakaoLoginService.instance;
 
   /// 카카오 로그인 (소셜 로그인 + 서버 토큰 발급)
-  Future<AuthResult> loginWithKakao() async {
+  Future<AuthResult> loginWithKakao(BuildContext context) async {
     try {
       // 1. 카카오 로그인으로 idToken 획득
       final kakaoResult = await _kakaoLogin.login();
@@ -65,6 +70,14 @@ class AuthService {
             refreshToken: tokenResult.refreshToken,
             isFirstLogin: tokenResult.firstLogin,
           );
+
+          if (context.mounted) {
+            unawaited(
+              context.read<MyViewModel>().registerFcmToken(
+                Prefs().fcmToken ?? '',
+              ),
+            );
+          }
 
           debugPrint('서버 토큰 발급 및 저장 완료, firstLogin: ${tokenResult.firstLogin}');
           return AuthResult.success(firstLogin: tokenResult.firstLogin);

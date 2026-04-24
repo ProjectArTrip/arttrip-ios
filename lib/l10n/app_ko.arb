@@ -138,5 +138,8 @@
   "resetAll": "전체 해제",
   "noExhibitsTitle": "진행중인 전시가 없습니다.",
   "noCurationExhibitsTitle": "진행중인 전시가 존재하지 않습니다.",
-  "curationTitle": "오늘의 큐레이션"
+  "curationTitle": "오늘의 큐레이션",
+  "minutesAgo": "{min}분 전",
+  "hoursAgo": "{hour}시간 전",
+  "noAlertsTitle": "알림이 없습니다."
 }

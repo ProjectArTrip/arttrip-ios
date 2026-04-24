@@ -26,13 +26,13 @@ class _LoginPageState extends State<LoginPage> {
     FlutterNativeSplash.remove();
   }
 
-  Future<void> _handleKakaoLogin() async {
+  Future<void> _handleKakaoLogin(BuildContext buildContext) async {
     if (_isLoading) return;
 
     setState(() => _isLoading = true);
 
     try {
-      final result = await AuthService.instance.loginWithKakao();
+      final result = await AuthService.instance.loginWithKakao(buildContext);
 
       if (!mounted) return;
 
@@ -81,7 +81,9 @@ class _LoginPageState extends State<LoginPage> {
                   spacing: 12.h,
                   children: [
                     SocialLoginButton(
-                      onPressed: _isLoading ? () {} : () => _handleKakaoLogin(),
+                      onPressed: _isLoading
+                          ? () {}
+                          : () => _handleKakaoLogin(context),
                       label: context.l10n.loginKakao,
                       icon: AppAssets.icKakao,
                       backgroundColor: AppColors.subKakao,

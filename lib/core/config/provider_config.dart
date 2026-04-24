@@ -1,5 +1,7 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/network/network.dart';
+import 'package:arttrip/features/alert/alert_repository.dart';
+import 'package:arttrip/features/alert/alert_viewmodel.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository_hybrid.dart';
 import 'package:arttrip/features/exhibit/data/exhibit_repository_mock.dart';
@@ -19,11 +21,12 @@ import 'package:arttrip/features/onboarding/viewmodels/keywords_viewmodel.dart';
 import 'package:arttrip/features/search/data/search_repository.dart';
 import 'package:arttrip/features/search/data/search_repository_mock.dart';
 import 'package:arttrip/features/search/viewmodels/search_viewmodel.dart';
-import 'package:arttrip/shared/viewmodels/alert_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 final getProviders = [
-  ChangeNotifierProvider(create: (_) => AlertViewModel()),
+  ChangeNotifierProvider(
+    create: (_) => AlertViewModel(AlertRepositoryImpl(DioClient.instance)),
+  ),
   ChangeNotifierProvider(
     create:
         (_) => ExhibitViewModel(

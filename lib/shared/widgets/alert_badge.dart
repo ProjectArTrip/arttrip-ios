@@ -1,7 +1,7 @@
 import 'package:arttrip/core/app_assets.dart';
+import 'package:arttrip/features/alert/alert_viewmodel.dart';
 import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
-import 'package:arttrip/shared/viewmodels/alert_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
