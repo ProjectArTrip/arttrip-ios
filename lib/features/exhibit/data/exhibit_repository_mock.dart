@@ -4,6 +4,7 @@ import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
+import 'package:arttrip/features/exhibit/data/models/favorite_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -185,6 +186,21 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
       hasNext: (cursor ?? 0) + (size ?? 10) < 30,
       nextCursor: (cursor ?? 0) + (size ?? 10),
       exhibitTotalCount: 30,
+    );
+  }
+
+  @override
+  Future<FavoriteFilterModel> fetchFavoriteFilters({
+    required int cursor,
+    required int size,
+    String? country,
+    String? region,
+    required String sortType,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return FavoriteFilterModel(
+      favorites: [],
+      hasNext: false,
     );
   }
 }

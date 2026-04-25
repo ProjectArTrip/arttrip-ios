@@ -11,6 +11,8 @@ import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:arttrip/shared/widgets/exception_view.dart';
 import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
+import 'package:arttrip/shared/widgets/exhibits_loading_view.dart';
+import 'package:arttrip/shared/widgets/no_exhibits_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -160,7 +162,13 @@ class _RegionDetailPageState extends State<RegionDetailPage> {
             valueListenable: _isLoading,
             builder: (context, isLoading, child) {
               if (isLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 12.h,
+                    horizontal: 24.w,
+                  ),
+                  child: const ExhibitsLoadingView(),
+                );
               }
 
               return ValueListenableBuilder(
@@ -168,6 +176,8 @@ class _RegionDetailPageState extends State<RegionDetailPage> {
                 builder: (context, exhibits, child) {
                   if (exhibits == null) {
                     return const ExceptionView();
+                  } else if (exhibits.isEmpty) {
+                    return const NoExhibitsView();
                   }
 
                   return ValueListenableBuilder(

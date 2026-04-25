@@ -1,5 +1,6 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
@@ -36,7 +37,7 @@ class MyProfileSection extends StatelessWidget {
                         .headline()
                         .color(AppColors.textPrimary)
                         .build()
-                        .text(profile.nickName ?? '임시닉네임'),
+                        .text(profile.nickName ?? context.l10n.tempNickname),
                   ),
                   SizedBox(width: 4.w),
                   SvgPicture.asset(

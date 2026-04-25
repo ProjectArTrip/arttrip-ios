@@ -47,6 +47,16 @@ class _VerticalRangeCalendarState extends State<VerticalRangeCalendar> {
   }
 
   @override
+  void didUpdateWidget(covariant VerticalRangeCalendar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.rangeStart != widget.rangeStart ||
+        oldWidget.rangeEnd != widget.rangeEnd) {
+      _rangeStart = widget.rangeStart ?? _today;
+      _rangeEnd = widget.rangeEnd;
+    }
+  }
+
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
@@ -176,132 +186,127 @@ class _VerticalRangeCalendarState extends State<VerticalRangeCalendar> {
                                       ? -4.5
                                       : 0))
                               .h,
-                      children:
-                          days.map((day) {
-                            if (day == null) {
-                              return const SizedBox.shrink();
-                            }
-                            final isStart =
-                                _rangeStart != null &&
-                                _isSameDay(day, _rangeStart!);
-                            final isEnd =
-                                _rangeEnd != null &&
-                                _isSameDay(day, _rangeEnd!);
-                            final isMiddle = _isWithinRange(day);
-                            final isRangeSelected =
-                                _rangeStart != null && _rangeEnd != null;
-                            final isPastDate = day.isBefore(
-                              DateTime(_today.year, _today.month, _today.day),
-                            );
+                      children: days.map((day) {
+                        if (day == null) {
+                          return const SizedBox.shrink();
+                        }
+                        final isStart =
+                            _rangeStart != null &&
+                            _isSameDay(day, _rangeStart!);
+                        final isEnd =
+                            _rangeEnd != null && _isSameDay(day, _rangeEnd!);
+                        final isMiddle = _isWithinRange(day);
+                        final isRangeSelected =
+                            _rangeStart != null && _rangeEnd != null;
+                        final isPastDate = day.isBefore(
+                          DateTime(_today.year, _today.month, _today.day),
+                        );
 
-                            Widget? child;
+                        Widget? child;
 
-                            /// 선택 날짜 사이
-                            if (isMiddle) {
-                              child = Container(
-                                height: 28.w,
-                                margin: EdgeInsets.symmetric(vertical: 6.h),
-                                decoration: const BoxDecoration(
-                                  color: AppColors.primary100,
-                                ),
-                                alignment: Alignment.center,
-                                child: ArtTripText.pretendard()
-                                    .body01Bold()
-                                    .build()
-                                    .text('${day.day}'),
-                              );
-                            } else if (isStart || isEnd) {
-                              /// 선택 날짜 시작과 끝
-                              child = Stack(
-                                children: [
-                                  if (isRangeSelected &&
-                                      (_rangeStart != _rangeEnd))
-                                    Positioned(
-                                      top: 0,
-                                      bottom: 0,
-                                      left: isRangeSelected && isEnd ? 0 : null,
-                                      right:
-                                          isRangeSelected && isStart ? 0 : null,
-                                      child: Container(
-                                        width: (28 + 16).w / 2,
-                                        height: 28.w,
-                                        margin: EdgeInsets.symmetric(
-                                          vertical: 6.h,
-                                        ),
-                                        alignment: Alignment.center,
-                                        color: AppColors.primary100,
-                                      ),
+                        /// 선택 날짜 사이
+                        if (isMiddle) {
+                          child = Container(
+                            height: 28.w,
+                            margin: EdgeInsets.symmetric(vertical: 6.h),
+                            decoration: const BoxDecoration(
+                              color: AppColors.primary100,
+                            ),
+                            alignment: Alignment.center,
+                            child: ArtTripText.pretendard()
+                                .body01Bold()
+                                .build()
+                                .text('${day.day}'),
+                          );
+                        } else if (isStart || isEnd) {
+                          /// 선택 날짜 시작과 끝
+                          child = Stack(
+                            children: [
+                              if (isRangeSelected && (_rangeStart != _rangeEnd))
+                                Positioned(
+                                  top: 0,
+                                  bottom: 0,
+                                  left: isRangeSelected && isEnd ? 0 : null,
+                                  right: isRangeSelected && isStart ? 0 : null,
+                                  child: Container(
+                                    width: (28 + 16).w / 2,
+                                    height: 28.w,
+                                    margin: EdgeInsets.symmetric(
+                                      vertical: 6.h,
                                     ),
-                                  Positioned(
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    child: Container(
-                                      width: 28.w,
-                                      height: 28.w,
-                                      decoration: const BoxDecoration(
-                                        color: AppColors.primary300,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      margin: EdgeInsets.symmetric(
-                                        vertical: 4.h,
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: ArtTripText.pretendard()
-                                          .body01Bold()
-                                          .color(AppColors.textWhite)
-                                          .build()
-                                          .text('${day.day}'),
-                                    ),
+                                    alignment: Alignment.center,
+                                    color: AppColors.primary100,
                                   ),
-                                ],
-                              );
-                            } else if (_isToday(day) && !_isTodaySelected()) {
-                              child = Container(
-                                width: 28.w,
-                                height: 28.w,
-                                decoration: BoxDecoration(
-                                  color: AppColors.subLightGray,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: AppColors.gray100),
                                 ),
-                                alignment: Alignment.center,
-                                child: ArtTripText.pretendard()
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                child: Container(
+                                  width: 28.w,
+                                  height: 28.w,
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.primary300,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  margin: EdgeInsets.symmetric(
+                                    vertical: 4.h,
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: ArtTripText.pretendard()
+                                      .body01Bold()
+                                      .color(AppColors.textWhite)
+                                      .build()
+                                      .text('${day.day}'),
+                                ),
+                              ),
+                            ],
+                          );
+                        } else if (_isToday(day) && !_isTodaySelected()) {
+                          child = Container(
+                            width: 28.w,
+                            height: 28.w,
+                            decoration: BoxDecoration(
+                              color: AppColors.subLightGray,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: AppColors.gray100),
+                            ),
+                            alignment: Alignment.center,
+                            child: ArtTripText.pretendard()
+                                .body01Bold()
+                                .color(AppColors.textSecondary)
+                                .build()
+                                .text('${day.day}'),
+                          );
+                        }
+                        return GestureDetector(
+                          onTap: isPastDate
+                              ? null
+                              : () {
+                                  _onDayTap(day);
+                                  widget.updateRanges(
+                                    _rangeStart,
+                                    _rangeEnd,
+                                  );
+                                },
+                          child: Container(
+                            alignment: Alignment.center,
+                            color: Colors.transparent,
+                            child:
+                                child ??
+                                ArtTripText.pretendard()
                                     .body01Bold()
-                                    .color(AppColors.textSecondary)
+                                    .color(
+                                      isPastDate
+                                          ? AppColors.textTertiary
+                                          : AppColors.textPrimary,
+                                    )
                                     .build()
                                     .text('${day.day}'),
-                              );
-                            }
-                            return GestureDetector(
-                              onTap:
-                                  isPastDate
-                                      ? null
-                                      : () {
-                                        _onDayTap(day);
-                                        widget.updateRanges(
-                                          _rangeStart,
-                                          _rangeEnd,
-                                        );
-                                      },
-                              child: Container(
-                                alignment: Alignment.center,
-                                color: Colors.transparent,
-                                child:
-                                    child ??
-                                    ArtTripText.pretendard()
-                                        .body01Bold()
-                                        .color(
-                                          isPastDate
-                                              ? AppColors.textTertiary
-                                              : AppColors.textPrimary,
-                                        )
-                                        .build()
-                                        .text('${day.day}'),
-                              ),
-                            );
-                          }).toList(),
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ],
                 );

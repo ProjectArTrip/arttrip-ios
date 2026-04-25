@@ -5,6 +5,8 @@ import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/features/my/data/models/user_profile_model.dart';
+import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
 import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
@@ -43,17 +45,30 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 12.h,
                 children: [
-                  // TODO: 유저 이름 동적으로 바꾸기
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: 24.w,
-                      top: 32.h,
-                      right: 24.w,
-                    ),
-                    child: ArtTripText.pretendard().title01Bold().build().text(
-                      context.l10n.personalizedRecommendationTitle('김미미'),
-                    ),
+                  Selector<MyViewModel, AsyncState<UserProfileModel>>(
+                    selector: (_, vm) => vm.profileState,
+                    builder: (context, state, _) {
+                      return AsyncView<UserProfileModel>(
+                        state: state,
+                        onData: (profile) => Padding(
+                          padding: EdgeInsets.only(
+                            left: 24.w,
+                            top: 32.h,
+                            right: 24.w,
+                          ),
+                          child: ArtTripText.pretendard()
+                              .title01Bold()
+                              .build()
+                              .text(
+                                context.l10n.personalizedRecommendationTitle(
+                                  profile.nickName ?? context.l10n.tempNickname,
+                                ),
+                              ),
+                        ),
+                      );
+                    },
                   ),
+
                   SizedBox(
                     height: 190.h,
                     child: ListView.separated(
