@@ -1,3 +1,4 @@
+import 'package:arttrip/core/api_endpoints.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:dio/dio.dart';
 
@@ -132,12 +133,12 @@ class AuthInterceptor extends Interceptor {
   /// 토큰이 필요 없는 공개 엔드포인트인지 확인
   bool _isPublicEndpoint(String path) {
     const publicEndpoints = [
-      '/auth/login',
-      '/auth/register',
-      '/auth/refresh',
-      '/auth/social',
-      '/auth/app/reissue',
-      '/health',
+      ApiEndpoints.authLogin,
+      ApiEndpoints.authRegister,
+      ApiEndpoints.authRefresh,
+      ApiEndpoints.authSocial,
+      ApiEndpoints.authReissue,
+      ApiEndpoints.health,
     ];
 
     return publicEndpoints.any((endpoint) => path.contains(endpoint));
@@ -145,7 +146,8 @@ class AuthInterceptor extends Interceptor {
 
   /// 토큰 갱신 엔드포인트인지 확인
   bool _isTokenRefreshEndpoint(String path) {
-    return path.contains('/auth/refresh') || path.contains('/auth/app/reissue');
+    return path.contains(ApiEndpoints.authRefresh) ||
+        path.contains(ApiEndpoints.authReissue);
   }
 
   /// 요청을 대기열에 추가

@@ -2,6 +2,7 @@ import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
 import 'package:arttrip/features/exhibit/viewmodels/exhibit_detail_viewmodel.dart';
+import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_detail_tab.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_header_section.dart';
 import 'package:arttrip/features/exhibit/widgets/exhibit_map_tab.dart';
@@ -63,8 +64,12 @@ class _ExhibitDetailModelPageState extends State<ExhibitDetailModelPage>
               builder: (context, isFavorite, _) {
                 return IconButton(
                   onPressed: () {
-                    context.read<ExhibitDetailModelViewModel>().toggleFavorite(
+                    context
+                        .read<ExhibitDetailModelViewModel>()
+                        .toggleFavoriteLocal();
+                    context.read<ExhibitViewModel>().updateFavoriteExhibit(
                       widget.exhibitId,
+                      !isFavorite,
                     );
                   },
                   icon: SvgPicture.asset(
@@ -77,18 +82,19 @@ class _ExhibitDetailModelPageState extends State<ExhibitDetailModelPage>
             ),
           ],
         ),
-        body: Selector<
-          ExhibitDetailModelViewModel,
-          AsyncState<ExhibitDetailModel>
-        >(
-          selector: (_, vm) => vm.exhibitState,
-          builder: (context, state, _) {
-            return AsyncView<ExhibitDetailModel>(
-              state: state,
-              onData: (exhibit) => _buildContent(exhibit),
-            );
-          },
-        ),
+        body:
+            Selector<
+              ExhibitDetailModelViewModel,
+              AsyncState<ExhibitDetailModel>
+            >(
+              selector: (_, vm) => vm.exhibitState,
+              builder: (context, state, _) {
+                return AsyncView<ExhibitDetailModel>(
+                  state: state,
+                  onData: (exhibit) => _buildContent(exhibit),
+                );
+              },
+            ),
       ),
     );
   }

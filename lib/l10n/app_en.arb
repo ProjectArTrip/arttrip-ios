@@ -101,5 +101,22 @@
   "noSearchResults": "No search results.",
   "recentSearches": "Recent Searches",
   "clearAll": "Clear All",
-  "recommendedSearches": "Recommended"
+  "recommendedSearches": "Recommended",
+  "mapExhibitListButton": "View exhibit list",
+  "mapExhibitCount": "Exhibits",
+  "mapExhibitUnit": "",
+  "mapNoExhibits": "No exhibits in this area.\nTry searching a different location.",
+  "mapLocationPermissionMessage": "Location access is required to find your current position.",
+  "mapSelectCountry": "Select country",
+  "mapSelectRegion": "Select region",
+  "sort": "Sort",
+  "sortByLatest": "Latest",
+  "sortByEndingSoon": "Ending Soon",
+  "sortByPopular": "Popular",
+  "exhibitGenre": "Exhibition Genre",
+  "exceptionTitle": "A temporary error has occurred.",
+  "exceptionDesc": "We apologize for the inconvenience.\nPlease try again in a moment.",
+  "noFavorites": "No favorite items.",
+  "resetAll": "Reset All",
+  "noExhibitsTitle": "No ongoing exhibitions."
 }
