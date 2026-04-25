@@ -5,6 +5,8 @@ import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/routes/app_routes.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
@@ -99,7 +101,9 @@ class _WeeklyExhibitsScheduleViewState
 
   GestureDetector _buildHeader() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Routes.push(context, AppRoutes.homeWeekly);
+      },
       child: ColoredBox(
         color: Colors.transparent,
         child: Row(

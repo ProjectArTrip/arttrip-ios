@@ -62,10 +62,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 isDomestic
                     ? const SliverToBoxAdapter(child: SizedBox.shrink())
                     : const DomesticOverseasView(),
-                SliverPadding(
-                  padding: EdgeInsets.only(top: isDomestic ? 16.h : 0),
-                  sliver: TodayExhibitsRecommendationView(isDomestic),
-                ),
+                TodayExhibitsRecommendationView(isDomestic),
                 const PersonalizedExhibitsView(),
                 const WeeklyExhibitsScheduleView(),
                 isDomestic

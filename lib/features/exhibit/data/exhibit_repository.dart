@@ -7,6 +7,7 @@ import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
+import 'package:arttrip/features/exhibit/data/models/favorite_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
 import 'package:arttrip/shared/models/base_result_model.dart';
 import 'package:dio/dio.dart';
@@ -49,6 +50,15 @@ abstract class ExhibitRepository {
     String? genres,
     String? styles,
     String? sortType,
+  });
+
+  /// 즐겨찾기 목록 조회
+  Future<FavoriteFilterModel> fetchFavoriteFilters({
+    required int cursor,
+    required int size,
+    String? country,
+    String? region,
+    required String sortType,
   });
 }
 
@@ -245,7 +255,6 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   }) async {
     try {
       final queryParams = {
-        'query': 'string',
         if (!isDomestic) 'country': country,
         if (isDomestic) 'region': region,
         'startDate': ?startDate,
@@ -269,6 +278,38 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
       return ExhibitFilterModel.fromJson(data as Map<String, dynamic>);
     } catch (e) {
       AppUtil.debugLog('fetchExhibitFilters: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<FavoriteFilterModel> fetchFavoriteFilters({
+    required int cursor,
+    required int size,
+    String? country,
+    String? region,
+    required String sortType,
+  }) async {
+    try {
+      final queryParams = {
+        'country': country,
+        'region': region,
+        'sortType': sortType,
+        'cursor': cursor,
+        'size': size,
+      };
+
+      final response = await _dio.get(
+        '/favorites',
+        queryParameters: queryParams,
+      );
+
+      final data = response.dataOrNull;
+      if (data == null) throw Exception('No data in response');
+
+      return FavoriteFilterModel.fromJson(data as Map<String, dynamic>);
+    } catch (e) {
+      AppUtil.debugLog('fetchFavoriteFilters: $e');
       rethrow;
     }
   }

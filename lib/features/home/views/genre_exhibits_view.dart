@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
@@ -214,6 +215,7 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
     return GestureDetector(
       onTap: () {
         final homeViewModel = context.read<HomeViewModel>();
+        final isDomestic = homeViewModel.locationType == LocationType.domestic;
         Routes.push(
           context,
           AppRoutes.homeGenrePath(
@@ -221,7 +223,13 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
                 homeViewModel.selectedGenre[homeViewModel
                     .locationType]![homeViewModel.area[homeViewModel
                     .locationType]],
-            isDomestic: 'true',
+            isDomestic: isDomestic ? 'true' : 'false',
+            country: isDomestic
+                ? null
+                : homeViewModel.area[homeViewModel.locationType],
+            region: isDomestic
+                ? homeViewModel.area[homeViewModel.locationType]
+                : null,
           ),
         );
       },

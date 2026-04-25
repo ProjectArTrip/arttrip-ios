@@ -1,8 +1,8 @@
-import 'package:arttrip/features/home/home_page.dart';
+import 'package:arttrip/features/favorite/favorites_page.dart';
+import 'package:arttrip/features/home/pages/home_page.dart';
 import 'package:arttrip/features/map/views/map_view.dart';
 import 'package:arttrip/features/my/views/my_page.dart';
 import 'package:arttrip/features/stamp/views/stamp_view.dart';
-import 'package:arttrip/features/storage/views/storage_view.dart';
 import 'package:arttrip/routes/route_builder.dart';
 import 'package:arttrip/shared/widgets/main_shell.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +28,9 @@ final mainShellRoute = StatefulShellRoute.indexedStack(
           path: '/',
           pageBuilder: (context, state) {
             // Routes.go() 호출 시 extra로 타임스탬프가 전달되면 강제 재생성
-            final pageKey =
-                state.extra != null ? ValueKey(state.extra) : state.pageKey;
+            final pageKey = state.extra != null
+                ? ValueKey(state.extra)
+                : state.pageKey;
             return MaterialPage<dynamic>(key: pageKey, child: const HomePage());
           },
         ),
@@ -66,7 +67,7 @@ final mainShellRoute = StatefulShellRoute.indexedStack(
         GoRoute(
           path: '/storage',
           pageBuilder: (context, state) {
-            return buildPage(context, state, child: const StorageView());
+            return buildPage(context, state, child: const FavoritesPage());
           },
         ),
       ],

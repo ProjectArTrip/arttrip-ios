@@ -17,6 +17,7 @@ class HomeViewModel with ChangeNotifier {
 
   final Map<LocationType, double> _scrollOffset = {};
   final DateTime _today = DateTime.now();
+
   // locationType -> area -> genre
   final Map<LocationType, Map<String, String>> _selectedGenre = {};
   // locationType -> area -> selected date in week
@@ -30,7 +31,7 @@ class HomeViewModel with ChangeNotifier {
   final Map<LocationType, Map<String, AsyncState<List<ExhibitModel>>>>
   _todayExhibitRecommendations = {};
 
-  /// 해외/국내별, 국가/지역의 일자별로 저장
+  /// 주간 전시 해외/국내별, 국가/지역의 일자별로 저장
   final Map<
     LocationType,
     Map<String, Map<String, AsyncState<List<ExhibitModel>>>>
@@ -47,6 +48,8 @@ class HomeViewModel with ChangeNotifier {
   AsyncState<List<String>> _genres = const AsyncState.loading();
 
   Map<LocationType, double> get scrollOffset => _scrollOffset;
+
+  /// locationType -> area -> genre
   Map<LocationType, dynamic> get selectedGenre => _selectedGenre;
   Map<LocationType, dynamic> get selectedDateInWeek => _selectedDateInWeek;
   LocationType get locationType => _locationType;
@@ -138,16 +141,9 @@ class HomeViewModel with ChangeNotifier {
     notifyListeners();
 
     try {
-      var result = await homeRepository.fetchOverseasCountries();
-      if (!context.mounted) {
-        /// context가 보장되지 않으면 '전체' 항목은 보여주지 않음
-        _overseasCountries = AsyncState.success(result);
-        _area[LocationType.overseas] = result.first;
-      } else {
-        result = [context.l10n.allItems, ...result];
-        _area[LocationType.overseas] = context.l10n.allItems;
-        _overseasCountries = AsyncState.success(result);
-      }
+      final result = await homeRepository.fetchOverseasCountries();
+      _overseasCountries = AsyncState.success(result);
+      _area[LocationType.overseas] = result.first;
     } catch (e) {
       AppUtil.debugLog('getOverseasCountries error: $e');
       _overseasCountries = const AsyncState.error();
@@ -378,7 +374,6 @@ class HomeViewModel with ChangeNotifier {
     notifyListeners();
 
     try {
-      await Future.delayed(const Duration(milliseconds: 500));
       final result = AppUtil.getCurrentWeek(_today);
 
       _weeklyCalendar = AsyncState.success(result);
