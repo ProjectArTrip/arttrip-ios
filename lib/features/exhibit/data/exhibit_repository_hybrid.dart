@@ -3,6 +3,7 @@ import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
+import 'package:arttrip/features/exhibit/data/models/favorite_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -154,6 +155,32 @@ class ExhibitRepositoryHybrid implements ExhibitRepository {
       endDate: endDate,
       genres: genres,
       styles: styles,
+      sortType: sortType,
+    );
+  }
+
+  @override
+  Future<FavoriteFilterModel> fetchFavoriteFilters({
+    required int cursor,
+    required int size,
+    String? country,
+    String? region,
+    required String sortType,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchFavoriteFilters(
+        cursor: cursor,
+        size: size,
+        country: country,
+        region: region,
+        sortType: sortType,
+      );
+    }
+    return api.fetchFavoriteFilters(
+      cursor: cursor,
+      size: size,
+      country: country,
+      region: region,
       sortType: sortType,
     );
   }

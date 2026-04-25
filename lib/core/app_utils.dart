@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_consts.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AppUtil {
   const AppUtil._();
@@ -41,9 +42,37 @@ class AppUtil {
     return '$year-$month-$day';
   }
 
+  /// 언어에 따라 '2025년 12월' 포맷 반환
+  static String formatDateLocaleYM(BuildContext context, DateTime date) {
+    final lang = getLanguage(context);
+
+    if (lang == 'ko') {
+      // 한국어: 2026년 10월
+      return DateFormat('yyyy년 MM월').format(date);
+    } else {
+      // 영어: October 2026 (또는 원하는 영어 형식)
+      return DateFormat('MMMM yyyy').format(date);
+    }
+  }
+
   static String getLanguage(BuildContext context) {
     final locale = Localizations.localeOf(context);
     final language = locale.languageCode == 'ko' ? 'ko' : 'en';
     return language;
+  }
+
+  /// 언어에 따라 12.17 (수) - 12.22 (월) 포멧 반환
+  static String getRangeDateString({
+    required BuildContext context,
+    required DateTime start,
+    required DateTime end,
+  }) {
+    final lang = getLanguage(context);
+    final DateFormat formatter = DateFormat('MM.dd (E)', lang);
+
+    final String startStr = formatter.format(start);
+    final String endStr = formatter.format(end);
+
+    return '$startStr - $endStr';
   }
 }

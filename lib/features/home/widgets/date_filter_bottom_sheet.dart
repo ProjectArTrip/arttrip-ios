@@ -3,16 +3,28 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/home/widgets/vertical_range_calendar.dart';
+import 'package:arttrip/routes/app_routes.dart';
+import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class DateFilterBottomSheet extends StatefulWidget {
-  const DateFilterBottomSheet(this.overseasCountries, {super.key});
+  const DateFilterBottomSheet(
+    this.overseasCountries, {
+    super.key,
+    this.country = '',
+    this.rangeStart,
+    this.rangeEnd,
+  });
 
   final List<String> overseasCountries;
+  final String country;
+  final DateTime? rangeStart;
+  final DateTime? rangeEnd;
 
   @override
   State<DateFilterBottomSheet> createState() => _DateFilterBottomSheetState();
@@ -24,6 +36,14 @@ class _DateFilterBottomSheetState extends State<DateFilterBottomSheet> {
   final ValueNotifier<String> _selectedCountry = ValueNotifier('');
   final ValueNotifier<DateTime?> _rangeStart = ValueNotifier(null);
   final ValueNotifier<DateTime?> _rangeEnd = ValueNotifier(null);
+
+  @override
+  void initState() {
+    super.initState();
+    _rangeStart.value = widget.rangeStart;
+    _rangeEnd.value = widget.rangeEnd;
+    _selectedCountry.value = widget.country;
+  }
 
   void updateApplyEnabled() {
     _isApplyEnabled.value =
@@ -155,13 +175,32 @@ class _DateFilterBottomSheetState extends State<DateFilterBottomSheet> {
                                         .build()
                                         .text(context.l10n.date),
                                     if (rangeStart != null || rangeEnd != null)
-                                      ArtTripText.pretendard()
-                                          .body01Bold()
-                                          .color(AppColors.textPoint)
-                                          .build()
-                                          .text(
-                                            '${formatSelectedStartDate(rangeStart)} - ${formatSelectedStartDate(rangeEnd)}',
-                                          ),
+                                      Row(
+                                        spacing: 8.w,
+                                        children: [
+                                          ArtTripText.pretendard()
+                                              .body01Bold()
+                                              .color(AppColors.textPoint)
+                                              .build()
+                                              .text(
+                                                '${formatSelectedStartDate(rangeStart)} - ${formatSelectedStartDate(rangeEnd)}',
+                                              ),
+                                          if (rangeEnd != null)
+                                            GestureDetector(
+                                              onTap: () {
+                                                _rangeStart.value =
+                                                    DateTime.now();
+                                                _rangeEnd.value = null;
+                                                updateApplyEnabled();
+                                              },
+                                              child: SvgPicture.asset(
+                                                AppAssets.icRefresh,
+                                                width: 20.w,
+                                                height: 20.w,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
                                   ],
                                 ),
                               ),
@@ -176,6 +215,8 @@ class _DateFilterBottomSheetState extends State<DateFilterBottomSheet> {
                 },
               ),
               const Expanded(child: SizedBox.shrink()),
+
+              /// 적용하기
               ValueListenableBuilder(
                 valueListenable: _isApplyEnabled,
                 builder: (context, isApplyEnabled, child) {
@@ -187,7 +228,29 @@ class _DateFilterBottomSheetState extends State<DateFilterBottomSheet> {
                       bottom: 44.h,
                     ),
                     child: ElevatedButton(
-                      onPressed: isApplyEnabled ? () {} : null,
+                      onPressed: isApplyEnabled
+                          ? () {
+                              // 이미 결과 화면에서 시트를 닫기만 하고 싶은 경우
+                              if (widget.country.isNotEmpty) {
+                                context.pop({
+                                  'country': _selectedCountry.value,
+                                  'rangeStart': _rangeStart.value,
+                                  'rangeEnd': _rangeEnd.value,
+                                });
+                                return;
+                              }
+
+                              context.pop();
+                              Routes.push(
+                                context,
+                                AppRoutes.calendarFilterResultPath(
+                                  country: _selectedCountry.value,
+                                  rangeStart: _rangeStart.value!.toString(),
+                                  rangeEnd: _rangeEnd.value!.toString(),
+                                ),
+                              );
+                            }
+                          : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary300,
                         padding: EdgeInsets.symmetric(vertical: 17.h),
@@ -240,6 +303,7 @@ class _DateFilterBottomSheetState extends State<DateFilterBottomSheet> {
 
   Column _buildCountryCard() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
           width: double.infinity,
@@ -330,10 +394,20 @@ class _DateFilterBottomSheetState extends State<DateFilterBottomSheet> {
           Divider(color: AppColors.gray100, height: 1.h),
 
           /// calendar
-          VerticalRangeCalendar(
-            rangeStart: _rangeStart.value,
-            rangeEnd: _rangeEnd.value,
-            updateRanges: updateRanges,
+          ValueListenableBuilder(
+            valueListenable: _rangeStart,
+            builder: (context, rangeStart, child) {
+              return ValueListenableBuilder(
+                valueListenable: _rangeEnd,
+                builder: (context, rangeEnd, child) {
+                  return VerticalRangeCalendar(
+                    rangeStart: rangeStart,
+                    rangeEnd: rangeEnd,
+                    updateRanges: updateRanges,
+                  );
+                },
+              );
+            },
           ),
         ],
       ),

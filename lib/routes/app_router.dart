@@ -1,8 +1,10 @@
 import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
 import 'package:arttrip/features/exhibit/views/exhibit_detail_page.dart';
 import 'package:arttrip/features/exhibit/views/write_review_page.dart';
+import 'package:arttrip/features/home/pages/calendar_result_page.dart';
 import 'package:arttrip/features/home/pages/genre_detail_page.dart';
 import 'package:arttrip/features/home/pages/region_detail_page.dart';
+import 'package:arttrip/features/home/pages/weekly_detail_page.dart';
 import 'package:arttrip/features/login/login_page.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:arttrip/features/my/views/edit_profile_page.dart';
@@ -111,6 +113,14 @@ final appRouter = GoRouter(
       },
     ),
 
+    /// 홈 > 주간 전시 전체 화면
+    GoRoute(
+      path: AppRoutes.homeWeekly,
+      pageBuilder: (context, state) {
+        return buildPage(context, state, child: const WeeklyDetailPage());
+      },
+    ),
+
     /// 홈 > 장르별 전체 화면
     GoRoute(
       path: AppRoutes.homeGenre,
@@ -145,6 +155,25 @@ final appRouter = GoRouter(
       path: AppRoutes.alerts,
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const AlertsPage());
+      },
+    ),
+
+    // 캘린더 필터 결과 화면
+    GoRoute(
+      path: AppRoutes.calendarFilterResult,
+      pageBuilder: (context, state) {
+        final country = state.uri.queryParameters['country'];
+        final rangeStart = state.uri.queryParameters['rangeStart'];
+        final rangeEnd = state.uri.queryParameters['rangeEnd'];
+        return buildPage(
+          context,
+          state,
+          child: CalendarResultPage(
+            country: country!,
+            rangeStart: DateTime.parse(rangeStart!),
+            rangeEnd: DateTime.parse(rangeEnd!),
+          ),
+        );
       },
     ),
 

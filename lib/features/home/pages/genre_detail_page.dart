@@ -11,6 +11,8 @@ import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:arttrip/shared/widgets/exception_view.dart';
 import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
+import 'package:arttrip/shared/widgets/exhibits_loading_view.dart';
+import 'package:arttrip/shared/widgets/no_exhibits_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -128,80 +130,96 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
         ),
         actions: const [AlertBadge()],
       ),
-      body: ListView(
-        controller: _scrollController,
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 24.h),
+      body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              /// 조회 결과 개수
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 11.h),
-                child: ValueListenableBuilder(
-                  valueListenable: _exhibits,
-                  builder: (context, exhibits, child) {
-                    return ArtTripText.pretendard().title02Bold().build().text(
-                      context.l10n.totalCount(exhibits?.length ?? 0),
-                    );
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsGeometry.symmetric(vertical: 8.h),
-                child: GestureDetector(
-                  onTap: () => _buildFilterSheet(),
-                  child: SvgPicture.asset(
-                    AppAssets.icFilter,
-                    width: 24.w,
-                    height: 24.w,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                /// 조회 결과 개수
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 11.h),
+                  child: ValueListenableBuilder(
+                    valueListenable: _exhibits,
+                    builder: (context, exhibits, child) {
+                      return ArtTripText.pretendard()
+                          .title02Bold()
+                          .build()
+                          .text(context.l10n.totalCount(exhibits?.length ?? 0));
+                    },
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsetsGeometry.symmetric(vertical: 8.h),
+                  child: GestureDetector(
+                    onTap: () => _buildFilterSheet(),
+                    child: SvgPicture.asset(
+                      AppAssets.icFilter,
+                      width: 24.w,
+                      height: 24.w,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
 
           /// 전시 리스트
-          ValueListenableBuilder(
-            valueListenable: _isLoading,
-            builder: (context, isLoading, child) {
-              if (isLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              return ValueListenableBuilder(
-                valueListenable: _exhibits,
-                builder: (context, exhibits, _) {
-                  if (exhibits == null) {
-                    return const ExceptionView();
-                  }
-                  return ValueListenableBuilder(
-                    valueListenable: _loadingMore,
-                    builder: (context, loadingMore, child) {
-                      final int length =
-                          exhibits.length + (loadingMore ? 1 : 0);
-                      return ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: length,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(height: 12.h),
-                        itemBuilder: (context, index) {
-                          if (loadingMore && index == exhibits.length) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          final ExhibitModel item = exhibits[index];
-                          return ExhibitListItem(item: item);
-                        },
-                      );
-                    },
+          Expanded(
+            child: ValueListenableBuilder(
+              valueListenable: _isLoading,
+              builder: (context, isLoading, child) {
+                if (isLoading) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 12.h,
+                      horizontal: 24.w,
+                    ),
+                    child: const ExhibitsLoadingView(),
                   );
-                },
-              );
-            },
+                }
+
+                return ValueListenableBuilder(
+                  valueListenable: _exhibits,
+                  builder: (context, exhibits, _) {
+                    if (exhibits == null) {
+                      return const ExceptionView();
+                    } else if (exhibits.isEmpty) {
+                      return const NoExhibitsView();
+                    }
+
+                    return ValueListenableBuilder(
+                      valueListenable: _loadingMore,
+                      builder: (context, loadingMore, child) {
+                        final int length =
+                            exhibits.length + (loadingMore ? 1 : 0);
+                        return ListView.separated(
+                          controller: _scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 24.h,
+                            vertical: 8.h,
+                          ),
+                          itemCount: length,
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 12.h),
+                          itemBuilder: (context, index) {
+                            if (loadingMore && index == exhibits.length) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            final ExhibitModel item = exhibits[index];
+                            return ExhibitListItem(item: item);
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),
