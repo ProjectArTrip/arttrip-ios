@@ -41,77 +41,83 @@ class _TodayExhibitsRecommendationViewState
                 onData: (data) {
                   if (data.isEmpty) return const SizedBox.shrink();
 
-                  return SizedBox(
-                    height: 240.h,
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: data.length,
-                      padding: EdgeInsets.symmetric(horizontal: 24.w),
-                      separatorBuilder: (context, index) =>
-                          SizedBox(width: 8.w),
-                      itemBuilder: (context, index) {
-                        final item = data[index];
-                        return Selector<ExhibitViewModel, bool>(
-                          selector: (_, vm) => vm.isFavorite(item.exhibitId),
-                          builder: (context, isFavorite, _) {
-                            return TodayExhibitWidget(
-                              item: item,
-                              isFavorite: isFavorite,
-                              location:
-                                  (area == context.l10n.allItems &&
-                                      !widget.isDomestic)
-                                  ? item.countryName
-                                  : widget.isDomestic
-                                  ? item.regionName
-                                  : null,
-                              onTap: () => Routes.push(
-                                context,
-                                AppRoutes.exhibitPath(item.exhibitId),
-                              ),
-                              favoriteOnTap: () {
-                                final exhibitViewModel =
-                                    Provider.of<ExhibitViewModel>(
-                                      context,
-                                      listen: false,
-                                    );
-                                exhibitViewModel.updateFavoriteExhibit(
-                                  item.exhibitId,
-                                  !isFavorite,
-                                );
-                              },
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  );
-                },
-                onLoading: () {
-                  return Shimmer(
-                    duration: const Duration(
-                      milliseconds: AppConsts.shimmerDurationMs,
-                    ),
-                    interval: const Duration(
-                      milliseconds: AppConsts.shimmerIntervalMs,
-                    ),
+                  return Padding(
+                    padding: EdgeInsets.only(top: widget.isDomestic ? 16.h : 0),
                     child: SizedBox(
                       height: 240.h,
                       child: ListView.separated(
                         shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.horizontal,
-                        itemCount: 3,
+                        itemCount: data.length,
                         padding: EdgeInsets.symmetric(horizontal: 24.w),
                         separatorBuilder: (context, index) =>
                             SizedBox(width: 8.w),
                         itemBuilder: (context, index) {
-                          return const ShimmerSkeletonItem(
-                            width: 180,
-                            height: 240,
-                            radius: 8,
+                          final item = data[index];
+                          return Selector<ExhibitViewModel, bool>(
+                            selector: (_, vm) => vm.isFavorite(item.exhibitId),
+                            builder: (context, isFavorite, _) {
+                              return TodayExhibitWidget(
+                                item: item,
+                                isFavorite: isFavorite,
+                                location:
+                                    (area == context.l10n.allItems &&
+                                        !widget.isDomestic)
+                                    ? item.countryName
+                                    : widget.isDomestic
+                                    ? item.regionName
+                                    : null,
+                                onTap: () => Routes.push(
+                                  context,
+                                  AppRoutes.exhibitPath(item.exhibitId),
+                                ),
+                                favoriteOnTap: () {
+                                  final exhibitViewModel =
+                                      Provider.of<ExhibitViewModel>(
+                                        context,
+                                        listen: false,
+                                      );
+                                  exhibitViewModel.updateFavoriteExhibit(
+                                    item.exhibitId,
+                                    !isFavorite,
+                                  );
+                                },
+                              );
+                            },
                           );
                         },
+                      ),
+                    ),
+                  );
+                },
+                onLoading: () {
+                  return Padding(
+                    padding: EdgeInsets.only(top: widget.isDomestic ? 16.h : 0),
+                    child: Shimmer(
+                      duration: const Duration(
+                        milliseconds: AppConsts.shimmerDurationMs,
+                      ),
+                      interval: const Duration(
+                        milliseconds: AppConsts.shimmerIntervalMs,
+                      ),
+                      child: SizedBox(
+                        height: 240.h,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 3,
+                          padding: EdgeInsets.symmetric(horizontal: 24.w),
+                          separatorBuilder: (context, index) =>
+                              SizedBox(width: 8.w),
+                          itemBuilder: (context, index) {
+                            return const ShimmerSkeletonItem(
+                              width: 180,
+                              height: 240,
+                              radius: 8,
+                            );
+                          },
+                        ),
                       ),
                     ),
                   );

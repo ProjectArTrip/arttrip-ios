@@ -13,9 +13,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class ExhibitListItem extends StatelessWidget {
-  const ExhibitListItem({super.key, required this.item});
+  const ExhibitListItem({super.key, required this.item, this.showArea = false});
 
   final ExhibitModel item;
+  final bool showArea;
 
   @override
   Widget build(BuildContext context) {
@@ -33,30 +34,30 @@ class ExhibitListItem extends StatelessWidget {
                   /// 전시 이미지
                   item.posterUrl?.isNotEmpty == true
                       ? AppCachedImage(
-                        imageUrl: item.posterUrl!,
-                        width: 100.w,
-                        height: 100.w,
-                        fit: BoxFit.cover,
-                      )
+                          imageUrl: item.posterUrl!,
+                          width: 100.w,
+                          height: 100.w,
+                          fit: BoxFit.cover,
+                        )
                       : Container(
-                        width: 100.w,
-                        height: 100.w,
-                        color: AppColors.gray100,
-                        child: const Center(
-                          child: Icon(
-                            Icons.image_not_supported,
-                            color: AppColors.textTertiary,
+                          width: 100.w,
+                          height: 100.w,
+                          color: AppColors.gray100,
+                          child: const Center(
+                            child: Icon(
+                              Icons.image_not_supported,
+                              color: AppColors.textTertiary,
+                            ),
                           ),
                         ),
-                      ),
 
                   /// 전시 상태
                   item.status != null
                       ? Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: ExhibitStatusBadge(item.status!),
-                      )
+                          right: 0,
+                          bottom: 0,
+                          child: ExhibitStatusBadge(item.status!),
+                        )
                       : const SizedBox.shrink(),
 
                   /// 즐겨찾기
@@ -94,20 +95,15 @@ class ExhibitListItem extends StatelessWidget {
             /// 전시 정보
             Expanded(
               child: Column(
-                spacing: 4.h,
+                spacing: 8.h,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '공예',
-                    style: TextStyle(
-                      color: AppColors.primary300,
-                      fontSize: 14.sp,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                      height: 20 / 14,
-                      letterSpacing: 14 * (-2 / 100),
-                    ),
-                  ),
+                  if (showArea)
+                    ArtTripText.pretendard()
+                        .body01Regular()
+                        .color(const Color(0xFF7859FF))
+                        .build()
+                        .text(item.countryName ?? item.regionName ?? ''),
                   ArtTripText.pretendard().body01Bold().build().text(
                     item.title ?? '',
                   ),

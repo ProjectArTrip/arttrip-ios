@@ -10,6 +10,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CommonAppBar({
     super.key,
     this.title,
+    this.titleWidget,
     this.showBackButton = true,
     this.actions,
     this.backgroundColor = AppColors.gray0,
@@ -17,6 +18,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.elevation = 0.0,
   });
   final String? title;
+  final Widget? titleWidget;
   final bool showBackButton;
   final List<Widget>? actions;
   final Color backgroundColor;
@@ -25,17 +27,27 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: backgroundColor,
-      surfaceTintColor: surfaceTintColor,
-      elevation: elevation,
-      centerTitle: true,
-      title: ArtTripText.pretendard().headline().build().text(title ?? ''),
-      toolbarHeight: 52.h,
-      leadingWidth: 24.w + 24.w,
-      leading:
-          showBackButton
-              ? Padding(
+    return Container(
+      decoration: BoxDecoration(
+        border: elevation > 0
+            ? Border(
+                bottom: BorderSide(color: AppColors.gray100, width: elevation),
+              )
+            : null,
+      ),
+
+      child: AppBar(
+        backgroundColor: backgroundColor,
+        surfaceTintColor: surfaceTintColor,
+        elevation: elevation,
+        centerTitle: true,
+        title:
+            titleWidget ??
+            ArtTripText.pretendard().headline().build().text(title ?? ''),
+        toolbarHeight: 52.h,
+        leadingWidth: 24.w + 24.w,
+        leading: showBackButton
+            ? Padding(
                 padding: EdgeInsets.only(left: 24.w),
                 child: GestureDetector(
                   onTap: () => GoRouter.of(context).pop(),
@@ -46,9 +58,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               )
-              : null,
-      actionsPadding: EdgeInsets.only(right: 24.w),
-      actions: actions,
+            : null,
+        actionsPadding: EdgeInsets.only(right: 24.w),
+        actions: actions,
+      ),
     );
   }
 

@@ -27,18 +27,57 @@ class AppRoutes {
   static String homeRegionPath(String regionName) =>
       '/home/domestic/$regionName';
 
+  /// 홈 > 주간 전시 전체 화면
+  static const homeWeekly = '/home/weekly';
+
   /// 홈 > 장르별 전시 추천 전체 화면
   static const homeGenre = '/home/genre/:genreName';
   static String homeGenrePath({
     required String genreName,
     required String isDomestic,
-  }) => '/home/genre/$genreName';
+    String? country,
+    String? region,
+  }) {
+    final queryParams = {
+      'isDomestic': isDomestic,
+      'country': ?country,
+      'region': ?region,
+    };
+
+    final uri = Uri(
+      path: '/home/genre/$genreName',
+      queryParameters: queryParams,
+    );
+
+    return uri.toString();
+  }
 
   /// 검색 페이지
   static const search = '/search';
 
   /// 알림 리스트 화면
   static const alerts = '/alerts';
+
+  /// 캘린더 필터 결과 화면
+  static const calendarFilterResult = '/calendar-filter-result';
+  static String calendarFilterResultPath({
+    required String country,
+    required String rangeStart,
+    required String rangeEnd,
+  }) {
+    final queryParams = {
+      'country': country,
+      'rangeStart': rangeStart,
+      'rangeEnd': rangeEnd,
+    };
+
+    final uri = Uri(
+      path: '/calendar-filter-result',
+      queryParameters: queryParams,
+    );
+
+    return uri.toString();
+  }
 
   /// 내 정보 수정 페이지
   static const myEditProfile = '/my/edit-profile';
