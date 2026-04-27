@@ -1,4 +1,5 @@
 import FirebaseCore
+import FirebaseMessaging
 import Flutter
 import GoogleMaps
 import UIKit
@@ -26,5 +27,18 @@ import UIKit
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+  }
+
+  override func applicationDidBecomeActive(_ application: UIApplication) {
+    application.applicationIconBadgeNumber = 0
+    super.applicationDidBecomeActive(application)
+  }
+
+  override func application(
+    _ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+  ) {
+    print("DEBUG: APNs 토큰을 성공적으로 받음: \(deviceToken)")
+    Messaging.messaging().apnsToken = deviceToken
+    super.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
   }
 }

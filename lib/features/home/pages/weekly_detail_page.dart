@@ -216,6 +216,7 @@ class _WeeklyDetailPageState extends State<WeeklyDetailPage> {
               return GestureDetector(
                 onTap: () {
                   _selectedDate.value = date;
+                  _cursor = 0;
                   _getWeeklyExhibits();
                 },
                 child: Container(

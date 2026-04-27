@@ -1,3 +1,4 @@
+import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/features/my/data/models/my_review_model.dart';
 import 'package:arttrip/features/my/data/models/recent_exhibit_model.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
@@ -159,6 +160,11 @@ class MyViewModel with ChangeNotifier {
   }
 
   Future<void> registerFcmToken(String token) async {
+    if (token.isEmpty) {
+      AppUtil.debugLog('FCM token is empty, skipping registration');
+      return;
+    }
+
     await _repository.registerFcmToken(token);
   }
 }

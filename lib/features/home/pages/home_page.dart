@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     AppUtil.debugLog('jwt: ${Prefs().accessToken}');
+    AppUtil.debugLog('refresh: ${Prefs().refreshToken}');
 
     _tabController = TabController(length: 2, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -147,5 +147,6 @@
   "exceptionDesc": "We apologize for the inconvenience.\nPlease try again in a moment.",
   "noFavorites": "No favorite items.",
   "resetAll": "Reset All",
-  "noExhibitsTitle": "No ongoing exhibitions."
+  "noExhibitsTitle": "No ongoing exhibitions.",
+  "noAlertsTitle": "No notifications."
 }

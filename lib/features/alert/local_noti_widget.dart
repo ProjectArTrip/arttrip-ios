@@ -4,17 +4,18 @@ import 'package:arttrip/routes/app_router.dart';
 import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LocalNotiWidget extends StatefulWidget {
   const LocalNotiWidget({
-    required this.title,
+    required this.message,
     required this.onDismiss,
     super.key,
   });
 
-  final String title;
+  final String message;
   final VoidCallback onDismiss;
 
   @override
@@ -53,6 +54,7 @@ class _LocalNotiWidgetState extends State<LocalNotiWidget>
     ]).animate(_controller);
 
     _controller.forward();
+    SystemSound.play(SystemSoundType.alert);
     Future.delayed(const Duration(seconds: 3), _dismiss);
   }
 
@@ -80,44 +82,41 @@ class _LocalNotiWidgetState extends State<LocalNotiWidget>
         child: Material(
           color: Colors.transparent,
           child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(top: 16.h, left: 16.w, right: 16.w),
-              child: GestureDetector(
-                onTap: () {
-                  _dismiss().then((_) => appRouter.push(AppRoutes.alerts));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.primary100,
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.w,
-                    vertical: 16.h,
-                  ),
-                  child: Row(
-                    spacing: 2.w,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: ArtTripText.pretendard()
-                            .body01Bold()
-                            .color(AppColors.textPoint)
-                            .textAlign(TextAlign.center)
-                            .build()
-                            .text(widget.title),
+            child: GestureDetector(
+              onTap: () {
+                _dismiss().then((_) => appRouter.push(AppRoutes.alerts));
+              },
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(top: 16.h, left: 32.w, right: 32.w),
+                padding: EdgeInsets.symmetric(vertical: 16.h),
+                decoration: BoxDecoration(
+                  color: AppColors.primary100,
+                  borderRadius: BorderRadius.circular(16.r),
+                ),
+                alignment: Alignment.topCenter,
+                child: Row(
+                  spacing: 2.w,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: ArtTripText.pretendard()
+                          .body01Bold()
+                          .color(AppColors.textPoint)
+                          .textAlign(TextAlign.center)
+                          .build()
+                          .text(widget.message),
+                    ),
+                    SvgPicture.asset(
+                      AppAssets.icNoArrowRight,
+                      width: 24.w,
+                      height: 24.w,
+                      colorFilter: const ColorFilter.mode(
+                        AppColors.textPoint,
+                        BlendMode.srcIn,
                       ),
-                      SvgPicture.asset(
-                        AppAssets.icNoArrowRight,
-                        width: 24.w,
-                        height: 24.w,
-                        colorFilter: const ColorFilter.mode(
-                          AppColors.textPoint,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

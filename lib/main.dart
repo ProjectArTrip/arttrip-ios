@@ -1,4 +1,5 @@
 import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/config/prefs.dart';
 import 'package:arttrip/core/config/provider_config.dart';
@@ -19,64 +20,35 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   AppUtil.debugLog('FCM background message: ${message.messageId}');
-}
 
-late FlutterLocalNotificationsPlugin _localNotifications;
-
-Future<void> _initLocalNotifications() async {
-  _localNotifications = FlutterLocalNotificationsPlugin();
-
-  const AndroidInitializationSettings androidSettings =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-
-  const DarwinInitializationSettings iosSettings =
-      DarwinInitializationSettings();
-
-  const InitializationSettings initSettings = InitializationSettings(
-    android: androidSettings,
-    iOS: iosSettings,
+  final appName = (await PackageInfo.fromPlatform()).appName;
+  final plugin = FlutterLocalNotificationsPlugin();
+  await plugin.initialize(
+    settings: const InitializationSettings(
+      iOS: DarwinInitializationSettings(),
+    ),
   );
-
-  await _localNotifications.initialize(settings: initSettings);
-}
-
-Future<void> _showLocalNotification(RemoteMessage message) async {
-  final title = message.notification?.title ?? 'ArtTrip';
-  final body = message.notification?.body ?? '';
-
-  const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-    'arttrip_channel',
-    'ArtTrip Notifications',
-    channelDescription: 'Notifications from ArtTrip',
-    importance: Importance.max,
-    priority: Priority.high,
-    showWhen: true,
-  );
-
-  const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
-    presentAlert: true,
-    presentBadge: true,
-    presentSound: true,
-  );
-
-  const NotificationDetails details = NotificationDetails(
-    android: androidDetails,
-    iOS: iosDetails,
-  );
-
-  await _localNotifications.show(
+  await plugin.show(
     id: message.messageId?.hashCode ?? 0,
-    title: title,
-    body: body,
-    notificationDetails: details,
+    title: appName,
+    body: message.notification?.body ?? '',
+    notificationDetails: const NotificationDetails(
+      iOS: DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      ),
+    ),
   );
 }
+
 
 OverlayEntry? _inAppBannerEntry;
 
@@ -87,7 +59,7 @@ void _showLocalNoti(RemoteMessage message) {
   _inAppBannerEntry?.remove();
   _inAppBannerEntry = OverlayEntry(
     builder: (_) => LocalNotiWidget(
-      title: message.notification?.title ?? 'ArtTrip',
+      message: message.notification?.title ?? '',
       onDismiss: () {
         _inAppBannerEntry?.remove();
         _inAppBannerEntry = null;
@@ -111,7 +83,6 @@ Future<void> _initFcm() async {
   );
 
   try {
-    await messaging.getAPNSToken();
     final token = await messaging.getToken();
     if (token != null) {
       await Prefs().setFcmToken(token);
@@ -121,10 +92,9 @@ Future<void> _initFcm() async {
     AppUtil.debugLog('Failed to get FCM token: $e');
   }
 
-  // 포그라운드 메시지
+  // 포그라운드 메시지 - 인앱 배너만 표시
   FirebaseMessaging.onMessage.listen((message) {
     AppUtil.debugLog('FCM foreground message: ${message.toMap()}');
-    _showLocalNotification(message);
     _showLocalNoti(message);
   });
 
@@ -150,6 +120,9 @@ void main() async {
     overlays: [SystemUiOverlay.top],
   );
 
+  // 앱 이름 초기화
+  AppConsts.appName = (await PackageInfo.fromPlatform()).appName;
+
   // 환경 변수 로드
   await dotenv.load(fileName: '.env');
 
@@ -159,7 +132,6 @@ void main() async {
   // Firebase 초기화
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await _initLocalNotifications();
   await _initFcm();
 
   // 카카오 SDK 초기화
