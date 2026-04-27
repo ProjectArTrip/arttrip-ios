@@ -1,3 +1,4 @@
+import 'package:arttrip/core/api_endpoints.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/features/my/data/models/my_review_model.dart';
@@ -46,7 +47,7 @@ class MyRepositoryImpl implements MyRepository {
   }) async {
     try {
       final response = await _dio.get(
-        '/me',
+        ApiEndpoints.me,
         queryParameters: {'w': width, 'h': height},
       );
       final data = response.dataOrNull;
@@ -64,7 +65,7 @@ class MyRepositoryImpl implements MyRepository {
       final formData = FormData.fromMap({
         'image': await MultipartFile.fromFile(image.path, filename: image.name),
       });
-      final response = await _dio.patch('/me/image', data: formData);
+      final response = await _dio.patch(ApiEndpoints.meImage, data: formData);
       return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('uploadProfileImage: $e');
@@ -75,7 +76,7 @@ class MyRepositoryImpl implements MyRepository {
   @override
   Future<bool> deleteProfileImage() async {
     try {
-      final response = await _dio.delete('/me/image');
+      final response = await _dio.delete(ApiEndpoints.meImage);
       return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('deleteProfileImage: $e');
@@ -86,7 +87,10 @@ class MyRepositoryImpl implements MyRepository {
   @override
   Future<String?> updateNickname(String nickname) async {
     try {
-      final response = await _dio.patch('/me', data: {'nickName': nickname});
+      final response = await _dio.patch(
+        ApiEndpoints.me,
+        data: {'nickName': nickname},
+      );
       if (response.isSuccess) {
         return null; // 성공
       }
@@ -120,7 +124,7 @@ class MyRepositoryImpl implements MyRepository {
         queryParams['cursor'] = cursor;
       }
       final response = await _dio.get(
-        '/reviews/all',
+        ApiEndpoints.reviewsAll,
         queryParameters: queryParams,
       );
       final data = response.dataOrNull;
@@ -135,7 +139,7 @@ class MyRepositoryImpl implements MyRepository {
   @override
   Future<bool> deleteReview(int reviewId) async {
     try {
-      final response = await _dio.delete('/reviews/$reviewId');
+      final response = await _dio.delete(ApiEndpoints.reviewsById(reviewId));
       return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('deleteReview: $e');
@@ -146,7 +150,7 @@ class MyRepositoryImpl implements MyRepository {
   @override
   Future<RecentExhibitListResponseModel?> fetchRecentExhibits() async {
     try {
-      final response = await _dio.get('/me/recent-exhibits');
+      final response = await _dio.get(ApiEndpoints.meRecentExhibits);
       final data = response.dataOrNull;
       if (data == null) return null;
       return RecentExhibitListResponseModel.fromJson(

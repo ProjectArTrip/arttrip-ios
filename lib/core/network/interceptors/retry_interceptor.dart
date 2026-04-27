@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:arttrip/core/api_endpoints.dart';
+
 import 'package:dio/dio.dart';
 
 /// 실패한 요청을 자동으로 재시도하는 인터셉터
@@ -111,7 +113,7 @@ class RetryInterceptor extends Interceptor {
 
   /// 재시도하지 않을 경로인지 확인
   bool _isNoRetryPath(String path) {
-    const noRetryPaths = ['/auth/app/logout', '/auth/social'];
+    const noRetryPaths = [ApiEndpoints.authLogout, ApiEndpoints.authSocial];
     return noRetryPaths.any((p) => path.contains(p));
   }
 
@@ -126,10 +128,9 @@ class RetryInterceptor extends Interceptor {
   Duration _getDelay(int retryCount) {
     if (useExponentialBackoff) {
       // 지수 백오프: baseDelay * 2^retryCount + 랜덤 지터
-      final baseDelay =
-          retryDelays.isNotEmpty
-              ? retryDelays.first
-              : const Duration(seconds: 1);
+      final baseDelay = retryDelays.isNotEmpty
+          ? retryDelays.first
+          : const Duration(seconds: 1);
       final exponentialDelay = baseDelay * pow(2, retryCount);
       final jitter = Duration(milliseconds: Random().nextInt(1000));
       return exponentialDelay + jitter;

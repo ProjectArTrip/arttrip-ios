@@ -29,10 +29,8 @@ class ExhibitDetailModelViewModel with ChangeNotifier {
 
   // 즐겨찾기 상태
   bool _isFavorite = false;
-  bool _isFavoriteLoading = false;
 
   bool get isFavorite => _isFavorite;
-  bool get isFavoriteLoading => _isFavoriteLoading;
 
   /// 전시 상세 정보 로드
   Future<void> fetchExhibitDetailModel(int exhibitId) async {
@@ -99,25 +97,9 @@ class ExhibitDetailModelViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  /// 즐겨찾기 토글
-  Future<void> toggleFavorite(int exhibitId) async {
-    if (_isFavoriteLoading) return;
-
-    _isFavoriteLoading = true;
-    notifyListeners();
-
-    bool success;
-    if (_isFavorite) {
-      success = await _repository.removeFavorite(exhibitId);
-    } else {
-      success = await _repository.addFavorite(exhibitId);
-    }
-
-    if (success) {
-      _isFavorite = !_isFavorite;
-    }
-
-    _isFavoriteLoading = false;
+  /// 즐겨찾기 로컬 상태 토글 (API 호출은 ExhibitViewModel이 담당)
+  void toggleFavoriteLocal() {
+    _isFavorite = !_isFavorite;
     notifyListeners();
   }
 }

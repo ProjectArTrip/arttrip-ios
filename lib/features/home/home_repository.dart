@@ -1,3 +1,4 @@
+import 'package:arttrip/core/api_endpoints.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
@@ -66,7 +67,7 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<List<String>> fetchOverseasCountries() async {
     try {
-      final response = await _dio.get('/exhibits/overseas');
+      final response = await _dio.get(ApiEndpoints.exhibitsOverseas);
       final data = response.dataOrNull;
       if (data == null) throw Exception('No data in response');
 
@@ -88,7 +89,7 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<List<RegionModel>> fetchDomesticRegions() async {
     try {
-      final response = await _dio.get('/exhibits/domestic');
+      final response = await _dio.get(ApiEndpoints.exhibitsDomestic);
       final data = response.dataOrNull;
       if (data == null) throw Exception('No data in response');
 
@@ -121,7 +122,7 @@ class HomeRepositoryImpl implements HomeRepository {
         if (isDomestic) 'region': region,
       };
       final response = await _dio.get(
-        '/home/exhibits/today',
+        ApiEndpoints.homeExhibitsToday,
         queryParameters: queryParams,
       );
       final data = response.dataOrNull;
@@ -145,7 +146,7 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<List<String>> fetchGenres() async {
     try {
-      final response = await _dio.get('/exhibits/genre');
+      final response = await _dio.get(ApiEndpoints.exhibitsGenre);
       final data = response.dataOrNull;
       if (data == null) throw Exception('No data in response');
       final map = data as Map<String, dynamic>;
@@ -176,7 +177,7 @@ class HomeRepositoryImpl implements HomeRepository {
         'singleGenre': genre,
       };
       final response = await _dio.get(
-        '/home/exhibits/genres',
+        ApiEndpoints.homeExhibitsGenres,
         queryParameters: queryParams,
       );
       final data = response.dataOrNull;
@@ -208,7 +209,7 @@ class HomeRepositoryImpl implements HomeRepository {
         if (isDomestic) 'region': region,
       };
       final response = await _dio.get(
-        '/home/exhibits/personalized',
+        ApiEndpoints.homeExhibitsPersonalized,
         queryParameters: queryParams,
       );
       final data = response.dataOrNull;
@@ -242,7 +243,7 @@ class HomeRepositoryImpl implements HomeRepository {
         'date': date,
       };
       final response = await _dio.get(
-        '/home/exhibits/schedule',
+        ApiEndpoints.homeExhibitsSchedule,
         queryParameters: queryParams,
       );
       final data = response.dataOrNull;

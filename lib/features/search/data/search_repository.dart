@@ -1,3 +1,4 @@
+import 'package:arttrip/core/api_endpoints.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
@@ -19,7 +20,7 @@ class SearchRepositoryImpl implements SearchRepository {
   Future<List<ExhibitModel>?> searchExhibits(String query) async {
     try {
       final response = await _dio.get(
-        '/exhibits',
+        ApiEndpoints.exhibits,
         queryParameters: {'query': query},
       );
       final data = response.dataOrNull;
@@ -41,7 +42,7 @@ class SearchRepositoryImpl implements SearchRepository {
   @override
   Future<List<KeywordModel>?> fetchRecommendedKeywords() async {
     try {
-      final response = await _dio.get('/keyword/recommand');
+      final response = await _dio.get(ApiEndpoints.keywordRecommand);
       final data = response.dataOrNull;
       if (data == null) return null;
       final map = data as Map<String, dynamic>;
@@ -61,7 +62,7 @@ class SearchRepositoryImpl implements SearchRepository {
   @override
   Future<List<SearchHistoryModel>?> fetchSearchHistory() async {
     try {
-      final response = await _dio.get('/search-history');
+      final response = await _dio.get(ApiEndpoints.searchHistory);
       final data = response.dataOrNull;
       if (data == null) return null;
       final map = data as Map<String, dynamic>;
@@ -81,7 +82,9 @@ class SearchRepositoryImpl implements SearchRepository {
   @override
   Future<bool> deleteSearchHistory(int searchHistoryId) async {
     try {
-      final response = await _dio.delete('/search-history/$searchHistoryId');
+      final response = await _dio.delete(
+        ApiEndpoints.searchHistoryById(searchHistoryId),
+      );
       return response.isSuccess;
     } catch (e) {
       AppUtil.debugLog('deleteSearchHistory: $e');

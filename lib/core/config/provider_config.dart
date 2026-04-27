@@ -12,6 +12,10 @@ import 'package:arttrip/features/home/home_repository.dart';
 import 'package:arttrip/features/home/home_repository_hybrid.dart';
 import 'package:arttrip/features/home/home_repository_mock.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/features/map/data/map_repository.dart';
+import 'package:arttrip/features/map/data/map_repository_hybrid.dart';
+import 'package:arttrip/features/map/data/map_repository_mock.dart';
+import 'package:arttrip/features/map/viewmodels/map_viewmodel.dart';
 import 'package:arttrip/features/my/data/my_repository.dart';
 import 'package:arttrip/features/my/data/my_repository_mock.dart';
 import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
@@ -28,63 +32,66 @@ final getProviders = [
     create: (_) => AlertViewModel(AlertRepositoryImpl(DioClient.instance)),
   ),
   ChangeNotifierProvider(
-    create:
-        (_) => ExhibitViewModel(
-          ExhibitRepositoryHybrid(
-            mock: ExhibitRepositoryMockImpl(),
-            api: ExhibitRepositoryImpl(DioClient.instance),
-          ),
-        ),
+    create: (_) => ExhibitViewModel(
+      ExhibitRepositoryHybrid(
+        mock: ExhibitRepositoryMockImpl(),
+        api: ExhibitRepositoryImpl(DioClient.instance),
+      ),
+    ),
   ),
   ChangeNotifierProxyProvider<ExhibitViewModel, HomeViewModel>(
-    create:
-        (context) => HomeViewModel(
-          exhibitVM: context.read<ExhibitViewModel>(),
-          homeRepository: HomeRepositoryHybrid(
-            mock: HomeRepositoryMockImpl(),
-            api: HomeRepositoryImpl(DioClient.instance),
-          ),
-        ),
+    create: (context) => HomeViewModel(
+      exhibitVM: context.read<ExhibitViewModel>(),
+      homeRepository: HomeRepositoryHybrid(
+        mock: HomeRepositoryMockImpl(),
+        api: HomeRepositoryImpl(DioClient.instance),
+      ),
+    ),
     update: (_, _, homeVM) => homeVM!,
   ),
   ChangeNotifierProvider<KeywordModelsViewModel>(
-    create:
-        (_) => KeywordModelsViewModel(
-          AppConsts.useMock
-              ? KeywordModelsRepositoryMockImpl()
-              : KeywordModelsRepositoryImpl(DioClient.instance),
-        ),
+    create: (_) => KeywordModelsViewModel(
+      AppConsts.useMock
+          ? KeywordModelsRepositoryMockImpl()
+          : KeywordModelsRepositoryImpl(DioClient.instance),
+    ),
   ),
   ChangeNotifierProvider<ExhibitDetailModelViewModel>(
-    create:
-        (_) => ExhibitDetailModelViewModel(
-          AppConsts.useMock
-              ? ExhibitRepositoryMockImpl()
-              : ExhibitRepositoryImpl(DioClient.instance),
-        ),
+    create: (_) => ExhibitDetailModelViewModel(
+      AppConsts.useMock
+          ? ExhibitRepositoryMockImpl()
+          : ExhibitRepositoryImpl(DioClient.instance),
+    ),
   ),
   ChangeNotifierProvider<WriteReviewViewModel>(
-    create:
-        (_) => WriteReviewViewModel(
-          AppConsts.useMock
-              ? ExhibitRepositoryMockImpl()
-              : ExhibitRepositoryImpl(DioClient.instance),
-        ),
+    create: (_) => WriteReviewViewModel(
+      AppConsts.useMock
+          ? ExhibitRepositoryMockImpl()
+          : ExhibitRepositoryImpl(DioClient.instance),
+    ),
   ),
   ChangeNotifierProvider<MyViewModel>(
-    create:
-        (_) => MyViewModel(
-          AppConsts.useMock
-              ? MyRepositoryMockImpl()
-              : MyRepositoryImpl(DioClient.instance),
-        ),
+    create: (_) => MyViewModel(
+      AppConsts.useMock
+          ? MyRepositoryMockImpl()
+          : MyRepositoryImpl(DioClient.instance),
+    ),
   ),
   ChangeNotifierProvider<SearchViewModel>(
-    create:
-        (_) => SearchViewModel(
-          AppConsts.useMock
-              ? SearchRepositoryMockImpl()
-              : SearchRepositoryImpl(DioClient.instance),
-        ),
+    create: (_) => SearchViewModel(
+      AppConsts.useMock
+          ? SearchRepositoryMockImpl()
+          : SearchRepositoryImpl(DioClient.instance),
+    ),
+  ),
+  ChangeNotifierProxyProvider<ExhibitViewModel, MapViewModel>(
+    create: (context) => MapViewModel(
+      exhibitVM: context.read<ExhibitViewModel>(),
+      mapRepository: MapRepositoryHybrid(
+        mock: MapRepositoryMockImpl(),
+        api: MapRepositoryImpl(DioClient.instance),
+      ),
+    ),
+    update: (_, _, mapVM) => mapVM!,
   ),
 ];

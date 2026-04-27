@@ -1,3 +1,4 @@
+import 'package:arttrip/core/api_endpoints.dart';
 import 'package:arttrip/core/env.dart';
 import 'package:arttrip/core/network/network.dart';
 import 'package:arttrip/features/auth/data/models/auth_token_result.dart';
@@ -17,10 +18,10 @@ class AuthApiService extends BaseApiService {
     required String idToken,
   }) {
     return post<AuthTokenResult>(
-      '/auth/social',
+      ApiEndpoints.authSocial,
       data: {'provider': provider, 'idToken': idToken},
-      fromJson:
-          (data) => AuthTokenResult.fromJson(data as Map<String, dynamic>),
+      fromJson: (data) =>
+          AuthTokenResult.fromJson(data as Map<String, dynamic>),
     );
   }
 
@@ -31,10 +32,10 @@ class AuthApiService extends BaseApiService {
     required String refreshToken,
   }) {
     return post<AuthTokenResult>(
-      '/auth/app/reissue',
+      ApiEndpoints.authReissue,
       data: {'refreshToken': refreshToken},
-      fromJson:
-          (data) => AuthTokenResult.fromJson(data as Map<String, dynamic>),
+      fromJson: (data) =>
+          AuthTokenResult.fromJson(data as Map<String, dynamic>),
     );
   }
 
@@ -55,7 +56,10 @@ class AuthApiService extends BaseApiService {
         ),
       );
 
-      await dio.post('/auth/app/logout', data: {'refreshToken': refreshToken});
+      await dio.post(
+        ApiEndpoints.authLogout,
+        data: {'refreshToken': refreshToken},
+      );
       return const ApiResult.success(null);
     } catch (e) {
       // 로그아웃 실패해도 로컬 로그아웃은 진행되므로 에러 무시
