@@ -66,6 +66,7 @@ class _CurationDetailPageState extends State<CurationDetailPage> {
 
   Future<void> _getCurationExhibits() async {
     _isLoading.value = true;
+    _cursor = 0;
 
     final homeVM = Provider.of<HomeViewModel>(context, listen: false);
     final ExhibitFilterModel? result = await homeVM.getCurationDetail(

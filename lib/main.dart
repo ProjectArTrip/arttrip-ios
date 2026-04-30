@@ -16,7 +16,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
@@ -27,28 +26,7 @@ import 'package:provider/provider.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   AppUtil.debugLog('FCM background message: ${message.messageId}');
-
-  final appName = (await PackageInfo.fromPlatform()).appName;
-  final plugin = FlutterLocalNotificationsPlugin();
-  await plugin.initialize(
-    settings: const InitializationSettings(
-      iOS: DarwinInitializationSettings(),
-    ),
-  );
-  await plugin.show(
-    id: message.messageId?.hashCode ?? 0,
-    title: appName,
-    body: message.notification?.body ?? '',
-    notificationDetails: const NotificationDetails(
-      iOS: DarwinNotificationDetails(
-        presentAlert: true,
-        presentBadge: true,
-        presentSound: true,
-      ),
-    ),
-  );
 }
-
 
 OverlayEntry? _inAppBannerEntry;
 

@@ -78,6 +78,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
   Future<void> _getFavoriteExhibits() async {
     _isLoading.value = true;
+    _cursor = 0;
 
     final exhibitVM = Provider.of<ExhibitViewModel>(context, listen: false);
     final FavoriteFilterModel? result = await exhibitVM.getFavoriteFilters(

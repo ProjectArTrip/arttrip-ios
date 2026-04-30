@@ -8,22 +8,39 @@ class AlertViewModel with ChangeNotifier {
 
   final AlertRepository _repository;
 
-  int _unreadCount = 0;
+  bool _hasUnread = false;
 
-  int get unreadCount => _unreadCount;
-  bool get hasUnread => _unreadCount > 0;
+  bool get hasUnread => _hasUnread;
 
-  set unreadCount(int count) {
-    _unreadCount = count;
+  set hasUnread(bool hasUnread) {
+    _hasUnread = hasUnread;
     notifyListeners();
   }
 
-  Future<AlertDetailModel?> getAlerts({int cursor = 0, int size = 10}) async {
+  Future<AlertDetailModel?> getAlerts({int? cursor, int size = 10}) async {
     try {
       return await _repository.fetchAlerts(cursor: cursor, size: size);
     } catch (e) {
       AppUtil.debugLog('getAlerts error: $e');
       return null;
+    }
+  }
+
+  Future<void> markAllAsRead() async {
+    try {
+      await _repository.markAllAsRead();
+      hasUnread = false; // 모든 알림을 읽음 처리했으므로 카운트 초기화
+    } catch (e) {
+      AppUtil.debugLog('markAllAsRead error: $e');
+    }
+  }
+
+  Future<void> getUnreadAlerts() async {
+    try {
+      final count = await _repository.fetchUnreadAlerts();
+      hasUnread = count;
+    } catch (e) {
+      AppUtil.debugLog('getUnreadAlerts error: $e');
     }
   }
 }

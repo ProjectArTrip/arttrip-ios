@@ -8,9 +8,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class AlertBadge extends StatelessWidget {
-  const AlertBadge({super.key, this.iconType = false});
+  const AlertBadge({super.key, this.iconType = false, this.hasUnread});
 
   final bool iconType;
+  final bool? hasUnread;
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +20,8 @@ class AlertBadge extends StatelessWidget {
           ? () {
               Routes.push(context, AppRoutes.alerts).then((_) {
                 if (context.mounted) {
-                  Provider.of<AlertViewModel>(
-                    context,
-                    listen: false,
-                  ).unreadCount = 0;
+                  final alertVM = context.read<AlertViewModel>();
+                  alertVM.getUnreadAlerts();
                 }
               });
             }
@@ -37,14 +36,18 @@ class AlertBadge extends StatelessWidget {
               width: 24.w,
               height: 24.w,
             ),
-            Selector<AlertViewModel, bool>(
-              selector: (_, vm) => vm.hasUnread,
-              builder: (context, hasUnread, _) {
-                if (!hasUnread) return const SizedBox.shrink();
+            hasUnread == null
+                ? Selector<AlertViewModel, bool>(
+                    selector: (_, vm) => vm.hasUnread,
+                    builder: (context, hasUnread, _) {
+                      if (!hasUnread) return const SizedBox.shrink();
 
-                return _buildUnreadMark();
-              },
-            ),
+                      return _buildUnreadMark();
+                    },
+                  )
+                : hasUnread == true
+                ? _buildUnreadMark()
+                : const SizedBox.shrink(),
           ],
         ),
       ),

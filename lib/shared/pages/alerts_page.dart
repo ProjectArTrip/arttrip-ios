@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
@@ -32,7 +34,7 @@ class _AlertsPageState extends State<AlertsPage> {
 
   final double threshold = 50.0;
   final int _size = 10;
-  int _cursor = 0;
+  int? _cursor;
 
   @override
   void initState() {
@@ -47,7 +49,10 @@ class _AlertsPageState extends State<AlertsPage> {
       _alerts.value = result?.notifications;
       _isLoading.value = false;
       _hasNext.value = result?.hasNext ?? false;
-      _cursor = result?.nextCursor ?? 0;
+      _cursor = result?.nextCursor;
+
+      /// 알림 전체 읽음 처리
+      unawaited(alertVM.markAllAsRead());
     });
 
     _scrollController.addListener(_scrollControllerListener);
@@ -85,7 +90,7 @@ class _AlertsPageState extends State<AlertsPage> {
     );
     _alerts.value = [...?_alerts.value, ...?result?.notifications];
     _hasNext.value = result?.hasNext ?? false;
-    _cursor = result?.nextCursor ?? 0;
+    _cursor = result?.nextCursor;
   }
 
   String _formatRelativeTime(String createdAt) {
@@ -107,6 +112,7 @@ class _AlertsPageState extends State<AlertsPage> {
       appBar: CommonAppBar(title: context.l10n.alert),
       body: CustomScrollView(
         controller: _scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverPadding(
             padding: EdgeInsets.only(
@@ -146,8 +152,6 @@ class _AlertsPageState extends State<AlertsPage> {
                                 child: CircularProgressIndicator(),
                               );
                             }
-                            // TODO: isUnread 수정 예정
-                            final isUnread = index % 2 == 0 ? true : false;
 
                             final AlertModel item = alerts[index];
 
@@ -157,7 +161,10 @@ class _AlertsPageState extends State<AlertsPage> {
                               children: [
                                 Padding(
                                   padding: EdgeInsetsGeometry.all(12.w),
-                                  child: const AlertBadge(iconType: true),
+                                  child: AlertBadge(
+                                    iconType: true,
+                                    hasUnread: !item.isRead,
+                                  ),
                                 ),
                                 Expanded(
                                   child: Column(
@@ -172,12 +179,12 @@ class _AlertsPageState extends State<AlertsPage> {
                                           ArtTripText.pretendard()
                                               .title02Bold()
                                               .color(
-                                                isUnread
+                                                !item.isRead
                                                     ? AppColors.textPrimary
                                                     : AppColors.textSecondary,
                                               )
                                               .build()
-                                              .text('알림 타이틀'),
+                                              .text(item.title),
                                           ArtTripText.pretendard()
                                               .body02Light()
                                               .color(AppColors.textTertiary)
@@ -193,14 +200,14 @@ class _AlertsPageState extends State<AlertsPage> {
                                       ArtTripText.pretendard()
                                           .body01Regular()
                                           .color(
-                                            isUnread
+                                            !item.isRead
                                                 ? AppColors.textSecondary
                                                 // ignore: dead_code
                                                 : AppColors.textTertiary,
                                           )
                                           .ellipsis(2)
                                           .build()
-                                          .text('알림 내용입니다. 최대 2줄' * 30),
+                                          .text(item.body),
                                     ],
                                   ),
                                 ),

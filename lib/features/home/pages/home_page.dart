@@ -4,6 +4,7 @@ import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/config/prefs.dart';
 import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/alert/alert_viewmodel.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/home/views/curation_view.dart';
 import 'package:arttrip/features/home/views/domestic_overseas_view.dart';
@@ -41,6 +42,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     AppUtil.debugLog('refresh: ${Prefs().refreshToken}');
 
     _tabController = TabController(length: 2, vsync: this);
+
+    context.read<AlertViewModel>().getUnreadAlerts();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
       homeViewModel.load(context);

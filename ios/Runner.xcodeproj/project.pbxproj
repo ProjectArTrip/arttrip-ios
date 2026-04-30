@@ -16,7 +16,7 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		AC5B1F0F2F9A59D90000CE27 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AC5B1F0E2F9A59D90000CE27 /* GoogleService-Info.plist */; };
+		AC15A03F2FA24DA900EDDED0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AC15A03E2FA24DA900EDDED0 /* GoogleService-Info.plist */; };
 		AC9683D32EEC8E1F00310A72 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AC9683D12EEC8DE000310A72 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
@@ -65,7 +65,7 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		97E8991EB71BB87F7B9EF99A /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
-		AC5B1F0E2F9A59D90000CE27 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		AC15A03E2FA24DA900EDDED0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AC5B1F102F9B5E730000CE27 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		AC9683D02EEC8DE000310A72 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		AC9683D22EEC8DE200310A72 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -168,7 +168,7 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
-				AC5B1F0E2F9A59D90000CE27 /* GoogleService-Info.plist */,
+				AC15A03E2FA24DA900EDDED0 /* GoogleService-Info.plist */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -275,7 +275,7 @@
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				AC9683D32EEC8E1F00310A72 /* InfoPlist.strings in Resources */,
-				AC5B1F0F2F9A59D90000CE27 /* GoogleService-Info.plist in Resources */,
+				AC15A03F2FA24DA900EDDED0 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -50,7 +50,6 @@ class Prefs {
     await Future.wait([
       prefs.remove(_accessTokenKey),
       prefs.remove(_refreshTokenKey),
-      prefs.remove(_fcmTokenKey),
     ]);
   }
 
