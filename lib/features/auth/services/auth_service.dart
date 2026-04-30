@@ -93,6 +93,45 @@ class AuthService {
     }
   }
 
+  /// 테스트 계정 로그인
+  Future<AuthResult> loginWithTestAccount(BuildContext context) async {
+    try {
+      const testEmail = 'test@arttrip.com';
+      const testPassword = 'test1234';
+
+      final result = await _authApi.testLogin(
+        email: testEmail,
+        password: testPassword,
+      );
+
+      return result.when(
+        success: (tokenResult) async {
+          await _tokenStorage.saveTokens(
+            accessToken: tokenResult.accessToken,
+            refreshToken: tokenResult.refreshToken,
+            isFirstLogin: tokenResult.firstLogin,
+          );
+
+          if (context.mounted) {
+            unawaited(
+              context.read<MyViewModel>().registerFcmToken(
+                Prefs().fcmToken ?? '',
+              ),
+            );
+          }
+
+          return AuthResult.success(firstLogin: tokenResult.firstLogin);
+        },
+        failure: (exception) {
+          return AuthResult.failure(exception.message);
+        },
+      );
+    } catch (e) {
+      debugPrint('테스트 로그인 오류: $e');
+      return AuthResult.failure('테스트 로그인 중 오류가 발생했습니다');
+    }
+  }
+
   /// Google 로그인 (추후 구현)
   Future<AuthResult> loginWithGoogle() async {
     // TODO: Google 로그인 구현

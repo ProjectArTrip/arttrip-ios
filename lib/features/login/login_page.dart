@@ -19,11 +19,45 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
+  int _logoTapCount = 0;
+  bool _showTestLogin = false;
 
   @override
   void initState() {
     super.initState();
     FlutterNativeSplash.remove();
+  }
+
+  void _onLogoTap() {
+    setState(() {
+      _logoTapCount++;
+      if (_logoTapCount >= 5) {
+        _showTestLogin = true;
+      }
+    });
+  }
+
+  Future<void> _handleTestLogin() async {
+    if (_isLoading) return;
+    setState(() => _isLoading = true);
+    try {
+      final result = await AuthService.instance.loginWithTestAccount(context);
+      if (!mounted) return;
+      if (result.isSuccess) {
+        if (result.firstLogin == true) {
+          Routes.go(context, '/onboarding/keywords');
+        } else {
+          Routes.go(context, '/');
+        }
+      } else {
+        SnackBarUtils.showError(
+          context,
+          message: result.errorMessage ?? '로그인에 실패했습니다',
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   Future<void> _handleKakaoLogin(BuildContext buildContext) async {
@@ -71,10 +105,13 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(
-                  AppAssets.icLogoWhite,
-                  width: 188.w,
-                  height: 59.h,
+                GestureDetector(
+                  onTap: _onLogoTap,
+                  child: SvgPicture.asset(
+                    AppAssets.icLogoWhite,
+                    width: 188.w,
+                    height: 59.h,
+                  ),
                 ),
                 SizedBox(height: 120.h),
                 Column(
@@ -107,6 +144,16 @@ class _LoginPageState extends State<LoginPage> {
                       backgroundColor: AppColors.gray900,
                       textColor: AppColors.textWhite,
                     ),
+                    if (_showTestLogin)
+                      SocialLoginButton(
+                        onPressed: () {
+                          _handleTestLogin();
+                        },
+                        label: context.l10n.loginTest,
+                        icon: AppAssets.icException,
+                        backgroundColor: AppColors.textTertiary,
+                        textColor: AppColors.textPrimary,
+                      ),
                   ],
                 ),
               ],
