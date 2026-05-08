@@ -14,6 +14,7 @@ import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:arttrip/shared/widgets/exception_view.dart';
 import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
+import 'package:arttrip/shared/widgets/exhibits_loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -77,6 +78,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
   Future<void> _getFavoriteExhibits() async {
     _isLoading.value = true;
+    _cursor = 0;
 
     final exhibitVM = Provider.of<ExhibitViewModel>(context, listen: false);
     final FavoriteFilterModel? result = await exhibitVM.getFavoriteFilters(
@@ -189,7 +191,15 @@ class _FavoritesPageState extends State<FavoritesPage> {
             valueListenable: _isLoading,
             builder: (context, isLoading, child) {
               if (isLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 12.h,
+                      horizontal: 24.w,
+                    ),
+                    child: const ExhibitsLoadingView(),
+                  ),
+                );
               }
 
               return ValueListenableBuilder(
@@ -198,8 +208,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   if (exhibits == null) {
                     return const ExceptionView();
                   } else if (exhibits.isEmpty) {
-                    return Padding(
-                      padding: EdgeInsets.only(top: 56.h),
+                    return Expanded(
                       child: Column(
                         spacing: 8.h,
                         mainAxisAlignment: MainAxisAlignment.center,

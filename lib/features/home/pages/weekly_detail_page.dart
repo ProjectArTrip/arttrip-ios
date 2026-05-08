@@ -81,6 +81,7 @@ class _WeeklyDetailPageState extends State<WeeklyDetailPage> {
 
   Future<void> _getWeeklyExhibits() async {
     _isLoading.value = true;
+    _cursor = 0;
 
     final exhibitVM = Provider.of<ExhibitViewModel>(context, listen: false);
     final ExhibitFilterModel? result = await exhibitVM.getExhibitFilters(
@@ -216,6 +217,7 @@ class _WeeklyDetailPageState extends State<WeeklyDetailPage> {
               return GestureDetector(
                 onTap: () {
                   _selectedDate.value = date;
+                  _cursor = 0;
                   _getWeeklyExhibits();
                 },
                 child: Container(

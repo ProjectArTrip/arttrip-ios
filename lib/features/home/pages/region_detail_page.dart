@@ -69,6 +69,7 @@ class _RegionDetailPageState extends State<RegionDetailPage> {
 
   Future<void> _getRegionExhibits() async {
     _isLoading.value = true;
+    _cursor = 0;
 
     final exhibitVM = Provider.of<ExhibitViewModel>(
       context,

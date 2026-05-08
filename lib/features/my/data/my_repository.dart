@@ -31,6 +31,9 @@ abstract class MyRepository {
 
   /// 최근 본 전시 목록 조회
   Future<RecentExhibitListResponseModel?> fetchRecentExhibits();
+
+  /// fcm token 등록
+  Future<void> registerFcmToken(String token);
 }
 
 class MyRepositoryImpl implements MyRepository {
@@ -157,5 +160,15 @@ class MyRepositoryImpl implements MyRepository {
       AppUtil.debugLog('fetchRecentExhibits: $e');
     }
     return null;
+  }
+
+  @override
+  Future<void> registerFcmToken(String token) async {
+    try {
+      await _dio.post('/me/fcm-token', data: {'token': token});
+      AppUtil.debugLog('registerFcmToken success: $token');
+    } catch (e) {
+      AppUtil.debugLog('registerFcmToken failed: $e');
+    }
   }
 }

@@ -85,6 +85,7 @@ class _CalendarResultPageState extends State<CalendarResultPage> {
 
   Future<void> _getFilterExhibits() async {
     _isLoading.value = true;
+    _cursor = 0;
 
     final exhibitVM = Provider.of<ExhibitViewModel>(context, listen: false);
     final ExhibitFilterModel? result = await exhibitVM.getExhibitFilters(

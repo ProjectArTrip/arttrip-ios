@@ -19,9 +19,11 @@ class Prefs {
 
   static const String _accessTokenKey = 'access_token';
   static const String _refreshTokenKey = 'refresh_token';
+  static const String _fcmTokenKey = 'fcm_token';
 
   String? get accessToken => prefs.getString(_accessTokenKey);
   String? get refreshToken => prefs.getString(_refreshTokenKey);
+  String? get fcmToken => prefs.getString(_fcmTokenKey);
 
   /// 첫 로그인 여부 조회
   bool get isFirstLogin => prefs.getBool('is_first_login') ?? false;
@@ -54,5 +56,14 @@ class Prefs {
   /// 첫 로그인 여부 저장
   Future<void> setIsFirstLogin(bool value) async {
     await prefs.setBool('is_first_login', value);
+  }
+
+  /// FCM 토큰 저장
+  Future<void> setFcmToken(String? value) async {
+    if (value == null) {
+      await prefs.remove(_fcmTokenKey);
+    } else {
+      await prefs.setString(_fcmTokenKey, value);
+    }
   }
 }

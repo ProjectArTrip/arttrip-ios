@@ -12,7 +12,8 @@ abstract class ExhibitFilterModel with _$ExhibitFilterModel {
     required List<ExhibitModel> exhibits,
     required bool hasNext,
     int? nextCursor,
-    required int exhibitTotalCount,
+    @Default(0) int exhibitTotalCount,
+    @Default('') String title,
   }) = _ExhibitFilterModel;
 
   factory ExhibitFilterModel.fromJson(Map<String, dynamic> json) =>

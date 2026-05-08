@@ -81,6 +81,21 @@
 		<string>UIStatusBarStyleDarkContent</string>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false />
+		<!-- fcm -->
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>remote-notification</string>
+			<string>processing</string>
+			<string>fetch</string>
+		</array>
+		<key>NSLocalNotificationUsageDescription</key>
+		<string>중요 공지사항 정보를 놓치지 않기 위해 알림 권한이 필요합니다.</string>
+		<key>FirebaseAppDelegateProxyEnabled</key>
+		<true />
+		<key>NSPushNotificationUsageDescription</key>
+		<string>앱에서 알림을 보내기 위해 사용됩니다.</string>
+		<key>NSLocalNetworkUsageDescription</key>
+		<string>앱의 디버깅 및 알림 처리를 위해 로컬 네트워크 접근 권한이 필요합니다.</string>
 		<!-- iOS UIScene migration -->
 		<key>UIApplicationSceneManifest</key>
 		<dict>

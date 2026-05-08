@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
+import 'package:arttrip/features/home/data/models/curation_model.dart';
 import 'package:arttrip/features/home/home_repository.dart';
 import 'package:arttrip/shared/models/region_model.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
@@ -38,8 +40,14 @@ class HomeViewModel with ChangeNotifier {
   >
   _weeklyExhibitsBySelectedDate = {};
 
+  /// 개인 맞춤 추천 전시
   final Map<LocationType, AsyncState<List<ExhibitModel>>>
   _personalizedExhibits = {};
+
+  /// 큐레이션 전시
+  final Map<LocationType, Map<String, AsyncState<CurationModel>>> _curations =
+      {};
+
   final Map<
     LocationType,
     Map<String, Map<String, AsyncState<List<ExhibitModel>>>>
@@ -66,17 +74,16 @@ class HomeViewModel with ChangeNotifier {
       _personalizedExhibits;
   Map<LocationType, Map<String, Map<String, AsyncState<List<ExhibitModel>>>>>
   get weeklyExhibitsBySelectedDate => _weeklyExhibitsBySelectedDate;
+
+  /// 큐레이션 전시 (국내/해외 -> 국가/지역)
+  Map<LocationType, Map<String, AsyncState<CurationModel>>> get curations =>
+      _curations;
   AsyncState<List<String>> get genres => _genres;
   Map<LocationType, Map<String, Map<String, AsyncState<List<ExhibitModel>>>>>
   get exhibitsByGenre => _exhibitsByGenre;
 
   set setLocationType(LocationType locationType) {
     _locationType = locationType;
-    notifyListeners();
-  }
-
-  set setArea(String area) {
-    _area[_locationType] = area;
     notifyListeners();
   }
 
@@ -97,6 +104,7 @@ class HomeViewModel with ChangeNotifier {
   }
 
   Future<void> load(BuildContext context) async {
+    _area[_locationType] = context.l10n.allItems;
     await (isDomestic
         ? getDomesticRegions(context)
         : getOverseasCountries(context));
@@ -110,6 +118,7 @@ class HomeViewModel with ChangeNotifier {
       ),
     );
     unawaited(getWeeklyCalendar());
+    unawaited(getCurations());
   }
 
   /// 해외/국내별 국가/지역 업데이트
@@ -122,6 +131,7 @@ class HomeViewModel with ChangeNotifier {
       _selectedDateInWeek[_locationType]?[_area[_locationType]] ?? _today,
     );
     getWeeklyCalendar();
+    getCurations();
   }
 
   /// 이번주 선택한 날짜 업데이트
@@ -143,7 +153,13 @@ class HomeViewModel with ChangeNotifier {
     try {
       final result = await homeRepository.fetchOverseasCountries();
       _overseasCountries = AsyncState.success(result);
-      _area[LocationType.overseas] = result.first;
+      if (result.isNotEmpty) {
+        _area[LocationType.overseas] = result.first;
+      } else {
+        if (context.mounted) {
+          _area[LocationType.overseas] = context.l10n.allItems;
+        }
+      }
     } catch (e) {
       AppUtil.debugLog('getOverseasCountries error: $e');
       _overseasCountries = const AsyncState.error();
@@ -167,14 +183,14 @@ class HomeViewModel with ChangeNotifier {
     _domesticRegions = const AsyncState.loading();
     notifyListeners();
     try {
+      _area[LocationType.domestic] = context.mounted
+          ? context.l10n.allItems
+          : '';
       final result = await homeRepository.fetchDomesticRegions();
       _domesticRegions = AsyncState.success(result);
     } catch (e) {
       AppUtil.debugLog('getDomesticRegions error: $e');
       _domesticRegions = const AsyncState.error();
-      _area[LocationType.domestic] = context.mounted
-          ? context.l10n.allItems
-          : '';
     }
     notifyListeners();
   }
@@ -196,7 +212,7 @@ class HomeViewModel with ChangeNotifier {
       notifyListeners();
       return;
     }
-    _area[_locationType] ??= '전체';
+    // _area[_locationType] ??= context.l10n.allItems;
     _todayExhibitRecommendations[_locationType] ??= {};
     _todayExhibitRecommendations[_locationType]![_area[_locationType]!] =
         const AsyncState.loading();
@@ -362,6 +378,37 @@ class HomeViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  /// 큐레이션 조회
+  Future<void> getCurations() async {
+    try {
+      if (_curations[_locationType]?[_area[_locationType]]?.status ==
+          AsyncStatus.success) {
+        final oldState = _curations[_locationType]![_area[_locationType]]!;
+
+        _curations[_locationType]![_area[_locationType]!] = AsyncState.success(
+          oldState.data!,
+        );
+
+        notifyListeners();
+        return;
+      }
+
+      _curations[_locationType] ??= {};
+      _curations[_locationType]![_area[_locationType]!] =
+          const AsyncState.loading();
+
+      final result = await homeRepository.fetchCurations(
+        isDomestic: isDomestic,
+        country: _area[_locationType],
+      );
+      _curations[_locationType]![_area[_locationType]!] = AsyncState.success(
+        result,
+      );
+    } catch (e) {
+      AppUtil.debugLog('getCurations error: $e');
+    }
+  }
+
   /// 이번주 캘린더 조회
   Future<void> getWeeklyCalendar() async {
     if (_weeklyCalendar.status == AsyncStatus.success) {
@@ -382,5 +429,28 @@ class HomeViewModel with ChangeNotifier {
       _weeklyCalendar = const AsyncState.error();
     }
     notifyListeners();
+  }
+
+  /// 큐레이션 전체 조회
+  ///
+  /// 로딩 처리는 각 화면에서 로딩 변수로 처리합니다.
+  ///
+  /// null: API 호출 실패
+  Future<ExhibitFilterModel?> getCurationDetail({
+    required String curationId,
+    required int cursor,
+    required int size,
+  }) async {
+    try {
+      final response = await homeRepository.fetchCurationDetail(
+        curationId: curationId,
+        cursor: cursor,
+        size: size,
+      );
+      return response;
+    } catch (e) {
+      AppUtil.debugLog('getCurationDetail error: $e');
+      return null;
+    }
   }
 }

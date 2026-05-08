@@ -25,6 +25,19 @@ class AuthApiService extends BaseApiService {
     );
   }
 
+  /// 테스트 계정 로그인
+  Future<ApiResult<AuthTokenResult>> testLogin({
+    required String email,
+    required String password,
+  }) {
+    return post<AuthTokenResult>(
+      ApiEndpoints.authLogin,
+      data: {'email': email, 'password': password},
+      fromJson: (data) =>
+          AuthTokenResult.fromJson(data as Map<String, dynamic>),
+    );
+  }
+
   /// 토큰 갱신 (재발행)
   ///
   /// [refreshToken] - 갱신에 사용할 리프레시 토큰

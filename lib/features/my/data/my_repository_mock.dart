@@ -95,14 +95,18 @@ class MyRepositoryMockImpl implements MyRepository {
         5,
         (i) => RecentExhibitModel(
           exhibitId: i + 1,
-          title:
-              i == 0
-                  ? '전시 제목은 최대2줄전시 제목은 최대2줄전시 제목은 최대2줄 전시 제목은 최대2줄 전시 제목은...'
-                  : '전시 제목',
+          title: i == 0
+              ? '전시 제목은 최대2줄전시 제목은 최대2줄전시 제목은 최대2줄 전시 제목은 최대2줄 전시 제목은...'
+              : '전시 제목',
           exhibitHallName: '전시관 이름',
           exhibitImage: 'https://picsum.photos/200/200?random=$i',
         ),
       ),
     );
+  }
+
+  @override
+  Future<void> registerFcmToken(String token) {
+    return Future.value();
   }
 }
