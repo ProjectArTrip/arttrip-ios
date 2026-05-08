@@ -29,11 +29,6 @@ import UIKit
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
   }
 
-  override func applicationDidBecomeActive(_ application: UIApplication) {
-    application.applicationIconBadgeNumber = 0
-    super.applicationDidBecomeActive(application)
-  }
-
   override func application(
     _ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
   ) {

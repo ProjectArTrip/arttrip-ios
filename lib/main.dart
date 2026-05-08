@@ -1,3 +1,4 @@
+import 'package:app_badge_plus/app_badge_plus.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_utils.dart';
@@ -138,8 +139,37 @@ void main() async {
   runApp(MultiProvider(providers: getProviders, child: const ArtTripApp()));
 }
 
-class ArtTripApp extends StatelessWidget {
+class ArtTripApp extends StatefulWidget {
   const ArtTripApp({super.key});
+
+  @override
+  State<ArtTripApp> createState() => _ArtTripAppState();
+}
+
+class _ArtTripAppState extends State<ArtTripApp> with WidgetsBindingObserver {
+  AppLifecycleState? _previousState;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    AppBadgePlus.updateBadge(0);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed &&
+        _previousState == AppLifecycleState.paused) {
+      AppBadgePlus.updateBadge(0);
+    }
+    _previousState = state;
+  }
 
   @override
   Widget build(BuildContext context) {
