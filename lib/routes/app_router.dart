@@ -10,6 +10,7 @@ import 'package:arttrip/features/login/login_page.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
 import 'package:arttrip/features/my/views/edit_profile_page.dart';
 import 'package:arttrip/features/my/views/my_reviews_page.dart';
+import 'package:arttrip/features/my/views/notification_settings_page.dart';
 import 'package:arttrip/features/my/views/recent_exhibits_page.dart';
 import 'package:arttrip/features/my/views/settings_page.dart';
 import 'package:arttrip/features/onboarding/views/keywords_page.dart';
@@ -213,6 +214,18 @@ final appRouter = GoRouter(
       path: AppRoutes.mySettings,
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const SettingsPage());
+      },
+    ),
+
+    // 알림 설정 페이지
+    GoRoute(
+      path: AppRoutes.myNotificationSettings,
+      pageBuilder: (context, state) {
+        return buildPage(
+          context,
+          state,
+          child: const NotificationSettingsPage(),
+        );
       },
     ),
 

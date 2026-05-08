@@ -52,9 +52,8 @@ class _SettingsPageState extends State<SettingsPage> {
             SizedBox(height: 16.h),
             MyMenuItem(
               title: context.l10n.notificationSettings,
-              onTap: () {
-                // 알림 설정 (추후 구현)
-              },
+              onTap: () =>
+                  Routes.push(context, AppRoutes.myNotificationSettings),
             ),
             // -------------------------------------------------------------- //
             SizedBox(height: 56.h),
