@@ -97,6 +97,7 @@
   "deleteAccountContent": "아트트립 탈퇴시 회원님의 사용정보\n(전시 즐겨찾기 목록, 리뷰, 스탬프 등)는\n모두 삭제 됩니다.",
   "deleteAccountQuestion": "탈퇴하시겠습니까?",
   "deleteAccountButton": "탈퇴하기",
+  "deleteAccountFailed": "회원 탈퇴에 실패했습니다. 잠시 후 다시 시도해주세요.",
   "selectCountryAndDate": "국가 및 날짜 선택",
   "country": "국가",
   "date": "날짜",

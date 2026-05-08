@@ -74,6 +74,7 @@
   "deleteAccountContent": "When you leave ArtTrip, your data\n(favorites, reviews, stamps, etc.)\nwill be permanently deleted.",
   "deleteAccountQuestion": "Do you want to proceed?",
   "deleteAccountButton": "Delete",
+  "deleteAccountFailed": "Failed to delete account. Please try again later.",
   "save": "Save",
   "complete": "Complete",
   "keywordSelectionTitle": "Choose your\nfavorite keywords!",
