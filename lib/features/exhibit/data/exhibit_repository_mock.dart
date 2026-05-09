@@ -6,6 +6,7 @@ import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
 import 'package:arttrip/features/exhibit/data/models/favorite_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
+import 'package:arttrip/features/exhibit/data/models/review_submit_result.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ExhibitRepositoryMockImpl implements ExhibitRepository {
@@ -74,29 +75,14 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
   }
 
   @override
-  Future<ReviewCreateResult?> createReview({
+  Future<ReviewSubmitResult> createReview({
     required int exhibitId,
     required List<XFile> images,
     required String date,
     required String content,
   }) async {
     await Future.delayed(const Duration(milliseconds: 500));
-
-    return ReviewCreateResult(
-      reviewId: DateTime.now().millisecondsSinceEpoch,
-      visitDate: date,
-      content: content,
-      images: images
-          .asMap()
-          .entries
-          .map(
-            (e) => ReviewImage(
-              reviewImageId: e.key,
-              imageUrl: 'https://picsum.photos/200/200?random=${e.key}',
-            ),
-          )
-          .toList(),
-    );
+    return ReviewSubmitResult.success;
   }
 
   @override
@@ -120,7 +106,7 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
   }
 
   @override
-  Future<bool> updateReview({
+  Future<ReviewSubmitResult> updateReview({
     required int reviewId,
     required List<XFile> newImages,
     required String date,
@@ -128,7 +114,7 @@ class ExhibitRepositoryMockImpl implements ExhibitRepository {
     required List<int> deleteImageIds,
   }) async {
     await Future.delayed(const Duration(milliseconds: 500));
-    return true;
+    return ReviewSubmitResult.success;
   }
 
   @override

@@ -5,6 +5,7 @@ import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
 import 'package:arttrip/features/exhibit/data/models/favorite_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
+import 'package:arttrip/features/exhibit/data/models/review_submit_result.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ExhibitRepositoryHybrid implements ExhibitRepository {
@@ -38,7 +39,7 @@ class ExhibitRepositoryHybrid implements ExhibitRepository {
   }
 
   @override
-  Future<ReviewCreateResult?> createReview({
+  Future<ReviewSubmitResult> createReview({
     required int exhibitId,
     required List<XFile> images,
     required String date,
@@ -69,7 +70,7 @@ class ExhibitRepositoryHybrid implements ExhibitRepository {
   }
 
   @override
-  Future<bool> updateReview({
+  Future<ReviewSubmitResult> updateReview({
     required int reviewId,
     required List<XFile> newImages,
     required String date,
