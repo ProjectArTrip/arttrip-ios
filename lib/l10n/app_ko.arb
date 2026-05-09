@@ -95,6 +95,8 @@
   "badWordDialogTitle": "금칙어가 포함되어있습니다.",
   "badWordDialogContent": "부적절한 표현이 있어 등록이 제한되었습니다.\n수정 후 다시 시도해 주세요.",
   "badWordDialogButton": "다시 수정하기",
+  "writeQuitTitle": "작성을 중단할까요?",
+  "writeQuitContent": "작성 중인 내용은 저장되지 않아요.",
   "arttripInfo": "아트트립 정보",
   "notices": "공지사항",
   "privacyPolicy": "개인정보 처리방침",

@@ -72,6 +72,8 @@
   "badWordDialogTitle": "Inappropriate words detected.",
   "badWordDialogContent": "Your post contains inappropriate language and cannot be submitted.\nPlease edit and try again.",
   "badWordDialogButton": "Edit Again",
+  "writeQuitTitle": "Discard your writing?",
+  "writeQuitContent": "Your draft will not be saved.",
   "arttripInfo": "ArtTrip Info",
   "notices": "Notices",
   "privacyPolicy": "Privacy Policy",
