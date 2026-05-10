@@ -1,4 +1,6 @@
 PODS:
+  - app_badge_plus (1.2.10):
+    - Flutter
   - connectivity_plus (0.0.1):
     - Flutter
   - Firebase/CoreOnly (12.12.0):
@@ -107,6 +109,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - app_badge_plus (from `.symlinks/plugins/app_badge_plus/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
@@ -139,6 +142,8 @@ SPEC REPOS:
     - PromisesObjC
 
 EXTERNAL SOURCES:
+  app_badge_plus:
+    :path: ".symlinks/plugins/app_badge_plus/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   firebase_core:
@@ -173,6 +178,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
+  app_badge_plus: 08a692638f84bc8170aab5aaf90225810fe131b6
   connectivity_plus: 2a701ffec2c0ae28a48cf7540e279787e77c447d
   Firebase: aa154fee4e9b8eac17aa42344988865b3e857d33
   firebase_core: 40bc9f4c0ee3a28fbfb1e00e2ddaed744bb86388
