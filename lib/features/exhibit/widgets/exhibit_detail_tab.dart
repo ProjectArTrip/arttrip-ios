@@ -34,11 +34,22 @@ class ExhibitDetailModelTabContent extends StatelessWidget {
 
     if (exhibit.hallAddress.isNotEmpty) {
       infoItems.add(
-        ExhibitInfoRow(
-          iconPath: AppAssets.icLocation2,
-          label: context.l10n.exhibitAddress,
-          value: exhibit.hallAddress,
-          extraWidget: _buildCopyButton(context, exhibit.hallAddress),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ExhibitInfoRow(
+              iconPath: AppAssets.icLocation2,
+              label: context.l10n.exhibitAddress,
+              value: exhibit.hallAddress,
+              extraWidget: _buildCopyButton(context, exhibit.hallAddress),
+            ),
+            SizedBox(height: 4.h),
+            ArtTripText.pretendard()
+                .body03Regular()
+                .color(AppColors.textSecondary)
+                .build()
+                .text(context.l10n.exhibitAddressNotice),
+          ],
         ),
       );
     }

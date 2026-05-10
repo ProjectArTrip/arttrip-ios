@@ -105,6 +105,7 @@
   "nicknameDuplicate": "중복된 닉네임입니다.",
   "nextButton": "다음으로",
   "startButton": "시작하기",
+  "exhibitAddressNotice": "전시 장소는 변경될 수 있으므로 공식 홈페이지를 확인해주세요.",
   "stepIndicator": "{current}/{total}",
   "@stepIndicator": {
     "placeholders": {

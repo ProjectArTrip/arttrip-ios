@@ -82,6 +82,7 @@
   "nicknameDuplicate": "This nickname is already taken.",
   "nextButton": "Next",
   "startButton": "Start",
+  "exhibitAddressNotice": "The venue is subject to change. Please verify on the official website.",
   "stepIndicator": "{current}/{total}",
   "@stepIndicator": {
     "placeholders": {
