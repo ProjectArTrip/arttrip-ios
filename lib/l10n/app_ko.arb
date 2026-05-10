@@ -97,6 +97,8 @@
   "badWordDialogButton": "다시 수정하기",
   "writeQuitTitle": "작성을 중단할까요?",
   "writeQuitContent": "작성 중인 내용은 저장되지 않아요.",
+  "reviewSubmitSuccess": "리뷰가 등록되었습니다.",
+  "reviewUpdateSuccess": "리뷰가 수정되었습니다.",
   "arttripInfo": "아트트립 정보",
   "notices": "공지사항",
   "privacyPolicy": "개인정보 처리방침",

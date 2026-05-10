@@ -8,6 +8,7 @@ import 'package:arttrip/features/my/widgets/my_review_item.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_confirm_dialog.dart';
+import 'package:arttrip/shared/widgets/app_toast.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:arttrip/shared/widgets/init_widget.dart';
@@ -53,12 +54,11 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
       content: Text(
         context.l10n.deleteReviewContent,
         textAlign: TextAlign.center,
-        style:
-            ArtTripText.pretendard()
-                .body01Regular()
-                .color(AppColors.textSecondary)
-                .build()
-                .style(),
+        style: ArtTripText.pretendard()
+            .body01Regular()
+            .color(AppColors.textSecondary)
+            .build()
+            .style(),
       ),
       cancelText: context.l10n.cancel,
       confirmText: context.l10n.deleteButton,
@@ -82,6 +82,7 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
     );
 
     if (result == true && mounted) {
+      AppToast.show(context, message: context.l10n.reviewUpdateSuccess);
       await context.read<MyViewModel>().fetchMyReviews();
     }
   }

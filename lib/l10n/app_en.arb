@@ -74,6 +74,8 @@
   "badWordDialogButton": "Edit Again",
   "writeQuitTitle": "Discard your writing?",
   "writeQuitContent": "Your draft will not be saved.",
+  "reviewSubmitSuccess": "Review submitted.",
+  "reviewUpdateSuccess": "Review updated.",
   "arttripInfo": "ArtTrip Info",
   "notices": "Notices",
   "privacyPolicy": "Privacy Policy",
