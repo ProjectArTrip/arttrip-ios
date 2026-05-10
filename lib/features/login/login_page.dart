@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
       if (result.isSuccess) {
         if (result.firstLogin == true) {
-          Routes.go(context, '/onboarding/keywords');
+          Routes.go(context, '/onboarding/nickname');
         } else {
           Routes.go(context, '/');
         }
@@ -75,8 +75,8 @@ class _LoginPageState extends State<LoginPage> {
 
         // firstLogin 분기 처리
         if (result.firstLogin == true) {
-          // 신규 사용자: 온보딩 키워드 선택으로 이동
-          Routes.go(context, '/onboarding/keywords');
+          // 신규 사용자: 온보딩 닉네임 입력으로 이동
+          Routes.go(context, '/onboarding/nickname');
         } else {
           // 기존 사용자: 홈으로 이동
           Routes.go(context, '/');

@@ -99,6 +99,19 @@
   "writeQuitContent": "작성 중인 내용은 저장되지 않아요.",
   "reviewSubmitSuccess": "리뷰가 등록되었습니다.",
   "reviewUpdateSuccess": "리뷰가 수정되었습니다.",
+  "nicknameInputTitle": "닉네임을 입력해주세요.",
+  "nicknameInputDescription": "닉네임은 문자 또는 숫자를 포함해야 하며,\n특수기호만으로는 설정할 수 없습니다.",
+  "nicknameInputPlaceholder": "닉네임 입력(최대 10자)",
+  "nicknameDuplicate": "중복된 닉네임입니다.",
+  "nextButton": "다음으로",
+  "startButton": "시작하기",
+  "stepIndicator": "{current}/{total}",
+  "@stepIndicator": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
   "arttripInfo": "아트트립 정보",
   "notices": "공지사항",
   "privacyPolicy": "개인정보 처리방침",

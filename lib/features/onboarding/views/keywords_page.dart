@@ -61,6 +61,10 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (!widget.isEditMode) ...[
+                      SizedBox(height: 16.h),
+                      _buildStepIndicator(),
+                    ],
                     _buildHeader(),
                     _buildDivider(),
                     _buildContent(vm),
@@ -70,6 +74,17 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
                 ),
               ),
       ),
+    );
+  }
+
+  Widget _buildStepIndicator() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 8.h),
+      child: ArtTripText.pretendard()
+          .body01Bold()
+          .color(_textColor)
+          .build()
+          .text(context.l10n.stepIndicator(2, 2)),
     );
   }
 
@@ -197,7 +212,9 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
                   ),
                 )
               : Text(
-                  widget.isEditMode ? context.l10n.save : context.l10n.complete,
+                  widget.isEditMode
+                      ? context.l10n.save
+                      : context.l10n.startButton,
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontSize: 16.sp,

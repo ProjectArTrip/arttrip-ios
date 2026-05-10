@@ -7,6 +7,7 @@ class AppRoutes {
 
   static const onboarding = '/onboarding';
 
+  static const onboardingNickname = '$onboarding/nickname';
   static const onboardingKeywords = '$onboarding/keywords';
   static const onboardingProfile = '$onboarding/profile';
 

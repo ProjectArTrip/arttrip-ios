@@ -76,6 +76,19 @@
   "writeQuitContent": "Your draft will not be saved.",
   "reviewSubmitSuccess": "Review submitted.",
   "reviewUpdateSuccess": "Review updated.",
+  "nicknameInputTitle": "Enter your nickname.",
+  "nicknameInputDescription": "Nickname must include letters or numbers.\nSpecial characters alone are not allowed.",
+  "nicknameInputPlaceholder": "Enter nickname (max 10 chars)",
+  "nicknameDuplicate": "This nickname is already taken.",
+  "nextButton": "Next",
+  "startButton": "Start",
+  "stepIndicator": "{current}/{total}",
+  "@stepIndicator": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
   "arttripInfo": "ArtTrip Info",
   "notices": "Notices",
   "privacyPolicy": "Privacy Policy",

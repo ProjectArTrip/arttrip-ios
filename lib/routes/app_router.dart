@@ -14,6 +14,7 @@ import 'package:arttrip/features/my/views/notification_settings_page.dart';
 import 'package:arttrip/features/my/views/recent_exhibits_page.dart';
 import 'package:arttrip/features/my/views/settings_page.dart';
 import 'package:arttrip/features/onboarding/views/keywords_page.dart';
+import 'package:arttrip/features/onboarding/views/nickname_input_page.dart';
 import 'package:arttrip/features/search/views/search_page.dart';
 import 'package:arttrip/features/splash/views/splash_view.dart';
 import 'package:arttrip/routes/app_routes.dart';
@@ -54,7 +55,15 @@ final appRouter = GoRouter(
       },
     ),
 
-    // 온보딩 - 관심 키워드 선택
+    // 온보딩 1/2 - 닉네임 입력
+    GoRoute(
+      path: AppRoutes.onboardingNickname,
+      pageBuilder: (context, state) {
+        return buildPage(context, state, child: const NicknameInputPage());
+      },
+    ),
+
+    // 온보딩 2/2 - 관심 키워드 선택
     GoRoute(
       path: AppRoutes.onboardingKeywords,
       pageBuilder: (context, state) {
