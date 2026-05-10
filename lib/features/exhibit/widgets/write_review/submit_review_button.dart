@@ -2,8 +2,8 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/review_submit_result.dart';
 import 'package:arttrip/features/exhibit/viewmodels/write_review_viewmodel.dart';
-import 'package:arttrip/shared/utils/snackbar_utils.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/app_toast.dart';
 import 'package:arttrip/shared/widgets/bad_word_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -79,7 +79,7 @@ class SubmitReviewButton extends StatelessWidget {
       case ReviewSubmitResult.badWord:
         await BadWordDialog.show(context);
       case ReviewSubmitResult.failure:
-        SnackBarUtils.showError(
+        AppToast.show(
           context,
           message: vm.isEditMode
               ? context.l10n.reviewUpdateError

@@ -5,9 +5,9 @@ import 'package:arttrip/features/my/widgets/my_menu_item.dart';
 import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/route_params.dart';
 import 'package:arttrip/routes/routes.dart';
-import 'package:arttrip/shared/utils/snackbar_utils.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_confirm_dialog.dart';
+import 'package:arttrip/shared/widgets/app_toast.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -160,10 +160,7 @@ class _SettingsPageState extends State<SettingsPage> {
     if (isSuccess) {
       Routes.go(context, AppRoutes.login);
     } else {
-      SnackBarUtils.showError(
-        context,
-        message: context.l10n.deleteAccountFailed,
-      );
+      AppToast.show(context, message: context.l10n.deleteAccountFailed);
     }
   }
 }

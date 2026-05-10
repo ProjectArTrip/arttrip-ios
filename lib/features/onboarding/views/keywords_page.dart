@@ -3,7 +3,6 @@ import 'package:arttrip/features/onboarding/data/models/keyword_model.dart';
 import 'package:arttrip/features/onboarding/viewmodels/keywords_viewmodel.dart';
 import 'package:arttrip/features/onboarding/widgets/keyword_chip.dart';
 import 'package:arttrip/routes/routes.dart';
-import 'package:arttrip/shared/utils/snackbar_utils.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_toast.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
@@ -47,31 +46,29 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:
-          widget.isEditMode
-              ? CommonAppBar(
-                title: context.l10n.myTasteAnalysis,
-                showBackButton: true,
-              )
-              : const CommonAppBar(showBackButton: false),
+      appBar: widget.isEditMode
+          ? CommonAppBar(
+              title: context.l10n.myTasteAnalysis,
+              showBackButton: true,
+            )
+          : const CommonAppBar(showBackButton: false),
       body: SafeArea(
         bottom: false,
-        child:
-            vm.isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 24.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildHeader(),
-                      _buildDivider(),
-                      _buildContent(vm),
-                      _buildSubmitButton(vm),
-                      SizedBox(height: 16.h),
-                    ],
-                  ),
+        child: vm.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(),
+                    _buildDivider(),
+                    _buildContent(vm),
+                    _buildSubmitButton(vm),
+                    SizedBox(height: 16.h),
+                  ],
                 ),
+              ),
       ),
     );
   }
@@ -160,14 +157,13 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
         Wrap(
           spacing: 8.w,
           runSpacing: 12.h,
-          children:
-              keywords.map((keyword) {
-                return KeywordModelChip(
-                  label: keyword.name,
-                  isSelected: vm.isSelected(keyword.keywordId),
-                  onTap: () => vm.toggleKeywordModel(keyword.keywordId),
-                );
-              }).toList(),
+          children: keywords.map((keyword) {
+            return KeywordModelChip(
+              label: keyword.name,
+              isSelected: vm.isSelected(keyword.keywordId),
+              onTap: () => vm.toggleKeywordModel(keyword.keywordId),
+            );
+          }).toList(),
         ),
       ],
     );
@@ -191,26 +187,23 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
             ),
             elevation: 0,
           ),
-          child:
-              vm.isSaving
-                  ? SizedBox(
-                    width: 24.w,
-                    height: 24.h,
-                    child: const CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 2,
-                    ),
-                  )
-                  : Text(
-                    widget.isEditMode
-                        ? context.l10n.save
-                        : context.l10n.complete,
-                    style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w700,
-                    ),
+          child: vm.isSaving
+              ? SizedBox(
+                  width: 24.w,
+                  height: 24.h,
+                  child: const CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
                   ),
+                )
+              : Text(
+                  widget.isEditMode ? context.l10n.save : context.l10n.complete,
+                  style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
         ),
       ),
     );
@@ -231,10 +224,7 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
       }
     } else {
       if (mounted) {
-        SnackBarUtils.showError(
-          context,
-          message: context.l10n.keywordSaveError,
-        );
+        AppToast.show(context, message: context.l10n.keywordSaveError);
       }
     }
   }

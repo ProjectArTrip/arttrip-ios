@@ -3,7 +3,7 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/auth/services/auth_service.dart';
 import 'package:arttrip/routes/routes.dart';
-import 'package:arttrip/shared/utils/snackbar_utils.dart';
+import 'package:arttrip/shared/widgets/app_toast.dart';
 import 'package:arttrip/shared/widgets/social_login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
           Routes.go(context, '/');
         }
       } else {
-        SnackBarUtils.showError(
+        AppToast.show(
           context,
           message: result.errorMessage ?? '로그인에 실패했습니다',
         );
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
           Routes.go(context, '/');
         }
       } else {
-        SnackBarUtils.showError(
+        AppToast.show(
           context,
           message: result.errorMessage ?? '로그인에 실패했습니다',
         );
