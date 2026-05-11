@@ -3,7 +3,7 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/auth/services/auth_service.dart';
 import 'package:arttrip/routes/routes.dart';
-import 'package:arttrip/shared/utils/snackbar_utils.dart';
+import 'package:arttrip/shared/widgets/app_toast.dart';
 import 'package:arttrip/shared/widgets/social_login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -45,12 +45,12 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
       if (result.isSuccess) {
         if (result.firstLogin == true) {
-          Routes.go(context, '/onboarding/keywords');
+          Routes.go(context, '/onboarding/nickname');
         } else {
           Routes.go(context, '/');
         }
       } else {
-        SnackBarUtils.showError(
+        AppToast.show(
           context,
           message: result.errorMessage ?? '로그인에 실패했습니다',
         );
@@ -75,14 +75,14 @@ class _LoginPageState extends State<LoginPage> {
 
         // firstLogin 분기 처리
         if (result.firstLogin == true) {
-          // 신규 사용자: 온보딩 키워드 선택으로 이동
-          Routes.go(context, '/onboarding/keywords');
+          // 신규 사용자: 온보딩 닉네임 입력으로 이동
+          Routes.go(context, '/onboarding/nickname');
         } else {
           // 기존 사용자: 홈으로 이동
           Routes.go(context, '/');
         }
       } else {
-        SnackBarUtils.showError(
+        AppToast.show(
           context,
           message: result.errorMessage ?? '로그인에 실패했습니다',
         );

@@ -61,8 +61,11 @@ class MapBottomSheet extends StatelessWidget {
                 return CustomScrollView(
                   controller: scrollController,
                   slivers: [
-                    // 드래그 핸들
-                    SliverToBoxAdapter(child: _buildHandle()),
+                    // 드래그 핸들 (스크롤 시 고정)
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: _HandleHeaderDelegate(onTap: _onHandleTap),
+                    ),
 
                     // 접힌 상태: "전시 리스트 확인하기"
                     if (!hasData)
@@ -152,27 +155,51 @@ class MapBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildHandle() {
+  void _onHandleTap() {
+    if (!sheetController.isAttached) return;
+    final target = sheetController.size < 0.5 ? 0.8 : 0.4;
+    sheetController.animateTo(
+      target,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+}
+
+class _HandleHeaderDelegate extends SliverPersistentHeaderDelegate {
+  const _HandleHeaderDelegate({required this.onTap});
+
+  final VoidCallback onTap;
+  static const double _height = 28;
+
+  @override
+  double get maxExtent => _height;
+
+  @override
+  double get minExtent => _height;
+
+  @override
+  bool shouldRebuild(covariant _HandleHeaderDelegate oldDelegate) => false;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return GestureDetector(
-      onTap: () {
-        if (!sheetController.isAttached) return;
-        final target = sheetController.size < 0.5 ? 0.8 : 0.4;
-        sheetController.animateTo(
-          target,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      },
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 12.h),
-        child: Center(
-          child: Container(
-            width: 32.w,
-            height: 4.h,
-            decoration: BoxDecoration(
-              color: AppColors.gray100,
-              borderRadius: BorderRadius.circular(10.r),
-            ),
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        height: _height,
+        color: AppColors.gray0,
+        alignment: Alignment.center,
+        child: Container(
+          width: 32.w,
+          height: 4.h,
+          decoration: BoxDecoration(
+            color: AppColors.gray100,
+            borderRadius: BorderRadius.circular(10.r),
           ),
         ),
       ),

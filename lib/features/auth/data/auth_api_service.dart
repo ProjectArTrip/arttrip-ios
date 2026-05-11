@@ -81,6 +81,35 @@ class AuthApiService extends BaseApiService {
       );
     }
   }
+
+  /// 회원 탈퇴
+  ///
+  /// [refreshToken] - 탈퇴할 사용자의 리프레시 토큰
+  /// 탈퇴 후 토큰이 무효화되므로 인터셉터를 거치지 않도록 별도 Dio 인스턴스 사용
+  Future<ApiResult<void>> withdraw({required String refreshToken}) async {
+    try {
+      final accessToken = TokenStorageService.instance.getAccessToken();
+      final dio = Dio(
+        BaseOptions(
+          baseUrl: Env.apiBaseUrl,
+          headers: {
+            'Content-Type': 'application/json',
+            if (accessToken != null) 'Authorization': 'Bearer $accessToken',
+          },
+        ),
+      );
+
+      await dio.post(
+        ApiEndpoints.authWithdraw,
+        data: {'refreshToken': refreshToken},
+      );
+      return const ApiResult.success(null);
+    } catch (e) {
+      return ApiResult.failure(
+        NetworkException.unexpected(message: e.toString()),
+      );
+    }
+  }
 }
 
 /// 소셜 로그인 제공자

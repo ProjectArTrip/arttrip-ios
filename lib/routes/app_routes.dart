@@ -7,6 +7,7 @@ class AppRoutes {
 
   static const onboarding = '/onboarding';
 
+  static const onboardingNickname = '$onboarding/nickname';
   static const onboardingKeywords = '$onboarding/keywords';
   static const onboardingProfile = '$onboarding/profile';
 
@@ -107,6 +108,9 @@ class AppRoutes {
 
   /// 설정 페이지
   static const mySettings = '/my/settings';
+
+  /// 알림 설정 페이지
+  static const myNotificationSettings = '/my/notification-settings';
 
   /// 나의 취향 분석 페이지
   static const myTasteAnalysis = '/my/taste-analysis';

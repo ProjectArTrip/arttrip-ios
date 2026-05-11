@@ -9,6 +9,7 @@ class ApiEndpoints {
   static const authSocial = '/auth/social';
   static const authReissue = '/auth/app/reissue';
   static const authLogout = '/auth/app/logout';
+  static const authWithdraw = '/auth/withdraw';
   static const authLogin = '/auth/login';
   static const authRegister = '/auth/register';
   static const authRefresh = '/auth/refresh';
