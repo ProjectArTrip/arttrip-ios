@@ -8,6 +8,7 @@ import 'package:arttrip/features/exhibit/widgets/write_review/submit_review_butt
 import 'package:arttrip/features/exhibit/widgets/write_review/visit_date_section.dart';
 import 'package:arttrip/features/exhibit/widgets/write_review/write_review_header.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/app_confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -39,54 +40,79 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.gray0,
-      appBar: AppBar(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: _onPopInvoked,
+      child: Scaffold(
         backgroundColor: AppColors.gray0,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        title: ArtTripText.pretendard()
-            .headline()
-            .color(AppColors.textPrimary)
-            .build()
-            .text(
-              widget.params.isEditMode
-                  ? context.l10n.editReviewTitle
-                  : context.l10n.writeReviewTitle,
-            ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  WriteReviewHeader(params: widget.params),
-                  const Divider(height: 1, color: AppColors.gray50),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 24.w,
-                      vertical: 16.h,
+        appBar: AppBar(
+          backgroundColor: AppColors.gray0,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          title: ArtTripText.pretendard()
+              .headline()
+              .color(AppColors.textPrimary)
+              .build()
+              .text(
+                widget.params.isEditMode
+                    ? context.l10n.editReviewTitle
+                    : context.l10n.writeReviewTitle,
+              ),
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    WriteReviewHeader(params: widget.params),
+                    const Divider(height: 1, color: AppColors.gray50),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24.w,
+                        vertical: 16.h,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const VisitDateSection(),
+                          SizedBox(height: 12.h),
+                          const PhotoAttachSection(),
+                          SizedBox(height: 12.h),
+                          const ReviewContentSection(),
+                        ],
+                      ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const VisitDateSection(),
-                        SizedBox(height: 12.h),
-                        const PhotoAttachSection(),
-                        SizedBox(height: 12.h),
-                        const ReviewContentSection(),
-                      ],
-                    ),
-                  ),
-                  SubmitReviewButton(exhibitId: widget.exhibitId),
-                ],
+                    SubmitReviewButton(exhibitId: widget.exhibitId),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
+  }
+
+  Future<void> _onPopInvoked(bool didPop, Object? result) async {
+    if (didPop) return;
+
+    final shouldQuit = await AppConfirmDialog.show(
+      context: context,
+      title: context.l10n.writeQuitTitle,
+      content: ArtTripText.pretendard()
+          .body01Regular()
+          .color(AppColors.textSecondary)
+          .textAlign(TextAlign.center)
+          .build()
+          .text(context.l10n.writeQuitContent),
+      cancelText: context.l10n.cancel,
+      confirmText: context.l10n.confirm,
+    );
+
+    if (shouldQuit == true && mounted) {
+      Navigator.of(context).pop();
+    }
   }
 }

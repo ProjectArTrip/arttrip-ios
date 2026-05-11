@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
       if (result.isSuccess) {
         if (result.firstLogin == true) {
-          Routes.go(context, '/onboarding/keywords');
+          Routes.go(context, '/onboarding/nickname');
         } else {
           Routes.go(context, '/');
         }

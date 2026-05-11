@@ -8,6 +8,7 @@ import 'package:arttrip/features/exhibit/widgets/review_list_item.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_confirm_dialog.dart';
+import 'package:arttrip/shared/widgets/app_toast.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -130,6 +131,7 @@ class _ExhibitReviewModelTabContentState
 
     // 리뷰 등록 성공 시 목록 새로고침
     if (result == true && context.mounted) {
+      AppToast.show(context, message: context.l10n.reviewSubmitSuccess);
       await context
           .read<ExhibitDetailModelViewModel>()
           .fetchExhibitReviewModels(widget.exhibitId);
@@ -166,12 +168,11 @@ class _ExhibitReviewModelTabContentState
           Text(
             context.l10n.reviewPromptContent,
             textAlign: TextAlign.center,
-            style:
-                ArtTripText.pretendard()
-                    .body01Regular()
-                    .color(AppColors.textPrimary)
-                    .build()
-                    .style(),
+            style: ArtTripText.pretendard()
+                .body01Regular()
+                .color(AppColors.textPrimary)
+                .build()
+                .style(),
           ),
           SizedBox(height: 16.h),
           ArtTripText.pretendard()

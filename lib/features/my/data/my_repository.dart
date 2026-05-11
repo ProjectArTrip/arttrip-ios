@@ -1,6 +1,7 @@
 import 'package:arttrip/core/api_endpoints.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/dio_client.dart';
+import 'package:arttrip/core/network/network_exceptions.dart';
 import 'package:arttrip/features/my/data/models/my_review_model.dart';
 import 'package:arttrip/features/my/data/models/recent_exhibit_model.dart';
 import 'package:arttrip/features/my/data/models/user_profile_model.dart';
@@ -91,20 +92,23 @@ class MyRepositoryImpl implements MyRepository {
         ApiEndpoints.me,
         data: {'nickName': nickname},
       );
-      if (response.isSuccess) {
-        return null; // 성공
-      }
-      return '닉네임 변경에 실패했습니다.';
-    } on DioException catch (e) {
-      final data = e.response?.data;
-      if (data is Map<String, dynamic>) {
-        return data['message'] as String? ?? '닉네임 변경에 실패했습니다.';
-      }
-      AppUtil.debugLog('updateNickname: $e');
+      return response.when(
+        success: (_) => null,
+        failure: (e) => _extractServerMessage(e) ?? '닉네임 변경에 실패했습니다.',
+      );
     } catch (e) {
       AppUtil.debugLog('updateNickname: $e');
     }
     return '닉네임 변경에 실패했습니다.';
+  }
+
+  /// NetworkException의 응답 본문에서 서버 메시지(`message` 필드) 추출
+  String? _extractServerMessage(NetworkException e) {
+    final data = e.data;
+    if (data is Map<String, dynamic>) {
+      return data['message'] as String?;
+    }
+    return null;
   }
 
   @override

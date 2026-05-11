@@ -1,5 +1,6 @@
 import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
+import 'package:arttrip/features/exhibit/data/models/review_submit_result.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -142,8 +143,8 @@ class WriteReviewViewModel with ChangeNotifier {
   }
 
   /// 리뷰 제출 (신규)
-  Future<bool> submitReview(int exhibitId) async {
-    if (!canSubmit) return false;
+  Future<ReviewSubmitResult> submitReview(int exhibitId) async {
+    if (!canSubmit) return ReviewSubmitResult.failure;
 
     _isSubmitting = true;
     notifyListeners();
@@ -160,24 +161,24 @@ class WriteReviewViewModel with ChangeNotifier {
       _isSubmitting = false;
       notifyListeners();
 
-      return result != null;
+      return result;
     } catch (e) {
       _isSubmitting = false;
       notifyListeners();
-      return false;
+      return ReviewSubmitResult.failure;
     }
   }
 
   /// 리뷰 수정
-  Future<bool> updateReview() async {
-    if (!canSubmit || _reviewId == null) return false;
+  Future<ReviewSubmitResult> updateReview() async {
+    if (!canSubmit || _reviewId == null) return ReviewSubmitResult.failure;
 
     _isSubmitting = true;
     notifyListeners();
 
     try {
       final dateStr = DateFormat('yyyy-MM-dd').format(_visitDate!);
-      final success = await _repository.updateReview(
+      final result = await _repository.updateReview(
         reviewId: _reviewId!,
         newImages: _selectedImages,
         date: dateStr,
@@ -188,11 +189,11 @@ class WriteReviewViewModel with ChangeNotifier {
       _isSubmitting = false;
       notifyListeners();
 
-      return success;
+      return result;
     } catch (e) {
       _isSubmitting = false;
       notifyListeners();
-      return false;
+      return ReviewSubmitResult.failure;
     }
   }
 }

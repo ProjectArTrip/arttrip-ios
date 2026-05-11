@@ -4,11 +4,13 @@ import 'package:arttrip/core/api_endpoints.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/network/api_result.dart';
 import 'package:arttrip/core/network/dio_client.dart';
+import 'package:arttrip/core/network/network_exceptions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
 import 'package:arttrip/features/exhibit/data/models/favorite_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
+import 'package:arttrip/features/exhibit/data/models/review_submit_result.dart';
 import 'package:arttrip/shared/models/base_result_model.dart';
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,14 +22,14 @@ abstract class ExhibitRepository {
     int? cursor,
     int size = 10,
   });
-  Future<ReviewCreateResult?> createReview({
+  Future<ReviewSubmitResult> createReview({
     required int exhibitId,
     required List<XFile> images,
     required String date,
     required String content,
   });
   Future<ReviewCreateResult?> fetchReviewDetail(int reviewId);
-  Future<bool> updateReview({
+  Future<ReviewSubmitResult> updateReview({
     required int reviewId,
     required List<XFile> newImages,
     required String date,
@@ -107,7 +109,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   }
 
   @override
-  Future<ReviewCreateResult?> createReview({
+  Future<ReviewSubmitResult> createReview({
     required int exhibitId,
     required List<XFile> images,
     required String date,
@@ -136,13 +138,35 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
         data: formData,
         options: Options(extra: {'requestJson': requestJson}),
       );
-      final data = response.dataOrNull;
-      if (data == null) return null;
-      return ReviewCreateResult.fromJson(data as Map<String, dynamic>);
+      return response.when(
+        success: (_) => ReviewSubmitResult.success,
+        failure: _classifySubmitFailure,
+      );
     } catch (e) {
       AppUtil.debugLog('createReview: $e');
     }
-    return null;
+    return ReviewSubmitResult.failure;
+  }
+
+  /// 리뷰 제출 실패 응답을 [ReviewSubmitResult]로 분류
+  ///
+  /// 서버 응답 코드가 `REVIEW400-BAD_WORD_INCLUDED`이면 [ReviewSubmitResult.badWord],
+  /// 그 외(타임아웃/네트워크/5xx/다른 4xx 등)는 [ReviewSubmitResult.failure]
+  ReviewSubmitResult _classifySubmitFailure(NetworkException e) {
+    final data = e.data;
+    Map<String, dynamic>? body;
+    if (data is Map<String, dynamic>) {
+      body = data;
+    } else if (data is String && data.isNotEmpty) {
+      try {
+        final decoded = jsonDecode(data);
+        if (decoded is Map<String, dynamic>) body = decoded;
+      } catch (_) {}
+    }
+    if (body != null && body['code'] == 'REVIEW400-BAD_WORD_INCLUDED') {
+      return ReviewSubmitResult.badWord;
+    }
+    return ReviewSubmitResult.failure;
   }
 
   @override
@@ -159,7 +183,7 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   }
 
   @override
-  Future<bool> updateReview({
+  Future<ReviewSubmitResult> updateReview({
     required int reviewId,
     required List<XFile> newImages,
     required String date,
@@ -193,11 +217,14 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
         data: formData,
         options: Options(extra: {'requestJson': requestJson}),
       );
-      return response.isSuccess;
+      return response.when(
+        success: (_) => ReviewSubmitResult.success,
+        failure: _classifySubmitFailure,
+      );
     } catch (e) {
       AppUtil.debugLog('updateReview: $e');
     }
-    return false;
+    return ReviewSubmitResult.failure;
   }
 
   @override

@@ -249,6 +249,30 @@ class AuthService {
     debugPrint('로그아웃 완료');
   }
 
+  /// 회원 탈퇴
+  ///
+  /// 서버 탈퇴 → 카카오 unlink → 로컬 토큰 삭제
+  /// 서버 응답 실패 시 로컬 정리 없이 false 반환 (재시도 가능하도록)
+  Future<bool> withdraw() async {
+    final refreshToken = _tokenStorage.getRefreshToken();
+    if (refreshToken == null) return false;
+
+    final result = await _authApi.withdraw(refreshToken: refreshToken);
+
+    return result.when(
+      success: (_) async {
+        await _kakaoLogin.unlink();
+        await _tokenStorage.clearTokens();
+        debugPrint('회원 탈퇴 완료');
+        return true;
+      },
+      failure: (e) {
+        debugPrint('회원 탈퇴 실패: ${e.message}');
+        return false;
+      },
+    );
+  }
+
   /// 토큰 갱신
   Future<String?> refreshToken() async {
     final refreshToken = _tokenStorage.getRefreshToken();
