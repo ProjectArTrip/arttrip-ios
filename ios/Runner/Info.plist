@@ -66,6 +66,14 @@
 					<string>kakao295035084c1e08b86ef4d6a4e107c4fa</string>
 				</array>
 			</dict>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>$(GOOGLE_REVERSED_CLIENT_ID)</string>
+				</array>
+			</dict>
 		</array>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>현재 위치를 기반으로 주변 전시를 찾기 위해 위치 정보가 필요합니다.</string>
@@ -75,6 +83,8 @@
 		<string>사진을 촬영하기 위해 카메라 접근 권한이 필요합니다.</string>
 		<key>GoogleMapsApiKey</key>
 		<string>$(GOOGLE_MAPS_API_KEY)</string>
+		<key>GIDClientID</key>
+		<string>$(GOOGLE_CLIENT_ID)</string>
 		<!--스플래시
 		화면에서 상단 시스템바 아이콘 색상을 검정으로 고정 -->
 		<key>UIStatusBarStyle</key>

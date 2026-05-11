@@ -38,6 +38,7 @@ class AppAssets {
   static const String icRefresh = 'assets/svg/ic_refresh.svg';
   static const String icFavorite = 'assets/svg/ic_favorite.svg';
   static const String icNoExhibits = 'assets/svg/ic_no_exhibits.svg';
+  static const String icNoImage = 'assets/svg/ic_no_image.svg';
 
   // Logo
   static const String icLogoWhite = 'assets/svg/ic_logo_white.svg';

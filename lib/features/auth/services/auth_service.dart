@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:arttrip/core/config/prefs.dart';
 import 'package:arttrip/features/auth/data/auth_api_service.dart';
 import 'package:arttrip/features/auth/services/token_storage_service.dart';
+import 'package:arttrip/features/login/services/apple_login_service.dart';
+import 'package:arttrip/features/login/services/google_login_service.dart';
 import 'package:arttrip/features/login/services/kakao_login_service.dart';
 import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +43,8 @@ class AuthService {
   final _authApi = AuthApiService();
   final _tokenStorage = TokenStorageService.instance;
   final _kakaoLogin = KakaoLoginService.instance;
+  final _googleLogin = GoogleLoginService.instance;
+  final _appleLogin = AppleLoginService.instance;
 
   /// 카카오 로그인 (소셜 로그인 + 서버 토큰 발급)
   Future<AuthResult> loginWithKakao(BuildContext context) async {
@@ -94,14 +98,15 @@ class AuthService {
   }
 
   /// 테스트 계정 로그인
-  Future<AuthResult> loginWithTestAccount(BuildContext context) async {
+  Future<AuthResult> loginWithTestAccount(
+    BuildContext context, {
+    required String email,
+    required String password,
+  }) async {
     try {
-      const testEmail = 'test@arttrip.com';
-      const testPassword = 'test1234';
-
       final result = await _authApi.testLogin(
-        email: testEmail,
-        password: testPassword,
+        email: email,
+        password: password,
       );
 
       return result.when(
@@ -132,16 +137,92 @@ class AuthService {
     }
   }
 
-  /// Google 로그인 (추후 구현)
-  Future<AuthResult> loginWithGoogle() async {
-    // TODO: Google 로그인 구현
-    return AuthResult.failure('Google 로그인은 아직 지원되지 않습니다');
+  /// Google 로그인
+  Future<AuthResult> loginWithGoogle(BuildContext context) async {
+    try {
+      final googleResult = await _googleLogin.login();
+
+      if (!googleResult.isSuccess || googleResult.idToken == null) {
+        return AuthResult.failure(
+          googleResult.errorMessage ?? '구글 로그인에 실패했습니다',
+        );
+      }
+
+      final serverResult = await _authApi.socialLogin(
+        provider: SocialProvider.google.value,
+        authorizationCode: googleResult.idToken!,
+      );
+
+      return serverResult.when(
+        success: (tokenResult) async {
+          await _tokenStorage.saveTokens(
+            accessToken: tokenResult.accessToken,
+            refreshToken: tokenResult.refreshToken,
+            isFirstLogin: tokenResult.firstLogin,
+          );
+
+          if (context.mounted) {
+            unawaited(
+              context.read<MyViewModel>().registerFcmToken(
+                Prefs().fcmToken ?? '',
+              ),
+            );
+          }
+
+          return AuthResult.success(firstLogin: tokenResult.firstLogin);
+        },
+        failure: (exception) {
+          return AuthResult.failure(exception.message);
+        },
+      );
+    } catch (e) {
+      debugPrint('구글 로그인 오류: $e');
+      return AuthResult.failure('로그인 중 오류가 발생했습니다');
+    }
   }
 
-  /// Apple 로그인 (추후 구현)
-  Future<AuthResult> loginWithApple() async {
-    // TODO: Apple 로그인 구현
-    return AuthResult.failure('Apple 로그인은 아직 지원되지 않습니다');
+  /// Apple 로그인
+  Future<AuthResult> loginWithApple(BuildContext context) async {
+    try {
+      final appleResult = await _appleLogin.login();
+
+      if (!appleResult.isSuccess || appleResult.idToken == null) {
+        return AuthResult.failure(
+          appleResult.errorMessage ?? '애플 로그인에 실패했습니다',
+        );
+      }
+
+      final serverResult = await _authApi.socialLogin(
+        provider: SocialProvider.apple.value,
+        idToken: appleResult.idToken,
+      );
+
+      return serverResult.when(
+        success: (tokenResult) async {
+          await _tokenStorage.saveTokens(
+            accessToken: tokenResult.accessToken,
+            refreshToken: tokenResult.refreshToken,
+            isFirstLogin: tokenResult.firstLogin,
+          );
+
+          if (context.mounted) {
+            unawaited(
+              context.read<MyViewModel>().registerFcmToken(
+                Prefs().fcmToken ?? '',
+              ),
+            );
+          }
+
+          return AuthResult.success(firstLogin: tokenResult.firstLogin);
+        },
+        failure: (exception) {
+          return AuthResult.failure(exception.message);
+        },
+      );
+    } catch (e) {
+      debugPrint('애플 로그인 오류: $e');
+      return AuthResult.failure('로그인 중 오류가 발생했습니다');
+    }
   }
 
   /// 로그아웃
@@ -157,8 +238,10 @@ class AuthService {
       );
     }
 
-    // 카카오 로그아웃
+    // 소셜 로그아웃
     await _kakaoLogin.logout();
+    await _googleLogin.logout();
+    await _appleLogin.logout();
 
     // 저장된 토큰 삭제
     await _tokenStorage.clearTokens();

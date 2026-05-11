@@ -15,11 +15,16 @@ class AuthApiService extends BaseApiService {
   /// [idToken] - 소셜 로그인에서 받은 토큰
   Future<ApiResult<AuthTokenResult>> socialLogin({
     required String provider,
-    required String idToken,
+    String? idToken,
+    String? authorizationCode,
   }) {
     return post<AuthTokenResult>(
       ApiEndpoints.authSocial,
-      data: {'provider': provider, 'idToken': idToken},
+      data: {
+        'provider': provider,
+        'idToken': ?idToken,
+        'authorizationCode': ?authorizationCode,
+      },
       fromJson: (data) =>
           AuthTokenResult.fromJson(data as Map<String, dynamic>),
     );
@@ -31,7 +36,7 @@ class AuthApiService extends BaseApiService {
     required String password,
   }) {
     return post<AuthTokenResult>(
-      ApiEndpoints.authLogin,
+      ApiEndpoints.authLoginTest,
       data: {'email': email, 'password': password},
       fromJson: (data) =>
           AuthTokenResult.fromJson(data as Map<String, dynamic>),

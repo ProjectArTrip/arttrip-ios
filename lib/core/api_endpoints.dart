@@ -10,6 +10,7 @@ class ApiEndpoints {
   static const authReissue = '/auth/app/reissue';
   static const authLogout = '/auth/app/logout';
   static const authLogin = '/auth/login';
+  static const authLoginTest = '/auth/login/test';
   static const authRegister = '/auth/register';
   static const authRefresh = '/auth/refresh';
   static const health = '/health';

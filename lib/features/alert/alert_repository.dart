@@ -13,7 +13,7 @@ abstract class AlertRepository {
   Future<void> markAllAsRead();
 
   /// 안읽음 알림 여부 조회
-  Future<bool> fetchUnreadAlerts();
+  Future<bool?> fetchUnreadAlerts();
 }
 
 class AlertRepositoryImpl implements AlertRepository {
@@ -51,13 +51,13 @@ class AlertRepositoryImpl implements AlertRepository {
   }
 
   @override
-  Future<bool> fetchUnreadAlerts() async {
+  Future<bool?> fetchUnreadAlerts() async {
     try {
       final response = await _dio.get('/notifications/read-status');
       final data = response.dataOrNull;
       if (data == null) throw Exception('No data');
 
-      return data['hasUnread'] as bool;
+      return data['hasUnread'] as bool?;
     } catch (e) {
       AppUtil.debugLog('fetchUnreadAlerts: $e');
       rethrow;

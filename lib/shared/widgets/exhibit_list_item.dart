@@ -98,7 +98,8 @@ class ExhibitListItem extends StatelessWidget {
                 spacing: 8.h,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (showArea)
+                  if (showArea &&
+                      (item.countryName != null || item.regionName != null))
                     ArtTripText.pretendard()
                         .body01Regular()
                         .color(const Color(0xFF7859FF))
@@ -111,16 +112,18 @@ class ExhibitListItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 2.h,
                     children: [
-                      ArtTripText.pretendard()
-                          .body02Regular()
-                          .color(AppColors.textTertiary)
-                          .build()
-                          .text(item.hallName ?? ''),
-                      ArtTripText.pretendard()
-                          .body02Regular()
-                          .color(AppColors.textTertiary)
-                          .build()
-                          .text(item.exhibitPeriod ?? ''),
+                      if (item.hallName?.isNotEmpty == true)
+                        ArtTripText.pretendard()
+                            .body02Regular()
+                            .color(AppColors.textTertiary)
+                            .build()
+                            .text(item.hallName!),
+                      if (item.exhibitPeriod?.isNotEmpty == true)
+                        ArtTripText.pretendard()
+                            .body02Regular()
+                            .color(AppColors.textTertiary)
+                            .build()
+                            .text(item.exhibitPeriod!),
                     ],
                   ),
                 ],
