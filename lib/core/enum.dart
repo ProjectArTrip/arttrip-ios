@@ -28,3 +28,17 @@ enum SortType {
   const SortType(this.type);
   final String type;
 }
+
+enum OnboardingStep {
+  nickname('NICKNAME'),
+  keyword('KEYWORD'),
+  completed('COMPLETED');
+
+  const OnboardingStep(this.type);
+  final String type;
+
+  static OnboardingStep? fromString(String? value) {
+    if (value == null) return null;
+    return OnboardingStep.values.where((e) => e.type == value).firstOrNull;
+  }
+}

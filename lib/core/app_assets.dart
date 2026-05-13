@@ -39,8 +39,14 @@ class AppAssets {
   static const String icFavorite = 'assets/svg/ic_favorite.svg';
   static const String icNoExhibits = 'assets/svg/ic_no_exhibits.svg';
   static const String icNoImage = 'assets/svg/ic_no_image.svg';
+  static const String icStampDefault = 'assets/svg/ic_stamp_default.svg';
+  static const String icHelp = 'assets/svg/ic_help.svg';
 
   // Logo
   static const String icLogoWhite = 'assets/svg/ic_logo_white.svg';
   static const String icLogoBlack = 'assets/svg/ic_logo_black.svg';
+
+  // Image
+  static const String imgStampBg = 'assets/img/img_stamp_bg.png';
+  static const String imgStampSample = 'assets/img/img_stamp_sample.png';
 }

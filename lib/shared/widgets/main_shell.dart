@@ -22,6 +22,7 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: widget.navigationShell,
       bottomNavigationBar: BottomNavBar(
         key: _bottomNavigationKey,
@@ -32,7 +33,6 @@ class _MainShellState extends State<MainShell> {
   }
 
   void _onTap(int index) {
-    // goBranch로 탭 전환 (각 탭의 상태 유지)
     widget.navigationShell.goBranch(
       index,
       initialLocation: index == widget.navigationShell.currentIndex,

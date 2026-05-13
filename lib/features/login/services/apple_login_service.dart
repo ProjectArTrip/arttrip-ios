@@ -4,18 +4,15 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 class AppleLoginResult {
   const AppleLoginResult({
     required this.isSuccess,
-    this.idToken,
     this.authorizationCode,
     this.errorMessage,
   });
 
   factory AppleLoginResult.success({
-    required String idToken,
     String? authorizationCode,
   }) {
     return AppleLoginResult(
       isSuccess: true,
-      idToken: idToken,
       authorizationCode: authorizationCode,
     );
   }
@@ -25,7 +22,6 @@ class AppleLoginResult {
   }
 
   final bool isSuccess;
-  final String? idToken;
   final String? authorizationCode;
   final String? errorMessage;
 }
@@ -53,7 +49,6 @@ class AppleLoginService {
 
       debugPrint('애플 로그인 성공');
       return AppleLoginResult.success(
-        idToken: idToken,
         authorizationCode: credential.authorizationCode,
       );
     } on SignInWithAppleAuthorizationException catch (e) {

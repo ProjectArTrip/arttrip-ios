@@ -13,6 +13,7 @@ abstract class AuthTokenResult with _$AuthTokenResult {
     @JsonKey(readValue: _readAccessToken) String? accessToken,
     required String refreshToken,
     @JsonKey(name: 'isFirstLogin') bool? firstLogin,
+    String? onboardingStep,
   }) = _AuthTokenResult;
 
   factory AuthTokenResult.fromJson(Map<String, dynamic> json) =>

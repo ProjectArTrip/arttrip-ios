@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/auth/services/auth_service.dart';
+import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/social_login_button.dart';
@@ -71,11 +73,7 @@ class _LoginPageState extends State<LoginPage> {
       );
       if (!mounted) return;
       if (result.isSuccess) {
-        if (result.firstLogin == true) {
-          Routes.go(context, '/onboarding/nickname');
-        } else {
-          Routes.go(context, '/');
-        }
+        _navigateAfterLogin(result.onboardingStep);
       } else {
         _showLoginError();
       }
@@ -91,11 +89,7 @@ class _LoginPageState extends State<LoginPage> {
       final result = await AuthService.instance.loginWithGoogle(buildContext);
       if (!mounted) return;
       if (result.isSuccess) {
-        if (result.firstLogin == true) {
-          Routes.go(context, '/onboarding/keywords');
-        } else {
-          Routes.go(context, '/');
-        }
+        _navigateAfterLogin(result.onboardingStep);
       } else {
         _showLoginError();
       }
@@ -111,11 +105,7 @@ class _LoginPageState extends State<LoginPage> {
       final result = await AuthService.instance.loginWithApple(buildContext);
       if (!mounted) return;
       if (result.isSuccess) {
-        if (result.firstLogin == true) {
-          Routes.go(context, '/onboarding/keywords');
-        } else {
-          Routes.go(context, '/');
-        }
+        _navigateAfterLogin(result.onboardingStep);
       } else {
         _showLoginError();
       }
@@ -131,16 +121,24 @@ class _LoginPageState extends State<LoginPage> {
       final result = await AuthService.instance.loginWithKakao(buildContext);
       if (!mounted) return;
       if (result.isSuccess) {
-        if (result.firstLogin == true) {
-          Routes.go(context, '/onboarding/keywords');
-        } else {
-          Routes.go(context, '/');
-        }
+        _navigateAfterLogin(result.onboardingStep);
       } else {
         _showLoginError();
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  void _navigateAfterLogin(OnboardingStep? step) {
+    switch (step) {
+      case OnboardingStep.nickname:
+        Routes.go(context, AppRoutes.onboardingNickname);
+      case OnboardingStep.keyword:
+        Routes.go(context, AppRoutes.onboardingKeywords);
+      case OnboardingStep.completed:
+      case null:
+        Routes.go(context, '/');
     }
   }
 

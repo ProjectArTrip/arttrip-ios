@@ -4,12 +4,17 @@ import 'package:google_sign_in/google_sign_in.dart';
 class GoogleLoginResult {
   const GoogleLoginResult({
     required this.isSuccess,
-    this.idToken,
     this.errorMessage,
+    this.idToken,
   });
 
-  factory GoogleLoginResult.success({required String idToken}) {
-    return GoogleLoginResult(isSuccess: true, idToken: idToken);
+  factory GoogleLoginResult.success({
+    String? idToken,
+  }) {
+    return GoogleLoginResult(
+      isSuccess: true,
+      idToken: idToken,
+    );
   }
 
   factory GoogleLoginResult.failure(String message) {
@@ -29,7 +34,11 @@ class GoogleLoginService {
   static GoogleLoginService get instance => _instance;
 
   static Future<void> initialize() async {
-    await GoogleSignIn.instance.initialize();
+    await GoogleSignIn.instance.initialize(
+      // serverClientId: Env.googleServerClientId.isNotEmpty
+      //     ? Env.googleServerClientId
+      //     : null,
+    );
   }
 
   Future<GoogleLoginResult> login() async {
@@ -44,7 +53,9 @@ class GoogleLoginService {
       }
 
       debugPrint('구글 로그인 성공: ${account.email}');
-      return GoogleLoginResult.success(idToken: idToken);
+      return GoogleLoginResult.success(
+        idToken: idToken,
+      );
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
         return GoogleLoginResult.failure('로그인이 취소됐습니다');

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:arttrip/core/config/prefs.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/features/auth/data/auth_api_service.dart';
 import 'package:arttrip/features/auth/services/token_storage_service.dart';
 import 'package:arttrip/features/login/services/apple_login_service.dart';
@@ -15,17 +16,25 @@ class AuthResult {
   const AuthResult({
     required this.isSuccess,
     this.firstLogin,
+    this.onboardingStep,
     this.errorMessage,
   });
 
-  factory AuthResult.success({bool? firstLogin}) =>
-      AuthResult(isSuccess: true, firstLogin: firstLogin);
+  factory AuthResult.success({
+    bool? firstLogin,
+    OnboardingStep? onboardingStep,
+  }) => AuthResult(
+    isSuccess: true,
+    firstLogin: firstLogin,
+    onboardingStep: onboardingStep,
+  );
 
   factory AuthResult.failure(String message) =>
       AuthResult(isSuccess: false, errorMessage: message);
 
   final bool isSuccess;
   final bool? firstLogin;
+  final OnboardingStep? onboardingStep;
   final String? errorMessage;
 }
 
@@ -84,7 +93,12 @@ class AuthService {
           }
 
           debugPrint('서버 토큰 발급 및 저장 완료, firstLogin: ${tokenResult.firstLogin}');
-          return AuthResult.success(firstLogin: tokenResult.firstLogin);
+          return AuthResult.success(
+            firstLogin: tokenResult.firstLogin,
+            onboardingStep: OnboardingStep.fromString(
+              tokenResult.onboardingStep,
+            ),
+          );
         },
         failure: (exception) {
           debugPrint('서버 토큰 발급 실패: ${exception.message}');
@@ -125,7 +139,12 @@ class AuthService {
             );
           }
 
-          return AuthResult.success(firstLogin: tokenResult.firstLogin);
+          return AuthResult.success(
+            firstLogin: tokenResult.firstLogin,
+            onboardingStep: OnboardingStep.fromString(
+              tokenResult.onboardingStep,
+            ),
+          );
         },
         failure: (exception) {
           return AuthResult.failure(exception.message);
@@ -142,7 +161,7 @@ class AuthService {
     try {
       final googleResult = await _googleLogin.login();
 
-      if (!googleResult.isSuccess || googleResult.idToken == null) {
+      if (!googleResult.isSuccess) {
         return AuthResult.failure(
           googleResult.errorMessage ?? '구글 로그인에 실패했습니다',
         );
@@ -150,7 +169,7 @@ class AuthService {
 
       final serverResult = await _authApi.socialLogin(
         provider: SocialProvider.google.value,
-        authorizationCode: googleResult.idToken!,
+        idToken: googleResult.idToken!,
       );
 
       return serverResult.when(
@@ -169,7 +188,12 @@ class AuthService {
             );
           }
 
-          return AuthResult.success(firstLogin: tokenResult.firstLogin);
+          return AuthResult.success(
+            firstLogin: tokenResult.firstLogin,
+            onboardingStep: OnboardingStep.fromString(
+              tokenResult.onboardingStep,
+            ),
+          );
         },
         failure: (exception) {
           return AuthResult.failure(exception.message);
@@ -186,7 +210,7 @@ class AuthService {
     try {
       final appleResult = await _appleLogin.login();
 
-      if (!appleResult.isSuccess || appleResult.idToken == null) {
+      if (!appleResult.isSuccess) {
         return AuthResult.failure(
           appleResult.errorMessage ?? '애플 로그인에 실패했습니다',
         );
@@ -194,7 +218,7 @@ class AuthService {
 
       final serverResult = await _authApi.socialLogin(
         provider: SocialProvider.apple.value,
-        idToken: appleResult.idToken,
+        authorizationCode: appleResult.authorizationCode!,
       );
 
       return serverResult.when(
@@ -213,7 +237,12 @@ class AuthService {
             );
           }
 
-          return AuthResult.success(firstLogin: tokenResult.firstLogin);
+          return AuthResult.success(
+            firstLogin: tokenResult.firstLogin,
+            onboardingStep: OnboardingStep.fromString(
+              tokenResult.onboardingStep,
+            ),
+          );
         },
         failure: (exception) {
           return AuthResult.failure(exception.message);

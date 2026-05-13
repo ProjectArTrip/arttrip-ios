@@ -2,7 +2,7 @@ import 'package:arttrip/features/favorite/favorites_page.dart';
 import 'package:arttrip/features/home/pages/home_page.dart';
 import 'package:arttrip/features/map/views/map_view.dart';
 import 'package:arttrip/features/my/views/my_page.dart';
-import 'package:arttrip/features/stamp/views/stamp_view.dart';
+import 'package:arttrip/features/stamp/stamp_page.dart';
 import 'package:arttrip/routes/route_builder.dart';
 import 'package:arttrip/shared/widgets/main_shell.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +55,7 @@ final mainShellRoute = StatefulShellRoute.indexedStack(
         GoRoute(
           path: '/stamp',
           pageBuilder: (context, state) {
-            return buildPage(context, state, child: const StampView());
+            return buildPage(context, state, child: const StampPage());
           },
         ),
       ],
