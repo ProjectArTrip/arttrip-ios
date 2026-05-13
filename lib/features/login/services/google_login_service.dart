@@ -1,3 +1,4 @@
+import 'package:arttrip/core/env.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -35,20 +36,22 @@ class GoogleLoginService {
 
   static Future<void> initialize() async {
     await GoogleSignIn.instance.initialize(
-      // serverClientId: Env.googleServerClientId.isNotEmpty
-      //     ? Env.googleServerClientId
-      //     : null,
+      clientId: Env.googleClientId.isNotEmpty ? Env.googleClientId : null,
+      serverClientId: Env.googleServerClientId.isNotEmpty
+          ? Env.googleServerClientId
+          : null,
     );
   }
 
   Future<GoogleLoginResult> login() async {
     try {
       final account = await GoogleSignIn.instance.authenticate();
-      final idToken = account.authentication.idToken;
+      final serverAuth = account.authentication.idToken;
+      final idToken = serverAuth;
 
       if (idToken == null) {
         return GoogleLoginResult.failure(
-          'ID Token을 받지 못했습니다. Google Cloud Console에서 OAuth 클라이언트 설정을 확인해주세요.',
+          'ID Token을 받지 못했습니다. .env의 GOOGLE_SERVER_CLIENT_ID(웹 애플리케이션 클라이언트 ID)를 확인해주세요.',
         );
       }
 
@@ -60,10 +63,10 @@ class GoogleLoginService {
       if (e.code == GoogleSignInExceptionCode.canceled) {
         return GoogleLoginResult.failure('로그인이 취소됐습니다');
       }
-      debugPrint('구글 로그인 실패: $e');
+      debugPrint('구글 로그인 실패 (GoogleSignInException): code=${e.code}, msg=$e');
       return GoogleLoginResult.failure('로그인 중 오류가 발생했습니다');
-    } catch (e) {
-      debugPrint('구글 로그인 실패: $e');
+    } catch (e, st) {
+      debugPrint('구글 로그인 실패 (catch): $e\n$st');
       return GoogleLoginResult.failure('로그인 중 오류가 발생했습니다');
     }
   }
