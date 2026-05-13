@@ -11,6 +11,7 @@ class ApiEndpoints {
   static const authLogout = '/auth/app/logout';
   static const authWithdraw = '/auth/withdraw';
   static const authLogin = '/auth/login';
+  static const authLoginTest = '/auth/login/test';
   static const authRegister = '/auth/register';
   static const authRefresh = '/auth/refresh';
   static const health = '/health';

@@ -1,8 +1,13 @@
+import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
+import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 /// 공용 네트워크 이미지 위젯
@@ -39,11 +44,21 @@ class AppCachedImage extends StatelessWidget {
       errorWidget: (context, url, error) => Container(
         width: width,
         height: height,
-        color: AppColors.gray100,
-        child: const Center(
-          child: Icon(
-            Icons.image_not_supported,
-            color: AppColors.textTertiary,
+        color: AppColors.gray50,
+        child: Center(
+          child: Column(
+            spacing: 8.h,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(AppAssets.icNoImage, width: 63.w, height: 20.h),
+              ArtTripText.pretendard()
+                  .body02Bold()
+                  .color(AppColors.textTertiary)
+                  .textAlign(TextAlign.center)
+                  .build()
+                  .text(context.l10n.noImage),
+            ],
           ),
         ),
       ),

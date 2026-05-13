@@ -38,7 +38,7 @@ class AlertViewModel with ChangeNotifier {
   Future<void> getUnreadAlerts() async {
     try {
       final count = await _repository.fetchUnreadAlerts();
-      hasUnread = count;
+      hasUnread = count ?? false;
     } catch (e) {
       AppUtil.debugLog('getUnreadAlerts error: $e');
     }

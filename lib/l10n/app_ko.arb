@@ -9,7 +9,10 @@
   "loginKakao": "카카오로 로그인",
   "loginGoogle": "Google로 로그인",
   "loginApple": "Apple로 로그인",
+  "loginFailed": "로그인에 실패했습니다. 다시 시도해주세요.",
   "loginTest": "테스트 계정으로 로그인",
+  "loginButton": "로그인",
+  "passwordLabel": "비밀번호를 입력해 주세요",
   "tempNickname": "임시닉네임",
   "oversea": "해외",
   "domestic": "국내",
@@ -75,7 +78,7 @@
   "logoutConfirmMessage": "정말 로그아웃 하시겠습니까?",
   "editProfileTitle": "내 정보 수정",
   "nicknameLabel": "닉네임",
-  "emailLabel": "대표 이메일",
+  "emailLabel": "이메일을 입력해 주세요",
   "changeProfileImage": "프로필 이미지 변경",
   "pickFromGallery": "사진 가져오기",
   "takePhoto": "사진 촬영",
@@ -176,5 +179,6 @@
   "curationTitle": "오늘의 큐레이션",
   "minutesAgo": "{min}분 전",
   "hoursAgo": "{hour}시간 전",
-  "noAlertsTitle": "알림이 없습니다."
+  "noAlertsTitle": "알림이 없습니다.",
+  "noImage": "이미지 준비중입니다"
 }

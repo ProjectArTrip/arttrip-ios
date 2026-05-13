@@ -8,10 +8,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class AlertBadge extends StatelessWidget {
-  const AlertBadge({super.key, this.iconType = false, this.hasUnread});
+  const AlertBadge({
+    super.key,
+    this.iconType = false,
+    this.hasUnread,
+    this.color,
+  });
 
   final bool iconType;
   final bool? hasUnread;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +41,9 @@ class AlertBadge extends StatelessWidget {
               AppAssets.icNotification,
               width: 24.w,
               height: 24.w,
+              colorFilter: color != null
+                  ? ColorFilter.mode(color!, BlendMode.srcIn)
+                  : null,
             ),
             hasUnread == null
                 ? Selector<AlertViewModel, bool>(

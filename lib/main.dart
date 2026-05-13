@@ -1,6 +1,5 @@
 import 'package:app_badge_plus/app_badge_plus.dart';
 import 'package:arttrip/core/app_colors.dart';
-import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_utils.dart';
 import 'package:arttrip/core/config/prefs.dart';
 import 'package:arttrip/core/config/provider_config.dart';
@@ -10,6 +9,7 @@ import 'package:arttrip/core/network/network.dart';
 import 'package:arttrip/features/alert/local_noti_widget.dart';
 import 'package:arttrip/features/auth/services/auth_service.dart';
 import 'package:arttrip/features/auth/services/token_storage_service.dart';
+import 'package:arttrip/features/login/services/google_login_service.dart';
 import 'package:arttrip/l10n/generated/app_localizations.dart';
 import 'package:arttrip/routes/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,7 +20,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 @pragma('vm:entry-point')
@@ -38,7 +37,7 @@ void _showLocalNoti(RemoteMessage message) {
   _inAppBannerEntry?.remove();
   _inAppBannerEntry = OverlayEntry(
     builder: (_) => LocalNotiWidget(
-      message: message.notification?.title ?? '',
+      message: message.notification?.body ?? '',
       onDismiss: () {
         _inAppBannerEntry?.remove();
         _inAppBannerEntry = null;
@@ -99,9 +98,6 @@ void main() async {
     overlays: [SystemUiOverlay.top],
   );
 
-  // 앱 이름 초기화
-  AppConsts.appName = (await PackageInfo.fromPlatform()).appName;
-
   // 환경 변수 로드
   await dotenv.load(fileName: '.env');
 
@@ -115,6 +111,9 @@ void main() async {
 
   // 카카오 SDK 초기화
   KakaoSdk.init(nativeAppKey: Env.kakaoNativeAppKey);
+
+  // 구글 SDK 초기화
+  await GoogleLoginService.initialize();
 
   // Dio 클라이언트 초기화
   DioClient.instance.initialize(

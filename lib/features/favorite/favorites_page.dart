@@ -121,151 +121,160 @@ class _FavoritesPageState extends State<FavoritesPage> {
         title: context.l10n.navStorage,
         actions: const [AlertBadge()],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                /// 조회 결과 개수
-                Padding(
-                  padding: EdgeInsets.only(top: 11.h, bottom: 19.h),
-                  child: ValueListenableBuilder(
-                    valueListenable: _exhibits,
-                    builder: (context, exhibits, child) {
-                      return ArtTripText.pretendard()
-                          .title02Bold()
-                          .build()
-                          .text(
-                            context.l10n.totalCount(exhibits?.length ?? 0),
-                          );
-                    },
-                  ),
-                ),
-
-                /// 최신순, 마감순, 필터
-                ValueListenableBuilder(
-                  valueListenable: _sortType,
-                  builder: (context, sortType, child) {
-                    return Row(
-                      children: [
-                        _buildSortType(
-                          isSelected: sortType == SortType.latest,
-                          sortType: SortType.latest,
-                          sortTypeName: context.l10n.sortByLatest,
-                        ),
-                        Container(
-                          width: 1.w,
-                          height: 12.h,
-                          margin: EdgeInsets.symmetric(horizontal: 8.w),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: AppColors.gray100,
-                          ),
-                        ),
-                        _buildSortType(
-                          isSelected: sortType == SortType.endingSoon,
-                          sortType: SortType.endingSoon,
-                          sortTypeName: context.l10n.sortByEndingSoon,
-                        ),
-                        SizedBox(width: 12.w),
-                        GestureDetector(
-                          onTap: () => _showFilterBottomSheet(),
-                          child: SvgPicture.asset(
-                            AppAssets.icFilter,
-                            width: 24.w,
-                            height: 24.w,
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-
-          /// 즐겨찾기 전시 리스트
-          ValueListenableBuilder(
-            valueListenable: _isLoading,
-            builder: (context, isLoading, child) {
-              if (isLoading) {
-                return Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 12.h,
-                      horizontal: 24.w,
-                    ),
-                    child: const ExhibitsLoadingView(),
-                  ),
-                );
-              }
-
-              return ValueListenableBuilder(
-                valueListenable: _exhibits,
-                builder: (context, exhibits, child) {
-                  if (exhibits == null) {
-                    return const ExceptionView();
-                  } else if (exhibits.isEmpty) {
-                    return Expanded(
-                      child: Column(
-                        spacing: 8.h,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            AppAssets.icFavorite,
-                            width: 96.w,
-                            height: 96.w,
-                          ),
-                          ArtTripText.pretendard()
-                              .body01Regular()
-                              .color(AppColors.textTertiary)
-                              .build()
-                              .text(context.l10n.noFavorites),
-                        ],
-                      ),
-                    );
-                  }
-
-                  return ValueListenableBuilder(
-                    valueListenable: _loadingMore,
-                    builder: (context, loadingMore, child) {
-                      final int length =
-                          exhibits.length + (loadingMore ? 1 : 0);
-
-                      return Expanded(
-                        child: ListView.separated(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          controller: _scrollController,
-                          padding: EdgeInsets.only(top: 8.h, bottom: 16.h),
-                          itemCount: length,
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: 12.h),
-                          itemBuilder: (context, index) {
-                            if (loadingMore && index == exhibits.length) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-
-                            final ExhibitModel item = exhibits[index];
-                            return ExhibitListItem(
-                              item: item,
-                              showArea:
-                                  _selectedArea.value == context.l10n.allItems,
+      body: RefreshIndicator(
+        onRefresh: _getFavoriteExhibits,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  /// 조회 결과 개수
+                  Padding(
+                    padding: EdgeInsets.only(top: 11.h, bottom: 19.h),
+                    child: ValueListenableBuilder(
+                      valueListenable: _exhibits,
+                      builder: (context, exhibits, child) {
+                        return ArtTripText.pretendard()
+                            .title02Bold()
+                            .build()
+                            .text(
+                              context.l10n.totalCount(exhibits?.length ?? 0),
                             );
-                          },
-                        ),
+                      },
+                    ),
+                  ),
+
+                  /// 최신순, 마감순, 필터
+                  ValueListenableBuilder(
+                    valueListenable: _sortType,
+                    builder: (context, sortType, child) {
+                      return Row(
+                        children: [
+                          _buildSortType(
+                            isSelected: sortType == SortType.latest,
+                            sortType: SortType.latest,
+                            sortTypeName: context.l10n.sortByLatest,
+                          ),
+                          Container(
+                            width: 1.w,
+                            height: 12.h,
+                            margin: EdgeInsets.symmetric(horizontal: 8.w),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: AppColors.gray100,
+                            ),
+                          ),
+                          _buildSortType(
+                            isSelected: sortType == SortType.endingSoon,
+                            sortType: SortType.endingSoon,
+                            sortTypeName: context.l10n.sortByEndingSoon,
+                          ),
+                          SizedBox(width: 12.w),
+                          GestureDetector(
+                            onTap: () => _showFilterBottomSheet(),
+                            child: SvgPicture.asset(
+                              AppAssets.icFilter,
+                              width: 24.w,
+                              height: 24.w,
+                            ),
+                          ),
+                        ],
                       );
                     },
+                  ),
+                ],
+              ),
+            ),
+
+            /// 즐겨찾기 전시 리스트
+            ValueListenableBuilder(
+              valueListenable: _isLoading,
+              builder: (context, isLoading, child) {
+                if (isLoading) {
+                  return Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 12.h,
+                        horizontal: 24.w,
+                      ),
+                      child: const ExhibitsLoadingView(),
+                    ),
                   );
-                },
-              );
-            },
-          ),
-        ],
+                }
+
+                return ValueListenableBuilder(
+                  valueListenable: _exhibits,
+                  builder: (context, exhibits, child) {
+                    if (exhibits == null) {
+                      return const ExceptionView();
+                    } else if (exhibits.isEmpty) {
+                      return Expanded(
+                        child: Column(
+                          spacing: 8.h,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              AppAssets.icFavorite,
+                              width: 96.w,
+                              height: 96.w,
+                            ),
+                            ArtTripText.pretendard()
+                                .body01Regular()
+                                .color(AppColors.textTertiary)
+                                .build()
+                                .text(context.l10n.noFavorites),
+                          ],
+                        ),
+                      );
+                    }
+
+                    return ValueListenableBuilder(
+                      valueListenable: _loadingMore,
+                      builder: (context, loadingMore, child) {
+                        final int length =
+                            exhibits.length + (loadingMore ? 1 : 0);
+
+                        return Expanded(
+                          child: ListView.separated(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            controller: _scrollController,
+                            padding: EdgeInsets.only(
+                              left: 24.w,
+                              right: 24.w,
+                              top: 8.h,
+                              bottom: 16.h,
+                            ),
+                            itemCount: length,
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 12.h),
+                            itemBuilder: (context, index) {
+                              if (loadingMore && index == exhibits.length) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+
+                              final ExhibitModel item = exhibits[index];
+                              return ExhibitListItem(
+                                item: item,
+                                showArea:
+                                    _selectedArea.value ==
+                                    context.l10n.allItems,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
