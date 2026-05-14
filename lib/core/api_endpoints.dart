@@ -15,6 +15,7 @@ class ApiEndpoints {
   static const authRegister = '/auth/register';
   static const authRefresh = '/auth/refresh';
   static const health = '/health';
+  static const maintenance = '/maintenance';
 
   // ─── Exhibits ───
   static const exhibits = '/exhibits';

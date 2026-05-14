@@ -5,6 +5,7 @@
   "navMy": "My",
   "navStamp": "스탬프",
   "navStorage": "즐겨찾기",
+  "exit": "종료",
   "splashSlogan": "세상의 전시, 내 손 안에.",
   "loginKakao": "카카오로 로그인",
   "loginGoogle": "Google로 로그인",
@@ -112,8 +113,12 @@
   "stepIndicator": "{current}/{total}",
   "@stepIndicator": {
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "arttripInfo": "아트트립 정보",
@@ -180,5 +185,13 @@
   "minutesAgo": "{min}분 전",
   "hoursAgo": "{hour}시간 전",
   "noAlertsTitle": "알림이 없습니다.",
-  "noImage": "이미지 준비중입니다"
+  "noImage": "이미지 준비중입니다",
+  "maintenanceTitle": "📢 서버 점검 안내",
+  "maintenanceMessage": "보다 안정적인 서비스 제공을 위해\n현재 서버 점검이 진행 중입니다.",
+  "termsAgreementDescription": "아트트립에 오신 것을 환영합니다\n이용약관에 동의해주세요",
+  "termsAgreeAll": "모두 동의하기",
+  "termsOfServiceAgree": "서비스 이용약관 동의 (필수)",
+  "termsPrivacyAgree": "개인정보 처리방침 동의 (필수)",
+  "termsMarketingAgree": "위치기반 서비스 이용약관 동의 (필수)",
+  "termsNextButton": "다음으로"
 }

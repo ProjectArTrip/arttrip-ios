@@ -45,6 +45,7 @@ class AppAssets {
   // Logo
   static const String icLogoWhite = 'assets/svg/ic_logo_white.svg';
   static const String icLogoBlack = 'assets/svg/ic_logo_black.svg';
+  static const String icLogoPurple = 'assets/svg/ic_logo_purple.svg';
 
   // Image
   static const String imgStampBg = 'assets/img/img_stamp_bg.png';

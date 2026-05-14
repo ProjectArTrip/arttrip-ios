@@ -33,6 +33,25 @@ class AppUtil {
     return labels;
   }
 
+  /// 언어에 따라 날짜 + 요일 포맷 반환
+  /// ko: '2025년 12월 25일(목)' / en: 'December 25, 2025 (Thu)'
+  static String formatDateFullWithWeekday(BuildContext context, DateTime date) {
+    final lang = getLanguage(context);
+    if (lang == 'ko') {
+      final weekday = AppConsts.weekDaysKo[date.weekday % 7];
+      return '${DateFormat('yyyy년 MM월 dd일').format(date)}($weekday)';
+    } else {
+      final weekday = AppConsts.weekDaysEn[date.weekday % 7];
+      return '${DateFormat('MMMM d, yyyy').format(date)} ($weekday)';
+    }
+  }
+
+  /// String → DateTime 변환, 파싱 실패 시 null 반환
+  /// [format] 미지정 시 ISO 8601 파싱 ('2025-12-25', '2025-12-25T10:00:00' 등)
+  static DateTime parseDate(String dateStr) {
+    return DateTime.tryParse(dateStr) ?? DateTime.now();
+  }
+
   /// '2025-12-25' 포맷 반환
   static String formatDateYMD(DateTime date) {
     final year = date.year.toString().padLeft(4, '0');

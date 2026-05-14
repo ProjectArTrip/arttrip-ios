@@ -15,6 +15,7 @@ import 'package:arttrip/features/my/views/recent_exhibits_page.dart';
 import 'package:arttrip/features/my/views/settings_page.dart';
 import 'package:arttrip/features/onboarding/views/keywords_page.dart';
 import 'package:arttrip/features/onboarding/views/nickname_input_page.dart';
+import 'package:arttrip/features/onboarding/views/terms_agreement_page.dart';
 import 'package:arttrip/features/search/views/search_page.dart';
 import 'package:arttrip/features/splash/views/splash_view.dart';
 import 'package:arttrip/routes/app_routes.dart';
@@ -31,7 +32,10 @@ import 'package:go_router/go_router.dart';
 ///
 /// 모든 라우트를 조합하여 GoRouter 인스턴스 생성
 
+final appNavigatorKey = GlobalKey<NavigatorState>();
+
 final appRouter = GoRouter(
+  navigatorKey: appNavigatorKey,
   initialLocation: AppRoutes.splash,
   debugLogDiagnostics: kDebugMode,
   extraCodec: const ExtraCodec(),
@@ -52,6 +56,19 @@ final appRouter = GoRouter(
       path: AppRoutes.login,
       pageBuilder: (context, state) {
         return buildPage(context, state, child: const LoginPage());
+      },
+    ),
+
+    // 온보딩 0단계 - 약관동의
+    GoRoute(
+      path: AppRoutes.onboardingTerms,
+      pageBuilder: (context, state) {
+        final params = state.extra as SocialLoginParams;
+        return buildPage(
+          context,
+          state,
+          child: TermsAgreementPage(params: params),
+        );
       },
     ),
 

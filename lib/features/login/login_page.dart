@@ -86,10 +86,10 @@ class _LoginPageState extends State<LoginPage> {
     if (_isLoading) return;
     setState(() => _isLoading = true);
     try {
-      final result = await AuthService.instance.loginWithGoogle(buildContext);
+      final params = await AuthService.instance.getGoogleCredentials();
       if (!mounted) return;
-      if (result.isSuccess) {
-        _navigateAfterLogin(result.onboardingStep);
+      if (params != null) {
+        await Routes.push(context, AppRoutes.onboardingTerms, extra: params);
       } else {
         _showLoginError();
       }
@@ -102,10 +102,10 @@ class _LoginPageState extends State<LoginPage> {
     if (_isLoading) return;
     setState(() => _isLoading = true);
     try {
-      final result = await AuthService.instance.loginWithApple(buildContext);
+      final params = await AuthService.instance.getAppleCredentials();
       if (!mounted) return;
-      if (result.isSuccess) {
-        _navigateAfterLogin(result.onboardingStep);
+      if (params != null) {
+        await Routes.push(context, AppRoutes.onboardingTerms, extra: params);
       } else {
         _showLoginError();
       }
@@ -118,10 +118,10 @@ class _LoginPageState extends State<LoginPage> {
     if (_isLoading) return;
     setState(() => _isLoading = true);
     try {
-      final result = await AuthService.instance.loginWithKakao(buildContext);
+      final params = await AuthService.instance.getKakaoCredentials();
       if (!mounted) return;
-      if (result.isSuccess) {
-        _navigateAfterLogin(result.onboardingStep);
+      if (params != null) {
+        await Routes.push(context, AppRoutes.onboardingTerms, extra: params);
       } else {
         _showLoginError();
       }

@@ -5,11 +5,13 @@
   "navMy": "My",
   "navStamp": "Stamp",
   "navStorage": "Storage",
+  "exit": "Exit",
   "splashSlogan": "The world's exhibitions, in your hands.",
   "loginKakao": "Login with Kakao",
   "loginGoogle": "Login with Google",
   "loginApple": "Login with Apple",
   "loginFailed": "Login failed. Please try again.",
+  "loginTest": "Login with Test Account",
   "loginButton": "Log In",
   "passwordLabel": "Password",
   "domesticExhibition": "domesticExhibition",
@@ -89,8 +91,12 @@
   "stepIndicator": "{current}/{total}",
   "@stepIndicator": {
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "arttripInfo": "ArtTrip Info",
@@ -178,5 +184,14 @@
   "noFavorites": "No favorite items.",
   "resetAll": "Reset All",
   "noExhibitsTitle": "No ongoing exhibitions.",
-  "noAlertsTitle": "No notifications."
+  "noAlertsTitle": "No notifications.",
+  "noImage": "Image coming soon",
+  "maintenanceTitle": "Server Maintenance",
+  "maintenanceMessage": "We are currently performing server maintenance\nfor a more stable service.",
+  "termsAgreementDescription": "Please agree to the terms below\nto use ArtTrip.",
+  "termsAgreeAll": "Agree to all",
+  "termsOfServiceAgree": "(Required) Terms of Service",
+  "termsPrivacyAgree": "(Required) Privacy Policy",
+  "termsMarketingAgree": "(Required) Location-based Service Terms",
+  "termsNextButton": "Next"
 }

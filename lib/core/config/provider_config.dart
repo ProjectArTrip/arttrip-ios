@@ -25,9 +25,15 @@ import 'package:arttrip/features/onboarding/viewmodels/keywords_viewmodel.dart';
 import 'package:arttrip/features/search/data/search_repository.dart';
 import 'package:arttrip/features/search/data/search_repository_mock.dart';
 import 'package:arttrip/features/search/viewmodels/search_viewmodel.dart';
+import 'package:arttrip/features/splash/data/maintenance_repository.dart';
+import 'package:arttrip/features/splash/viewmodels/splash_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 final getProviders = [
+  ChangeNotifierProvider<SplashViewModel>(
+    create: (_) =>
+        SplashViewModel(MaintenanceRepositoryImpl(DioClient.instance)),
+  ),
   ChangeNotifierProvider(
     create: (_) => AlertViewModel(AlertRepositoryImpl(DioClient.instance)),
   ),
