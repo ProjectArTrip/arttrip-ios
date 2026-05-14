@@ -31,7 +31,10 @@ import 'package:go_router/go_router.dart';
 ///
 /// 모든 라우트를 조합하여 GoRouter 인스턴스 생성
 
+final appNavigatorKey = GlobalKey<NavigatorState>();
+
 final appRouter = GoRouter(
+  navigatorKey: appNavigatorKey,
   initialLocation: AppRoutes.splash,
   debugLogDiagnostics: kDebugMode,
   extraCodec: const ExtraCodec(),

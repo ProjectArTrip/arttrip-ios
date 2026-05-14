@@ -1,5 +1,21 @@
 enum AsyncStatus { loading, success, error }
 
+enum MaintenanceState {
+  normal('NORMAL'),
+  notice('NOTICE'),
+  block('BLOCK');
+
+  const MaintenanceState(this.value);
+  final String value;
+
+  static MaintenanceState fromString(String? value) {
+    return MaintenanceState.values.firstWhere(
+      (e) => e.value == value,
+      orElse: () => MaintenanceState.normal,
+    );
+  }
+}
+
 enum FontFamilyType {
   pretendard('Pretendard');
 

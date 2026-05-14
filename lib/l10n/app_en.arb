@@ -178,5 +178,8 @@
   "noFavorites": "No favorite items.",
   "resetAll": "Reset All",
   "noExhibitsTitle": "No ongoing exhibitions.",
-  "noAlertsTitle": "No notifications."
+  "noAlertsTitle": "No notifications.",
+  "maintenanceTitle": "Server Maintenance",
+  "maintenanceContent": "The server is currently under maintenance.\nWe apologize for the inconvenience.",
+  "maintenanceConfirm": "OK"
 }
