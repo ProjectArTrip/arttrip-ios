@@ -8,6 +8,7 @@ import 'package:arttrip/features/login/services/apple_login_service.dart';
 import 'package:arttrip/features/login/services/google_login_service.dart';
 import 'package:arttrip/features/login/services/kakao_login_service.dart';
 import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
+import 'package:arttrip/routes/route_params.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +55,97 @@ class AuthService {
   final _kakaoLogin = KakaoLoginService.instance;
   final _googleLogin = GoogleLoginService.instance;
   final _appleLogin = AppleLoginService.instance;
+
+  /// 카카오 소셜 SDK 로그인만 수행 (서버 호출 없음)
+  Future<SocialLoginParams?> getKakaoCredentials() async {
+    try {
+      final result = await _kakaoLogin.login();
+      if (!result.isSuccess || result.idToken == null) return null;
+      return SocialLoginParams(
+        provider: SocialProvider.kakao.value,
+        idToken: result.idToken,
+      );
+    } catch (e) {
+      debugPrint('카카오 credentials 획득 오류: $e');
+      return null;
+    }
+  }
+
+  /// Google 소셜 SDK 로그인만 수행 (서버 호출 없음)
+  Future<SocialLoginParams?> getGoogleCredentials() async {
+    try {
+      final result = await _googleLogin.login();
+      if (!result.isSuccess || result.idToken == null) return null;
+      return SocialLoginParams(
+        provider: SocialProvider.google.value,
+        idToken: result.idToken,
+      );
+    } catch (e) {
+      debugPrint('구글 credentials 획득 오류: $e');
+      return null;
+    }
+  }
+
+  /// Apple 소셜 SDK 로그인만 수행 (서버 호출 없음)
+  Future<SocialLoginParams?> getAppleCredentials() async {
+    try {
+      final result = await _appleLogin.login();
+      if (!result.isSuccess || result.authorizationCode == null) return null;
+      return SocialLoginParams(
+        provider: SocialProvider.apple.value,
+        authorizationCode: result.authorizationCode,
+      );
+    } catch (e) {
+      debugPrint('애플 credentials 획득 오류: $e');
+      return null;
+    }
+  }
+
+  /// 소셜 credentials로 서버 로그인 (약관동의 완료 후 호출)
+  Future<AuthResult> loginWithServer(
+    BuildContext context,
+    SocialLoginParams params,
+  ) async {
+    try {
+      final serverResult = await _authApi.socialLogin(
+        provider: params.provider,
+        idToken: params.idToken,
+        authorizationCode: params.authorizationCode,
+      );
+
+      return serverResult.when(
+        success: (tokenResult) async {
+          await _tokenStorage.saveTokens(
+            accessToken: tokenResult.accessToken,
+            refreshToken: tokenResult.refreshToken,
+            isFirstLogin: tokenResult.firstLogin,
+          );
+
+          if (context.mounted) {
+            unawaited(
+              context.read<MyViewModel>().registerFcmToken(
+                Prefs().fcmToken ?? '',
+              ),
+            );
+          }
+
+          return AuthResult.success(
+            firstLogin: tokenResult.firstLogin,
+            onboardingStep: OnboardingStep.fromString(
+              tokenResult.onboardingStep,
+            ),
+          );
+        },
+        failure: (exception) {
+          debugPrint('서버 토큰 발급 실패: ${exception.message}');
+          return AuthResult.failure(exception.message);
+        },
+      );
+    } catch (e) {
+      debugPrint('서버 로그인 오류: $e');
+      return AuthResult.failure('로그인 중 오류가 발생했습니다');
+    }
+  }
 
   /// 카카오 로그인 (소셜 로그인 + 서버 토큰 발급)
   Future<AuthResult> loginWithKakao(BuildContext context) async {

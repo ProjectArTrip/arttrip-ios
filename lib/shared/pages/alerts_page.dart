@@ -274,12 +274,12 @@ class _AlertsPageState extends State<AlertsPage> {
   }
 
   Widget _buildAlertsEmpty() {
-    return Align(
-      alignment: Alignment.center,
+    return Center(
       child: Column(
         spacing: 8.h,
         mainAxisSize: MainAxisSize.min,
         children: [
+          SizedBox(height: MediaQuery.of(context).size.height / 4),
           SvgPicture.asset(AppAssets.icNoExhibits, width: 96.w, height: 96.w),
           ArtTripText.pretendard()
               .body01Regular()

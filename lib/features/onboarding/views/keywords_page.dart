@@ -51,7 +51,7 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
               title: context.l10n.myTasteAnalysis,
               showBackButton: true,
             )
-          : const CommonAppBar(showBackButton: false),
+          : null,
       body: SafeArea(
         bottom: false,
         child: vm.isLoading
@@ -62,7 +62,7 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (!widget.isEditMode) ...[
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 40.h),
                       _buildStepIndicator(),
                     ],
                     _buildHeader(),

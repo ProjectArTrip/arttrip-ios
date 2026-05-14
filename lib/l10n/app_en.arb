@@ -181,5 +181,14 @@
   "noAlertsTitle": "No notifications.",
   "maintenanceTitle": "Server Maintenance",
   "maintenanceContent": "The server is currently under maintenance.\nWe apologize for the inconvenience.",
-  "maintenanceConfirm": "OK"
+  "maintenanceConfirm": "OK",
+  "termsAgreementTitle": "Terms of Service",
+  "termsAgreementDescription": "Please agree to the terms below\nto use ArtTrip.",
+  "termsAgreeAll": "Agree to all",
+  "termsOfServiceAgree": "(Required) Terms of Service",
+  "termsPrivacyAgree": "(Required) Privacy Policy",
+  "termsMarketingAgree": "(Optional) Marketing notifications",
+  "termsView": "View",
+  "termsNextButton": "Next",
+  "termsRequiredHint": "Please agree to the required terms."
 }

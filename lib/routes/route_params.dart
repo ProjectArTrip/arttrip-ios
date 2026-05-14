@@ -29,3 +29,16 @@ class WebViewParams {
   final String title;
   final String url;
 }
+
+/// 약관동의 화면으로 전달하는 소셜 로그인 파라미터
+class SocialLoginParams {
+  const SocialLoginParams({
+    required this.provider,
+    this.idToken,
+    this.authorizationCode,
+  });
+
+  final String provider;
+  final String? idToken;
+  final String? authorizationCode;
+}

@@ -46,7 +46,7 @@ class _StampPageState extends State<StampPage> {
                   padding: EdgeInsets.only(
                     left: 24.w,
                     right: 24.w,
-                    bottom: 40.h,
+                    bottom: 40.h + MediaQuery.of(context).padding.bottom,
                   ),
                   child: Image.asset(
                     AppAssets.imgStampSample,

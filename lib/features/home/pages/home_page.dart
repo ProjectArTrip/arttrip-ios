@@ -14,6 +14,7 @@ import 'package:arttrip/features/home/views/regional_exhibits_view.dart';
 import 'package:arttrip/features/home/views/today_exhibits_recommendation_view.dart';
 import 'package:arttrip/features/home/views/weekly_exhibits_schedule_view.dart';
 import 'package:arttrip/features/home/widgets/date_filter_bottom_sheet.dart';
+import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
 import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
@@ -46,7 +47,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     context.read<AlertViewModel>().getUnreadAlerts();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+      final myViewModel = context.read<MyViewModel>();
       homeViewModel.load(context);
+      myViewModel.fetchUserProfile();
     });
   }
 
