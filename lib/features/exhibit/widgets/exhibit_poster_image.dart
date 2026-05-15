@@ -1,6 +1,6 @@
-import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
 import 'package:arttrip/shared/widgets/exhibit_status_badge.dart';
+import 'package:arttrip/shared/widgets/image_empty_big_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,22 +17,13 @@ class ExhibitPosterImage extends StatelessWidget {
       children: [
         posterUrl != null
             ? AppCachedImage(
-              imageUrl: posterUrl!,
-              width: double.infinity,
-              height: 276.h,
-              fit: BoxFit.cover,
-            )
-            : Container(
-              width: double.infinity,
-              height: 276.h,
-              color: AppColors.gray100,
-              child: const Center(
-                child: Icon(
-                  Icons.image_not_supported,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-            ),
+                imageUrl: posterUrl!,
+                width: double.infinity,
+                height: 276.h,
+                fit: BoxFit.cover,
+              )
+            : ImageEmptyBigWidget(width: double.infinity, height: 276.h),
+
         if (status != null && status!.isNotEmpty)
           Positioned(
             top: 16.h,

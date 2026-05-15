@@ -3,6 +3,7 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
+import 'package:arttrip/shared/widgets/image_empty_big_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -39,17 +40,7 @@ class TodayExhibitWidget extends StatelessWidget {
                     height: 240.h,
                     fit: BoxFit.cover,
                   )
-                : Container(
-                    width: 180.w,
-                    height: 240.h,
-                    color: AppColors.gray100,
-                    child: const Center(
-                      child: Icon(
-                        Icons.image_not_supported,
-                        color: AppColors.textTertiary,
-                      ),
-                    ),
-                  ),
+                : ImageEmptyBigWidget(width: 180.w, height: 240.h),
 
             /// 테두리
             Container(

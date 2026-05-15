@@ -1,13 +1,8 @@
-import 'package:arttrip/core/app_assets.dart';
-import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
-import 'package:arttrip/core/extensions.dart';
-import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/image_empty_big_widget.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 /// 공용 네트워크 이미지 위젯
@@ -22,6 +17,7 @@ class AppCachedImage extends StatelessWidget {
     this.height,
     this.fit = BoxFit.cover,
     this.borderRadius,
+    this.errorWidget,
   });
 
   final String imageUrl;
@@ -29,6 +25,7 @@ class AppCachedImage extends StatelessWidget {
   final double? height;
   final BoxFit fit;
   final BorderRadius? borderRadius;
+  final Widget Function(BuildContext, String, Object)? errorWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -41,27 +38,10 @@ class AppCachedImage extends StatelessWidget {
       height: height,
       fit: fit,
       placeholder: (context, url) => _buildPlaceholder(),
-      errorWidget: (context, url, error) => Container(
-        width: width,
-        height: height,
-        color: AppColors.gray50,
-        child: Center(
-          child: Column(
-            spacing: 8.h,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SvgPicture.asset(AppAssets.icNoImage, width: 63.w, height: 20.h),
-              ArtTripText.pretendard()
-                  .body02Bold()
-                  .color(AppColors.textTertiary)
-                  .textAlign(TextAlign.center)
-                  .build()
-                  .text(context.l10n.noImage),
-            ],
-          ),
-        ),
-      ),
+      errorWidget:
+          errorWidget ??
+          (context, url, error) =>
+              ImageEmptyBigWidget(width: width, height: height),
     );
 
     if (borderRadius != null) {

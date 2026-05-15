@@ -64,7 +64,9 @@ class MapBottomSheet extends StatelessWidget {
                     // 드래그 핸들 (스크롤 시 고정)
                     SliverPersistentHeader(
                       pinned: true,
-                      delegate: _HandleHeaderDelegate(onTap: _onHandleTap),
+                      delegate: _HandleHeaderDelegate(
+                        sheetController: sheetController,
+                      ),
                     ),
 
                     // 접힌 상태: "전시 리스트 확인하기"
@@ -155,22 +157,14 @@ class MapBottomSheet extends StatelessWidget {
     );
   }
 
-  void _onHandleTap() {
-    if (!sheetController.isAttached) return;
-    final target = sheetController.size < 0.5 ? 0.8 : 0.4;
-    sheetController.animateTo(
-      target,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
-  }
 }
 
 class _HandleHeaderDelegate extends SliverPersistentHeaderDelegate {
-  const _HandleHeaderDelegate({required this.onTap});
+  _HandleHeaderDelegate({required this.sheetController});
 
-  final VoidCallback onTap;
+  final DraggableScrollableController sheetController;
   static const double _height = 28;
+  static const _snapSizes = [0.07, 0.4, 0.8];
 
   @override
   double get maxExtent => _height;
@@ -181,6 +175,49 @@ class _HandleHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant _HandleHeaderDelegate oldDelegate) => false;
 
+  void _onTap() {
+    if (!sheetController.isAttached) return;
+    final target = sheetController.size < 0.5 ? 0.8 : 0.4;
+    sheetController.animateTo(
+      target,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _onDragUpdate(DragUpdateDetails details, BuildContext context) {
+    if (!sheetController.isAttached) return;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final delta = -details.delta.dy / screenHeight;
+    final newSize = (sheetController.size + delta).clamp(0.07, 0.8);
+    sheetController.jumpTo(newSize);
+  }
+
+  void _onDragEnd(DragEndDetails details) {
+    if (!sheetController.isAttached) return;
+    final velocity = details.primaryVelocity ?? 0;
+    final current = sheetController.size;
+
+    double target;
+    if (velocity < -300) {
+      final above = _snapSizes.where((s) => s > current + 0.01).toList();
+      target = above.isNotEmpty ? above.first : _snapSizes.last;
+    } else if (velocity > 300) {
+      final below = _snapSizes.where((s) => s < current - 0.01).toList();
+      target = below.isNotEmpty ? below.last : _snapSizes.first;
+    } else {
+      target = _snapSizes.reduce(
+        (a, b) => (a - current).abs() < (b - current).abs() ? a : b,
+      );
+    }
+
+    sheetController.animateTo(
+      target,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
   @override
   Widget build(
     BuildContext context,
@@ -188,7 +225,9 @@ class _HandleHeaderDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: _onTap,
+      onVerticalDragUpdate: (d) => _onDragUpdate(d, context),
+      onVerticalDragEnd: _onDragEnd,
       behavior: HitTestBehavior.opaque,
       child: Container(
         height: _height,

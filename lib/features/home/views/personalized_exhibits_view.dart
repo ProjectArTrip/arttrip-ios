@@ -12,6 +12,7 @@ import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
+import 'package:arttrip/shared/widgets/image_empty_big_widget.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -106,17 +107,11 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
                                               height: 150.h,
                                               fit: BoxFit.cover,
                                             )
-                                          : Container(
+                                          : ImageEmptyBigWidget(
                                               width: 120.w,
                                               height: 150.h,
-                                              color: AppColors.gray100,
-                                              child: const Center(
-                                                child: Icon(
-                                                  Icons.image_not_supported,
-                                                  color: AppColors.textTertiary,
-                                                ),
-                                              ),
                                             ),
+
                                       location?.isNotEmpty == true
                                           ? Container(
                                               padding: EdgeInsets.symmetric(

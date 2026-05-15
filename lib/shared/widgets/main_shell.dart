@@ -23,7 +23,7 @@ class _MainShellState extends State<MainShell> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      body: widget.navigationShell,
+      body: SafeArea(child: widget.navigationShell),
       bottomNavigationBar: BottomNavBar(
         key: _bottomNavigationKey,
         currentIndex: widget.navigationShell.currentIndex,

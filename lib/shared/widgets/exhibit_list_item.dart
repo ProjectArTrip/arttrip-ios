@@ -7,6 +7,7 @@ import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
 import 'package:arttrip/shared/widgets/exhibit_status_badge.dart';
+import 'package:arttrip/shared/widgets/image_empty_medium_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -38,18 +39,12 @@ class ExhibitListItem extends StatelessWidget {
                           width: 100.w,
                           height: 100.w,
                           fit: BoxFit.cover,
-                        )
-                      : Container(
-                          width: 100.w,
-                          height: 100.w,
-                          color: AppColors.gray100,
-                          child: const Center(
-                            child: Icon(
-                              Icons.image_not_supported,
-                              color: AppColors.textTertiary,
-                            ),
+                          errorWidget: (p0, p1, p2) => ImageEmptyMediumWidget(
+                            width: 100.w,
+                            height: 100.w,
                           ),
-                        ),
+                        )
+                      : ImageEmptyMediumWidget(width: 100.w, height: 100.w),
 
                   /// 전시 상태
                   item.status != null

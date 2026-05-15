@@ -2,6 +2,7 @@ import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/features/exhibit/data/models/write_review_params.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
+import 'package:arttrip/shared/widgets/image_empty_small_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -19,24 +20,21 @@ class WriteReviewHeader extends StatelessWidget {
         children: [
           params.posterUrl != null
               ? AppCachedImage(
-                imageUrl: params.posterUrl!,
-                width: 50.w,
-                height: 50.w,
-                borderRadius: BorderRadius.circular(4.r),
-              )
-              : Container(
-                width: 50.w,
-                height: 50.w,
-                decoration: BoxDecoration(
-                  color: AppColors.gray100,
+                  imageUrl: params.posterUrl!,
+                  width: 50.w,
+                  height: 50.w,
                   borderRadius: BorderRadius.circular(4.r),
+                  errorWidget: (_, _, _) => const ImageEmptySmallWidget(),
+                )
+              : Container(
+                  width: 50.w,
+                  height: 50.w,
+                  decoration: BoxDecoration(
+                    color: AppColors.gray100,
+                    borderRadius: BorderRadius.circular(4.r),
+                  ),
+                  child: const ImageEmptySmallWidget(),
                 ),
-                child: Icon(
-                  Icons.image_not_supported,
-                  size: 20.w,
-                  color: AppColors.textTertiary,
-                ),
-              ),
           SizedBox(width: 16.w),
           Expanded(
             child: Column(
