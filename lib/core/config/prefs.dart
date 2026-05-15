@@ -69,6 +69,18 @@ class Prefs {
   }
 
   // ============================================
+  // Notification
+  // ============================================
+
+  static const String _pushEnabledKey = 'push_enabled';
+
+  bool get pushEnabled => prefs.getBool(_pushEnabledKey) ?? true;
+
+  Future<void> setPushEnabled(bool value) async {
+    await prefs.setBool(_pushEnabledKey, value);
+  }
+
+  // ============================================
   // Onboarding Step
   // ============================================
 

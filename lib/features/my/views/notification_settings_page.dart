@@ -1,10 +1,13 @@
 import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/config/prefs.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
   const NotificationSettingsPage({super.key});
@@ -15,9 +18,30 @@ class NotificationSettingsPage extends StatefulWidget {
 }
 
 class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
-  bool _exhibitInfo = false;
-  bool _stampIssue = false;
-  bool _notice = false;
+  bool _notice = Prefs().pushEnabled;
+  bool _isUpdating = false;
+
+  Future<void> _onNoticeChanged(bool value) async {
+    if (_isUpdating) return;
+
+    final previous = _notice;
+    setState(() {
+      _notice = value;
+      _isUpdating = true;
+    });
+
+    final vm = context.read<MyViewModel>();
+    final success = await vm.updatePushEnabled(value);
+
+    if (!mounted) return;
+    if (success) {
+      await Prefs().setPushEnabled(value);
+    }
+    setState(() {
+      if (!success) _notice = previous;
+      _isUpdating = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,21 +67,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                   .text(context.l10n.serviceNotificationDesc),
               SizedBox(height: 16.h),
               _buildToggleRow(
-                label: context.l10n.notifExhibitInfo,
-                value: _exhibitInfo,
-                onChanged: (v) => setState(() => _exhibitInfo = v),
-              ),
-              SizedBox(height: 20.h),
-              _buildToggleRow(
-                label: context.l10n.notifStampIssue,
-                value: _stampIssue,
-                onChanged: (v) => setState(() => _stampIssue = v),
-              ),
-              SizedBox(height: 20.h),
-              _buildToggleRow(
                 label: context.l10n.notifNotice,
                 value: _notice,
-                onChanged: (v) => setState(() => _notice = v),
+                onChanged: _isUpdating ? null : _onNoticeChanged,
               ),
             ],
           ),
@@ -77,7 +89,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   Widget _buildToggleRow({
     required String label,
     required bool value,
-    required ValueChanged<bool> onChanged,
+    required ValueChanged<bool>? onChanged,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -167,4 +167,8 @@ class MyViewModel with ChangeNotifier {
 
     await _repository.registerFcmToken(token);
   }
+
+  Future<bool> updatePushEnabled(bool enabled) async {
+    return _repository.updatePushEnabled(enabled);
+  }
 }

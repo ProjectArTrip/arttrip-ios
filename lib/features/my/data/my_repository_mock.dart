@@ -109,4 +109,10 @@ class MyRepositoryMockImpl implements MyRepository {
   Future<void> registerFcmToken(String token) {
     return Future.value();
   }
+
+  @override
+  Future<bool> updatePushEnabled(bool enabled) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    return true;
+  }
 }
