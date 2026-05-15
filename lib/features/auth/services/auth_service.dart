@@ -115,11 +115,13 @@ class AuthService {
 
       return serverResult.when(
         success: (tokenResult) async {
+          final step = OnboardingStep.fromString(tokenResult.onboardingStep);
           await _tokenStorage.saveTokens(
             accessToken: tokenResult.accessToken,
             refreshToken: tokenResult.refreshToken,
             isFirstLogin: tokenResult.firstLogin,
           );
+          await Prefs().setOnboardingStep(step);
 
           if (context.mounted) {
             unawaited(
@@ -131,9 +133,7 @@ class AuthService {
 
           return AuthResult.success(
             firstLogin: tokenResult.firstLogin,
-            onboardingStep: OnboardingStep.fromString(
-              tokenResult.onboardingStep,
-            ),
+            onboardingStep: step,
           );
         },
         failure: (exception) {
@@ -217,11 +217,13 @@ class AuthService {
 
       return result.when(
         success: (tokenResult) async {
+          final step = OnboardingStep.fromString(tokenResult.onboardingStep);
           await _tokenStorage.saveTokens(
             accessToken: tokenResult.accessToken,
             refreshToken: tokenResult.refreshToken,
             isFirstLogin: tokenResult.firstLogin,
           );
+          await Prefs().setOnboardingStep(step);
 
           if (context.mounted) {
             unawaited(
@@ -233,9 +235,7 @@ class AuthService {
 
           return AuthResult.success(
             firstLogin: tokenResult.firstLogin,
-            onboardingStep: OnboardingStep.fromString(
-              tokenResult.onboardingStep,
-            ),
+            onboardingStep: step,
           );
         },
         failure: (exception) {
@@ -366,6 +366,7 @@ class AuthService {
 
     // 저장된 토큰 삭제
     await _tokenStorage.clearTokens();
+    await Prefs().setOnboardingStep(OnboardingStep.nickname);
 
     debugPrint('로그아웃 완료');
   }

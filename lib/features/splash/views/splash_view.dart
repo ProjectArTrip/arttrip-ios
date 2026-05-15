@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_utils.dart';
+import 'package:arttrip/core/config/prefs.dart';
 import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/auth/services/auth_service.dart';
 import 'package:arttrip/features/splash/data/maintenance_model.dart';
 import 'package:arttrip/features/splash/viewmodels/splash_viewmodel.dart';
 import 'package:arttrip/routes/app_router.dart';
+import 'package:arttrip/routes/app_routes.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/init_widget.dart';
@@ -161,7 +163,15 @@ class _SplashViewState extends State<SplashView> {
 
   void _navigateToHome() {
     if (!mounted) return;
-    Routes.go(context, '/');
+    switch (Prefs().onboardingStep) {
+      case OnboardingStep.nickname:
+        Routes.go(context, AppRoutes.onboardingNickname);
+      case OnboardingStep.keyword:
+        Routes.go(context, AppRoutes.onboardingKeywords);
+      case OnboardingStep.completed:
+      case null:
+        Routes.go(context, '/');
+    }
   }
 
   @override

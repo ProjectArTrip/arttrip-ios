@@ -1,4 +1,5 @@
 import 'package:arttrip/core/app_utils.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// SharedPreferences 공용 클래스
@@ -64,6 +65,23 @@ class Prefs {
       await prefs.remove(_fcmTokenKey);
     } else {
       await prefs.setString(_fcmTokenKey, value);
+    }
+  }
+
+  // ============================================
+  // Onboarding Step
+  // ============================================
+
+  static const String _onboardingStepKey = 'onboarding_step';
+
+  OnboardingStep? get onboardingStep =>
+      OnboardingStep.fromString(prefs.getString(_onboardingStepKey));
+
+  Future<void> setOnboardingStep(OnboardingStep? value) async {
+    if (value == null) {
+      await prefs.remove(_onboardingStepKey);
+    } else {
+      await prefs.setString(_onboardingStepKey, value.type);
     }
   }
 }

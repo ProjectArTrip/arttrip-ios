@@ -1,3 +1,5 @@
+import 'package:arttrip/core/config/prefs.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/onboarding/data/models/keyword_model.dart';
 import 'package:arttrip/features/onboarding/viewmodels/keywords_viewmodel.dart';
@@ -236,7 +238,8 @@ class _KeywordModelsPageState extends State<KeywordModelsPage> {
         if (widget.isEditMode) {
           AppToast.show(context, message: context.l10n.keywordSaveSuccess);
         } else {
-          Routes.go(context, '/');
+          await Prefs().setOnboardingStep(OnboardingStep.completed);
+          if (mounted) Routes.go(context, '/');
         }
       }
     } else {
