@@ -1,5 +1,4 @@
 import 'package:arttrip/core/app_colors.dart';
-import 'package:arttrip/core/config/prefs.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
@@ -18,8 +17,20 @@ class NotificationSettingsPage extends StatefulWidget {
 }
 
 class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
-  bool _notice = Prefs().pushEnabled;
+  bool? _notice;
   bool _isUpdating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchInitialState();
+  }
+
+  Future<void> _fetchInitialState() async {
+    final enabled = await context.read<MyViewModel>().fetchPushEnabled();
+    if (!mounted) return;
+    setState(() => _notice = enabled);
+  }
 
   Future<void> _onNoticeChanged(bool value) async {
     if (_isUpdating) return;
@@ -30,13 +41,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
       _isUpdating = true;
     });
 
-    final vm = context.read<MyViewModel>();
-    final success = await vm.updatePushEnabled(value);
+    final success = await context.read<MyViewModel>().updatePushEnabled(value);
 
     if (!mounted) return;
-    if (success) {
-      await Prefs().setPushEnabled(value);
-    }
     setState(() {
       if (!success) _notice = previous;
       _isUpdating = false;
@@ -68,8 +75,10 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
               SizedBox(height: 16.h),
               _buildToggleRow(
                 label: context.l10n.notifNotice,
-                value: _notice,
-                onChanged: _isUpdating ? null : _onNoticeChanged,
+                value: _notice ?? false,
+                onChanged: (_notice == null || _isUpdating)
+                    ? null
+                    : _onNoticeChanged,
               ),
             ],
           ),

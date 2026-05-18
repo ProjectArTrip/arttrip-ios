@@ -36,6 +36,9 @@ abstract class MyRepository {
   /// fcm token 등록
   Future<void> registerFcmToken(String token);
 
+  /// 푸시 알림 수신 여부 조회
+  Future<bool?> fetchPushEnabled();
+
   /// 푸시 알림 수신 여부 변경
   Future<bool> updatePushEnabled(bool enabled);
 }
@@ -177,6 +180,19 @@ class MyRepositoryImpl implements MyRepository {
     } catch (e) {
       AppUtil.debugLog('registerFcmToken failed: $e');
     }
+  }
+
+  @override
+  Future<bool?> fetchPushEnabled() async {
+    try {
+      final response = await _dio.get(ApiEndpoints.mePushEnabled);
+      final data = response.dataOrNull;
+      if (data == null) return null;
+      return (data as Map<String, dynamic>)['enabled'] as bool?;
+    } catch (e) {
+      AppUtil.debugLog('fetchPushEnabled: $e');
+    }
+    return null;
   }
 
   @override
