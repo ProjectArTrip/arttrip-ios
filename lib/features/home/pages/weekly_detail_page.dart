@@ -183,7 +183,7 @@ class _WeeklyDetailPageState extends State<WeeklyDetailPage> {
                               }
 
                               final ExhibitModel item = exhibits[index];
-                              return ExhibitListItem(item: item);
+                              return ExhibitListItem(item: item, isDomestic: _isDomestic);
                             },
                           ),
                         );

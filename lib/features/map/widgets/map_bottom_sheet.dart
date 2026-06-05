@@ -1,6 +1,7 @@
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/map/viewmodels/map_viewmodel.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
@@ -52,6 +53,8 @@ class MapBottomSheet extends StatelessWidget {
             ),
             child: Consumer<MapViewModel>(
               builder: (context, vm, _) {
+                final homeVM = context.read<HomeViewModel>();
+                final isDomestic = homeVM.locationType == LocationType.domestic;
                 final exhibits = vm.currentExhibits;
                 final count = vm.exhibitTotalCount;
                 final isLoading =
@@ -111,6 +114,7 @@ class MapBottomSheet extends StatelessWidget {
                               ),
                               child: ExhibitListItem(
                                 item: exhibits[index],
+                                isDomestic: isDomestic,
                               ),
                             );
                           },
@@ -156,7 +160,6 @@ class MapBottomSheet extends StatelessWidget {
       },
     );
   }
-
 }
 
 class _HandleHeaderDelegate extends SliverPersistentHeaderDelegate {

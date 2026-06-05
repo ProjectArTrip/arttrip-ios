@@ -17,6 +17,10 @@ abstract class ExhibitModel with _$ExhibitModel {
     String? hallName,
     String? countryName,
     String? regionName,
+
+    /// 즐겨찾기 관련
+    int? favoriteId,
+    @Default(false) bool active,
     @JsonKey(name: 'isFavorite') @Default(false) bool favorite,
   }) = _ExhibitModel;
 

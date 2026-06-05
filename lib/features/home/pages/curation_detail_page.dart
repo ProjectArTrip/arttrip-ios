@@ -1,4 +1,5 @@
 import 'package:arttrip/core/app_utils.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
@@ -123,7 +124,9 @@ class _CurationDetailPageState extends State<CurationDetailPage> {
               } else if (exhibits.isEmpty) {
                 return const NoExhibitsView();
               }
-
+              final bool isDomestic =
+                  context.read<HomeViewModel>().locationType ==
+                  LocationType.domestic;
               return ValueListenableBuilder(
                 valueListenable: _loadingMore,
                 builder: (context, loadingMore, child) {
@@ -147,7 +150,10 @@ class _CurationDetailPageState extends State<CurationDetailPage> {
                       }
 
                       final ExhibitModel item = exhibits[index];
-                      return ExhibitListItem(item: item);
+                      return ExhibitListItem(
+                        item: item,
+                        isDomestic: isDomestic,
+                      );
                     },
                   );
                 },

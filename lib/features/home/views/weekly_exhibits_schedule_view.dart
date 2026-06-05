@@ -2,6 +2,7 @@ import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
 import 'package:arttrip/core/app_consts.dart';
 import 'package:arttrip/core/app_utils.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
@@ -60,12 +61,21 @@ class _WeeklyExhibitsScheduleViewState
                           if (data.isEmpty) {
                             return _buildNoExhibitions();
                           }
-
+                          final homeVM = context.read<HomeViewModel>();
+                          final bool isDomestic =
+                              homeVM.locationType == LocationType.domestic;
+                          final bool isAllItems =
+                              homeVM.area[homeVM.locationType] ==
+                              context.l10n.allItems;
                           return Column(
                             spacing: 8.h,
                             children: List.generate(data.length, (index) {
                               final item = data[index];
-                              return ExhibitListItem(item: item);
+                              return ExhibitListItem(
+                                item: item,
+                                isDomestic: isDomestic,
+                                showArea: isAllItems ? true : false,
+                              );
                             }),
                           );
                         },

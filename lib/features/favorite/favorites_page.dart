@@ -78,7 +78,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
   @override
   void dispose() {
-    context.read<ExhibitViewModel>().removeListener(_onFavoritesRefreshTriggered);
+    context.read<ExhibitViewModel>().removeListener(
+      _onFavoritesRefreshTriggered,
+    );
     _scrollController.dispose();
     super.dispose();
   }
@@ -119,6 +121,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
     _hasNext.value = result?.hasNext ?? false;
     _cursor = result?.nextCursor ?? 0;
     _isLoading.value = false;
+
+    exhibitVM.initializeFromExhibits(result?.favorites ?? []);
   }
 
   Future<void> _loadMoreExhibits() async {
@@ -137,6 +141,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
     _hasNext.value = result?.hasNext ?? false;
     _cursor = result?.nextCursor ?? 0;
     _loadingMore.value = false;
+
+    exhibitVM.initializeFromExhibits(result?.favorites ?? []);
   }
 
   @override
@@ -287,9 +293,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                 final ExhibitModel item = exhibits[index];
                                 return ExhibitListItem(
                                   item: item,
+                                  isDomestic: _isDomestic.value,
                                   showArea:
                                       _selectedArea.value ==
                                       context.l10n.allItems,
+                                  forceFavorite: true,
                                 );
                               },
                             ),
