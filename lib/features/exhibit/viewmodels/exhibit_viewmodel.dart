@@ -11,6 +11,14 @@ class ExhibitViewModel with ChangeNotifier {
 
   final Map<int, bool> _favoriteMap = {};
 
+  int _favoritesRefreshTrigger = 0;
+  int get favoritesRefreshTrigger => _favoritesRefreshTrigger;
+
+  void triggerFavoritesRefresh() {
+    _favoritesRefreshTrigger++;
+    notifyListeners();
+  }
+
   /// 즐겨찾기 여부 조회
   bool isFavorite(int? exhibitId) {
     return _favoriteMap[exhibitId] ?? false;

@@ -162,7 +162,8 @@ class _CurationViewState extends State<CurationView> {
                 ),
               ],
             ),
-            ArtTripText.pretendard().body01Regular().build().text(subtitle),
+            if (subtitle.isNotEmpty)
+              ArtTripText.pretendard().body01Regular().build().text(subtitle),
           ],
         ),
       ),

@@ -34,7 +34,8 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
     return SliverToBoxAdapter(
       child: Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
         selector: (_, vm) =>
-            vm.personalizedExhibits[vm.locationType] ??
+            vm.personalizedExhibits[vm.locationType]?[vm.area[vm
+                .locationType]] ??
             const AsyncState.loading(),
         builder: (context, state, _) {
           return AsyncView(
@@ -42,6 +43,7 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
             onData: (data) {
               if (data.isEmpty) return const SizedBox.shrink();
 
+              final bool isDomestic = context.read<HomeViewModel>().isDomestic;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 12.h,
@@ -83,7 +85,9 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
                           SizedBox(width: 8.w),
                       itemBuilder: (_, index) {
                         final item = data[index];
-                        final location = item.countryName ?? item.regionName;
+                        final location = !isDomestic
+                            ? item.countryName ?? item.regionName
+                            : item.regionName;
                         return GestureDetector(
                           onTap: () => Routes.push(
                             context,

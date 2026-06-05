@@ -40,8 +40,8 @@ class HomeViewModel with ChangeNotifier {
   >
   _weeklyExhibitsBySelectedDate = {};
 
-  /// 개인 맞춤 추천 전시
-  final Map<LocationType, AsyncState<List<ExhibitModel>>>
+  /// 개인 맞춤 추천 전시 (해외/국내 -> 국가/지역)
+  final Map<LocationType, Map<String, AsyncState<List<ExhibitModel>>>>
   _personalizedExhibits = {};
 
   /// 큐레이션 전시
@@ -70,8 +70,8 @@ class HomeViewModel with ChangeNotifier {
   Map<LocationType, Map<String, AsyncState<List<ExhibitModel>>>>
   get todayExhibitRecommendations => _todayExhibitRecommendations;
 
-  Map<LocationType, AsyncState<List<ExhibitModel>>> get personalizedExhibits =>
-      _personalizedExhibits;
+  Map<LocationType, Map<String, AsyncState<List<ExhibitModel>>>>
+  get personalizedExhibits => _personalizedExhibits;
   Map<LocationType, Map<String, Map<String, AsyncState<List<ExhibitModel>>>>>
   get weeklyExhibitsBySelectedDate => _weeklyExhibitsBySelectedDate;
 
@@ -310,16 +310,19 @@ class HomeViewModel with ChangeNotifier {
   /// 사용자 맞춤 전시 리스트 조회
   Future<void> getPersonalizedExhibits() async {
     /// 캐싱 처리
-    if (_personalizedExhibits[_locationType]?.status == AsyncStatus.success) {
-      final oldState = _personalizedExhibits[_locationType]!;
-      _personalizedExhibits[_locationType] = AsyncState.success(
-        List.from(oldState.data!),
-      );
+    if (_personalizedExhibits[_locationType]?[_area[_locationType]]?.status ==
+        AsyncStatus.success) {
+      final oldState =
+          _personalizedExhibits[_locationType]![_area[_locationType]]!;
+      _personalizedExhibits[_locationType]![_area[_locationType]!] =
+          AsyncState.success(List.from(oldState.data!));
       notifyListeners();
       return;
     }
 
-    _personalizedExhibits[_locationType] = const AsyncState.loading();
+    _personalizedExhibits[_locationType] ??= {};
+    _personalizedExhibits[_locationType]![_area[_locationType]!] =
+        const AsyncState.loading();
     notifyListeners();
 
     try {
@@ -329,11 +332,13 @@ class HomeViewModel with ChangeNotifier {
         region: isDomestic ? _area[_locationType] : null,
       );
 
-      _personalizedExhibits[_locationType] = AsyncState.success(result);
+      _personalizedExhibits[_locationType]![_area[_locationType]!] =
+          AsyncState.success(result);
       exhibitVM.initializeFromExhibits(result);
     } catch (e) {
       AppUtil.debugLog('getPersonalizedExhibits error: $e');
-      _personalizedExhibits[_locationType] = const AsyncState.error();
+      _personalizedExhibits[_locationType]![_area[_locationType]!] =
+          const AsyncState.error();
     }
     notifyListeners();
   }
@@ -406,6 +411,8 @@ class HomeViewModel with ChangeNotifier {
       );
     } catch (e) {
       AppUtil.debugLog('getCurations error: $e');
+      _curations[_locationType]![_area[_locationType]!] =
+          const AsyncState.error();
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -24,7 +25,6 @@ class KeywordModelChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 100.w,
         height: 40.h,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         decoration: BoxDecoration(
@@ -34,19 +34,19 @@ class KeywordModelChip extends StatelessWidget {
               ? null
               : Border.all(color: _unselectedBorderColor, width: 1),
         ),
-        alignment: Alignment.center,
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w300,
-              color: isSelected ? Colors.white : _textColor,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
+        child: isSelected
+            ? ArtTripText.pretendard()
+                  .body01Bold()
+                  .textAlign(TextAlign.center)
+                  .color(Colors.white)
+                  .build()
+                  .text(label)
+            : ArtTripText.pretendard()
+                  .body01Light()
+                  .textAlign(TextAlign.center)
+                  .color(_textColor)
+                  .build()
+                  .text(label),
       ),
     );
   }

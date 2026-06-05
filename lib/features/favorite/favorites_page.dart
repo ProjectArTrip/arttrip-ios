@@ -43,9 +43,15 @@ class _FavoritesPageState extends State<FavoritesPage> {
   final int _size = 10;
   int _cursor = 0;
 
+  late int _lastRefreshTrigger;
+
   @override
   void initState() {
     super.initState();
+    final exhibitVM = context.read<ExhibitViewModel>();
+    _lastRefreshTrigger = exhibitVM.favoritesRefreshTrigger;
+    exhibitVM.addListener(_onFavoritesRefreshTriggered);
+
     final homeVM = context.read<HomeViewModel>();
     Future.delayed(Duration.zero, () async {
       if (mounted) await homeVM.getDomesticRegions(context);
@@ -72,8 +78,28 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
   @override
   void dispose() {
+    context.read<ExhibitViewModel>().removeListener(_onFavoritesRefreshTriggered);
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onFavoritesRefreshTriggered() {
+    final exhibitVM = context.read<ExhibitViewModel>();
+
+    final trigger = exhibitVM.favoritesRefreshTrigger;
+    if (trigger != _lastRefreshTrigger) {
+      _lastRefreshTrigger = trigger;
+      _getFavoriteExhibits();
+      return;
+    }
+
+    if (_exhibits.value != null) {
+      _exhibits.value = _exhibits.value!
+          .where(
+            (e) => e.exhibitId != null && exhibitVM.isFavorite(e.exhibitId),
+          )
+          .toList();
+    }
   }
 
   Future<void> _getFavoriteExhibits() async {

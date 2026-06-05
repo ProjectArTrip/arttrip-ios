@@ -130,7 +130,7 @@ class TodayExhibitWidget extends StatelessWidget {
                           .color(AppColors.textWhite)
                           .build()
                           .text(item.hallName!),
-                    if (item.exhibitPeriod != null)
+                    if (item.exhibitPeriod?.isNotEmpty == true)
                       ArtTripText.pretendard()
                           .body02Regular()
                           .color(AppColors.textWhite)

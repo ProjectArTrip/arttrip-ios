@@ -44,11 +44,14 @@ class ExhibitDetailModelTabContent extends StatelessWidget {
               extraWidget: _buildCopyButton(context, exhibit.hallAddress),
             ),
             SizedBox(height: 4.h),
-            ArtTripText.pretendard()
-                .body03Regular()
-                .color(AppColors.textSecondary)
-                .build()
-                .text(context.l10n.exhibitAddressNotice),
+            Align(
+              alignment: Alignment.center,
+              child: ArtTripText.pretendard()
+                  .body03Regular()
+                  .color(AppColors.textSecondary)
+                  .build()
+                  .text(context.l10n.exhibitAddressNotice),
+            ),
           ],
         ),
       );
