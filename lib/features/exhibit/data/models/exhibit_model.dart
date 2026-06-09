@@ -13,10 +13,14 @@ abstract class ExhibitModel with _$ExhibitModel {
     String? title,
     String? posterUrl,
     String? status,
+    String? exhibitStatus,
     String? exhibitPeriod,
     String? hallName,
+    String? exhibitHallName,
     String? countryName,
+    String? country,
     String? regionName,
+    String? region,
 
     /// 즐겨찾기 관련
     int? favoriteId,
