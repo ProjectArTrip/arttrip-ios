@@ -21,6 +21,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+/// 즐겨찾기 페이지
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
 
@@ -32,8 +33,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<List<ExhibitModel>?> _exhibits = ValueNotifier([]);
   final ValueNotifier<SortType> _sortType = ValueNotifier(SortType.latest);
-  final ValueNotifier<String?> _selectedArea = ValueNotifier(null);
-  final ValueNotifier<bool> _isDomestic = ValueNotifier(true);
+  final ValueNotifier<String?> _selectedOverseasCountry = ValueNotifier(null);
+  final ValueNotifier<String?> _selectedDomesticArea = ValueNotifier(null);
 
   final ValueNotifier<bool> _isLoading = ValueNotifier(true); // 전체 로딩 상태
   final ValueNotifier<bool> _hasNext = ValueNotifier(true); // 다음 페이지 존재 여부
@@ -113,8 +114,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
       cursor: _cursor,
       size: _size,
       sortType: _sortType.value.type,
-      country: _isDomestic.value ? null : _selectedArea.value,
-      region: _isDomestic.value ? _selectedArea.value : null,
+      country: _selectedOverseasCountry.value,
+      region: _selectedDomesticArea.value,
     );
 
     _exhibits.value = result?.favorites;
@@ -134,8 +135,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
       cursor: _cursor,
       size: _size,
       sortType: _sortType.value.type,
-      country: _isDomestic.value ? null : _selectedArea.value,
-      region: _isDomestic.value ? _selectedArea.value : null,
+      country: _selectedOverseasCountry.value,
+      region: _selectedDomesticArea.value,
     );
     _exhibits.value = [...?_exhibits.value, ...?result?.favorites];
     _hasNext.value = result?.hasNext ?? false;
@@ -293,10 +294,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                 final ExhibitModel item = exhibits[index];
                                 return ExhibitListItem(
                                   item: item,
-                                  isDomestic: _isDomestic.value,
-                                  showArea:
-                                      _selectedArea.value ==
-                                      context.l10n.allItems,
+                                  isDomestic: false,
+                                  showArea: true,
                                   forceFavorite: true,
                                 );
                               },
@@ -316,13 +315,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
   }
 
   void _showFilterBottomSheet() {
-    final ValueNotifier<String?> tempArea = ValueNotifier(_selectedArea.value);
-    final ValueNotifier<bool> tempIsDomestic = ValueNotifier(_isDomestic.value);
+    final ValueNotifier<String?> tempOverseasCountry = ValueNotifier(
+      _selectedOverseasCountry.value,
+    );
+    final ValueNotifier<String?> tempDomesticArea = ValueNotifier(
+      _selectedDomesticArea.value,
+    );
     final ValueNotifier<bool> isApplyEnabled = ValueNotifier(false);
-
-    void updateApplyEnabled() {
-      isApplyEnabled.value = tempArea.value?.isNotEmpty == true;
-    }
 
     showModalBottomSheet(
       context: context,
@@ -361,11 +360,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 bottom: 20.h,
               ),
               child: ValueListenableBuilder(
-                valueListenable: tempIsDomestic,
-                builder: (context, isDomestic, child) {
+                valueListenable: tempOverseasCountry,
+                builder: (context, overseasCountry, child) {
                   return ValueListenableBuilder(
-                    valueListenable: tempArea,
-                    builder: (context, selectedArea, child) {
+                    valueListenable: tempDomesticArea,
+                    builder: (context, domesticArea, child) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -377,9 +376,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                               ArtTripText.pretendard()
                                   .body01Bold()
                                   .build()
-                                  .text(
-                                    context.l10n.oversea,
-                                  ),
+                                  .text(context.l10n.oversea),
                               Selector<HomeViewModel, AsyncState<List<String>>>(
                                 selector: (_, vm) => vm.overseasCountries,
                                 builder: (context, overseasCountries, _) {
@@ -394,13 +391,15 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                           (index) {
                                             final item = data[index];
                                             final isSelected =
-                                                selectedArea == item &&
-                                                !isDomestic;
+                                                overseasCountry == item ||
+                                                (overseasCountry == null &&
+                                                    index == 0);
+
                                             return GestureDetector(
                                               onTap: () {
-                                                tempArea.value = item;
-                                                tempIsDomestic.value = false;
-                                                updateApplyEnabled();
+                                                tempOverseasCountry.value =
+                                                    item;
+                                                isApplyEnabled.value = true;
                                               },
                                               child: Container(
                                                 padding: EdgeInsets.symmetric(
@@ -464,9 +463,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                               ArtTripText.pretendard()
                                   .body01Bold()
                                   .build()
-                                  .text(
-                                    context.l10n.domestic,
-                                  ),
+                                  .text(context.l10n.domestic),
                               Selector<
                                 HomeViewModel,
                                 AsyncState<List<RegionModel>>
@@ -498,13 +495,19 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                           (index) {
                                             final item = tempList[index];
                                             final isSelected =
-                                                selectedArea == item.region &&
-                                                isDomestic;
+                                                domesticArea == item.region ||
+                                                (domesticArea == null &&
+                                                    index == 0);
+
                                             return GestureDetector(
                                               onTap: () {
-                                                tempArea.value = item.region;
-                                                tempIsDomestic.value = true;
-                                                updateApplyEnabled();
+                                                if (index == 0) {
+                                                  tempDomesticArea.value = null;
+                                                } else {
+                                                  tempDomesticArea.value =
+                                                      item.region;
+                                                }
+                                                isApplyEnabled.value = true;
                                               },
                                               child: Container(
                                                 padding: EdgeInsets.symmetric(
@@ -565,8 +568,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   /// 전체 해제
                   GestureDetector(
                     onTap: () {
-                      tempArea.value = null;
-                      updateApplyEnabled();
+                      tempOverseasCountry.value = null;
+                      tempDomesticArea.value = null;
+                      isApplyEnabled.value = true;
                     },
                     child: ColoredBox(
                       color: Colors.transparent,
@@ -596,23 +600,21 @@ class _FavoritesPageState extends State<FavoritesPage> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary300,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 17.h,
-                            ),
+                            padding: EdgeInsets.symmetric(vertical: 17.h),
                             elevation: 0,
                             shadowColor: Colors.transparent,
                             disabledBackgroundColor: AppColors.gray100,
                             overlayColor: Colors.transparent,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadiusGeometry.circular(
-                                12.r,
-                              ),
+                              borderRadius: BorderRadiusGeometry.circular(12.r),
                             ),
                           ),
                           onPressed: enabled
                               ? () {
-                                  _selectedArea.value = tempArea.value;
-                                  _isDomestic.value = tempIsDomestic.value;
+                                  _selectedOverseasCountry.value =
+                                      tempOverseasCountry.value;
+                                  _selectedDomesticArea.value =
+                                      tempDomesticArea.value;
                                   _getFavoriteExhibits();
                                   context.pop();
                                 }
