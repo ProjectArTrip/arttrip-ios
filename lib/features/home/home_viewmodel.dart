@@ -232,7 +232,7 @@ class HomeViewModel with ChangeNotifier {
           );
     } catch (e) {
       AppUtil.debugLog('getTodayExhibitRecommendations error: $e');
-      _todayExhibitRecommendations[_locationType]![_area[_locationType]!] =
+      _todayExhibitRecommendations[_locationType]?[_area[_locationType]!] =
           const AsyncState.error();
     }
     notifyListeners();
@@ -337,7 +337,7 @@ class HomeViewModel with ChangeNotifier {
       exhibitVM.initializeFromExhibits(result);
     } catch (e) {
       AppUtil.debugLog('getPersonalizedExhibits error: $e');
-      _personalizedExhibits[_locationType]![_area[_locationType]!] =
+      _personalizedExhibits[_locationType]?[_area[_locationType]!] =
           const AsyncState.error();
     }
     notifyListeners();
@@ -411,7 +411,7 @@ class HomeViewModel with ChangeNotifier {
       );
     } catch (e) {
       AppUtil.debugLog('getCurations error: $e');
-      _curations[_locationType]![_area[_locationType]!] =
+      _curations[_locationType]?[_area[_locationType]!] =
           const AsyncState.error();
     }
   }
