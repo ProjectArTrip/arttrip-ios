@@ -10,7 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class WriteReviewHeader extends StatelessWidget {
   const WriteReviewHeader({super.key, required this.params});
 
-  final WriteReviewParams params;
+  final WriteReviewParams? params;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +18,9 @@ class WriteReviewHeader extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
       child: Row(
         children: [
-          params.posterUrl != null
+          params?.posterUrl != null
               ? AppCachedImage(
-                  imageUrl: params.posterUrl!,
+                  imageUrl: params!.posterUrl!,
                   width: 50.w,
                   height: 50.w,
                   borderRadius: BorderRadius.circular(4.r),
@@ -44,13 +44,13 @@ class WriteReviewHeader extends StatelessWidget {
                     .title02Bold()
                     .color(AppColors.textPrimary)
                     .build()
-                    .text(params.title),
+                    .text(params?.title ?? ''),
                 SizedBox(height: 4.h),
                 ArtTripText.pretendard()
                     .body02Regular()
                     .color(AppColors.textSecondary)
                     .build()
-                    .text(params.hallName),
+                    .text(params?.hallName ?? ''),
               ],
             ),
           ),

@@ -376,7 +376,7 @@ class HomeViewModel with ChangeNotifier {
       exhibitVM.initializeFromExhibits(result);
     } catch (e) {
       AppUtil.debugLog('getWeeklyExhibitsBySelectedDate error: $e');
-      _weeklyExhibitsBySelectedDate[_locationType]![_area[_locationType]]![selectedDateDay] =
+      _weeklyExhibitsBySelectedDate[_locationType]?[_area[_locationType]]![selectedDateDay] =
           const AsyncState.error();
     }
 
