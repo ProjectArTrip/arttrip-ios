@@ -47,7 +47,7 @@ class ExhibitDetailModelTabContent extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: ArtTripText.pretendard()
-                  .body03Regular()
+                  .body02Regular()
                   .color(AppColors.textSecondary)
                   .build()
                   .text(context.l10n.exhibitAddressNotice),
@@ -106,7 +106,7 @@ class ExhibitDetailModelTabContent extends StatelessWidget {
         );
       },
       child: ArtTripText.pretendard()
-          .body02Regular()
+          .body01Regular()
           .color(AppColors.textPoint)
           .build()
           .text(context.l10n.copy),
@@ -125,13 +125,13 @@ class ExhibitDetailModelTabContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ArtTripText.pretendard()
-              .body02Bold()
+              .title01Bold()
               .color(AppColors.textPrimary)
               .build()
               .text(context.l10n.exhibitDescription),
           SizedBox(height: 8.h),
           ArtTripText.pretendard()
-              .body02Light()
+              .title01Light()
               .color(AppColors.textPrimary)
               .build()
               .text(exhibit.description),

@@ -35,14 +35,14 @@ class ReviewListItem extends StatelessWidget {
       children: [
         Expanded(
           child: ArtTripText.pretendard()
-              .body02Bold()
+              .body01Bold()
               .color(const Color(0xFFA5A5AF))
               .build()
               .text(review.reviewer ?? '익명'),
         ),
         SizedBox(width: 10.w),
         ArtTripText.pretendard()
-            .body02Light()
+            .body01Light()
             .color(const Color(0xFFA5A5AF))
             .build()
             .text(review.visitDate),
@@ -52,7 +52,7 @@ class ReviewListItem extends StatelessWidget {
 
   Widget _buildContent() {
     return ArtTripText.pretendard()
-        .body02Regular()
+        .body01Regular()
         .color(const Color(0xFF111111))
         .build()
         .text(review.content);
@@ -62,20 +62,19 @@ class ReviewListItem extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children:
-            review.photoUrls
-                .map(
-                  (url) => Padding(
-                    padding: EdgeInsets.only(right: 8.w),
-                    child: AppCachedImage(
-                      imageUrl: url,
-                      width: 100.w,
-                      height: 100.w,
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                  ),
-                )
-                .toList(),
+        children: review.photoUrls
+            .map(
+              (url) => Padding(
+                padding: EdgeInsets.only(right: 8.w),
+                child: AppCachedImage(
+                  imageUrl: url,
+                  width: 100.w,
+                  height: 100.w,
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }
