@@ -55,7 +55,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
     final homeVM = context.read<HomeViewModel>();
     Future.delayed(Duration.zero, () async {
-      if (mounted) await homeVM.getDomesticRegions(context);
+      if (mounted) {
+        _selectedOverseasCountry.value = context.l10n.allItems;
+        _selectedDomesticArea.value = context.l10n.allItems;
+        await homeVM.getDomesticRegions(context);
+      }
+
       if (homeVM.locationType == LocationType.overseas) {
         if (mounted) await homeVM.getOverseasCountries(context);
       }
@@ -114,8 +119,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
       cursor: _cursor,
       size: _size,
       sortType: _sortType.value.type,
-      country: _selectedOverseasCountry.value,
-      region: _selectedDomesticArea.value,
+      country: _selectedOverseasCountry.value?.isNotEmpty == true
+          ? _selectedOverseasCountry.value
+          : null,
+      region: _selectedDomesticArea.value?.isNotEmpty == true
+          ? _selectedDomesticArea.value
+          : null,
     );
 
     _exhibits.value = result?.favorites;
@@ -135,8 +144,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
       cursor: _cursor,
       size: _size,
       sortType: _sortType.value.type,
-      country: _selectedOverseasCountry.value,
-      region: _selectedDomesticArea.value,
+      country: _selectedOverseasCountry.value?.isNotEmpty == true
+          ? _selectedOverseasCountry.value
+          : null,
+      region: _selectedDomesticArea.value?.isNotEmpty == true
+          ? _selectedDomesticArea.value
+          : null,
     );
     _exhibits.value = [...?_exhibits.value, ...?result?.favorites];
     _hasNext.value = result?.hasNext ?? false;
@@ -391,14 +404,18 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                           (index) {
                                             final item = data[index];
                                             final isSelected =
-                                                overseasCountry == item ||
-                                                (overseasCountry == null &&
-                                                    index == 0);
+                                                overseasCountry == item;
 
                                             return GestureDetector(
                                               onTap: () {
-                                                tempOverseasCountry.value =
-                                                    item;
+                                                if (tempOverseasCountry.value ==
+                                                    item) {
+                                                  tempOverseasCountry.value =
+                                                      '';
+                                                } else {
+                                                  tempOverseasCountry.value =
+                                                      item;
+                                                }
                                                 isApplyEnabled.value = true;
                                               },
                                               child: Container(
@@ -495,18 +512,23 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                           (index) {
                                             final item = tempList[index];
                                             final isSelected =
-                                                domesticArea == item.region ||
-                                                (domesticArea == null &&
-                                                    index == 0);
+                                                domesticArea == item.region;
 
                                             return GestureDetector(
                                               onTap: () {
-                                                if (index == 0) {
-                                                  tempDomesticArea.value = null;
+                                                if (tempDomesticArea.value ==
+                                                    item.region) {
+                                                  tempDomesticArea.value = '';
                                                 } else {
-                                                  tempDomesticArea.value =
-                                                      item.region;
+                                                  if (index == 0) {
+                                                    tempDomesticArea.value =
+                                                        context.l10n.allItems;
+                                                  } else {
+                                                    tempDomesticArea.value =
+                                                        item.region;
+                                                  }
                                                 }
+
                                                 isApplyEnabled.value = true;
                                               },
                                               child: Container(
@@ -568,8 +590,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   /// 전체 해제
                   GestureDetector(
                     onTap: () {
-                      tempOverseasCountry.value = null;
-                      tempDomesticArea.value = null;
+                      tempOverseasCountry.value = context.l10n.allItems;
+                      tempDomesticArea.value = context.l10n.allItems;
                       isApplyEnabled.value = true;
                     },
                     child: ColoredBox(
