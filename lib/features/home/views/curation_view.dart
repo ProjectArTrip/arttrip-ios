@@ -39,7 +39,7 @@ class _CurationViewState extends State<CurationView> {
             return Selector<HomeViewModel, AsyncState<CurationModel>>(
               selector: (_, vm) =>
                   vm.curations[vm.locationType]?[vm.area[vm.locationType]!] ??
-                  const AsyncState.error(),
+                  const AsyncState.loading(),
               builder: (context, state, _) {
                 return AsyncView(
                   state: state,
@@ -111,7 +111,9 @@ class _CurationViewState extends State<CurationView> {
                     );
                   },
                   onLoading: () => _buildCurationLoadingView(),
-                  onError: ({error}) => _buildEmptyView('', '', '0'),
+                  onError: ({error}) {
+                    return _buildEmptyView('', '', '0');
+                  },
                 );
               },
             );
