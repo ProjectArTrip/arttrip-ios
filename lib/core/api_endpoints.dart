@@ -44,6 +44,7 @@ class ApiEndpoints {
   static const me = '/me';
   static const meImage = '/me/image';
   static const meRecentExhibits = '/me/recent-exhibits';
+  static const mePushEnabled = '/me/push-enabled';
 
   // ─── Keywords ───
   static const keywordAll = '/keyword/all';

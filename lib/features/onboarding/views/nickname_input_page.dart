@@ -1,4 +1,6 @@
 import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/config/prefs.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
 import 'package:arttrip/routes/app_routes.dart';
@@ -195,6 +197,8 @@ class _NicknameInputPageState extends State<NicknameInputPage> {
     if (!mounted) return;
 
     if (errorMessage == null) {
+      await Prefs().setOnboardingStep(OnboardingStep.keyword);
+      if (!mounted) return;
       await Routes.replace(context, AppRoutes.onboardingKeywords);
       return;
     }

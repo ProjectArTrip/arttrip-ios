@@ -104,6 +104,10 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
                                       .locationType]];
                               return _buildNoExhibitions(selectedGenre);
                             }
+                            final homeViewModel = context.read<HomeViewModel>();
+                            final isDomestic =
+                                homeViewModel.locationType ==
+                                LocationType.domestic;
                             return ListView.separated(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
@@ -113,7 +117,10 @@ class _GenreExhibitsViewState extends State<GenreExhibitsView> {
                                   SizedBox(height: 8.h),
                               itemBuilder: (context, index) {
                                 final item = data[index];
-                                return ExhibitListItem(item: item);
+                                return ExhibitListItem(
+                                  item: item,
+                                  isDomestic: isDomestic,
+                                );
                               },
                             );
                           },

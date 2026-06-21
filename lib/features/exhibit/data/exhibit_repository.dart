@@ -319,8 +319,8 @@ class ExhibitRepositoryImpl implements ExhibitRepository {
   }) async {
     try {
       final queryParams = {
-        'country': country,
-        'region': region,
+        'country': ?country,
+        'region': ?region,
         'sortType': sortType,
         'cursor': cursor,
         'size': size,

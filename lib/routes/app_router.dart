@@ -93,7 +93,7 @@ final appRouter = GoRouter(
       path: AppRoutes.exhibitWriteReview,
       pageBuilder: (context, state) {
         final id = int.parse(state.pathParameters['id']!);
-        final params = state.extra as WriteReviewParams;
+        final params = state.extra as WriteReviewParams?;
         return buildPage(
           context,
           state,

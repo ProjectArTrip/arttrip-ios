@@ -1,5 +1,6 @@
 import 'package:arttrip/core/app_assets.dart';
 import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/config/prefs.dart';
 import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/auth/services/auth_service.dart';
@@ -42,6 +43,13 @@ class _TermsAgreementPageState extends State<TermsAgreementPage> {
 
   Future<void> _onNext() async {
     if (!_allChecked || _isLoading) return;
+
+    if (widget.params.skipServerLogin) {
+      await Prefs().setOnboardingStep(OnboardingStep.nickname);
+      if (!mounted) return;
+      Routes.go(context, AppRoutes.onboardingNickname);
+      return;
+    }
 
     setState(() => _isLoading = true);
     try {

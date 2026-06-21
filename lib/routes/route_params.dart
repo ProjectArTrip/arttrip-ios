@@ -36,9 +36,13 @@ class SocialLoginParams {
     required this.provider,
     this.idToken,
     this.authorizationCode,
+    this.skipServerLogin = false,
   });
 
   final String provider;
   final String? idToken;
   final String? authorizationCode;
+
+  /// true이면 서버 로그인이 이미 완료된 상태 — 약관동의 UI만 표시 후 닉네임 화면으로 이동
+  final bool skipServerLogin;
 }

@@ -3,6 +3,7 @@ import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/my/data/models/my_review_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
+import 'package:arttrip/shared/widgets/image_empty_small_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -108,6 +109,8 @@ class MyReviewItem extends StatelessWidget {
       width: 72.w,
       height: 72.h,
       borderRadius: BorderRadius.circular(4.r),
+      errorWidget: (p0, p1, p2) =>
+          ImageEmptySmallWidget(width: 72.w, height: 72.h),
     );
   }
 

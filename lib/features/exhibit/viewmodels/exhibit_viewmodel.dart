@@ -11,19 +11,29 @@ class ExhibitViewModel with ChangeNotifier {
 
   final Map<int, bool> _favoriteMap = {};
 
+  int _favoritesRefreshTrigger = 0;
+  int get favoritesRefreshTrigger => _favoritesRefreshTrigger;
+
+  void triggerFavoritesRefresh() {
+    _favoritesRefreshTrigger++;
+    notifyListeners();
+  }
+
   /// 즐겨찾기 여부 조회
   bool isFavorite(int? exhibitId) {
     return _favoriteMap[exhibitId] ?? false;
   }
 
   /// ExhibitModel 리스트로 즐겨찾기 상태 초기화
-  /// (이미 존재하는 값은 덮어쓰지 않음)
+  /// favorite = true면 stale false를 덮어씀, false면 기존 값 유지
   void initializeFromExhibits(List<ExhibitModel> exhibits) {
     for (var exhibit in exhibits) {
       final id = exhibit.exhibitId;
       if (id == null) continue;
 
-      _favoriteMap.putIfAbsent(id, () => exhibit.favorite);
+      if (exhibit.favorite || exhibit.active) {
+        _favoriteMap[id] = true;
+      }
     }
   }
 

@@ -162,7 +162,7 @@ class SnackBarUtils {
               message,
               style: TextStyle(
                 color: textColor,
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),

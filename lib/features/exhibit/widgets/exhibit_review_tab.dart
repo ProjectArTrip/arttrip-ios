@@ -69,13 +69,13 @@ class _ExhibitReviewModelTabContentState
               Row(
                 children: [
                   ArtTripText.pretendard()
-                      .body02Bold()
+                      .body01Bold()
                       .color(AppColors.textPrimary)
                       .build()
                       .text(context.l10n.exhibitReviewCount),
                   SizedBox(width: 4.w),
                   ArtTripText.pretendard()
-                      .body02Bold()
+                      .body01Bold()
                       .color(AppColors.primary300)
                       .build()
                       .text('($totalCount)'),
@@ -105,7 +105,7 @@ class _ExhibitReviewModelTabContentState
           ),
         ),
         child: ArtTripText.pretendard()
-            .body02Bold()
+            .body01Bold()
             .color(const Color(0xFF111111))
             .build()
             .text(context.l10n.writeReview),

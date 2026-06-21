@@ -21,6 +21,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+/// 즐겨찾기 페이지
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
 
@@ -32,8 +33,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<List<ExhibitModel>?> _exhibits = ValueNotifier([]);
   final ValueNotifier<SortType> _sortType = ValueNotifier(SortType.latest);
-  final ValueNotifier<String?> _selectedArea = ValueNotifier(null);
-  final ValueNotifier<bool> _isDomestic = ValueNotifier(true);
+  final ValueNotifier<String?> _selectedOverseasCountry = ValueNotifier(null);
+  final ValueNotifier<String?> _selectedDomesticArea = ValueNotifier(null);
 
   final ValueNotifier<bool> _isLoading = ValueNotifier(true); // 전체 로딩 상태
   final ValueNotifier<bool> _hasNext = ValueNotifier(true); // 다음 페이지 존재 여부
@@ -43,12 +44,23 @@ class _FavoritesPageState extends State<FavoritesPage> {
   final int _size = 10;
   int _cursor = 0;
 
+  late int _lastRefreshTrigger;
+
   @override
   void initState() {
     super.initState();
+    final exhibitVM = context.read<ExhibitViewModel>();
+    _lastRefreshTrigger = exhibitVM.favoritesRefreshTrigger;
+    exhibitVM.addListener(_onFavoritesRefreshTriggered);
+
     final homeVM = context.read<HomeViewModel>();
     Future.delayed(Duration.zero, () async {
-      if (mounted) await homeVM.getDomesticRegions(context);
+      if (mounted) {
+        _selectedOverseasCountry.value = context.l10n.allItems;
+        _selectedDomesticArea.value = context.l10n.allItems;
+        await homeVM.getDomesticRegions(context);
+      }
+
       if (homeVM.locationType == LocationType.overseas) {
         if (mounted) await homeVM.getOverseasCountries(context);
       }
@@ -72,8 +84,30 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
   @override
   void dispose() {
+    context.read<ExhibitViewModel>().removeListener(
+      _onFavoritesRefreshTriggered,
+    );
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onFavoritesRefreshTriggered() {
+    final exhibitVM = context.read<ExhibitViewModel>();
+
+    final trigger = exhibitVM.favoritesRefreshTrigger;
+    if (trigger != _lastRefreshTrigger) {
+      _lastRefreshTrigger = trigger;
+      _getFavoriteExhibits();
+      return;
+    }
+
+    if (_exhibits.value != null) {
+      _exhibits.value = _exhibits.value!
+          .where(
+            (e) => e.exhibitId != null && exhibitVM.isFavorite(e.exhibitId),
+          )
+          .toList();
+    }
   }
 
   Future<void> _getFavoriteExhibits() async {
@@ -85,14 +119,20 @@ class _FavoritesPageState extends State<FavoritesPage> {
       cursor: _cursor,
       size: _size,
       sortType: _sortType.value.type,
-      country: _isDomestic.value ? null : _selectedArea.value,
-      region: _isDomestic.value ? _selectedArea.value : null,
+      country: _selectedOverseasCountry.value?.isNotEmpty == true
+          ? _selectedOverseasCountry.value
+          : null,
+      region: _selectedDomesticArea.value?.isNotEmpty == true
+          ? _selectedDomesticArea.value
+          : null,
     );
 
     _exhibits.value = result?.favorites;
     _hasNext.value = result?.hasNext ?? false;
     _cursor = result?.nextCursor ?? 0;
     _isLoading.value = false;
+
+    exhibitVM.initializeFromExhibits(result?.favorites ?? []);
   }
 
   Future<void> _loadMoreExhibits() async {
@@ -104,13 +144,19 @@ class _FavoritesPageState extends State<FavoritesPage> {
       cursor: _cursor,
       size: _size,
       sortType: _sortType.value.type,
-      country: _isDomestic.value ? null : _selectedArea.value,
-      region: _isDomestic.value ? _selectedArea.value : null,
+      country: _selectedOverseasCountry.value?.isNotEmpty == true
+          ? _selectedOverseasCountry.value
+          : null,
+      region: _selectedDomesticArea.value?.isNotEmpty == true
+          ? _selectedDomesticArea.value
+          : null,
     );
     _exhibits.value = [...?_exhibits.value, ...?result?.favorites];
     _hasNext.value = result?.hasNext ?? false;
     _cursor = result?.nextCursor ?? 0;
     _loadingMore.value = false;
+
+    exhibitVM.initializeFromExhibits(result?.favorites ?? []);
   }
 
   @override
@@ -121,172 +167,174 @@ class _FavoritesPageState extends State<FavoritesPage> {
         title: context.l10n.navStorage,
         actions: const [AlertBadge()],
       ),
-      body: RefreshIndicator(
-        onRefresh: _getFavoriteExhibits,
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  /// 조회 결과 개수
-                  Padding(
-                    padding: EdgeInsets.only(top: 11.h, bottom: 19.h),
-                    child: ValueListenableBuilder(
-                      valueListenable: _exhibits,
-                      builder: (context, exhibits, child) {
-                        return ArtTripText.pretendard()
-                            .title02Bold()
-                            .build()
-                            .text(
-                              context.l10n.totalCount(exhibits?.length ?? 0),
-                            );
-                      },
-                    ),
-                  ),
-
-                  /// 최신순, 마감순, 필터
-                  ValueListenableBuilder(
-                    valueListenable: _sortType,
-                    builder: (context, sortType, child) {
-                      return Row(
-                        children: [
-                          _buildSortType(
-                            isSelected: sortType == SortType.latest,
-                            sortType: SortType.latest,
-                            sortTypeName: context.l10n.sortByLatest,
-                          ),
-                          Container(
-                            width: 1.w,
-                            height: 12.h,
-                            margin: EdgeInsets.symmetric(horizontal: 8.w),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: AppColors.gray100,
-                            ),
-                          ),
-                          _buildSortType(
-                            isSelected: sortType == SortType.endingSoon,
-                            sortType: SortType.endingSoon,
-                            sortTypeName: context.l10n.sortByEndingSoon,
-                          ),
-                          SizedBox(width: 12.w),
-                          GestureDetector(
-                            onTap: () => _showFilterBottomSheet(),
-                            child: SvgPicture.asset(
-                              AppAssets.icFilter,
-                              width: 24.w,
-                              height: 24.w,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-
-            /// 즐겨찾기 전시 리스트
-            ValueListenableBuilder(
-              valueListenable: _isLoading,
-              builder: (context, isLoading, child) {
-                if (isLoading) {
-                  return Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 12.h,
-                        horizontal: 24.w,
-                      ),
-                      child: const ExhibitsLoadingView(),
-                    ),
-                  );
-                }
-
-                return ValueListenableBuilder(
-                  valueListenable: _exhibits,
-                  builder: (context, exhibits, child) {
-                    if (exhibits == null) {
-                      return const ExceptionView();
-                    } else if (exhibits.isEmpty) {
-                      return Expanded(
-                        child: Column(
-                          spacing: 8.h,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              AppAssets.icFavorite,
-                              width: 96.w,
-                              height: 96.w,
-                            ),
-                            ArtTripText.pretendard()
-                                .body01Regular()
-                                .color(AppColors.textTertiary)
-                                .build()
-                                .text(context.l10n.noFavorites),
-                          ],
-                        ),
-                      );
-                    }
-
-                    return ValueListenableBuilder(
-                      valueListenable: _loadingMore,
-                      builder: (context, loadingMore, child) {
-                        final int length =
-                            exhibits.length + (loadingMore ? 1 : 0);
-
-                        return Expanded(
-                          child: ListView.separated(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            controller: _scrollController,
-                            padding: EdgeInsets.only(
-                              left: 24.w,
-                              right: 24.w,
-                              top: 8.h,
-                              bottom: 16.h,
-                            ),
-                            itemCount: length,
-                            separatorBuilder: (context, index) =>
-                                SizedBox(height: 12.h),
-                            itemBuilder: (context, index) {
-                              if (loadingMore && index == exhibits.length) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-
-                              final ExhibitModel item = exhibits[index];
-                              return ExhibitListItem(
-                                item: item,
-                                showArea:
-                                    _selectedArea.value ==
-                                    context.l10n.allItems,
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: _getFavoriteExhibits,
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    /// 조회 결과 개수
+                    Padding(
+                      padding: EdgeInsets.only(top: 11.h, bottom: 19.h),
+                      child: ValueListenableBuilder(
+                        valueListenable: _exhibits,
+                        builder: (context, exhibits, child) {
+                          return ArtTripText.pretendard()
+                              .title02Bold()
+                              .build()
+                              .text(
+                                context.l10n.totalCount(exhibits?.length ?? 0),
                               );
-                            },
-                          ),
+                        },
+                      ),
+                    ),
+
+                    /// 최신순, 마감순, 필터
+                    ValueListenableBuilder(
+                      valueListenable: _sortType,
+                      builder: (context, sortType, child) {
+                        return Row(
+                          children: [
+                            _buildSortType(
+                              isSelected: sortType == SortType.latest,
+                              sortType: SortType.latest,
+                              sortTypeName: context.l10n.sortByLatest,
+                            ),
+                            Container(
+                              width: 1.w,
+                              height: 12.h,
+                              margin: EdgeInsets.symmetric(horizontal: 8.w),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                color: AppColors.gray100,
+                              ),
+                            ),
+                            _buildSortType(
+                              isSelected: sortType == SortType.endingSoon,
+                              sortType: SortType.endingSoon,
+                              sortTypeName: context.l10n.sortByEndingSoon,
+                            ),
+                            SizedBox(width: 12.w),
+                            GestureDetector(
+                              onTap: () => _showFilterBottomSheet(),
+                              child: SvgPicture.asset(
+                                AppAssets.icFilter,
+                                width: 24.w,
+                                height: 24.w,
+                              ),
+                            ),
+                          ],
                         );
                       },
+                    ),
+                  ],
+                ),
+              ),
+
+              /// 즐겨찾기 전시 리스트
+              ValueListenableBuilder(
+                valueListenable: _isLoading,
+                builder: (context, isLoading, child) {
+                  if (isLoading) {
+                    return Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 12.h,
+                          horizontal: 24.w,
+                        ),
+                        child: const ExhibitsLoadingView(),
+                      ),
                     );
-                  },
-                );
-              },
-            ),
-          ],
+                  }
+
+                  return ValueListenableBuilder(
+                    valueListenable: _exhibits,
+                    builder: (context, exhibits, child) {
+                      if (exhibits == null) {
+                        return const ExceptionView();
+                      } else if (exhibits.isEmpty) {
+                        return Expanded(
+                          child: Column(
+                            spacing: 8.h,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                AppAssets.icFavorite,
+                                width: 96.w,
+                                height: 96.w,
+                              ),
+                              ArtTripText.pretendard()
+                                  .body01Regular()
+                                  .color(AppColors.textTertiary)
+                                  .build()
+                                  .text(context.l10n.noFavorites),
+                            ],
+                          ),
+                        );
+                      }
+
+                      return ValueListenableBuilder(
+                        valueListenable: _loadingMore,
+                        builder: (context, loadingMore, child) {
+                          final int length =
+                              exhibits.length + (loadingMore ? 1 : 0);
+
+                          return Expanded(
+                            child: ListView.separated(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              controller: _scrollController,
+                              padding: EdgeInsets.only(
+                                left: 24.w,
+                                right: 24.w,
+                                top: 8.h,
+                                bottom: 16.h,
+                              ),
+                              itemCount: length,
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 12.h),
+                              itemBuilder: (context, index) {
+                                if (loadingMore && index == exhibits.length) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                final ExhibitModel item = exhibits[index];
+                                return ExhibitListItem(
+                                  item: item,
+                                  isDomestic: false,
+                                  showArea: true,
+                                  forceFavorite: true,
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   void _showFilterBottomSheet() {
-    final ValueNotifier<String?> tempArea = ValueNotifier(_selectedArea.value);
-    final ValueNotifier<bool> tempIsDomestic = ValueNotifier(_isDomestic.value);
+    final ValueNotifier<String?> tempOverseasCountry = ValueNotifier(
+      _selectedOverseasCountry.value,
+    );
+    final ValueNotifier<String?> tempDomesticArea = ValueNotifier(
+      _selectedDomesticArea.value,
+    );
     final ValueNotifier<bool> isApplyEnabled = ValueNotifier(false);
-
-    void updateApplyEnabled() {
-      isApplyEnabled.value = tempArea.value?.isNotEmpty == true;
-    }
 
     showModalBottomSheet(
       context: context,
@@ -325,11 +373,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 bottom: 20.h,
               ),
               child: ValueListenableBuilder(
-                valueListenable: tempIsDomestic,
-                builder: (context, isDomestic, child) {
+                valueListenable: tempOverseasCountry,
+                builder: (context, overseasCountry, child) {
                   return ValueListenableBuilder(
-                    valueListenable: tempArea,
-                    builder: (context, selectedArea, child) {
+                    valueListenable: tempDomesticArea,
+                    builder: (context, domesticArea, child) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -341,9 +389,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                               ArtTripText.pretendard()
                                   .body01Bold()
                                   .build()
-                                  .text(
-                                    context.l10n.oversea,
-                                  ),
+                                  .text(context.l10n.oversea),
                               Selector<HomeViewModel, AsyncState<List<String>>>(
                                 selector: (_, vm) => vm.overseasCountries,
                                 builder: (context, overseasCountries, _) {
@@ -358,13 +404,19 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                           (index) {
                                             final item = data[index];
                                             final isSelected =
-                                                selectedArea == item &&
-                                                !isDomestic;
+                                                overseasCountry == item;
+
                                             return GestureDetector(
                                               onTap: () {
-                                                tempArea.value = item;
-                                                tempIsDomestic.value = false;
-                                                updateApplyEnabled();
+                                                if (tempOverseasCountry.value ==
+                                                    item) {
+                                                  tempOverseasCountry.value =
+                                                      '';
+                                                } else {
+                                                  tempOverseasCountry.value =
+                                                      item;
+                                                }
+                                                isApplyEnabled.value = true;
                                               },
                                               child: Container(
                                                 padding: EdgeInsets.symmetric(
@@ -428,9 +480,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                               ArtTripText.pretendard()
                                   .body01Bold()
                                   .build()
-                                  .text(
-                                    context.l10n.domestic,
-                                  ),
+                                  .text(context.l10n.domestic),
                               Selector<
                                 HomeViewModel,
                                 AsyncState<List<RegionModel>>
@@ -462,13 +512,24 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                           (index) {
                                             final item = tempList[index];
                                             final isSelected =
-                                                selectedArea == item.region &&
-                                                isDomestic;
+                                                domesticArea == item.region;
+
                                             return GestureDetector(
                                               onTap: () {
-                                                tempArea.value = item.region;
-                                                tempIsDomestic.value = true;
-                                                updateApplyEnabled();
+                                                if (tempDomesticArea.value ==
+                                                    item.region) {
+                                                  tempDomesticArea.value = '';
+                                                } else {
+                                                  if (index == 0) {
+                                                    tempDomesticArea.value =
+                                                        context.l10n.allItems;
+                                                  } else {
+                                                    tempDomesticArea.value =
+                                                        item.region;
+                                                  }
+                                                }
+
+                                                isApplyEnabled.value = true;
                                               },
                                               child: Container(
                                                 padding: EdgeInsets.symmetric(
@@ -529,8 +590,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   /// 전체 해제
                   GestureDetector(
                     onTap: () {
-                      tempArea.value = null;
-                      updateApplyEnabled();
+                      tempOverseasCountry.value = context.l10n.allItems;
+                      tempDomesticArea.value = context.l10n.allItems;
+                      isApplyEnabled.value = true;
                     },
                     child: ColoredBox(
                       color: Colors.transparent,
@@ -560,23 +622,21 @@ class _FavoritesPageState extends State<FavoritesPage> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary300,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 17.h,
-                            ),
+                            padding: EdgeInsets.symmetric(vertical: 17.h),
                             elevation: 0,
                             shadowColor: Colors.transparent,
                             disabledBackgroundColor: AppColors.gray100,
                             overlayColor: Colors.transparent,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadiusGeometry.circular(
-                                12.r,
-                              ),
+                              borderRadius: BorderRadiusGeometry.circular(12.r),
                             ),
                           ),
                           onPressed: enabled
                               ? () {
-                                  _selectedArea.value = tempArea.value;
-                                  _isDomestic.value = tempIsDomestic.value;
+                                  _selectedOverseasCountry.value =
+                                      tempOverseasCountry.value;
+                                  _selectedDomesticArea.value =
+                                      tempDomesticArea.value;
                                   _getFavoriteExhibits();
                                   context.pop();
                                 }

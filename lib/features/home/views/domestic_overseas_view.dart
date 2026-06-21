@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
+/// 해외/국내별 국가/지역 선택 탭바 뷰
 class DomesticOverseasView extends StatefulWidget {
   const DomesticOverseasView({super.key});
 
@@ -35,20 +36,20 @@ class _DomesticOverseasViewState extends State<DomesticOverseasView> {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: SizedBox(
-        height: 64.h,
-        child: Selector<HomeViewModel, AsyncState<List<String>>>(
-          selector: (_, vm) => vm.overseasCountries,
-          builder: (context, state, _) {
-            return AsyncView(
-              state: state,
-              onData: (data) {
-                if (data.isEmpty) return const SizedBox.shrink();
+      child: Selector<HomeViewModel, AsyncState<List<String>>>(
+        selector: (_, vm) => vm.overseasCountries,
+        builder: (context, state, _) {
+          return AsyncView(
+            state: state,
+            onData: (data) {
+              if (data.isEmpty) return const SizedBox.shrink();
 
-                final itemCount = data.length;
-                _itemKeys = List.generate(itemCount, (_) => GlobalKey());
+              final itemCount = data.length;
+              _itemKeys = List.generate(itemCount, (_) => GlobalKey());
 
-                return ListView.separated(
+              return SizedBox(
+                height: 64.h,
+                child: ListView.separated(
                   shrinkWrap: true,
                   itemCount: itemCount,
                   scrollDirection: Axis.horizontal,
@@ -66,39 +67,39 @@ class _DomesticOverseasViewState extends State<DomesticOverseasView> {
                       data[index],
                     );
                   },
-                );
-              },
-              onLoading: () {
-                return Shimmer(
-                  duration: const Duration(
-                    milliseconds: AppConsts.shimmerDurationMs,
-                  ),
-                  interval: const Duration(
-                    milliseconds: AppConsts.shimmerIntervalMs,
-                  ),
-                  child: SizedBox(
-                    height: 64.h,
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24.w,
-                        vertical: 16.h,
-                      ),
-                      itemCount: 5,
-                      separatorBuilder: (context, index) =>
-                          SizedBox(width: 8.w),
-                      itemBuilder: (context, index) {
-                        return const ShimmerSkeletonItem(width: 76, height: 32);
-                      },
+                ),
+              );
+            },
+            onLoading: () {
+              return Shimmer(
+                duration: const Duration(
+                  milliseconds: AppConsts.shimmerDurationMs,
+                ),
+                interval: const Duration(
+                  milliseconds: AppConsts.shimmerIntervalMs,
+                ),
+                child: SizedBox(
+                  height: 64.h,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 24.w,
+                      vertical: 16.h,
                     ),
+                    itemCount: 5,
+                    separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                    itemBuilder: (context, index) {
+                      return const ShimmerSkeletonItem(width: 76, height: 32);
+                    },
                   ),
-                );
-              },
-            );
-          },
-        ),
+                ),
+              );
+            },
+            onError: ({error}) => const SizedBox.shrink(),
+          );
+        },
       ),
     );
   }

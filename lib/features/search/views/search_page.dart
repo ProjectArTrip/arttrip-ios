@@ -1,6 +1,8 @@
 import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
+import 'package:arttrip/features/home/home_viewmodel.dart';
 import 'package:arttrip/features/onboarding/data/models/keyword_model.dart';
 import 'package:arttrip/features/search/data/models/search_history_model.dart';
 import 'package:arttrip/features/search/viewmodels/search_viewmodel.dart';
@@ -132,11 +134,16 @@ class _SearchPageState extends State<SearchPage> {
           state: state,
           onData: (exhibits) {
             if (exhibits.isEmpty) return _buildEmptyState();
+            final homeVM = context.read<HomeViewModel>();
+            final isDomestic = homeVM.locationType == LocationType.domestic;
             return ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
               itemCount: exhibits.length,
               separatorBuilder: (_, _) => SizedBox(height: 16.h),
-              itemBuilder: (_, index) => ExhibitListItem(item: exhibits[index]),
+              itemBuilder: (_, index) => ExhibitListItem(
+                item: exhibits[index],
+                isDomestic: isDomestic,
+              ),
             );
           },
         );

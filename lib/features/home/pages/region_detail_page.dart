@@ -204,7 +204,7 @@ class _RegionDetailPageState extends State<RegionDetailPage> {
                           }
 
                           final item = exhibits[index];
-                          return ExhibitListItem(item: item);
+                          return ExhibitListItem(item: item, isDomestic: true);
                         },
                       );
                     },

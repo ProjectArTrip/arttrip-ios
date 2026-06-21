@@ -188,7 +188,6 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
                     } else if (exhibits.isEmpty) {
                       return const NoExhibitsView();
                     }
-
                     return ValueListenableBuilder(
                       valueListenable: _loadingMore,
                       builder: (context, loadingMore, child) {
@@ -211,7 +210,10 @@ class _GenreDetailPageState extends State<GenreDetailPage> {
                               );
                             }
                             final ExhibitModel item = exhibits[index];
-                            return ExhibitListItem(item: item);
+                            return ExhibitListItem(
+                              item: item,
+                              isDomestic: widget.isDomestic,
+                            );
                           },
                         );
                       },

@@ -55,18 +55,23 @@ class _MapViewState extends State<MapView> {
     return InitWidget(
       init: () => context.read<MapViewModel>().init(),
       child: Scaffold(
-        body: Selector<MapViewModel, AsyncState<List<MapMarkerModel>>>(
-          selector: (_, vm) => vm.markersState,
-          builder: (context, markersState, _) {
-            return AsyncView<List<MapMarkerModel>>(
-              state: markersState,
-              onLoading: () => _buildMapStack(context),
-              onData: (markers) {
-                _updateClusterItems(markers);
-                return _buildMapStack(context);
-              },
-            );
-          },
+        body: Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).padding.bottom,
+          ),
+          child: Selector<MapViewModel, AsyncState<List<MapMarkerModel>>>(
+            selector: (_, vm) => vm.markersState,
+            builder: (context, markersState, _) {
+              return AsyncView<List<MapMarkerModel>>(
+                state: markersState,
+                onLoading: () => _buildMapStack(context),
+                onData: (markers) {
+                  _updateClusterItems(markers);
+                  return _buildMapStack(context);
+                },
+              );
+            },
+          ),
         ),
       ),
     );

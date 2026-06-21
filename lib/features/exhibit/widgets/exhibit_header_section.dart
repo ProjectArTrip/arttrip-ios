@@ -40,7 +40,7 @@ class ExhibitHeaderSection extends StatelessWidget {
 
   Widget _buildTitle() {
     return ArtTripText.pretendard()
-        .title01Bold()
+        .headline()
         .color(AppColors.textPrimary)
         .build()
         .text(title);
@@ -48,7 +48,7 @@ class ExhibitHeaderSection extends StatelessWidget {
 
   Widget _buildSubInfo(String text) {
     return ArtTripText.pretendard()
-        .body02Regular()
+        .body01Regular()
         .color(AppColors.textPrimary)
         .build()
         .text(text);
@@ -74,7 +74,7 @@ class ExhibitHeaderSection extends StatelessWidget {
           ),
         ),
         child: ArtTripText.pretendard()
-            .body01Bold()
+            .title02Bold()
             .color(AppColors.textWhite)
             .build()
             .text(context.l10n.goToHomepage),

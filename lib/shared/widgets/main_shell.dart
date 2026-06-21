@@ -1,6 +1,8 @@
+import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
 import 'package:arttrip/shared/widgets/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 /// GNB ShellRoute용 Shell 위젯
 ///
@@ -23,6 +25,7 @@ class _MainShellState extends State<MainShell> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
+      extendBodyBehindAppBar: true,
       body: widget.navigationShell,
       bottomNavigationBar: BottomNavBar(
         key: _bottomNavigationKey,
@@ -33,6 +36,9 @@ class _MainShellState extends State<MainShell> {
   }
 
   void _onTap(int index) {
+    if (index == 3) {
+      context.read<ExhibitViewModel>().triggerFavoritesRefresh();
+    }
     widget.navigationShell.goBranch(
       index,
       initialLocation: index == widget.navigationShell.currentIndex,

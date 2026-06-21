@@ -7,6 +7,7 @@ import 'package:arttrip/shared/models/region_model.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
+import 'package:arttrip/shared/widgets/image_empty_small_widget.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -79,6 +80,11 @@ class _RegionalExhibitsViewState extends State<RegionalExhibitsView> {
                                             imageUrl: item.imageUrl,
                                             width: 64.w,
                                             height: 64.w,
+                                            errorWidget: (p0, p1, p2) =>
+                                                ImageEmptySmallWidget(
+                                                  width: 64.w,
+                                                  height: 64.w,
+                                                ),
                                           )
                                         : const SizedBox.shrink(),
                                   ),

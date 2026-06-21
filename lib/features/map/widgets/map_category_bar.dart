@@ -17,7 +17,8 @@ class MapCategoryBar extends StatelessWidget {
     return Consumer<MapViewModel>(
       builder: (context, vm, _) {
         final isOpen = vm.isDropdownOpen;
-        final allCountries = [context.l10n.domestic, ...vm.countries];
+        final allCountries = [context.l10n.korea, ...vm.countries]
+          ..removeWhere((c) => c == context.l10n.allItems);
 
         return Container(
           decoration: BoxDecoration(

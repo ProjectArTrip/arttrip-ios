@@ -12,6 +12,7 @@ import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/app_cached_image.dart';
 import 'package:arttrip/shared/widgets/async_view.dart';
+import 'package:arttrip/shared/widgets/image_empty_big_widget.dart';
 import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,7 +34,8 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
     return SliverToBoxAdapter(
       child: Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
         selector: (_, vm) =>
-            vm.personalizedExhibits[vm.locationType] ??
+            vm.personalizedExhibits[vm.locationType]?[vm.area[vm
+                .locationType]] ??
             const AsyncState.loading(),
         builder: (context, state, _) {
           return AsyncView(
@@ -41,6 +43,7 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
             onData: (data) {
               if (data.isEmpty) return const SizedBox.shrink();
 
+              final bool isDomestic = context.read<HomeViewModel>().isDomestic;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 12.h,
@@ -82,7 +85,9 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
                           SizedBox(width: 8.w),
                       itemBuilder: (_, index) {
                         final item = data[index];
-                        final location = item.countryName ?? item.regionName;
+                        final location = !isDomestic
+                            ? item.countryName ?? item.regionName
+                            : item.regionName;
                         return GestureDetector(
                           onTap: () => Routes.push(
                             context,
@@ -106,17 +111,11 @@ class _PersonalizedExhibitsViewState extends State<PersonalizedExhibitsView> {
                                               height: 150.h,
                                               fit: BoxFit.cover,
                                             )
-                                          : Container(
+                                          : ImageEmptyBigWidget(
                                               width: 120.w,
                                               height: 150.h,
-                                              color: AppColors.gray100,
-                                              child: const Center(
-                                                child: Icon(
-                                                  Icons.image_not_supported,
-                                                  color: AppColors.textTertiary,
-                                                ),
-                                              ),
                                             ),
+
                                       location?.isNotEmpty == true
                                           ? Container(
                                               padding: EdgeInsets.symmetric(

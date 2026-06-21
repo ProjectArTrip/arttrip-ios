@@ -96,8 +96,8 @@ class _CalendarBottomSheetState extends State<CalendarBottomSheet> {
                     .build()
                     .text(
                       context.l10n.calendarYearMonth(
-                        _focusedDay.year,
                         _focusedDay.month,
+                        _focusedDay.year,
                       ),
                     ),
                 SizedBox(width: 4.w),
@@ -281,11 +281,10 @@ Future<DateTime?> showCalendarBottomSheet({
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
-    builder:
-        (context) => CalendarBottomSheet(
-          initialDate: initialDate,
-          firstDate: firstDate,
-          lastDate: lastDate,
-        ),
+    builder: (context) => CalendarBottomSheet(
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    ),
   );
 }

@@ -6,6 +6,7 @@ import 'package:arttrip/core/enum.dart';
 import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/auth/services/auth_service.dart';
 import 'package:arttrip/routes/app_routes.dart';
+import 'package:arttrip/routes/route_params.dart';
 import 'package:arttrip/routes/routes.dart';
 import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/social_login_button.dart';
@@ -88,8 +89,14 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final params = await AuthService.instance.getGoogleCredentials();
       if (!mounted) return;
-      if (params != null) {
-        await Routes.push(context, AppRoutes.onboardingTerms, extra: params);
+      if (params == null) {
+        _showLoginError();
+        return;
+      }
+      final result = await AuthService.instance.loginWithServer(context, params);
+      if (!mounted) return;
+      if (result.isSuccess) {
+        _navigateAfterLogin(result.onboardingStep, params);
       } else {
         _showLoginError();
       }
@@ -104,8 +111,14 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final params = await AuthService.instance.getAppleCredentials();
       if (!mounted) return;
-      if (params != null) {
-        await Routes.push(context, AppRoutes.onboardingTerms, extra: params);
+      if (params == null) {
+        _showLoginError();
+        return;
+      }
+      final result = await AuthService.instance.loginWithServer(context, params);
+      if (!mounted) return;
+      if (result.isSuccess) {
+        _navigateAfterLogin(result.onboardingStep, params);
       } else {
         _showLoginError();
       }
@@ -120,8 +133,14 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final params = await AuthService.instance.getKakaoCredentials();
       if (!mounted) return;
-      if (params != null) {
-        await Routes.push(context, AppRoutes.onboardingTerms, extra: params);
+      if (params == null) {
+        _showLoginError();
+        return;
+      }
+      final result = await AuthService.instance.loginWithServer(context, params);
+      if (!mounted) return;
+      if (result.isSuccess) {
+        _navigateAfterLogin(result.onboardingStep, params);
       } else {
         _showLoginError();
       }
@@ -130,10 +149,18 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _navigateAfterLogin(OnboardingStep? step) {
+  void _navigateAfterLogin(OnboardingStep? step, [SocialLoginParams? params]) {
     switch (step) {
       case OnboardingStep.nickname:
-        Routes.go(context, AppRoutes.onboardingNickname);
+        // 신규 유저: 약관 동의 후 닉네임 설정 (서버 로그인은 이미 완료)
+        Routes.push(
+          context,
+          AppRoutes.onboardingTerms,
+          extra: SocialLoginParams(
+            provider: params?.provider ?? '',
+            skipServerLogin: true,
+          ),
+        );
       case OnboardingStep.keyword:
         Routes.go(context, AppRoutes.onboardingKeywords);
       case OnboardingStep.completed:

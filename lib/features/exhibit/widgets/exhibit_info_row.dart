@@ -31,7 +31,7 @@ class ExhibitInfoRow extends StatelessWidget {
         SizedBox(
           width: 66.w,
           child: ArtTripText.pretendard()
-              .body02Bold()
+              .body01Bold()
               .color(AppColors.textPrimary)
               .build()
               .text(label),
@@ -42,7 +42,7 @@ class ExhibitInfoRow extends StatelessWidget {
             children: [
               Flexible(
                 child: ArtTripText.pretendard()
-                    .body02Regular()
+                    .body01Regular()
                     .color(
                       isEmpty ? AppColors.textTertiary : AppColors.textPrimary,
                     )

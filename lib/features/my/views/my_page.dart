@@ -32,14 +32,16 @@ class MyPage extends StatelessWidget {
           showBackButton: false,
           actions: const [AlertBadge()],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildProfileSection(context),
-              const AppDivider(),
-              SizedBox(height: 20.h),
-              _buildMenuList(context),
-            ],
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                _buildProfileSection(context),
+                const AppDivider(),
+                SizedBox(height: 20.h),
+                _buildMenuList(context),
+              ],
+            ),
           ),
         ),
       ),

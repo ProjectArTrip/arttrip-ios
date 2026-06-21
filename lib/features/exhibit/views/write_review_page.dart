@@ -19,7 +19,7 @@ class WriteReviewPage extends StatefulWidget {
 
   /// 신규 작성 시 필수, 수정 모드에서는 사용하지 않음
   final int exhibitId;
-  final WriteReviewParams params;
+  final WriteReviewParams? params;
 
   @override
   State<WriteReviewPage> createState() => _WriteReviewPageState();
@@ -31,9 +31,9 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
     super.initState();
     final vm = context.read<WriteReviewViewModel>();
     vm.reset(notify: false);
-    if (widget.params.isEditMode) {
+    if (widget.params?.isEditMode == true) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        vm.initForEdit(reviewId: widget.params.reviewId!);
+        vm.initForEdit(reviewId: widget.params!.reviewId!);
       });
     }
   }
@@ -54,7 +54,7 @@ class _WriteReviewPageState extends State<WriteReviewPage> {
               .color(AppColors.textPrimary)
               .build()
               .text(
-                widget.params.isEditMode
+                widget.params?.isEditMode == true
                     ? context.l10n.editReviewTitle
                     : context.l10n.writeReviewTitle,
               ),

@@ -20,6 +20,7 @@ class _StampPageState extends State<StampPage> {
     final topPadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: AppColors.gray0,
       body: Stack(
         children: [
