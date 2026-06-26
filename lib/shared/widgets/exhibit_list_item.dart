@@ -116,6 +116,7 @@ class ExhibitListItem extends StatelessWidget {
                     ArtTripText.pretendard()
                         .body01Regular()
                         .color(const Color(0xFF7859FF))
+                        .ellipsis(2)
                         .build()
                         .text(
                           !isDomestic
@@ -141,12 +142,14 @@ class ExhibitListItem extends StatelessWidget {
                         ArtTripText.pretendard()
                             .body02Regular()
                             .color(AppColors.textTertiary)
+                            .ellipsis(2)
                             .build()
                             .text(item.hallName ?? item.exhibitHallName!),
                       if (item.exhibitPeriod?.isNotEmpty == true)
                         ArtTripText.pretendard()
                             .body02Regular()
                             .color(AppColors.textTertiary)
+                            .ellipsis(2)
                             .build()
                             .text(item.exhibitPeriod!),
                     ],

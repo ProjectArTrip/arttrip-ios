@@ -154,9 +154,13 @@ class _CurationViewState extends State<CurationView> {
           spacing: 4.h,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ArtTripText.pretendard().title01Bold().build().text(title),
-                const Expanded(child: SizedBox.shrink()),
+                Expanded(
+                  child: ArtTripText.pretendard().title01Bold().build().text(
+                    title,
+                  ),
+                ),
                 SvgPicture.asset(
                   AppAssets.icNoArrowRight,
                   width: 24.w,
