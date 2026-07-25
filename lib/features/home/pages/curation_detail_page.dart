@@ -4,6 +4,7 @@ import 'package:arttrip/core/extensions.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
 import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
 import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/shared/utils/text/arttrip_text.dart';
 import 'package:arttrip/shared/widgets/alert_badge.dart';
 import 'package:arttrip/shared/widgets/common_appbar.dart';
 import 'package:arttrip/shared/widgets/exception_view.dart';
@@ -103,7 +104,14 @@ class _CurationDetailPageState extends State<CurationDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonAppBar(
-        title: widget.title.isEmpty ? context.l10n.curationTitle : widget.title,
+        titleWidget: ArtTripText.pretendard()
+            .headline()
+            .ellipsis(2)
+            .textAlign(TextAlign.center)
+            .build()
+            .text(
+              widget.title.isEmpty ? context.l10n.curationTitle : widget.title,
+            ),
         actions: const [AlertBadge()],
       ),
       body: ValueListenableBuilder(

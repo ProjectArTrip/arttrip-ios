@@ -39,7 +39,7 @@ class _CurationViewState extends State<CurationView> {
             return Selector<HomeViewModel, AsyncState<CurationModel>>(
               selector: (_, vm) =>
                   vm.curations[vm.locationType]?[vm.area[vm.locationType]!] ??
-                  const AsyncState.error(),
+                  const AsyncState.loading(),
               builder: (context, state, _) {
                 return AsyncView(
                   state: state,
@@ -111,7 +111,9 @@ class _CurationViewState extends State<CurationView> {
                     );
                   },
                   onLoading: () => _buildCurationLoadingView(),
-                  onError: ({error}) => _buildEmptyView('', '', '0'),
+                  onError: ({error}) {
+                    return _buildEmptyView('', '', '0');
+                  },
                 );
               },
             );
@@ -152,9 +154,13 @@ class _CurationViewState extends State<CurationView> {
           spacing: 4.h,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ArtTripText.pretendard().title01Bold().build().text(title),
-                const Expanded(child: SizedBox.shrink()),
+                Expanded(
+                  child: ArtTripText.pretendard().title01Bold().build().text(
+                    title,
+                  ),
+                ),
                 SvgPicture.asset(
                   AppAssets.icNoArrowRight,
                   width: 24.w,

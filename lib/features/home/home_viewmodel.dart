@@ -401,6 +401,7 @@ class HomeViewModel with ChangeNotifier {
       _curations[_locationType] ??= {};
       _curations[_locationType]![_area[_locationType]!] =
           const AsyncState.loading();
+      notifyListeners();
 
       final result = await homeRepository.fetchCurations(
         isDomestic: isDomestic,
@@ -414,6 +415,7 @@ class HomeViewModel with ChangeNotifier {
       _curations[_locationType]?[_area[_locationType]!] =
           const AsyncState.error();
     }
+    notifyListeners();
   }
 
   /// 이번주 캘린더 조회
