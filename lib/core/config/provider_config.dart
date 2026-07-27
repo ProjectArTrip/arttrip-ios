@@ -1,0 +1,103 @@
+import 'package:arttrip/core/app_consts.dart';
+import 'package:arttrip/core/network/network.dart';
+import 'package:arttrip/features/alert/alert_repository.dart';
+import 'package:arttrip/features/alert/alert_viewmodel.dart';
+import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
+import 'package:arttrip/features/exhibit/data/exhibit_repository_hybrid.dart';
+import 'package:arttrip/features/exhibit/data/exhibit_repository_mock.dart';
+import 'package:arttrip/features/exhibit/viewmodels/exhibit_detail_viewmodel.dart';
+import 'package:arttrip/features/exhibit/viewmodels/exhibit_viewmodel.dart';
+import 'package:arttrip/features/exhibit/viewmodels/write_review_viewmodel.dart';
+import 'package:arttrip/features/home/home_repository.dart';
+import 'package:arttrip/features/home/home_repository_hybrid.dart';
+import 'package:arttrip/features/home/home_repository_mock.dart';
+import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/features/map/data/map_repository.dart';
+import 'package:arttrip/features/map/data/map_repository_hybrid.dart';
+import 'package:arttrip/features/map/data/map_repository_mock.dart';
+import 'package:arttrip/features/map/viewmodels/map_viewmodel.dart';
+import 'package:arttrip/features/my/data/my_repository.dart';
+import 'package:arttrip/features/my/data/my_repository_mock.dart';
+import 'package:arttrip/features/my/viewmodels/my_viewmodel.dart';
+import 'package:arttrip/features/onboarding/data/keywords_repository.dart';
+import 'package:arttrip/features/onboarding/data/keywords_repository_mock.dart';
+import 'package:arttrip/features/onboarding/viewmodels/keywords_viewmodel.dart';
+import 'package:arttrip/features/search/data/search_repository.dart';
+import 'package:arttrip/features/search/data/search_repository_mock.dart';
+import 'package:arttrip/features/search/viewmodels/search_viewmodel.dart';
+import 'package:arttrip/features/splash/data/maintenance_repository.dart';
+import 'package:arttrip/features/splash/viewmodels/splash_viewmodel.dart';
+import 'package:provider/provider.dart';
+
+final getProviders = [
+  ChangeNotifierProvider<SplashViewModel>(
+    create: (_) =>
+        SplashViewModel(MaintenanceRepositoryImpl(DioClient.instance)),
+  ),
+  ChangeNotifierProvider(
+    create: (_) => AlertViewModel(AlertRepositoryImpl(DioClient.instance)),
+  ),
+  ChangeNotifierProvider(
+    create: (_) => ExhibitViewModel(
+      ExhibitRepositoryHybrid(
+        mock: ExhibitRepositoryMockImpl(),
+        api: ExhibitRepositoryImpl(DioClient.instance),
+      ),
+    ),
+  ),
+  ChangeNotifierProxyProvider<ExhibitViewModel, HomeViewModel>(
+    create: (context) => HomeViewModel(
+      exhibitVM: context.read<ExhibitViewModel>(),
+      homeRepository: HomeRepositoryHybrid(
+        mock: HomeRepositoryMockImpl(),
+        api: HomeRepositoryImpl(DioClient.instance),
+      ),
+    ),
+    update: (_, _, homeVM) => homeVM!,
+  ),
+  ChangeNotifierProvider<KeywordModelsViewModel>(
+    create: (_) => KeywordModelsViewModel(
+      AppConsts.useMock
+          ? KeywordModelsRepositoryMockImpl()
+          : KeywordModelsRepositoryImpl(DioClient.instance),
+    ),
+  ),
+  ChangeNotifierProvider<ExhibitDetailModelViewModel>(
+    create: (_) => ExhibitDetailModelViewModel(
+      AppConsts.useMock
+          ? ExhibitRepositoryMockImpl()
+          : ExhibitRepositoryImpl(DioClient.instance),
+    ),
+  ),
+  ChangeNotifierProvider<WriteReviewViewModel>(
+    create: (_) => WriteReviewViewModel(
+      AppConsts.useMock
+          ? ExhibitRepositoryMockImpl()
+          : ExhibitRepositoryImpl(DioClient.instance),
+    ),
+  ),
+  ChangeNotifierProvider<MyViewModel>(
+    create: (_) => MyViewModel(
+      AppConsts.useMock
+          ? MyRepositoryMockImpl()
+          : MyRepositoryImpl(DioClient.instance),
+    ),
+  ),
+  ChangeNotifierProvider<SearchViewModel>(
+    create: (_) => SearchViewModel(
+      AppConsts.useMock
+          ? SearchRepositoryMockImpl()
+          : SearchRepositoryImpl(DioClient.instance),
+    ),
+  ),
+  ChangeNotifierProxyProvider<ExhibitViewModel, MapViewModel>(
+    create: (context) => MapViewModel(
+      exhibitVM: context.read<ExhibitViewModel>(),
+      mapRepository: MapRepositoryHybrid(
+        mock: MapRepositoryMockImpl(),
+        api: MapRepositoryImpl(DioClient.instance),
+      ),
+    ),
+    update: (_, _, mapVM) => mapVM!,
+  ),
+];

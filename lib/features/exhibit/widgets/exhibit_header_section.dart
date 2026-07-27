@@ -1,0 +1,84 @@
+import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+/// 전시 상세 페이지의 헤더 섹션 (제목, 장소, 기간, 버튼)
+class ExhibitHeaderSection extends StatelessWidget {
+  const ExhibitHeaderSection({
+    super.key,
+    required this.title,
+    required this.hallName,
+    required this.exhibitPeriod,
+    this.ticketUrl,
+  });
+
+  final String title;
+  final String hallName;
+  final String exhibitPeriod;
+  final String? ticketUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTitle(),
+        SizedBox(height: 16.h),
+        _buildSubInfo(hallName),
+        SizedBox(height: 4.h),
+        _buildSubInfo(exhibitPeriod),
+        if (ticketUrl?.isNotEmpty == true) ...[
+          SizedBox(height: 16.h),
+          _buildTicketButton(context),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildTitle() {
+    return ArtTripText.pretendard()
+        .headline()
+        .color(AppColors.textPrimary)
+        .build()
+        .text(title);
+  }
+
+  Widget _buildSubInfo(String text) {
+    return ArtTripText.pretendard()
+        .body01Regular()
+        .color(AppColors.textPrimary)
+        .build()
+        .text(text);
+  }
+
+  Widget _buildTicketButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 52.h,
+      child: ElevatedButton(
+        onPressed: () async {
+          final uri = Uri.parse(ticketUrl!);
+          if (await canLaunchUrl(uri)) {
+            await launchUrl(uri, mode: LaunchMode.externalApplication);
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary300,
+          foregroundColor: AppColors.textWhite,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+        ),
+        child: ArtTripText.pretendard()
+            .title02Bold()
+            .color(AppColors.textWhite)
+            .build()
+            .text(context.l10n.goToHomepage),
+      ),
+    );
+  }
+}

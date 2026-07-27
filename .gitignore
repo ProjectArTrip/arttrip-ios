@@ -1,3 +1,6 @@
+# Claude
+/.claude
+
 # Miscellaneous
 *.class
 *.log
@@ -32,6 +35,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+**/build/
 
 # Symbolication related
 app.*.symbols
@@ -43,3 +47,20 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# freezed
+*.freezed.dart
+*.g.dart
+
+# Generated files
+/lib/l10n/generated/
+
+# Environment variables
+.env
+ios/Flutter/GoogleMaps.xcconfig
+
+# Docs
+/docs/devtools_options.yaml
+
+# FVM Version Cache
+.fvm/

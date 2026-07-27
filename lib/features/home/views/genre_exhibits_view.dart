@@ -1,0 +1,313 @@
+import 'package:arttrip/core/app_assets.dart';
+import 'package:arttrip/core/app_colors.dart';
+import 'package:arttrip/core/app_consts.dart';
+import 'package:arttrip/core/enum.dart';
+import 'package:arttrip/core/extensions.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_model.dart';
+import 'package:arttrip/features/home/home_viewmodel.dart';
+import 'package:arttrip/features/home/widgets/home_no_exhibits_view.dart';
+import 'package:arttrip/routes/app_routes.dart';
+import 'package:arttrip/routes/routes.dart';
+import 'package:arttrip/shared/utils/text/arttrip_text.dart';
+import 'package:arttrip/shared/widgets/async_view.dart';
+import 'package:arttrip/shared/widgets/exhibit_list_item.dart';
+import 'package:arttrip/shared/widgets/exhibit_list_item_skeleton.dart';
+import 'package:arttrip/shared/widgets/shimmer_skeleton_item.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
+
+class GenreExhibitsView extends StatefulWidget {
+  const GenreExhibitsView({super.key});
+
+  @override
+  State<GenreExhibitsView> createState() => _GenreExhibitsViewState();
+}
+
+class _GenreExhibitsViewState extends State<GenreExhibitsView> {
+  List<GlobalKey>? _itemKeys;
+
+  void _updateSelectedGenre(int index, String genre) {
+    final homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
+    homeViewModel.setSelectedGenre = genre;
+    homeViewModel.getExhibitsByGenre();
+    if (_itemKeys![index].currentContext != null) {
+      Scrollable.ensureVisible(
+        _itemKeys![index].currentContext!,
+        alignment: 0.5,
+        duration: const Duration(milliseconds: 500),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Selector<HomeViewModel, AsyncState<List<String>>>(
+        selector: (_, vm) => vm.genres,
+        builder: (context, state, _) {
+          return AsyncView(
+            state: state,
+            onData: (genres) {
+              if (genres.isEmpty) return const SizedBox.shrink();
+
+              final itemCount = genres.length;
+              _itemKeys = List.generate(itemCount, (_) => GlobalKey());
+
+              return Padding(
+                padding: EdgeInsetsGeometry.only(top: 32.h),
+                child: Column(
+                  children: [
+                    _buildHeader(),
+
+                    /// 장르 리스트
+                    SizedBox(
+                      height: 64.h,
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: itemCount,
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 16.h,
+                          horizontal: 24.w,
+                        ),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(width: 8.w),
+                        itemBuilder: (context, index) {
+                          return _buildGenreItem(
+                            _itemKeys![index],
+                            index,
+                            genres[index],
+                          );
+                        },
+                      ),
+                    ),
+
+                    /// 장르별 랜덤 전시
+                    Selector<HomeViewModel, AsyncState<List<ExhibitModel>>>(
+                      selector: (_, vm) =>
+                          vm.exhibitsByGenre[vm.locationType]?[vm.area[vm
+                              .locationType]]?[vm.selectedGenre[vm
+                              .locationType]![vm.area[vm.locationType]]] ??
+                          const AsyncState.loading(),
+                      builder: (context, state, _) {
+                        return AsyncView(
+                          state: state,
+                          onData: (data) {
+                            if (data.isEmpty) {
+                              final homeVM = context.read<HomeViewModel>();
+                              final selectedGenre =
+                                  homeVM.selectedGenre[homeVM
+                                      .locationType]![homeVM.area[homeVM
+                                      .locationType]];
+                              return _buildNoExhibitions(selectedGenre);
+                            }
+                            final homeViewModel = context.read<HomeViewModel>();
+                            final isDomestic =
+                                homeViewModel.locationType ==
+                                LocationType.domestic;
+                            return ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: data.length,
+                              padding: EdgeInsets.symmetric(horizontal: 24.w),
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 8.h),
+                              itemBuilder: (context, index) {
+                                final item = data[index];
+                                return ExhibitListItem(
+                                  item: item,
+                                  isDomestic: isDomestic,
+                                );
+                              },
+                            );
+                          },
+                          onLoading: () => Shimmer(
+                            duration: const Duration(
+                              milliseconds: AppConsts.shimmerDurationMs,
+                            ),
+                            interval: const Duration(
+                              milliseconds: AppConsts.shimmerIntervalMs,
+                            ),
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.symmetric(horizontal: 24.w),
+                              itemCount: 2,
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 8.h),
+                              itemBuilder: (context, index) {
+                                return const ExhibitListItemSkeleton();
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+            onLoading: () => _buildGenreExhibitsLoadingView(),
+          );
+        },
+      ),
+    );
+  }
+
+  GestureDetector _buildHeader() {
+    return GestureDetector(
+      onTap: () {
+        final homeViewModel = context.read<HomeViewModel>();
+        final isDomestic = homeViewModel.locationType == LocationType.domestic;
+        Routes.push(
+          context,
+          AppRoutes.homeGenrePath(
+            genreName:
+                homeViewModel.selectedGenre[homeViewModel
+                    .locationType]![homeViewModel.area[homeViewModel
+                    .locationType]],
+            isDomestic: isDomestic ? 'true' : 'false',
+            country: isDomestic
+                ? null
+                : homeViewModel.area[homeViewModel.locationType],
+            region: isDomestic
+                ? homeViewModel.area[homeViewModel.locationType]
+                : null,
+          ),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 2.h),
+        color: Colors.transparent,
+        child: Row(
+          children: [
+            ArtTripText.pretendard().title01Bold().build().text(
+              context.l10n.recommendedGenreExhibition,
+            ),
+            const Expanded(child: SizedBox.shrink()),
+            SvgPicture.asset(
+              AppAssets.icNoArrowRight,
+              width: 24.w,
+              height: 24.w,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _buildGenreItem(GlobalKey key, int index, String genre) {
+    return GestureDetector(
+      onTap: () {
+        final homeViewModel = Provider.of<HomeViewModel>(
+          context,
+          listen: false,
+        );
+        if (homeViewModel.selectedGenre[homeViewModel
+                .locationType]![homeViewModel.area[homeViewModel
+                .locationType]] !=
+            genre) {
+          _updateSelectedGenre(index, genre);
+        }
+      },
+      child: Selector<HomeViewModel, String>(
+        selector: (_, vm) =>
+            vm.selectedGenre[vm.locationType]?[vm.area[vm.locationType]] ??
+            vm.genres.data?.first ??
+            '',
+        builder: (context, selectedGenreIndex, _) {
+          final isSelected = genre == selectedGenreIndex;
+          return Container(
+            key: key,
+            padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 20.w),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: isSelected ? AppColors.primary300 : AppColors.gray0,
+              border: Border.all(
+                color: isSelected ? AppColors.primary300 : AppColors.gray100,
+                width: 1.w,
+              ),
+            ),
+            child: ArtTripText.pretendard()
+                .body01Bold()
+                .color(isSelected ? AppColors.textWhite : AppColors.textPrimary)
+                .build()
+                .text(genre),
+          );
+        },
+      ),
+    );
+  }
+
+  /// 전시가 없는 경우 보여주는 위젯
+  Widget _buildNoExhibitions(String genre) {
+    return HomeNoExhibitsView(title: context.l10n.noExhibitionsInGenre(genre));
+  }
+
+  Widget _buildGenreExhibitsLoadingView() {
+    return Shimmer(
+      duration: const Duration(
+        milliseconds: AppConsts.shimmerDurationMs,
+      ),
+      interval: const Duration(
+        milliseconds: AppConsts.shimmerIntervalMs,
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(top: 28.h),
+        child: Column(
+          spacing: 12.h,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const ShimmerSkeletonItem(width: 160, height: 20),
+                  SvgPicture.asset(
+                    AppAssets.icNoArrowRight,
+                    width: 24.w,
+                    height: 24.w,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 64.h,
+              child: ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 24.w,
+                  vertical: 16.h,
+                ),
+                itemCount: 5,
+                separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                itemBuilder: (context, index) {
+                  return const ShimmerSkeletonItem(
+                    width: 76,
+                    height: 32,
+                  );
+                },
+              ),
+            ),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              itemCount: 2,
+              separatorBuilder: (context, index) => SizedBox(height: 8.h),
+              itemBuilder: (context, index) {
+                return const ExhibitListItemSkeleton();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

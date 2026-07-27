@@ -1,0 +1,188 @@
+import 'package:arttrip/core/app_consts.dart';
+import 'package:arttrip/features/exhibit/data/exhibit_repository.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_detail_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_filter_model.dart';
+import 'package:arttrip/features/exhibit/data/models/exhibit_review_model.dart';
+import 'package:arttrip/features/exhibit/data/models/favorite_filter_model.dart';
+import 'package:arttrip/features/exhibit/data/models/review_create_result.dart';
+import 'package:arttrip/features/exhibit/data/models/review_submit_result.dart';
+import 'package:image_picker/image_picker.dart';
+
+class ExhibitRepositoryHybrid implements ExhibitRepository {
+  ExhibitRepositoryHybrid({required this.mock, required this.api});
+
+  final ExhibitRepository mock;
+  final ExhibitRepositoryImpl api;
+
+  @override
+  Future<ExhibitDetailModel?> fetchExhibitDetailModel(int exhibitId) {
+    if (AppConsts.useMock) {
+      return mock.fetchExhibitDetailModel(exhibitId);
+    }
+    return api.fetchExhibitDetailModel(exhibitId);
+  }
+
+  @override
+  Future<ExhibitReviewListResponseModel?> fetchExhibitReviewModels(
+    int exhibitId, {
+    int? cursor,
+    int size = 10,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchExhibitReviewModels(
+        exhibitId,
+        cursor: cursor,
+        size: size,
+      );
+    }
+    return api.fetchExhibitReviewModels(exhibitId, cursor: cursor, size: size);
+  }
+
+  @override
+  Future<ReviewSubmitResult> createReview({
+    required int exhibitId,
+    required List<XFile> images,
+    required String date,
+    required String content,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.createReview(
+        exhibitId: exhibitId,
+        images: images,
+        date: date,
+        content: content,
+      );
+    }
+    return api.createReview(
+      exhibitId: exhibitId,
+      images: images,
+      date: date,
+      content: content,
+    );
+  }
+
+  @override
+  Future<ReviewCreateResult?> fetchReviewDetail(int reviewId) {
+    if (AppConsts.useMock) {
+      return mock.fetchReviewDetail(reviewId);
+    }
+    return api.fetchReviewDetail(reviewId);
+  }
+
+  @override
+  Future<ReviewSubmitResult> updateReview({
+    required int reviewId,
+    required List<XFile> newImages,
+    required String date,
+    required String content,
+    required List<int> deleteImageIds,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.updateReview(
+        reviewId: reviewId,
+        newImages: newImages,
+        date: date,
+        content: content,
+        deleteImageIds: deleteImageIds,
+      );
+    }
+    return api.updateReview(
+      reviewId: reviewId,
+      newImages: newImages,
+      date: date,
+      content: content,
+      deleteImageIds: deleteImageIds,
+    );
+  }
+
+  @override
+  Future<bool> addFavorite(int exhibitId) {
+    if (AppConsts.useMock) {
+      return mock.addFavorite(exhibitId);
+    }
+    return api.addFavorite(exhibitId);
+  }
+
+  @override
+  Future<bool> removeFavorite(int exhibitId) {
+    if (AppConsts.useMock) {
+      return mock.removeFavorite(exhibitId);
+    }
+    return api.removeFavorite(exhibitId);
+  }
+
+  @override
+  Future<void> updateFavoriteExhibit(int exhibitId, bool isFavorite) {
+    if (AppConsts.useMock) {
+      return mock.updateFavoriteExhibit(exhibitId, isFavorite);
+    }
+    return api.updateFavoriteExhibit(exhibitId, isFavorite);
+  }
+
+  @override
+  Future<ExhibitFilterModel> fetchExhibitFilters({
+    required bool isDomestic,
+    int? cursor,
+    int? size,
+    String? country,
+    String? region,
+    String? startDate,
+    String? endDate,
+    String? genres,
+    String? styles,
+    String? sortType,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchExhibitFilters(
+        isDomestic: isDomestic,
+        cursor: cursor,
+        size: size,
+        country: country,
+        region: region,
+        startDate: startDate,
+        endDate: endDate,
+        genres: genres,
+        styles: styles,
+        sortType: sortType,
+      );
+    }
+    return api.fetchExhibitFilters(
+      isDomestic: isDomestic,
+      cursor: cursor,
+      size: size,
+      country: country,
+      region: region,
+      startDate: startDate,
+      endDate: endDate,
+      genres: genres,
+      styles: styles,
+      sortType: sortType,
+    );
+  }
+
+  @override
+  Future<FavoriteFilterModel> fetchFavoriteFilters({
+    required int cursor,
+    required int size,
+    String? country,
+    String? region,
+    required String sortType,
+  }) {
+    if (AppConsts.useMock) {
+      return mock.fetchFavoriteFilters(
+        cursor: cursor,
+        size: size,
+        country: country,
+        region: region,
+        sortType: sortType,
+      );
+    }
+    return api.fetchFavoriteFilters(
+      cursor: cursor,
+      size: size,
+      country: country,
+      region: region,
+      sortType: sortType,
+    );
+  }
+}

@@ -7,9 +7,9 @@
 
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
-include: package:flutter_lints/flutter.yaml
+include:
+  package:flutter_lints/flutter.yaml
 
-linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:flutter_lints/flutter.yaml`
   # included above or to enable additional rules. A list of all available lints
@@ -20,9 +20,52 @@ linter:
   # or a specific dart file by using the `// ignore: name_of_lint` and
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
+linter:
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    # const 최적화
+    - prefer_const_constructors
+    - prefer_const_literals_to_create_immutables
+    - prefer_const_declarations
 
+    # 변수 안정성
+    - prefer_final_fields
+    - prefer_final_locals
+
+    # 코드 가독성
+    - curly_braces_in_flow_control_structures
+    - prefer_single_quotes
+    - unnecessary_this
+
+    # 비동기 안전
+    - unawaited_futures
+    - await_only_futures
+
+    # Flutter 위젯
+    - use_key_in_widget_constructors
+
+    # import 관리
+    - directives_ordering
+    - combinators_ordering
+    - always_use_package_imports
+
+    # 코드 정리
+    - avoid_empty_else
+    - unnecessary_parenthesis
+
+    - avoid_escaping_inner_quotes
+    - annotate_overrides
+    - sort_constructors_first
+
+analyzer:
+  exclude:
+    - lib/**.freezed.dart
+    - lib/**.g.dart
+  errors:
+    invalid_annotation_target: ignore
+    todo: ignore
+
+formatter:
+  page_width: 80
+  trailing_commas: preserve
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
